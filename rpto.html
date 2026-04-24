@@ -83,7 +83,7 @@
     background: radial-gradient(ellipse 65% 55% at 55% 45%, rgba(46,204,113,0.11), transparent 70%),
                 radial-gradient(ellipse 35% 45% at 10% 80%, rgba(46,204,113,0.06), transparent 60%);
   }
-  .hero-inner { position: relative; z-index: 2; max-width: 720px; }
+  .hero-inner { position: relative; z-index: 2; max-width: 720px; width: 100%; }
   .company-tag {
     font-size: 0.75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
     color: var(--green); margin-bottom: 14px; opacity: 0.8;
@@ -255,8 +255,25 @@
     nav { padding: 16px 20px; }
     .nav-links, .nav-cta { display: none; }
     .hamburger { display: flex; }
-    .rpto-hero, section { padding: 100px 20px 60px; }
-    .hero-drone-img { display: none; }
+    .rpto-hero {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 100px 20px 48px;
+      min-height: unset;
+      overflow: visible;
+    }
+    section { padding: 100px 20px 60px; }
+    .hero-drone-img {
+      position: relative;
+      right: unset;
+      top: unset;
+      transform: none;
+      width: 100%;
+      opacity: 1;
+      margin-top: 32px;
+      animation: none;
+    }
+    .hero-drone-img img { border-radius: var(--radius); }
     .about-rpto-inner, .courses-grid, .contact-inner, .rpto-pillars { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; gap: 32px; }
     .form-row { grid-template-columns: 1fr; }
