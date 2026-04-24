@@ -783,4 +783,13 @@ document.addEventListener('DOMContentLoaded', function() {
   var fadeObs = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) {
       if (e.isIntersecting) {
-        e.t
+        e.te.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  });
+  fadeEls.forEach(function(el) { fadeObs.observe(el); });
+});
+</script>
+</body>
+</html>
