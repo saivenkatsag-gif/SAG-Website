@@ -284,6 +284,93 @@
     background: none; border: none; line-height: 1;
   }
 
+  /* ── DRONE APPLICATIONS ── */
+  #drone-applications { background: var(--dark2); overflow: hidden; }
+  .app-section-header { display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 16px; }
+  .app-tabs { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+  .app-tab {
+    padding: 10px 22px; border-radius: 40px; border: 1.5px solid var(--border);
+    background: transparent; color: var(--muted); font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.04em;
+    transition: all .25s; text-transform: uppercase;
+  }
+  .app-tab:hover { border-color: var(--green); color: var(--green); }
+  .app-tab.active { background: var(--green); border-color: var(--green); color: #0a0f0d; }
+
+  .app-showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 0; min-height: 460px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+  .app-panel {
+    display: none; grid-column: 1 / -1; grid-template-columns: 1fr 1fr; gap: 0;
+  }
+  .app-panel.active { display: grid; animation: panelIn .45s ease both; }
+  @keyframes panelIn { from{opacity:0;transform:translateX(30px)} to{opacity:1;transform:translateX(0)} }
+
+  .app-panel-visual {
+    position: relative; overflow: hidden; min-height: 180px;
+    background: var(--card);
+  }
+  .app-panel-visual .visual-bg {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9rem; opacity: 0.15; user-select: none;
+    animation: floatEmoji 4s ease-in-out infinite;
+  }
+  @keyframes floatEmoji { 0%,100%{transform:translateY(0) rotate(-3deg)} 50%{transform:translateY(-14px) rotate(3deg)} }
+  .app-panel-visual .visual-overlay {
+    position: absolute; inset: 0;
+  }
+  .app-panel-visual .drone-anim {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    font-size: 5rem; animation: droneFly 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 24px var(--green));
+  }
+  @keyframes droneFly { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-58%) scale(1.05)} }
+  .app-badge-count {
+    position: absolute; top: 20px; right: 20px;
+    background: var(--green); color: #0a0f0d;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: 0.78rem; padding: 5px 14px; border-radius: 40px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  .app-panel-info {
+    background: var(--card2); padding: 18px 22px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .app-panel-info .app-num {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 2.5rem; font-weight: 800;
+    color: var(--border); line-height: 1; margin-bottom: 4px;
+    letter-spacing: -0.02em;
+  }
+  .app-panel-info h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 800;
+    color: var(--white); line-height: 1.1; margin-bottom: 6px;
+  }
+  .app-panel-info h3 span { color: var(--green); }
+  .app-panel-info .app-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+  .app-features { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+  .app-feature {
+    display: flex; align-items: flex-start; gap: 7px;
+    font-size: 0.78rem; color: var(--text);
+  }
+  .app-feature-dot {
+    width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+    flex-shrink: 0; margin-top: 5px;
+  }
+  .app-cta-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--green); font-weight: 700; font-size: 0.82rem;
+    text-decoration: none; transition: gap .2s;
+  }
+  .app-cta-link:hover { gap: 12px; }
+
+  .app-dots { display: flex; gap: 8px; margin-top: 36px; justify-content: center; }
+  .app-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); cursor: pointer; transition: background .2s, transform .2s;
+    border: none;
+  }
+  .app-dot.active { background: var(--green); transform: scale(1.3); }
+
   /* ── MOBILE ── */
   @media(max-width:900px) {
     nav { padding: 16px 20px; }
@@ -306,6 +393,14 @@
     .hero-stats .stat-num { font-size: 1.7rem; }
     footer { padding: 56px 20px 32px; }
     .cta-checks { flex-direction: column; align-items: center; gap: 14px; }
+    .app-showcase { grid-template-columns: 1fr; }
+    .app-panel { grid-template-columns: 1fr; }
+    .app-panel-visual { min-height: 220px; }
+    .app-panel-info { padding: 28px 20px; }
+    .app-panel-info .app-num { font-size: 2.5rem; }
+    .app-panel-info h3 { font-size: 1.5rem; }
+    .app-tabs { gap: 8px; }
+    .app-tab { font-size: 0.82rem; padding: 8px 14px; }
   }
 </style>
 
@@ -521,6 +616,37 @@
   </div>
 </section>
 
+<!-- DRONE APPLICATIONS -->
+<section id="drone-applications">
+  <div class="app-section-header">
+    <div class="section-tag">Beyond Agriculture</div>
+    <h2>More Drone <span style="color:var(--green)">Applications</span> We Build</h2>
+    <p class="section-intro" style="max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">From festive flower showers to LED sky shows — our drones go beyond the farm. Explore the full range of custom drone solutions we engineer and deploy.</p>
+    <div class="app-tabs" id="appTabs">
+      <!-- Tabs injected dynamically -->
+    </div>
+  </div>
+
+  <div class="app-showcase" id="appShowcase">
+    <!-- Panels injected dynamically -->
+  </div>
+
+  <div class="app-dots" id="appDots">
+    <!-- Dots injected dynamically -->
+  </div>
+</section>
+
+<style>
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
+  100% { transform: translateY(380px) rotate(360deg); opacity: 0; }
+}
+@keyframes ledBlink {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.3; transform: scale(0.7); }
+}
+</style>
+
 <!-- STATS -->
 <div class="stats-section">
   <div class="stats-header">
@@ -678,7 +804,240 @@
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* ── Mobile menu helpers ── */
+
+  // ══════════════════════════════════════════════════════
+  // SUPABASE CONFIG (shared with admin panel via localStorage)
+  // ══════════════════════════════════════════════════════
+  var SUPABASE_URL = localStorage.getItem('sag_supabase_url') || 'https://mefmpxohxrpnezwlbchj.supabase.co';
+  var SUPABASE_KEY = localStorage.getItem('sag_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
+
+  // Clear stale cached credentials from old project
+  (function() {
+    var cached = localStorage.getItem('sag_supabase_url') || '';
+    if (cached && cached.indexOf('mefmpxohxrpnezwlbchj') === -1) {
+      localStorage.removeItem('sag_supabase_url');
+      localStorage.removeItem('sag_supabase_key');
+      SUPABASE_URL = 'https://mefmpxohxrpnezwlbchj.supabase.co';
+      SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
+    }
+  })();
+
+  // ══════════════════════════════════════════════════════
+  // DEFAULT FALLBACK APPS (shown if Supabase & localStorage are both unavailable)
+  // ══════════════════════════════════════════════════════
+  var DEFAULT_APPS = [
+    {id:1,emoji:'🌸',tabLabel:'🌸 Flower Dropping',title:'Flower Dropping',titleHighlight:'Drone',
+     desc:'Transform weddings, temple festivals, political rallies, and grand events with a breathtaking aerial flower shower. Our custom payload drones release flowers at precise moments, altitude, and density for maximum visual impact.',
+     badge:'Event Ready',accentColor:'#2ecc71',ctaText:'Enquire for Events →',ctaLink:'tel:+918977776019',
+     features:['Payload up to 5 kg of petals or flowers per flight','Custom trigger mechanism — remote or timed release','Works for weddings, temples, political events & concerts','Safe low-altitude deployment with precision hover'],
+     imageUrl:'',status:'active',order:0},
+    {id:2,emoji:'💡',tabLabel:'💡 LED Display',title:'LED Display',titleHighlight:'Advertising Drone',
+     desc:'Turn the night sky into a moving billboard. Our LED-equipped advertising drones carry large programmable LED panels that display brand logos, text, and animations — perfect for night events, brand launches, and open-air advertising campaigns.',
+     badge:'Sky Billboard',accentColor:'#2e8ccc',ctaText:'Get a Demo →',ctaLink:'tel:+918977776019',
+     features:['Programmable full-color LED matrix panels','Visible up to 500m distance in clear night sky','Display logos, text, animations, and countdowns','Ideal for product launches, IPL matches, outdoor concerts'],
+     imageUrl:'',status:'active',order:1},
+    {id:3,emoji:'🎮',tabLabel:'🎮 FPV Custom Builds',title:'FPV',titleHighlight:'Custom Builds',
+     desc:'We build high-performance FPV (First Person View) racing and cinematic drones from scratch — tuned for speed, agility, or ultra-smooth aerial footage. Every build is custom-engineered to your exact specifications and use case.',
+     badge:'Custom Build',accentColor:'#e07030',ctaText:'Start Your Build →',ctaLink:'tel:+918977776019',
+     features:['Racing frames, freestyle, and cinewhoop builds','Custom PID tuning and flight controller configuration','4K camera integration for cinematic footage','Training and support included with every build'],
+     imageUrl:'',status:'active',order:2},
+    {id:4,emoji:'🎥',tabLabel:'🎥 Aerial Filming',title:'Aerial',titleHighlight:'Filming & Photography',
+     desc:'Capture stunning aerial footage for films, real-estate, weddings, construction progress, and corporate events. Our cinematography drones deliver silky-smooth, high-resolution shots from perspectives no other camera can reach.',
+     badge:'4K Cinema',accentColor:'#8060dd',ctaText:'Book a Shoot →',ctaLink:'tel:+918977776019',
+     features:['4K / 6K high-resolution stabilized footage','3-axis gimbal for cinema-grade stabilization','Real-estate, weddings, events, and film production','Licensed and insured pilots for safe operations'],
+     imageUrl:'',status:'active',order:3},
+    {id:5,emoji:'🔍',tabLabel:'🔍 Surveillance',title:'Surveillance &',titleHighlight:'Security Drones',
+     desc:'Deploy intelligent drone surveillance for border monitoring, event security, forest fire detection, and industrial inspections. Our security drones carry thermal and optical sensors for 24/7 monitoring coverage.',
+     badge:'Security Tech',accentColor:'#c8dc2e',ctaText:'Get a Proposal →',ctaLink:'tel:+918977776019',
+     features:['Thermal + RGB dual-sensor payload options','Autonomous patrol route programming','Industrial, border, and crowd surveillance','Real-time live stream to ground control'],
+     imageUrl:'',status:'active',order:4}
+  ];
+
+  // ══════════════════════════════════════════════════════
+  // TAB SWITCHER
+  // ══════════════════════════════════════════════════════
+  var appAutoTimer = null;
+  var appCurrentIndex = 0;
+  var appTotal = 0;
+
+  function switchApp(index) {
+    var panels = document.querySelectorAll('.app-panel');
+    var tabs = document.querySelectorAll('.app-tab');
+    var dots = document.querySelectorAll('.app-dot');
+    appCurrentIndex = index;
+    panels.forEach(function(p, i) { p.classList.toggle('active', i === index); });
+    tabs.forEach(function(t, i) { t.classList.toggle('active', i === index); });
+    dots.forEach(function(d, i) { d.classList.toggle('active', i === index); });
+  }
+  function startAppCycle() {
+    clearInterval(appAutoTimer);
+    appAutoTimer = setInterval(function() {
+      if (appTotal < 1) return;
+      appCurrentIndex = (appCurrentIndex + 1) % appTotal;
+      switchApp(appCurrentIndex);
+    }, 5000);
+  }
+  function resetAppCycle(index) {
+    clearInterval(appAutoTimer);
+    switchApp(index);
+    startAppCycle();
+  }
+
+  // ══════════════════════════════════════════════════════
+  // BUILD PANEL HTML FROM APP DATA
+  // ══════════════════════════════════════════════════════
+  function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  function buildAppPanel(app, index, isActive) {
+    var color = app.accentColor || app.accent_color || '#2ecc71';
+    var emoji = app.emoji || '🚁';
+    var badge = app.badge || '';
+    var title = app.title || '';
+    var titleHL = app.titleHighlight || app.title_highlight || '';
+    var desc = app.desc || app.description || '';
+    var features = app.features || [];
+    var ctaText = app.ctaText || app.cta_text || 'Enquire →';
+    var ctaLink = app.ctaLink || app.cta_link || 'tel:+918977776019';
+    var imageUrl = app.imageUrl || app.image_url || '';
+    var num = String(index + 1).padStart(2, '0');
+
+    var visualStyle = imageUrl
+      ? 'background: linear-gradient(135deg, #0a0f0d, #131f16);'
+      : 'background: linear-gradient(135deg, #0a0f0d, #131f16);';
+
+    var visualInner = imageUrl
+      ? '<img src="'+esc(imageUrl)+'" alt="'+esc(title)+'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.style.display=\'none\'"/>'
+        + '<div class="visual-bg" style="font-size:8rem;position:absolute;">'+emoji+'</div>'
+      : '<div class="visual-bg" style="font-size:8rem;">'+emoji+'</div>';
+
+    var featuresHtml = Array.isArray(features)
+      ? features.map(function(f) {
+          return '<div class="app-feature"><div class="app-feature-dot" style="background:'+esc(color)+'"></div><span>'+esc(f)+'</span></div>';
+        }).join('')
+      : '';
+
+    return '<div class="app-panel'+(isActive?' active':'')+'" id="appPanel'+index+'">'
+      + '<div class="app-panel-visual" style="'+visualStyle+'">'
+      + visualInner
+      + '<div class="visual-overlay" style="background:radial-gradient(ellipse 70% 70% at 50% 50%, '+hexToRgba(color,0.1)+', transparent 70%);"></div>'
+      + (imageUrl ? '' : '<div class="drone-anim" style="filter:drop-shadow(0 0 28px '+esc(color)+');">🚁</div>')
+      + (badge ? '<div class="app-badge-count" style="background:'+esc(color)+';color:'+(isLight(color)?'#0a0f0d':'#fff')+';">'+esc(badge)+'</div>' : '')
+      + '</div>'
+      + '<div class="app-panel-info">'
+      + '<div class="app-num">'+num+'</div>'
+      + '<h3>'+esc(title)+' <span>'+esc(titleHL)+'</span></h3>'
+      + '<p class="app-desc">'+esc(desc)+'</p>'
+      + (featuresHtml ? '<div class="app-features">'+featuresHtml+'</div>' : '')
+      + '<a class="app-cta-link" href="'+esc(ctaLink)+'">'+esc(ctaText)+'</a>'
+      + '</div></div>';
+  }
+
+  function hexToRgba(hex, alpha) {
+    hex = (hex||'#2ecc71').replace('#','');
+    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    var r = parseInt(hex.substring(0,2),16)||46;
+    var g = parseInt(hex.substring(2,4),16)||204;
+    var b = parseInt(hex.substring(4,6),16)||113;
+    return 'rgba('+r+','+g+','+b+','+(alpha||0.1)+')';
+  }
+  function isLight(hex) {
+    hex = (hex||'#2ecc71').replace('#','');
+    if (hex.length===3) hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+    var r=parseInt(hex.substring(0,2),16),g=parseInt(hex.substring(2,4),16),b=parseInt(hex.substring(4,6),16);
+    return (r*299+g*587+b*114)/1000 > 128;
+  }
+
+  // ══════════════════════════════════════════════════════
+  // RENDER APPLICATIONS INTO DOM
+  // ══════════════════════════════════════════════════════
+  function renderApps(appsData) {
+    var active = appsData.filter(function(a){ return (a.status||'active') === 'active'; });
+    active.sort(function(a,b){ return (a.order||a.display_order||0)-(b.order||b.display_order||0); });
+
+    if (!active.length) return; // keep whatever is already rendered
+
+    appTotal = active.length;
+    appCurrentIndex = 0;
+
+    var tabsEl = document.getElementById('appTabs');
+    var showcaseEl = document.getElementById('appShowcase');
+    var dotsEl = document.getElementById('appDots');
+    if (!tabsEl || !showcaseEl || !dotsEl) return;
+
+    tabsEl.innerHTML = active.map(function(app, i) {
+      var label = app.tabLabel || app.tab_label || (app.emoji+' '+app.title);
+      return '<button class="app-tab'+(i===0?' active':'')+'" onclick="resetAppCycle('+i+')">'+label+'</button>';
+    }).join('');
+
+    showcaseEl.innerHTML = active.map(function(app, i) {
+      return buildAppPanel(app, i, i===0);
+    }).join('');
+
+    dotsEl.innerHTML = active.map(function(_, i) {
+      return '<button class="app-dot'+(i===0?' active':'')+'" onclick="resetAppCycle('+i+')"></button>';
+    }).join('');
+
+    clearInterval(appAutoTimer);
+    startAppCycle();
+  }
+
+  // ══════════════════════════════════════════════════════
+  // LOAD: localStorage first → Supabase fallback
+  // ══════════════════════════════════════════════════════
+  async function loadDroneApplications() {
+    // 1. Try localStorage (written by admin panel)
+    var localRaw = localStorage.getItem('sag_drone_apps');
+    if (localRaw) {
+      try {
+        var local = JSON.parse(localRaw);
+        if (local && local.length > 0) {
+          renderApps(local);
+          // Then silently refresh from Supabase in background
+          fetchFromSupabase();
+          return;
+        }
+      } catch(e) {}
+    }
+    // 2. Try Supabase directly
+    var supaApps = await fetchFromSupabase();
+    // 3. If both fail, use hardcoded defaults
+    if (!supaApps || supaApps.length === 0) {
+      renderApps(DEFAULT_APPS);
+    }
+  }
+
+  async function fetchFromSupabase() {
+    if (!SUPABASE_URL) return null;
+    try {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/drone_applications?select=*&order=display_order.asc', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      if (!res.ok) return null;
+      var rows = await res.json();
+      if (!Array.isArray(rows) || rows.length === 0) return null;
+      // Map DB rows → app format
+      var mapped = rows.map(function(r) {
+        return {
+          id: r.id, emoji: r.emoji, tabLabel: r.tab_label, title: r.title,
+          titleHighlight: r.title_highlight, desc: r.description,
+          ctaText: r.cta_text, ctaLink: r.cta_link, badge: r.badge,
+          status: r.status, accentColor: r.accent_color, imageUrl: r.image_url,
+          features: Array.isArray(r.features) ? r.features : [],
+          order: r.display_order
+        };
+      });
+      // Cache in localStorage so next load is instant
+      localStorage.setItem('sag_drone_apps', JSON.stringify(mapped));
+      renderApps(mapped);
+      return mapped;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  // ══════════════════════════════════════════════════════
+  // MOBILE MENU
+  // ══════════════════════════════════════════════════════
   function toggleMobileMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
     document.getElementById('hamburger').classList.toggle('open');
@@ -687,8 +1046,6 @@
     document.getElementById('mobileMenu').classList.remove('open');
     document.getElementById('hamburger').classList.remove('open');
   }
-
-  /* ── Close mobile menu on outside click ── */
   document.addEventListener('click', function(e) {
     var menu = document.getElementById('mobileMenu');
     var burger = document.getElementById('hamburger');
@@ -698,6 +1055,9 @@
   });
 
 document.addEventListener('DOMContentLoaded', function() {
+
+  // Load applications dynamically
+  loadDroneApplications();
 
   /* ── Smooth scroll for all anchor links ── */
   document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
@@ -722,9 +1082,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var minDist = Infinity;
     spySections.forEach(function(sec) {
       var rect = sec.getBoundingClientRect();
-      /* distance from the section top to just below the nav */
-      var dist = Math.abs(rect.top - offset);
-      /* pick the section whose top is closest to (and above) the nav bottom */
       if (rect.top - offset <= 0 && Math.abs(rect.top - offset) < minDist) {
         minDist = Math.abs(rect.top - offset);
         current = sec.id;
@@ -733,7 +1090,6 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks.forEach(function(link) {
       link.classList.toggle('active', link.dataset.section === current);
     });
-    /* Nav background opacity on scroll */
     var nav = document.getElementById('mainNav');
     nav.style.background = window.pageYOffset > 50 ? 'rgba(10,15,13,0.98)' : 'rgba(10,15,13,0.88)';
   }
