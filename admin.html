@@ -1,795 +1,2483 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SAG Drone Technologies | Drone Services & Training in India</title>
-<meta name="description" content="SAG Drone Technologies — India's trusted drone ecosystem builder. We offer certified drone training, RPTO services, drone deployment, and modern agri-drone solutions."/>
-<meta name="keywords" content="drone services india, Agri drones, drones india, drone training, RPTO, agri drones, SAG drones, drone deployment, certified drone pilot, Andhra Pradesh drones"/>
-<meta name="author" content="SAG Drone Technologies"/>
-<meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://sagdrones.com/"/>
-
-<!-- Open Graph (for social sharing) -->
-<meta property="og:title" content="SAG Drone Technologies | Drone Services & Training in India"/>
-<meta property="og:description" content="India's trusted drone ecosystem builder — training pilots, deploying compliant drone services, and enabling modern farming at scale."/>
-<meta property="og:url" content="https://sagdrones.com/"/>
-<meta property="og:type" content="website"/>
-<meta property="og:image" content="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png"/>
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="SAG Drone Technologies"/>
-<meta name="twitter:description" content="India's trusted drone ecosystem builder — training pilots, deploying drones, and enabling modern farming."/>
-<meta name="twitter:image" content="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png"/>
-
-<link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<title>Admin Panel | SAG Drone Technologies</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --green: #2ecc71;
-    --green-dark: #1a9c52;
-    --green-glow: rgba(46,204,113,0.18);
-    --dark: #0a0f0d;
-    --dark2: #101810;
-    --card: #131f16;
-    --card2: #182118;
-    --border: rgba(46,204,113,0.13);
-    --text: #e8f5ec;
-    --muted: #7aab8a;
-    --white: #ffffff;
-    --radius: 16px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    overflow-x: hidden;
-  }
+:root {
+  --green: #2ecc71;
+  --green-dark: #1a9c52;
+  --green-glow: rgba(46,204,113,0.18);
+  --dark: #0a0f0d;
+  --dark2: #101810;
+  --card: #131f16;
+  --card2: #182118;
+  --border: rgba(46,204,113,0.13);
+  --border-solid: #1e3522;
+  --text: #e8f5ec;
+  --muted: #7aab8a;
+  --white: #ffffff;
+  --radius: 14px;
+  --red: #e05050;
+  --red-glow: rgba(224,80,80,0.15);
+  --amber: #f0a030;
+  --amber-glow: rgba(240,160,48,0.15);
+  --blue: #3a9ad9;
+  --blue-glow: rgba(58,154,217,0.15);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;}
 
-    /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 60px;
-    background: rgba(10,15,13,0.88);
-    backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-  .nav-logo img { height: 60px; width: auto; }
-  .nav-logo span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; color: var(--green); letter-spacing: 0.02em; }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-  .hamburger span { width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: .3s; }
-  .nav-links { display: flex; gap: 28px; list-style: none; }
-  .nav-links a { color: var(--text); text-decoration: none; font-size: 0.93rem; font-weight: 500; transition: color .2s; }
-  .nav-links a:hover, .nav-links a.active { color: var(--green); }
-  .nav-cta {
-    background: var(--green); color: #0a0f0d; padding: 10px 24px;
-    border-radius: 40px; font-weight: 700; font-size: 0.88rem;
-    text-decoration: none; transition: background .2s, transform .15s; white-space: nowrap;
-  }
-  .nav-cta:hover { background: var(--green-dark); transform: scale(1.03); }
+/* ── SUPABASE CONFIG BANNER ── */
+#configBanner {
+  position:fixed;top:0;left:0;right:0;z-index:10000;
+  background:linear-gradient(90deg,#1a1000,#1a0a00);
+  border-bottom:1px solid var(--amber);
+  padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-size:0.82rem;
+}
+#configBanner.hidden{display:none;}
+.config-banner-text{color:var(--amber);display:flex;align-items:center;gap:8px;}
+.config-banner-text strong{color:var(--white);}
+.config-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.config-input{
+  padding:6px 12px;background:var(--dark2);border:1px solid var(--amber);
+  border-radius:8px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.8rem;
+  width:260px;outline:none;
+}
+.config-input:focus{border-color:var(--green);}
+.config-btn{
+  padding:6px 14px;background:var(--amber);color:#0a0f0d;
+  border:none;border-radius:8px;font-weight:700;font-size:0.8rem;cursor:pointer;white-space:nowrap;
+}
+.config-btn:hover{opacity:0.85;}
+.config-dismiss{background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.8rem;white-space:nowrap;}
+.config-dismiss:hover{color:var(--red);}
 
-  /* ── HERO ── */
-  #home {
-    min-height: 100vh;
-    display: flex; align-items: center;
-    padding: 120px 60px 80px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(46,204,113,0.10) 0%, transparent 70%),
-                radial-gradient(ellipse 40% 50% at 20% 80%, rgba(46,204,113,0.06) 0%, transparent 60%);
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 60px 60px;
-    opacity: 0.4;
-  }
-  .hero-content { position: relative; z-index: 2; max-width: 700px; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: var(--green-glow); border: 1px solid var(--green);
-    border-radius: 40px; padding: 6px 16px; margin-bottom: 28px;
-    font-size: 0.82rem; color: var(--green); font-weight: 600; text-decoration: none;
-    transition: background .2s;
-  }
-  .hero-badge:hover { background: rgba(46,204,113,0.28); }
-  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
-  h1 {
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
-    font-size: clamp(2.4rem, 5vw, 4.2rem);
-    line-height: 1.05; letter-spacing: 0.01em; color: var(--white); margin-bottom: 20px;
-    animation: fadeUp .7s ease both;
-  }
-  h1 span { color: var(--green); }
-  .hero-sub {
-    font-size: 1.05rem; color: var(--muted); line-height: 1.7;
-    max-width: 560px; margin-bottom: 36px;
-    animation: fadeUp .7s .15s ease both;
-  }
-  .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp .7s .25s ease both; }
-  .btn-primary {
-    background: var(--green); color: #0a0f0d;
-    padding: 14px 32px; border-radius: 40px;
-    font-weight: 700; font-size: 0.95rem; text-decoration: none;
-    transition: background .2s, transform .15s; display: inline-block;
-  }
-  .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
-  .btn-outline {
-    border: 1.5px solid var(--green); color: var(--green);
-    padding: 14px 32px; border-radius: 40px;
-    font-weight: 700; font-size: 0.95rem; text-decoration: none;
-    transition: background .2s, transform .15s; display: inline-block;
-  }
-  .btn-outline:hover { background: var(--green-glow); transform: translateY(-2px); }
-  .hero-stats { display: flex; gap: 48px; margin-top: 52px; animation: fadeUp .7s .35s ease both; }
-  .stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--white); }
-  .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
-  .hero-img {
-    position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-    width: 48%; max-width: 720px; z-index: 1; opacity: 0.85;
-    animation: floatIn 1s .2s ease both;
-  }
-  .hero-img img { width: 100%; display: block; }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes floatIn { from{opacity:0;transform:translateY(-40%) translateX(60px)} to{opacity:.85;transform:translateY(-50%)} }
+/* ── LOGIN SCREEN ── */
+#loginScreen{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--dark);display:flex;align-items:center;justify-content:center;
+}
+#loginScreen.hidden{display:none;}
+.login-box{
+  background:var(--card);border:1px solid var(--border-solid);
+  border-radius:20px;padding:48px 44px;width:100%;max-width:420px;text-align:center;
+  box-shadow:0 0 80px rgba(46,204,113,0.07);
+}
+.login-logo{height:52px;margin-bottom:24px;}
+.login-box h2{font-family:'Barlow Condensed',sans-serif;font-size:1.9rem;font-weight:800;color:var(--white);margin-bottom:6px;}
+.login-box p{font-size:0.88rem;color:var(--muted);margin-bottom:32px;}
+.login-field{margin-bottom:16px;text-align:left;}
+.login-field label{font-size:0.78rem;color:var(--muted);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;display:block;margin-bottom:6px;}
+.login-field input{
+  width:100%;padding:12px 16px;background:var(--dark2);
+  border:1px solid var(--border-solid);border-radius:10px;
+  color:var(--white);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color .2s;
+}
+.login-field input:focus{border-color:var(--green);}
+.login-btn{
+  width:100%;padding:13px;background:var(--green);color:#0a0f0d;
+  border:none;border-radius:40px;font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:0.95rem;cursor:pointer;transition:all .2s;margin-top:8px;
+}
+.login-btn:hover{background:var(--green-dark);transform:translateY(-1px);}
+.login-error{color:var(--red);font-size:0.85rem;margin-top:12px;background:var(--red-glow);border-radius:8px;padding:8px 14px;display:none;}
+.login-error.show{display:block;}
 
-  /* ── BRANDS MARQUEE ── */
-  .brands-section { padding: 48px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; }
-  .brands-title { text-align: center; font-size: 0.8rem; color: var(--muted); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 32px; }
-  .marquee-track { display: flex; gap: 48px; animation: marquee 22s linear infinite; width: max-content; }
-  .marquee-track:hover { animation-play-state: paused; }
-  .brand-logo { width: 72px; height: 72px; object-fit: contain; filter: grayscale(1) brightness(1.5); opacity: 0.6; transition: filter .2s, opacity .2s; }
-  .brand-logo:hover { filter: none; opacity: 1; }
-  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+/* ── LAYOUT ── */
+.admin-layout{display:flex;min-height:100vh;}
 
-  /* ── SECTIONS SHARED ── */
-  section { padding: 100px 60px; }
-  .section-tag {
-    display: inline-block; background: var(--green-glow); border: 1px solid var(--green);
-    border-radius: 40px; padding: 5px 16px; font-size: 0.78rem; color: var(--green);
-    font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px;
-  }
-  h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(2rem,4vw,3.2rem); color: var(--white); line-height: 1.1; letter-spacing: 0.01em; }
-  .section-intro { color: var(--muted); font-size: 1.02rem; line-height: 1.7; margin-top: 14px; max-width: 560px; }
+/* ── SIDEBAR ── */
+.sidebar{
+  width:248px;flex-shrink:0;
+  background:var(--card);border-right:1px solid var(--border-solid);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;height:100vh;z-index:50;transition:transform .3s;
+}
+.sidebar-logo{
+  padding:24px 20px 20px;border-bottom:1px solid var(--border-solid);
+  display:flex;align-items:center;gap:10px;
+}
+.sidebar-logo img{height:40px;}
+.sidebar-logo span{font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;font-weight:800;color:var(--green);letter-spacing:0.02em;line-height:1.2;}
+.sidebar-nav{padding:20px 12px;flex:1;overflow-y:auto;}
+.sidebar-section-label{
+  font-size:0.68rem;font-weight:700;color:var(--muted);
+  letter-spacing:0.1em;text-transform:uppercase;
+  padding:0 10px;margin-bottom:8px;margin-top:16px;
+}
+.sidebar-section-label:first-child{margin-top:0;}
+.sidebar-link{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  font-size:0.88rem;color:var(--muted);font-weight:500;
+  transition:all .2s;text-decoration:none;border:none;
+  background:none;width:100%;text-align:left;
+}
+.sidebar-link .icon{font-size:1.05rem;width:20px;text-align:center;}
+.sidebar-link:hover{background:var(--dark2);color:var(--text);}
+.sidebar-link.active{background:var(--green-glow);color:var(--green);font-weight:600;}
+.sidebar-link .badge{
+  margin-left:auto;background:var(--green);color:#0a0f0d;
+  font-size:0.68rem;font-weight:800;padding:2px 7px;border-radius:20px;
+}
+.sidebar-link .badge-red{background:var(--red);color:var(--white);}
+.sidebar-footer{padding:16px 12px;border-top:1px solid var(--border-solid);}
+.sidebar-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;}
+.sidebar-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--green-glow);border:1.5px solid var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;color:var(--green);font-size:0.9rem;
+}
+.sidebar-user-info{flex:1;min-width:0;}
+.sidebar-user-name{font-size:0.84rem;font-weight:600;color:var(--white);}
+.sidebar-user-role{font-size:0.72rem;color:var(--muted);}
+.logout-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px;transition:color .2s;}
+.logout-btn:hover{color:var(--red);}
 
-  /* ── ABOUT ── */
-  #about-us { background: var(--dark2); }
-  .about-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; align-items: start; }
-  .pillar-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 32px; transition: border-color .2s, transform .2s;
-  }
-  .pillar-card:hover { border-color: var(--green); transform: translateY(-4px); }
-  .pillar-icon { width: 56px; height: 56px; border-radius: 12px; object-fit: cover; margin-bottom: 18px; }
-  .pillar-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 12px; }
-  .pillar-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
-  .pillar-card .checks { margin-top: 12px; display: flex; flex-direction: column; gap: 4px; }
-  .pillar-card .checks span { font-size: 0.88rem; color: var(--green); }
-  .pillar-card blockquote { margin-top: 14px; font-style: italic; font-size: 0.88rem; color: var(--text); border-left: 2px solid var(--green); padding-left: 12px; }
+/* ── MAIN ── */
+.main-content{margin-left:248px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{
+  position:sticky;top:0;z-index:40;
+  background:rgba(10,15,13,0.96);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border-solid);
+  padding:16px 36px;display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-title{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;color:var(--white);letter-spacing:0.01em;}
+.topbar-title span{color:var(--green);}
+.topbar-actions{display:flex;align-items:center;gap:10px;}
+.topbar-live-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(46,204,113,0.1);border:1px solid var(--green);
+  border-radius:20px;padding:4px 12px;font-size:0.75rem;font-weight:700;color:var(--green);letter-spacing:0.06em;
+}
+.topbar-live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+.topbar-live-badge.offline{border-color:var(--amber);color:var(--amber);background:var(--amber-glow);}
+.topbar-live-badge.offline .topbar-live-dot{background:var(--amber);}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
 
-  /* ── SERVICES ── */
-  #our-services { background: var(--dark); }
-  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 56px; }
-  .service-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 32px; transition: border-color .2s, transform .2s; position: relative; overflow: hidden;
-  }
-  .service-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 60% at 50% 0%, var(--green-glow), transparent 70%);
-    opacity: 0; transition: opacity .3s;
-  }
-  .service-card:hover::before { opacity: 1; }
-  .service-card:hover { border-color: var(--green); transform: translateY(-4px); }
-  .service-icon { width: 40px; height: 40px; margin-bottom: 18px; }
-  .service-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.02rem; font-weight: 700; color: var(--white); margin-bottom: 12px; }
-  .service-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+/* ── PAGES ── */
+.page{padding:36px;display:none;}
+.page.active{display:block;}
 
-  /* ── STATS ── */
-  .stats-section { background: var(--dark2); padding: 80px 60px; }
-  .stats-header { text-align: center; margin-bottom: 56px; }
-  .stats-tag { display: inline-block; border: 1px solid var(--green); border-radius: 40px; padding: 5px 16px; font-size: 0.78rem; color: var(--green); font-weight: 700; letter-spacing: .08em; margin-bottom: 14px; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 48px; }
-  .stat-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 36px 24px; text-align: center; transition: border-color .2s, transform .2s;
-  }
-  .stat-card:hover { border-color: var(--green); transform: translateY(-4px); }
-  .stat-card .num { font-family: 'Barlow Condensed', sans-serif; font-size: 2.6rem; font-weight: 800; color: var(--green); }
-  .stat-card .lbl { font-size: 0.88rem; color: var(--muted); margin-top: 6px; }
-  .stats-copy { text-align: center; font-size: 1rem; color: var(--muted); max-width: 680px; margin: 0 auto; line-height: 1.75; }
-  .stats-copy strong { color: var(--white); }
+/* ── STAT CARDS ── */
+.dash-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-bottom:32px;}
+.dash-stat{
+  background:var(--card);border:1px solid var(--border-solid);
+  border-radius:var(--radius);padding:24px 20px;transition:all .2s;position:relative;overflow:hidden;
+}
+.dash-stat::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--green);transform:scaleX(0);transition:transform .3s;transform-origin:left;
+}
+.dash-stat:hover{border-color:var(--green);transform:translateY(-3px);}
+.dash-stat:hover::after{transform:scaleX(1);}
+.dash-stat-icon{font-size:1.4rem;margin-bottom:12px;}
+.dash-stat-num{font-family:'Barlow Condensed',sans-serif;font-size:2.4rem;font-weight:800;color:var(--green);line-height:1;}
+.dash-stat-num.red{color:var(--red);}
+.dash-stat-num.amber{color:var(--amber);}
+.dash-stat-num.blue{color:var(--blue);}
+.dash-stat-label{font-size:0.82rem;color:var(--muted);margin-top:6px;}
 
-  /* ── FAQ ── */
-  #faq { background: var(--dark); }
-  .faq-list { margin-top: 48px; max-width: 860px; }
-  .faq-item {
-    border-bottom: 1px solid var(--border); padding: 22px 0; cursor: pointer;
-  }
-  .faq-q {
-    display: flex; justify-content: space-between; align-items: center;
-    font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 1.5rem; color: var(--white);
-  }
-  .faq-q .icon { width: 24px; height: 24px; color: var(--green); font-size: 1.4rem; transition: transform .3s; flex-shrink: 0; }
-  .faq-a { font-size: 0.93rem; color: var(--muted); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height .35s ease, margin .3s; }
-  .faq-item.open .faq-a { max-height: 300px; margin-top: 14px; }
-  .faq-item.open .icon { transform: rotate(45deg); }
+/* ── SECTION HEADER ── */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.section-hdr h3{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:800;color:var(--white);}
+.section-hdr h3 span{color:var(--green);}
 
-  /* ── CTA ── */
-  .cta-section {
-    background: linear-gradient(135deg, #0d1f10 0%, #0a160c 100%);
-    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    padding: 100px 60px; text-align: center; position: relative; overflow: hidden;
-  }
-  .cta-section::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(46,204,113,0.10), transparent 70%);
-    pointer-events: none;
-  }
-  .cta-section h2 { margin-bottom: 20px; }
-  .cta-checks { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; margin: 28px 0 36px; }
-  .cta-check { display: flex; align-items: center; gap: 10px; font-size: 0.93rem; color: var(--text); }
-  .cta-check::before { content: '✔'; color: var(--green); font-size: 1rem; }
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:10px 20px;border-radius:40px;font-family:'DM Sans',sans-serif;
+  font-weight:700;font-size:0.85rem;cursor:pointer;
+  border:none;transition:all .2s;text-decoration:none;
+}
+.btn-green{background:var(--green);color:#0a0f0d;}
+.btn-green:hover{background:var(--green-dark);transform:translateY(-1px);}
+.btn-outline-green{background:transparent;border:1.5px solid var(--green);color:var(--green);}
+.btn-outline-green:hover{background:var(--green-glow);}
+.btn-red{background:var(--red-glow);border:1px solid var(--red);color:var(--red);}
+.btn-red:hover{background:rgba(224,80,80,0.28);}
+.btn-amber{background:var(--amber-glow);border:1px solid var(--amber);color:var(--amber);}
+.btn-amber:hover{background:rgba(240,160,48,0.28);}
+.btn-blue{background:var(--blue-glow);border:1px solid var(--blue);color:var(--blue);}
+.btn-blue:hover{background:rgba(58,154,217,0.25);}
+.btn-sm{padding:7px 14px;font-size:0.78rem;}
 
-  /* ── REVIEWS ── */
-  #reviews { background: var(--dark2); }
-  .reviews-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
-  .review-card {
-    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 28px; transition: border-color .2s, transform .2s;
-  }
-  .review-card:hover { border-color: var(--green); transform: translateY(-3px); }
-  .review-stars { color: var(--green); font-size: 1rem; margin-bottom: 14px; }
-  .review-text { font-size: 0.92rem; color: var(--muted); line-height: 1.7; margin-bottom: 20px; }
-  .review-author { display: flex; align-items: center; gap: 12px; }
-  .review-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--green-glow); border: 1.5px solid var(--green); display: flex; align-items: center; justify-content: center; font-family:'Barlow Condensed',sans-serif; font-weight:800; color: var(--green); font-size: 1rem; }
-  .review-name { font-weight: 600; font-size: 0.9rem; color: var(--white); }
-  .review-role { font-size: 0.8rem; color: var(--muted); }
+/* ── APPS GRID ── */
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+.app-card{
+  background:var(--card);border:1px solid var(--border-solid);
+  border-radius:var(--radius);overflow:hidden;transition:all .2s;
+}
+.app-card:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 8px 32px rgba(46,204,113,0.08);}
+.app-card-visual{
+  height:160px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;background:var(--dark2);
+}
+.app-card-visual img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.app-card:hover .app-card-visual img{transform:scale(1.05);}
+.emoji-placeholder{font-size:5rem;opacity:0.25;}
+.card-num{
+  position:absolute;top:12px;left:12px;
+  background:rgba(10,15,13,0.8);backdrop-filter:blur(6px);
+  border:1px solid var(--border-solid);border-radius:8px;
+  padding:3px 10px;font-family:'Barlow Condensed',sans-serif;
+  font-size:0.78rem;font-weight:800;color:var(--muted);
+}
+.card-status{
+  position:absolute;top:12px;right:12px;
+  border-radius:20px;padding:3px 10px;font-size:0.72rem;font-weight:700;letter-spacing:0.05em;
+}
+.status-active{background:rgba(46,204,113,0.15);border:1px solid var(--green);color:var(--green);}
+.status-inactive{background:var(--red-glow);border:1px solid var(--red);color:var(--red);}
+.app-card-body{padding:20px;}
+.app-card-emoji{font-size:1.4rem;margin-bottom:8px;}
+.app-card-title{font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;color:var(--white);margin-bottom:6px;}
+.app-card-desc{font-size:0.83rem;color:var(--muted);line-height:1.55;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.app-card-actions{display:flex;gap:8px;flex-wrap:wrap;}
 
-  /* ── FOOTER ── */
-  footer {
-    background: #080d09; border-top: 1px solid var(--border);
-    padding: 72px 60px 40px;
-  }
-  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 48px; margin-bottom: 56px; }
-  .footer-brand img { height: 40px; margin-bottom: 16px; }
-  .footer-brand p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
-  .footer-contact { font-size: 0.85rem; color: var(--muted); line-height: 2; }
-  .footer-contact a { color: var(--muted); text-decoration: none; }
-  .footer-contact a:hover { color: var(--green); }
-  .footer-col h4 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--white); margin-bottom: 16px; letter-spacing: .04em; }
-  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .footer-col ul a { color: var(--muted); text-decoration: none; font-size: 0.87rem; transition: color .2s; }
-  .footer-col ul a:hover { color: var(--green); }
-  .footer-social { display: flex; gap: 12px; margin-top: 20px; }
-  .social-btn {
-    width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--border);
-    display: flex; align-items: center; justify-content: center; text-decoration: none;
-    font-size: 1rem; color: var(--muted); transition: border-color .2s, color .2s, background .2s;
-  }
-  .social-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-glow); }
-  .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; text-align: center; font-size: 0.82rem; color: var(--muted); }
+/* ── SETTINGS SECTION ── */
+.settings-card{
+  background:var(--card);border:1px solid var(--border-solid);
+  border-radius:var(--radius);padding:28px;margin-bottom:20px;
+}
+.settings-card h4{
+  font-family:'Barlow Condensed',sans-serif;font-size:1.2rem;font-weight:800;
+  color:var(--white);margin-bottom:6px;
+}
+.settings-card .settings-desc{font-size:0.84rem;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.settings-divider{height:1px;background:var(--border-solid);margin:20px 0;}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(30,53,34,0.5);}
+.setting-row:last-child{border-bottom:none;}
+.setting-row-info strong{display:block;font-size:0.88rem;color:var(--white);margin-bottom:3px;}
+.setting-row-info span{font-size:0.78rem;color:var(--muted);}
+.setting-value{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;color:var(--green);}
+.setting-value.muted{color:var(--muted);font-size:0.85rem;font-family:'DM Sans',sans-serif;font-weight:400;}
 
-  /* ── MOBILE MENU OVERLAY ── */
-  .nav-mobile-menu {
-    display: none;
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10,15,13,0.97);
-    backdrop-filter: blur(16px);
-    z-index: 200;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 32px;
-  }
-  .nav-mobile-menu.open { display: flex; }
-  .nav-mobile-menu a {
-    color: var(--text); text-decoration: none;
-    font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700;
-    transition: color .2s;
-  }
-  .nav-mobile-menu a:hover { color: var(--green); }
-  .nav-mobile-close {
-    position: absolute; top: 24px; right: 28px;
-    font-size: 2rem; color: var(--green); cursor: pointer;
-    background: none; border: none; line-height: 1;
-  }
+/* ── SUPABASE STATUS ── */
+.supabase-status{
+  display:flex;align-items:center;gap:8px;padding:12px 16px;
+  border-radius:10px;font-size:0.84rem;font-weight:600;margin-bottom:20px;
+}
+.supabase-status.connected{background:rgba(46,204,113,0.1);border:1px solid var(--green);color:var(--green);}
+.supabase-status.disconnected{background:var(--amber-glow);border:1px solid var(--amber);color:var(--amber);}
+.supabase-status.error{background:var(--red-glow);border:1px solid var(--red);color:var(--red);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:pulse 1.5s infinite;}
 
-  /* ── MOBILE ── */
-  @media(max-width:900px) {
-    nav { padding: 16px 20px; }
-    .nav-links, .nav-cta { display: none; }
-    .hamburger { display: flex; }
-    #home { padding: 100px 20px 60px; overflow: hidden; flex-direction: column; align-items: flex-start; }
-    .hero-content { max-width: 100%; width: 100%; }
-    h1 { font-size: clamp(2rem, 8vw, 3rem); word-break: break-word; }
-    .hero-sub { font-size: 0.95rem; max-width: 100%; }
-    .hero-actions { flex-direction: column; align-items: stretch; }
-    .hero-actions a { text-align: center; }
-    .hero-img { display: block; position: relative; right: auto; top: auto; transform: none; width: 100%; max-width: 420px; margin: 36px auto 0; opacity: 1; animation: none; }
-    .hero-img img { width: 100%; display: block; }
-    section { padding: 72px 20px; }
-    .about-grid, .services-grid, .reviews-grid { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-    .stats-section, .cta-section { padding: 72px 20px; }
-    .hero-stats { gap: 20px; flex-wrap: wrap; }
-    .hero-stats .stat-num { font-size: 1.7rem; }
-    footer { padding: 56px 20px 32px; }
-    .cta-checks { flex-direction: column; align-items: center; gap: 14px; }
-  }
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(5,10,7,0.88);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{
+  background:var(--card);border:1px solid var(--border-solid);
+  border-radius:20px;width:100%;max-width:680px;
+  max-height:90vh;overflow-y:auto;
+  transform:translateY(24px);transition:transform .25s;
+}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-header{
+  padding:24px 28px 20px;border-bottom:1px solid var(--border-solid);
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;
+  background:var(--card);z-index:2;
+}
+.modal-header h3{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;color:var(--white);}
+.modal-close{
+  width:32px;height:32px;border-radius:50%;border:1px solid var(--border-solid);
+  background:none;color:var(--muted);cursor:pointer;font-size:1.1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.modal-close:hover{border-color:var(--red);color:var(--red);}
+.modal-body{padding:28px;}
+.modal-footer{
+  padding:16px 28px;border-top:1px solid var(--border-solid);
+  display:flex;gap:10px;justify-content:flex-end;
+  position:sticky;bottom:0;background:var(--card);
+}
+
+/* ── FORM ── */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.form-row.single{grid-template-columns:1fr;}
+.form-group{margin-bottom:0;}
+.form-group label{display:block;font-size:0.75rem;font-weight:700;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:7px;}
+.form-group label .required{color:var(--green);margin-left:2px;}
+.form-control{
+  width:100%;padding:11px 14px;
+  background:var(--dark2);border:1px solid var(--border-solid);
+  border-radius:10px;color:var(--white);
+  font-family:'DM Sans',sans-serif;font-size:0.9rem;
+  outline:none;transition:border-color .2s;resize:vertical;
+}
+.form-control:focus{border-color:var(--green);}
+.form-control::placeholder{color:var(--muted);opacity:0.6;}
+select.form-control{cursor:pointer;}
+select.form-control option{background:var(--card2);}
+
+/* Features list */
+.features-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+.feature-item{display:flex;align-items:center;gap:8px;}
+.feature-item input{flex:1;}
+.feature-remove{
+  width:30px;height:30px;border-radius:50%;border:1px solid var(--border-solid);
+  background:none;color:var(--muted);cursor:pointer;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;
+}
+.feature-remove:hover{border-color:var(--red);color:var(--red);}
+.add-feature-btn{
+  background:none;border:1px dashed var(--border-solid);border-radius:10px;
+  color:var(--muted);padding:8px;width:100%;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:0.83rem;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.add-feature-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-glow);}
+
+/* Color picker */
+.color-row{display:flex;align-items:center;gap:10px;}
+.color-row input[type="color"]{width:44px;height:36px;padding:2px;border-radius:8px;border:1px solid var(--border-solid);background:var(--dark2);cursor:pointer;}
+.color-row .form-control{flex:1;}
+
+/* Image preview */
+.image-preview-wrap{position:relative;display:inline-block;margin-top:12px;}
+.image-preview{max-height:140px;max-width:100%;border-radius:10px;border:1px solid var(--border-solid);}
+.image-preview-remove{
+  position:absolute;top:-8px;right:-8px;width:24px;height:24px;
+  border-radius:50%;background:var(--red);color:white;border:none;cursor:pointer;font-size:0.8rem;
+  display:flex;align-items:center;justify-content:center;
+}
+
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  background:var(--card2);border:1px solid var(--border-solid);
+  border-radius:12px;padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+  transform:translateY(20px);opacity:0;pointer-events:none;
+  transition:all .3s;min-width:220px;
+}
+#toast.show{transform:translateY(0);opacity:1;pointer-events:all;}
+#toast.success{border-color:var(--green);}
+#toast.error{border-color:var(--red);}
+#toast.info{border-color:var(--blue);}
+#toast .toast-icon{font-size:1.1rem;}
+
+/* ── CONFIRM DIALOG ── */
+.confirm-overlay{
+  position:fixed;inset:0;z-index:300;
+  background:rgba(5,10,7,0.9);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.confirm-overlay.open{opacity:1;pointer-events:all;}
+.confirm-box{
+  background:var(--card);border:1px solid var(--red);
+  border-radius:16px;padding:32px;max-width:380px;text-align:center;
+}
+.confirm-box .confirm-icon{font-size:2.5rem;margin-bottom:14px;}
+.confirm-box h4{font-family:'Barlow Condensed',sans-serif;font-size:1.4rem;font-weight:800;color:var(--white);margin-bottom:8px;}
+.confirm-box p{font-size:0.88rem;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.confirm-actions{display:flex;gap:10px;justify-content:center;}
+
+/* ── ORDER LIST ── */
+.order-list{display:flex;flex-direction:column;gap:10px;}
+.order-item{
+  background:var(--dark2);border:1px solid var(--border-solid);
+  border-radius:10px;padding:14px 16px;
+  display:flex;align-items:center;gap:12px;cursor:grab;transition:all .2s;
+}
+.order-item:active{cursor:grabbing;}
+.order-item.drag-over{border-color:var(--green);background:var(--green-glow);}
+.order-drag-handle{color:var(--muted);font-size:1.1rem;}
+.order-item-emoji{font-size:1.4rem;}
+.order-item-title{font-weight:600;font-size:0.9rem;color:var(--white);flex:1;}
+.order-item-num{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--muted);}
+
+/* ── PREVIEW BAR ── */
+.preview-bar{
+  background:var(--card2);border:1px solid var(--border-solid);
+  border-radius:var(--radius);padding:20px 24px;margin-bottom:28px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.preview-bar-text h4{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:800;color:var(--white);}
+.preview-bar-text p{font-size:0.82rem;color:var(--muted);margin-top:2px;}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state .empty-icon{font-size:3.5rem;margin-bottom:16px;}
+.empty-state h4{font-family:'Barlow Condensed',sans-serif;font-size:1.3rem;font-weight:800;color:var(--white);margin-bottom:8px;}
+
+/* ── RECENT ACTIVITY ── */
+.activity-list{display:flex;flex-direction:column;gap:0;}
+.activity-item{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:16px 0;border-bottom:1px solid rgba(30,53,34,0.5);
+}
+.activity-item:last-child{border-bottom:none;}
+.activity-icon{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:1rem;
+  background:var(--green-glow);border:1px solid var(--green);
+}
+.activity-icon.red{background:var(--red-glow);border-color:var(--red);}
+.activity-icon.amber{background:var(--amber-glow);border-color:var(--amber);}
+.activity-content{flex:1;}
+.activity-title{font-size:0.88rem;color:var(--white);font-weight:500;margin-bottom:2px;}
+.activity-time{font-size:0.75rem;color:var(--muted);}
+
+/* ── QUICK LINKS GRID ── */
+.quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:20px;}
+.quick-link-card{
+  background:var(--card2);border:1px solid var(--border-solid);
+  border-radius:12px;padding:20px;text-align:center;cursor:pointer;
+  transition:all .2s;text-decoration:none;display:block;
+}
+.quick-link-card:hover{border-color:var(--green);transform:translateY(-2px);}
+.quick-link-icon{font-size:2rem;margin-bottom:10px;}
+.quick-link-label{font-size:0.84rem;color:var(--text);font-weight:500;}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--dark);}
+::-webkit-scrollbar-thumb{background:var(--border-solid);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--green-dark);}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main-content{margin-left:0;}
+  .page{padding:20px;}
+  .dash-stats{grid-template-columns:1fr 1fr;}
+  .apps-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .topbar{padding:14px 20px;}
+  .mob-menu-btn{display:flex !important;}
+  .modal{max-width:100%;}
+  .config-form{width:100%;}
+  .config-input{width:100%;}
+}
+.mob-menu-btn{
+  display:none;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:8px;
+  background:var(--card);border:1px solid var(--border-solid);
+  color:var(--green);cursor:pointer;font-size:1.2rem;
+}
+.sidebar-overlay{display:none;position:fixed;inset:0;z-index:49;background:rgba(5,10,7,0.7);}
+.sidebar-overlay.open{display:block;}
+
+/* ── LOADING SPINNER ── */
+.loading-overlay{
+  position:fixed;inset:0;z-index:8000;
+  background:rgba(10,15,13,0.7);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.loading-overlay.show{opacity:1;pointer-events:all;}
+.spinner{width:42px;height:42px;border:3px solid var(--border-solid);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── LIVE SYNC PANEL ── */
+.sync-panel {
+  background: var(--card); border: 1px solid var(--border-solid);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.sync-panel::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), var(--blue), var(--green));
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.sync-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+}
+.sync-panel-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.15rem; font-weight: 800; color: var(--white);
+  display: flex; align-items: center; gap: 8px;
+}
+.sync-pulse {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+  animation: pulse 1.5s infinite;
+}
+.sync-pulse.inactive { background: var(--amber); }
+.sync-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.sync-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px;
+}
+.sync-card {
+  background: var(--dark2); border: 1px solid var(--border-solid);
+  border-radius: 10px; padding: 16px; position: relative; overflow: hidden;
+  transition: border-color .2s;
+}
+.sync-card:hover { border-color: var(--green); }
+.sync-card-source {
+  font-size: 0.68rem; font-weight: 700; color: var(--muted);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 5px;
+}
+.sync-card-source .src-dot {
+  width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+}
+.sync-card-num {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800;
+  line-height: 1; margin-bottom: 3px;
+}
+.sync-card-label { font-size: 0.78rem; color: var(--muted); }
+.sync-card-change {
+  position: absolute; top: 12px; right: 12px;
+  font-size: 0.7rem; font-weight: 700; padding: 2px 8px;
+  border-radius: 20px;
+}
+.sync-card-change.up { background: rgba(46,204,113,0.15); color: var(--green); }
+.sync-card-change.same { background: var(--dark); color: var(--muted); }
+.sync-change-down { background: var(--red-glow); color: var(--red); }
+
+/* ── LIVE FEED ── */
+.live-feed {
+  background: var(--dark2); border: 1px solid var(--border-solid);
+  border-radius: 10px; overflow: hidden; max-height: 200px; overflow-y: auto;
+}
+.live-feed-header {
+  padding: 10px 14px;
+  background: rgba(46,204,113,0.05);
+  border-bottom: 1px solid var(--border-solid);
+  font-size: 0.72rem; font-weight: 700; color: var(--muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.feed-entry {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid rgba(30,53,34,0.4);
+  font-size: 0.8rem; color: var(--text); transition: background .15s;
+  animation: feedIn .3s ease;
+}
+@keyframes feedIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
+.feed-entry:last-child { border-bottom: none; }
+.feed-entry:hover { background: rgba(46,204,113,0.04); }
+.feed-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; margin-top: 1px; }
+.feed-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+.feed-entry-text { flex: 1; line-height: 1.4; }
+.feed-tag {
+  display: inline-block; padding: 1px 7px; border-radius: 10px;
+  font-size: 0.65rem; font-weight: 700; margin-left: 6px;
+  vertical-align: middle;
+}
+.tag-products { background: rgba(58,154,217,0.15); color: var(--blue); }
+.tag-apps { background: rgba(46,204,113,0.12); color: var(--green); }
+.tag-sync { background: var(--amber-glow); color: var(--amber); }
+
+/* ── DIFF ALERT ── */
+.diff-alert {
+  background: rgba(240,160,48,0.08); border: 1px solid var(--amber);
+  border-radius: 10px; padding: 12px 16px; margin-top: 14px;
+  font-size: 0.83rem; color: var(--amber); display: none;
+  align-items: center; gap: 10px;
+}
+.diff-alert.show { display: flex; }
+.diff-alert strong { color: var(--white); }
+
+/* ── PAGE PREVIEW STRIP ── */
+.page-strip {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;
+}
+
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav id="mainNav">
-  <a class="nav-logo" href="#home">
-    <img src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt="SAG Logo"/>
-    <span></span>
-  </a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
-    <li><a href="#about-us" class="nav-link" data-section="about-us">About Us</a></li>
-    <li><a href="#our-services" class="nav-link" data-section="our-services">Services</a></li>
-    <li><a href="rpto.html" class="nav-link">RPTO</a></li>
-    <li><a href="products.html" class="nav-link">Products</a></li>
-    <li><a href="#reviews" class="nav-link" data-section="reviews">Testimonials</a></li>
-  </ul>
-  <a class="nav-cta" href="tel:+918977771705">Get a Free Quote</a>
-  <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
-    <span></span><span></span><span></span>
+<!-- SUPABASE CONFIG BANNER -->
+<div id="configBanner">
+  <div class="config-banner-text">
+    ⚡ <strong>Supabase not configured.</strong>&nbsp;Connect your database for real-time sync:
   </div>
-</nav>
-
-<!-- MOBILE MENU OVERLAY -->
-<div class="nav-mobile-menu" id="mobileMenu">
-  <button class="nav-mobile-close" onclick="closeMobileMenu()">&times;</button>
-  <a href="#home" onclick="closeMobileMenu()">Home</a>
-  <a href="#about-us" onclick="closeMobileMenu()">About Us</a>
-  <a href="#our-services" onclick="closeMobileMenu()">Services</a>
-  <a href="rpto.html" onclick="closeMobileMenu()">RPTO</a>
-  <a href="products.html" onclick="closeMobileMenu()">Products</a>
-  <a href="#reviews" onclick="closeMobileMenu()">Testimonials</a>
-  <a href="tel:+918977771705" style="color:var(--green);border:1.5px solid var(--green);padding:12px 32px;border-radius:40px;text-decoration:none;">Get a Free Quote</a>
-</div>
-
-<!-- HERO -->
-<section id="home">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <a class="hero-badge" href="https://www.youtube.com/@SAGDroneTechnologies" target="_blank">
-      <span class="dot"></span> Explore Our Drones on YouTube ↗
-    </a>
-    <h1><span>S</span>AMATULANA <span>A</span>NTARJALA<br/><span>G</span>ATHAKA PRIVATE LIMITED</h1>
-    <p class="hero-sub">We are a certified agri-drone ecosystem builder — training pilots, deploying compliant drone services, and enabling modern farming at scale.</p>
-    <div class="hero-actions">
-      <a class="btn-primary" href="tel:+918977771705">Get a Free Quote</a>
-      <a class="btn-outline" href="https://drive.google.com/file/d/1DcaFBGkMgYWVOzNAI9l_fsYv_QAHR3sM/view?usp=sharing" target="_blank">Book Your Slot Now</a>
-    </div>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-num">500+</div>
-        <div class="stat-label">Happy Clients</div>
-      </div>
-      <div>
-        <div class="stat-num">30+</div>
-        <div class="stat-label">Experts Team</div>
-      </div>
-      <div>
-        <div class="stat-num">1000+</div>
-        <div class="stat-label">Acres Sprayed</div>
-      </div>
-    </div>
-  </div>
-  <div class="hero-img">
-    <img src="https://framerusercontent.com/images/Rj3kVKO8jf8ObPTfoIuf4HVhCFY.png" alt="Drone Hero"/>
-  </div>
-</section>
-
-<!-- BRANDS MARQUEE -->
-<div class="brands-section">
-  <div class="brands-title">Delivering Products from Top Brands</div>
-  <div style="overflow:hidden;">
-    <div class="marquee-track" id="marquee">
-      <img class="brand-logo" src="https://framerusercontent.com/images/0izqObkahAX7w6lXOf9YLu1AvOg.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/qtq67wtFFXfSiWaAjbIqdtWQDrA.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/S9RuB3rDTG5RvVMDP3zXQBdQ.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/CuKJkZT8RTFA41dX3Cu03LSzCM.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/YpABxXoIcXAcXlIyhQ6PJKBh8.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/o79Cyj3pRYRISfcTRB7RClLIl0.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/iOAaPiaqlQBNfphlYTlaQ4yfi48.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/meIScF0NjMlY02SVu2Ggqqx9wWQ.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/u4AaVQabUauRbCW5qMBrLpycsA.png" alt="Brand"/>
-      <!-- duplicate for seamless loop -->
-      <img class="brand-logo" src="https://framerusercontent.com/images/0izqObkahAX7w6lXOf9YLu1AvOg.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/qtq67wtFFXfSiWaAjbIqdtWQDrA.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/S9RuB3rDTG5RvVMDP3zXQBdQ.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/CuKJkZT8RTFA41dX3Cu03LSzCM.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/YpABxXoIcXAcXlIyhQ6PJKBh8.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/o79Cyj3pRYRISfcTRB7RClLIl0.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/iOAaPiaqlQBNfphlYTlaQ4yfi48.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/meIScF0NjMlY02SVu2Ggqqx9wWQ.png" alt="Brand"/>
-      <img class="brand-logo" src="https://framerusercontent.com/images/u4AaVQabUauRbCW5qMBrLpycsA.png" alt="Brand"/>
-    </div>
+  <div class="config-form">
+    <input class="config-input" id="cfgUrl" placeholder="Supabase Project URL (https://xxx.supabase.co)" type="url"/>
+    <input class="config-input" id="cfgKey" placeholder="Supabase Anon Key" style="width:320px;"/>
+    <button class="config-btn" onclick="saveSupabaseConfig()">Connect →</button>
+    <button class="config-dismiss" onclick="dismissConfigBanner()">Skip for now</button>
   </div>
 </div>
 
-<!-- ABOUT US -->
-<section id="about-us">
-  <div class="section-tag">About Us</div>
-  <h2>Three Pillars of Our <span style="color:var(--green)">Ecosystem</span></h2>
-  <p class="section-intro">A certified agri-drone ecosystem builder — from training pilots to deploying compliant drone services and enabling modern farming at scale.</p>
-  <div class="about-grid">
-    <div class="pillar-card">
-      <img class="pillar-icon" src="https://framerusercontent.com/images/m4bwi49v4imSNKc3foNtD8znAmQ.jpg" alt="RPTO"/>
-      <h3>Pillar 1: RPTO — Skill &amp; Certification Authority</h3>
-      <div class="checks">
-        <span>✔ DGCA-compliant</span>
-        <span>✔ Industry-aligned, not exam-only</span>
-        <span>✔ Focused on real agri operations</span>
-      </div>
-      <blockquote>We don't just certify pilots — we create job-ready agri-drone professionals.</blockquote>
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <img class="login-logo" src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt="SAG Logo"/>
+    <h2>Admin Panel</h2>
+    <p>SAG Drone Technologies — Unified Control</p>
+    <div class="login-field">
+      <label>Username</label>
+      <input type="text" id="loginUser" placeholder="admin" autocomplete="username"/>
     </div>
-    <div class="pillar-card">
-      <img class="pillar-icon" src="https://framerusercontent.com/images/VLDgDv4ypOj9a2HKNjJdxfM4RQ.jpg" alt="Agri Drone"/>
-      <h3>Pillar 2: Agri-Drone Services — Execution Authority</h3>
-      <div class="checks">
-        <span>✔ Safe</span>
-        <span>✔ Certified</span>
-        <span>✔ Scientifically applied</span>
-      </div>
-      <blockquote>Certified drones. Certified pilots. Verified spraying.</blockquote>
+    <div class="login-field">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"/>
     </div>
-    <div class="pillar-card">
-      <img class="pillar-icon" src="https://framerusercontent.com/images/yMrSZhXDuYWlBcTl6hbdimx0J0.webp" alt="Tech"/>
-      <h3>Pillar 3: Indigenous Technology &amp; Compliance</h3>
-      <div class="checks">
-        <span>✔ Indigenous drones</span>
-        <span>✔ DGCA type certification</span>
-        <span>✔ Local manufacturing / assembly</span>
-        <span>✔ Service &amp; spare availability</span>
-      </div>
-      <blockquote>Make-in-India drones, built for Indian farms — compliant, reliable, and scalable.</blockquote>
-    </div>
-    <div class="pillar-card">
-      <img class="pillar-icon" src="https://framerusercontent.com/images/s7jWNKFDt4kbVwESltnIdw299PQ.webp" alt="Footprint"/>
-      <h3>Expanding Footprint</h3>
-      <p>6 branches across Andhra Pradesh, now expanding to Telangana. Bringing precision agriculture closer to every farmer.</p>
-    </div>
-    <div class="pillar-card">
-      <img class="pillar-icon" src="https://framerusercontent.com/images/TmEe0Bfwy52yUGB7vkBzEygNA4.png" alt="Coverage"/>
-      <h3>Extensive Coverage</h3>
-      <p>Over 1,000 acres sprayed with precision. Our drone fleet covers vast agricultural land efficiently and accurately.</p>
-    </div>
-    <div class="pillar-card">
-      <img class="pillar-icon" src="https://framerusercontent.com/images/Yi7o292da9z47oNypxDapOCFQ.webp" alt="Clients"/>
-      <h3>Trusted by Hundreds</h3>
-      <p>500+ happy clients using our innovative drones. A 90% client retention rate driven by reliable performance and dedicated support.</p>
-    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="login-error" id="loginError">Incorrect username or password.</div>
   </div>
-</section>
-
-<!-- SERVICES -->
-<section id="our-services">
-  <div class="section-tag">Our Services</div>
-  <h2>However, we approach things<br/><span style="color:var(--green)">differently around here.</span></h2>
-  <div class="services-grid">
-    <div class="service-card">
-      <div class="service-icon" style="font-size:1.8rem;">🌾</div>
-      <h3>Agricultural Spraying</h3>
-      <p>Efficient and precise pesticide and fertilizer spraying using advanced drone technology, covering large areas in minimal time.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon" style="font-size:1.8rem;">🎓</div>
-      <h3>Remote Pilot Training</h3>
-      <p>Our RPTO provides industry-standard drone pilot training with a strong focus on safety, regulations, and practical flying skills.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon" style="font-size:1.8rem;">🗺️</div>
-      <h3>Field Mapping</h3>
-      <p>Generate accurate field maps to analyze soil conditions, plant density, and topography, enabling data-driven decision-making.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon" style="font-size:1.8rem;">🎯</div>
-      <h3>Precision Agriculture Solutions</h3>
-      <p>Implement targeted spraying and monitoring to reduce chemical usage and maximize crop yield, promoting sustainable farming.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon" style="font-size:1.8rem;">🔧</div>
-      <h3>Drone Sales and Maintenance</h3>
-      <p>Offer a range of high-performance agriculture drones with maintenance, servicing, and technical support.</p>
-    </div>
-    <div class="service-card">
-      <div class="service-icon" style="font-size:1.8rem;">⚙️</div>
-      <h3>Custom Drone Solutions</h3>
-      <p>From specialized spraying mechanisms to custom payloads, we develop drones that fit your exact requirements.</p>
-    </div>
-  </div>
-</section>
-
-<!-- STATS -->
-<div class="stats-section">
-  <div class="stats-header">
-    <div class="stats-tag">Results &amp; Analytics</div>
-    <h2>Performance Insights and<br/>Analytics Overview</h2>
-  </div>
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="num" data-target="400">500+</div>
-      <div class="lbl">Happy Customers</div>
-    </div>
-    <div class="stat-card">
-      <div class="num" data-target="15">10+</div>
-      <div class="lbl">Industry Collaborations</div>
-    </div>
-    <div class="stat-card">
-      <div class="num" data-target="3">5</div>
-      <div class="lbl">Years of Experience</div>
-    </div>
-    <div class="stat-card">
-      <div class="num" data-target="20">15+</div>
-      <div class="lbl">Team Members</div>
-    </div>
-  </div>
-  <p class="stats-copy">Trusted by over <strong>500 happy clients</strong>, who have embraced our innovative drone technology to optimize their farming practices. Achieved a <strong>90% client retention rate</strong>, thanks to our reliable performance and dedicated support.</p>
 </div>
 
-<!-- REVIEWS -->
-<section id="reviews">
-  <div class="section-tag">Reviews</div>
-  <h2>Client Success Stories</h2>
-  <div class="reviews-grid">
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">SAG Drone Technologies transformed our farming completely. The precision spraying saved us chemical costs and increased our yield dramatically. Excellent team and great support.</p>
-      <div class="review-author">
-        <div class="review-avatar">R</div>
-        <div><div class="review-name">Ravi Kumar</div><div class="review-role">Farmer, Andhra Pradesh</div></div>
-      </div>
-    </div>
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">The RPTO training was thorough and practical. Got DGCA certified within the stipulated time and was placed immediately. Best investment in my career.</p>
-      <div class="review-author">
-        <div class="review-avatar">S</div>
-        <div><div class="review-name">Suresh Babu</div><div class="review-role">Certified Pilot, Nidadavole</div></div>
-      </div>
-    </div>
-    <div class="review-card">
-      <div class="review-stars">★★★★★</div>
-      <p class="review-text">Very reliable service and prompt support. The drones covered our 50-acre fields in a fraction of the time. Highly recommend SAG for any agri-drone needs.</p>
-      <div class="review-author">
-        <div class="review-avatar">V</div>
-        <div><div class="review-name">Venkata Rao</div><div class="review-role">Farm Owner, Martur</div></div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- SIDEBAR OVERLAY (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="section-tag">FAQ's</div>
-  <h2>Frequently Asked Questions</h2>
-  <p class="section-intro">Answers to common questions about our services, processes, and what sets us apart.</p>
-  <div class="faq-list" id="faqList">
-    <div class="faq-item">
-      <div class="faq-q">What types of drones do you offer?<span class="icon">+</span></div>
-      <div class="faq-a">We offer a range of DGCA-certified agricultural drones including multi-rotor sprayers, mapping drones, and custom payload drones suited for different crop types and farm sizes.</div>
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt="SAG"/>
+      <span>SAG Admin<br/>Panel</span>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Who can enroll in RPTO training?<span class="icon">+</span></div>
-      <div class="faq-a">Anyone above 18 years with a Class 10 pass certificate can enroll. Both fresher candidates and experienced pilots looking for DGCA certification are welcome.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Is certification mandatory to operate a drone?<span class="icon">+</span></div>
-      <div class="faq-a">Yes. As per DGCA regulations, a Remote Pilot Certificate (RPC) is mandatory for operating medium and large category drones commercially in India.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">How can I enroll in the pilot training program?<span class="icon">+</span></div>
-      <div class="faq-a">You can contact us via phone at +91 897777 1705 or email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="770416100312141f1e19111837101a161e1b5914181a">[email&#160;protected]</a>. You can also book your slot online via our booking link.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Will I get hands-on flying experience?<span class="icon">+</span></div>
-      <div class="faq-a">Absolutely. Our RPTO program is designed with heavy emphasis on practical flying hours, field operations, and real agri-drone deployment scenarios.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">What is the duration of the training program?<span class="icon">+</span></div>
-      <div class="faq-a">The standard training program runs for 7 days, covering both theory and practical sessions, followed by DGCA examination preparation and certification.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">What topics are covered in RPTO training?<span class="icon">+</span></div>
-      <div class="faq-a">Topics include DGCA regulations, air traffic rules, drone maintenance, navigation, emergency procedures, agri-spraying techniques, mapping, and field safety protocols.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Do you provide pilot training?<span class="icon">+</span></div>
-      <div class="faq-a">Yes, we are an accredited RPTO (Remote Pilot Training Organization) and provide complete DGCA-recognized pilot training with certification support.</div>
-    </div>
-  </div>
-</section>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section-label">Overview</div>
+      <button class="sidebar-link active" onclick="showPage('dashboard')">
+        <span class="icon">📊</span> Dashboard
+      </button>
 
-<!-- CTA -->
-<div class="cta-section">
-  <div class="section-tag">Get Your Drone Now</div>
-  <h2>Contact us today to get your drone and<br/><span style="color:var(--green)">take your farming to the next level!</span></h2>
-  <div class="cta-checks">
-    <div class="cta-check">7 days Free Training</div>
-    <div class="cta-check">1 Year Warranty on all Parts</div>
-    <div class="cta-check">Free Service for 1 year</div>
-  </div>
-  <a class="btn-primary" href="tel:+918977776019">Contact Now</a>
+      <div class="sidebar-section-label">Applications</div>
+      <button class="sidebar-link" onclick="showPage('applications')">
+        <span class="icon">🚁</span> Drone Applications
+        <span class="badge" id="appCountBadge">—</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('order')">
+        <span class="icon">↕️</span> Reorder
+      </button>
+
+      <div class="sidebar-section-label">Products</div>
+      <button class="sidebar-link" onclick="showPage('products')">
+        <span class="icon">🛒</span> Manage Products
+        <span class="badge" id="productCountBadge">—</span>
+      </button>
+
+      <div class="sidebar-section-label">System</div>
+      <button class="sidebar-link" onclick="showPage('settings')">
+        <span class="icon">⚙️</span> Settings & Database
+      </button>
+
+      <div class="sidebar-section-label">Site Links</div>
+      <a class="sidebar-link" href="index.html" target="_blank">
+        <span class="icon">🌐</span> View Website
+      </a>
+      <a class="sidebar-link" href="products.html" target="_blank">
+        <span class="icon">🛒</span> Products Page
+      </a>
+      <a class="sidebar-link" href="rpto.html" target="_blank">
+        <span class="icon">🎓</span> RPTO Page
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div id="supabaseSidebarStatus" style="padding:8px 12px;font-size:0.72rem;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+        <span id="supabaseSidebarDot" style="width:6px;height:6px;border-radius:50%;background:var(--amber);display:inline-block;"></span>
+        <span id="supabaseSidebarText">DB: Not connected</span>
+      </div>
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">A</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Admin</div>
+          <div class="sidebar-user-role">Super Admin</div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()" title="Logout">⏏</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <button class="mob-menu-btn" onclick="openSidebar()">☰</button>
+        <div class="topbar-title" id="topbarTitle">📊 <span>Dashboard</span></div>
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-live-badge" id="liveStatusBadge">
+          <div class="topbar-live-dot"></div> <span id="liveStatusText">LIVE</span>
+        </div>
+        <button class="btn btn-green btn-sm" onclick="showPage('applications');openAddModal()">+ Add Application</button>
+      </div>
+    </div>
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="dash-stat-icon">🚁</div>
+          <div class="dash-stat-num" id="statTotal">—</div>
+          <div class="dash-stat-label">Total Applications</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon">👁</div>
+          <div class="dash-stat-num" id="statActive">—</div>
+          <div class="dash-stat-label">Active / Visible</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon">🙈</div>
+          <div class="dash-stat-num red" id="statInactive">—</div>
+          <div class="dash-stat-label">Hidden / Inactive</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon">⭐</div>
+          <div class="dash-stat-num amber" id="statFeatures">—</div>
+          <div class="dash-stat-label">Avg. Features / App</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon">🛒</div>
+          <div class="dash-stat-num blue" id="statProducts">—</div>
+          <div class="dash-stat-label">Total Products</div>
+        </div>
+      </div>
+
+      <!-- DB Status Card -->
+      <div id="dashDbCard" style="margin-bottom:20px;"></div>
+
+      <!-- ══ REAL-TIME SYNC PANEL ══ -->
+      <div class="sync-panel">
+        <div class="sync-panel-header">
+          <div class="sync-panel-title">
+            <span class="sync-pulse" id="syncPulseDot"></span>
+            Live Site Data — Real-Time Monitor
+          </div>
+          <div class="sync-actions">
+            <span id="lastSyncLabel" style="font-size:0.75rem;color:var(--muted);align-self:center;white-space:nowrap;">Checking…</span>
+            <button class="btn btn-outline-green btn-sm" onclick="manualSyncAll()">🔄 Sync Now</button>
+            <button class="btn btn-blue btn-sm" onclick="forcePushToPages()">⬆ Push to Pages</button>
+          </div>
+        </div>
+
+        <!-- Sync stat cards -->
+        <div class="sync-grid">
+          <div class="sync-card">
+            <div class="sync-card-source">
+              <span class="src-dot" style="background:var(--blue);"></span>
+              products.html
+            </div>
+            <div class="sync-card-num" id="syncProductCount" style="color:var(--blue);">—</div>
+            <div class="sync-card-label">Products on page</div>
+            <div class="sync-card-change same" id="syncProductDiff">—</div>
+          </div>
+          <div class="sync-card">
+            <div class="sync-card-source">
+              <span class="src-dot"></span>
+              index.html (Applications)
+            </div>
+            <div class="sync-card-num" id="syncAppCount" style="color:var(--green);">—</div>
+            <div class="sync-card-label">Applications visible</div>
+            <div class="sync-card-change same" id="syncAppDiff">—</div>
+          </div>
+          <div class="sync-card">
+            <div class="sync-card-source">
+              <span class="src-dot" style="background:var(--amber);"></span>
+              Sync Status
+            </div>
+            <div class="sync-card-num" id="syncHealthNum" style="color:var(--green);font-size:1.4rem;">✓ OK</div>
+            <div class="sync-card-label" id="syncHealthLabel">All data in sync</div>
+            <div class="sync-card-change same" id="syncHealthBadge">Live</div>
+          </div>
+        </div>
+
+        <!-- Drift alert if admin data differs from page data -->
+        <div class="diff-alert" id="syncDriftAlert">
+          ⚠️ <strong>Data drift detected.</strong>
+          <span id="syncDriftMsg">Admin data differs from what's shown on your pages.</span>
+          <button class="btn btn-amber btn-sm" style="margin-left:auto;" onclick="forcePushToPages()">Fix Now →</button>
+        </div>
+
+        <!-- Per-page preview -->
+        <div class="page-strip">
+          <div class="page-preview-card" onclick="window.open('products.html','_blank')">
+            <div class="page-preview-label">🛒 products.html — Live Data</div>
+            <div class="page-preview-row">
+              <span>Total Products</span>
+              <span class="page-preview-val" id="previewProductTotal">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>In Stock</span>
+              <span class="page-preview-val" id="previewProductInstock" style="color:var(--green);">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Out of Stock</span>
+              <span class="page-preview-val" id="previewProductOutstock" style="color:var(--red);">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Tagged "New"</span>
+              <span class="page-preview-val" id="previewProductNew" style="color:var(--amber);">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Tagged "Offer"</span>
+              <span class="page-preview-val" id="previewProductOffer" style="color:var(--blue);">—</span>
+            </div>
+          </div>
+          <div class="page-preview-card" onclick="window.open('index.html','_blank')">
+            <div class="page-preview-label">🌐 index.html — Applications Section</div>
+            <div class="page-preview-row">
+              <span>Total Applications</span>
+              <span class="page-preview-val" id="previewAppTotal">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Active / Visible</span>
+              <span class="page-preview-val" id="previewAppActive" style="color:var(--green);">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Hidden</span>
+              <span class="page-preview-val" id="previewAppHidden" style="color:var(--red);">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Avg Features</span>
+              <span class="page-preview-val" id="previewAppFeatures" style="color:var(--amber);">—</span>
+            </div>
+            <div class="page-preview-row">
+              <span>Source</span>
+              <span class="page-preview-val" id="previewAppSource" style="color:var(--blue);font-size:0.75rem;">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live activity feed -->
+        <div style="margin-top:16px;">
+          <div class="live-feed">
+            <div class="live-feed-header">
+              <span>⚡ Live Activity Feed</span>
+              <button onclick="clearFeed()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;">Clear</button>
+            </div>
+            <div id="liveFeedEntries">
+              <div class="feed-entry">
+                <span class="feed-icon">ℹ️</span>
+                <span class="feed-entry-text">Dashboard loaded. Monitoring products.html and index.html…</span>
+                <span class="feed-time" id="initFeedTime"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- ══ END SYNC PANEL ══ -->
+
+      <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;">
+        <div>
+          <div class="section-hdr">
+            <h3>Recent <span>Applications</span></h3>
+            <button class="btn btn-outline-green btn-sm" onclick="showPage('applications')">View All →</button>
+          </div>
+          <div class="apps-grid" id="dashAppGrid"></div>
+        </div>
+        <div>
+          <div class="section-hdr">
+            <h3>Quick <span>Links</span></h3>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <a href="index.html" target="_blank" class="quick-link-card">
+              <div class="quick-link-icon">🌐</div>
+              <div class="quick-link-label">View Live Website</div>
+            </a>
+            <a href="products.html" target="_blank" class="quick-link-card">
+              <div class="quick-link-icon">🛒</div>
+              <div class="quick-link-label">Products Page</div>
+            </a>
+            <a href="rpto.html" target="_blank" class="quick-link-card">
+              <div class="quick-link-icon">🎓</div>
+              <div class="quick-link-label">RPTO Training Page</div>
+            </a>
+            <div class="quick-link-card" onclick="showPage('products')">
+              <div class="quick-link-icon">🛒</div>
+              <div class="quick-link-label">Manage Products</div>
+            </div>
+            <div class="quick-link-card" onclick="showPage('settings')">
+              <div class="quick-link-icon">⚙️</div>
+              <div class="quick-link-label">Database Settings</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- APPLICATIONS PAGE -->
+    <div class="page" id="page-applications">
+      <div class="preview-bar">
+        <div class="preview-bar-text">
+          <h4>🚁 Drone Applications Manager</h4>
+          <p>Add, edit, reorder or hide applications shown on the homepage. Changes sync to Supabase in real-time.</p>
+        </div>
+        <button class="btn btn-green" onclick="openAddModal()">+ Add New Application</button>
+      </div>
+      <div class="apps-grid" id="appsGrid"></div>
+    </div>
+
+    <!-- REORDER PAGE -->
+    <div class="page" id="page-order">
+      <div class="preview-bar">
+        <div class="preview-bar-text">
+          <h4>↕️ Reorder Applications</h4>
+          <p>Drag and drop to change the display order on the homepage. Click Save Order to push changes.</p>
+        </div>
+        <button class="btn btn-green" onclick="saveOrder()">💾 Save Order</button>
+      </div>
+      <div class="order-list" id="orderList"></div>
+    </div>
+
+    <!-- PRODUCTS PAGE -->
+    <div class="page" id="page-products">
+      <div class="preview-bar">
+        <div class="preview-bar-text">
+          <h4>🛒 Products Manager</h4>
+          <p>Add, edit, or remove products shown on products.html. Changes sync to Supabase in real-time.</p>
+        </div>
+        <button class="btn btn-green" onclick="openAddProductModal()">+ Add New Product</button>
+      </div>
+      <div class="section-hdr" style="margin-bottom:16px;">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input class="form-control" id="productSearchInput" placeholder="🔍 Search products…" oninput="filterProductGrid()" style="max-width:260px;padding:9px 14px;"/>
+          <select class="form-control" id="productFilterTag" onchange="filterProductGrid()" style="max-width:160px;">
+            <option value="all">All Tags</option>
+            <option value="new">New</option>
+            <option value="offer">Offer</option>
+          </select>
+        </div>
+        <span id="productCountLabel" style="font-size:0.82rem;color:var(--muted);"></span>
+      </div>
+      <div class="apps-grid" id="productsAdminGrid"></div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div class="section-hdr">
+        <h3>Settings &amp; <span>Database</span></h3>
+      </div>
+
+      <!-- Supabase Connection -->
+      <div class="settings-card">
+        <h4>🗄️ Supabase Database Connection</h4>
+        <p class="settings-desc">Connect to your Supabase project for real-time data persistence. Applications will be stored in a <code style="background:var(--dark2);padding:2px 6px;border-radius:4px;font-size:0.8rem;color:var(--green);">drone_applications</code> table and sync live across all sessions.</p>
+        
+        <div id="settingsDbStatus" style="margin-bottom:20px;"></div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Supabase Project URL <span class="required">*</span></label>
+            <input class="form-control" id="settingsCfgUrl" placeholder="https://your-project.supabase.co"/>
+          </div>
+          <div class="form-group">
+            <label>Anon Public Key <span class="required">*</span></label>
+            <input class="form-control" id="settingsCfgKey" placeholder="eyJhbGci..." type="password"/>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-green" onclick="saveSupabaseConfigFromSettings()">💾 Save &amp; Connect</button>
+          <button class="btn btn-blue" onclick="testSupabaseConnection()">🔌 Test Connection</button>
+          <button class="btn btn-amber" onclick="migrateLocalToSupabase()">⬆️ Push Local Data to Supabase</button>
+          <button class="btn btn-outline-green" onclick="syncFromSupabase()">⬇️ Pull from Supabase</button>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <h4 style="margin-bottom:10px;font-size:1rem;">📋 Supabase Table Setup SQL</h4>
+        <p class="settings-desc" style="margin-bottom:12px;">Run this SQL in your Supabase SQL Editor to create the required table:</p>
+        <pre style="background:var(--dark2);border:1px solid var(--border-solid);border-radius:10px;padding:16px;font-size:0.78rem;color:var(--green);overflow-x:auto;line-height:1.6;">CREATE TABLE IF NOT EXISTS drone_applications (
+  id BIGSERIAL PRIMARY KEY,
+  emoji TEXT NOT NULL DEFAULT '🚁',
+  tab_label TEXT,
+  title TEXT NOT NULL,
+  title_highlight TEXT DEFAULT '',
+  description TEXT NOT NULL,
+  cta_text TEXT DEFAULT 'Enquire →',
+  cta_link TEXT DEFAULT 'tel:+918977776019',
+  badge TEXT DEFAULT '',
+  status TEXT DEFAULT 'active',
+  accent_color TEXT DEFAULT '#2ecc71',
+  image_url TEXT DEFAULT '',
+  features JSONB DEFAULT '[]'::jsonb,
+  display_order INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable Row Level Security (allow public read, authenticated write)
+ALTER TABLE drone_applications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Public read" ON drone_applications FOR SELECT USING (true);
+CREATE POLICY "Auth write" ON drone_applications FOR ALL USING (true);
+
+-- Enable realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
+      </div>
+
+      <!-- Credentials Settings -->
+      <div class="settings-card">
+        <h4>🔐 Admin Credentials</h4>
+        <p class="settings-desc">Update the admin login credentials. These are stored locally in your browser.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Admin Username</label>
+            <input class="form-control" id="newUsername" placeholder="sagadmin"/>
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input class="form-control" id="newPassword" placeholder="Min 6 characters" type="password"/>
+          </div>
+        </div>
+        <button class="btn btn-green btn-sm" onclick="updateCredentials()">Save Credentials</button>
+      </div>
+
+      <!-- Data Management -->
+      <div class="settings-card">
+        <h4>🗂️ Data Management</h4>
+        <p class="settings-desc">Manage your application data. Reset to defaults or clear all local storage.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-amber btn-sm" onclick="resetToDefaults()">🔄 Reset to Default Data</button>
+          <button class="btn btn-red btn-sm" onclick="clearAllData()">🗑️ Clear All Local Data</button>
+        </div>
+        <div class="settings-divider"></div>
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <strong>Total Applications (local)</strong>
+            <span>Count of apps stored locally</span>
+          </div>
+          <div class="setting-value" id="settingStatTotal">—</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <strong>Storage Source</strong>
+            <span>Where data is currently being read from</span>
+          </div>
+          <div class="setting-value" id="settingStorageSource">Local Storage</div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-row-info">
+            <strong>Last Synced</strong>
+            <span>Last time data was synced with Supabase</span>
+          </div>
+          <div class="setting-value muted" id="settingLastSync">Never</div>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <img src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt="SAG Logo"/>
-      <p>Book your drone now and take your farming to the next level with SAG Drone Technologies — India's trusted agri-drone ecosystem builder.</p>
-      <div class="footer-contact">
-        <div>📧 <a href="/cdn-cgi/l/email-protection#ec9f8d8b98898f8485828a83ac8b818d8580c28f8381"><span class="__cf_email__" data-cfemail="e49785839081878c8d8a828ba48389858d88ca878b89"><span class="__cf_email__" data-cfemail="047765637061676c6d6a626b446369656d682a676b69">[email&#160;protected]</span></span></a></div>
-        <div>📞 <a href="tel:+918977776019">+91 897777 6019</a> / <a href="tel:+918977771705">897777 1705</a></div>
-        <div>📍 Konidena Road, Martur, A.P</div>
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Add Application</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId"/>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Emoji Icon <span class="required">*</span></label>
+          <input class="form-control" id="fEmoji" placeholder="e.g. 🌸" maxlength="4"/>
+        </div>
+        <div class="form-group">
+          <label>Tab Label</label>
+          <input class="form-control" id="fTabLabel" placeholder="e.g. 🌸 Flower Dropping"/>
+        </div>
       </div>
-      <div class="footer-social">
-        <a class="social-btn" href="https://www.youtube.com/@SAGDroneTechnologies" target="_blank" title="YouTube">▶</a>
-        <a class="social-btn" href="https://www.instagram.com/sagdronetechnologies/" target="_blank" title="Instagram">📷</a>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Application Title <span class="required">*</span></label>
+          <input class="form-control" id="fTitle" placeholder="e.g. Flower Dropping Drone"/>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Title Highlight <span style="font-weight:400;text-transform:none;font-size:0.7rem;color:var(--muted);">(words to show in green)</span></label>
+          <input class="form-control" id="fTitleHighlight" placeholder="e.g. Drone"/>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Description <span class="required">*</span></label>
+          <textarea class="form-control" id="fDesc" rows="3" placeholder="Describe this drone application..."></textarea>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>CTA Button Text</label>
+          <input class="form-control" id="fCtaText" placeholder="e.g. Enquire for Events →"/>
+        </div>
+        <div class="form-group">
+          <label>CTA Link</label>
+          <input class="form-control" id="fCtaLink" placeholder="tel:+918977776019 or #contact"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Badge Text</label>
+          <input class="form-control" id="fBadge" placeholder="e.g. Event Ready"/>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control" id="fStatus">
+            <option value="active">Active (Visible)</option>
+            <option value="inactive">Inactive (Hidden)</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Accent Color</label>
+          <div class="color-row">
+            <input type="color" id="fColorPicker" value="#2ecc71" oninput="document.getElementById('fColor').value=this.value"/>
+            <input class="form-control" id="fColor" placeholder="#2ecc71" oninput="syncColorPicker()"/>
+          </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Image URL <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(paste a direct image URL)</span></label>
+          <input class="form-control" id="fImageUrl" placeholder="https://..." oninput="previewUrlImage()"/>
+          <div id="urlPreviewWrap" style="margin-top:10px;display:none;">
+            <div class="image-preview-wrap">
+              <img id="urlPreview" class="image-preview" src="" alt="Preview"/>
+              <button class="image-preview-remove" onclick="clearImageUrl()">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Key Features</label>
+          <div class="features-list" id="featuresList"></div>
+          <button class="add-feature-btn" onclick="addFeatureRow()">+ Add Feature</button>
+        </div>
       </div>
     </div>
-    <div class="footer-col">
-      <h4>Home</h4>
-      <ul>
-        <li><a href="#about-us">About</a></li>
-        <li><a href="#our-services">Services</a></li>
-        <li><a href="#reviews">Testimonials</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Branches</h4>
-      <ul>
-        <li><a href="">MARTUR</a></li>
-        <li><a href="">NIDADAVOLE</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="tel:+918977776019">Contact Us</a></li>
-        <li><a href="#faq">FAQ's</a></li>
-        <li><a href="rpto.html">RPTO</a></li>
-        <li><a href="products.html">Products</a></li>
-      </ul>
+    <div class="modal-footer">
+      <button class="btn btn-outline-green" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-green" id="saveBtn" onclick="saveApplication()">💾 Save Application</button>
     </div>
   </div>
-  <div class="footer-bottom">@2026, SAG Drone Technologies. All Rights Reserved.</div>
-</footer>
+</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  /* ── Mobile menu helpers ── */
-  function toggleMobileMenu() {
-    document.getElementById('mobileMenu').classList.toggle('open');
-    document.getElementById('hamburger').classList.toggle('open');
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <h4>Delete Application?</h4>
+    <p id="confirmText">This will permanently remove this application.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-outline-green" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-red" onclick="confirmDeleteAction()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT ADD/EDIT MODAL -->
+<div class="modal-overlay" id="productModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="productModalTitle">Add Product</h3>
+      <button class="modal-close" onclick="closeProductModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="pEditId"/>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Product Name <span class="required">*</span></label>
+          <input class="form-control" id="pName" placeholder="e.g. Beta 610 TC Drone"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (₹) <span class="required">*</span></label>
+          <input class="form-control" id="pPrice" type="number" min="0" placeholder="e.g. 250000"/>
+        </div>
+        <div class="form-group">
+          <label>Original Price (₹) <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(for strikethrough)</span></label>
+          <input class="form-control" id="pOriginalPrice" type="number" min="0" placeholder="e.g. 280000"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control" id="pStatus">
+            <option value="instock">In Stock</option>
+            <option value="outofstock">Out of Stock</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tags</label>
+          <div style="display:flex;gap:14px;align-items:center;padding:10px 0;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;">
+              <input type="checkbox" id="pIsNew" style="accent-color:var(--green);width:15px;height:15px;"/> New
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;">
+              <input type="checkbox" id="pIsOffer" style="accent-color:var(--green);width:15px;height:15px;"/> Offer
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Image URL <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(paste a direct image URL)</span></label>
+          <input class="form-control" id="pImageUrl" placeholder="https://..." oninput="previewProductUrlImage()"/>
+          <div id="pUrlPreviewWrap" style="margin-top:10px;display:none;">
+            <div class="image-preview-wrap">
+              <img id="pUrlPreview" class="image-preview" src="" alt="Preview"/>
+              <button class="image-preview-remove" onclick="clearProductImageUrl()">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>WhatsApp Enquiry Number <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(with country code, no +)</span></label>
+          <input class="form-control" id="pWaNum" placeholder="e.g. 919390238537" value="919390238537"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-green" onclick="closeProductModal()">Cancel</button>
+      <button class="btn btn-green" id="saveProductBtn" onclick="saveProduct()">💾 Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT CONFIRM DELETE -->
+<div class="confirm-overlay" id="productConfirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <h4>Delete Product?</h4>
+    <p id="productConfirmText">This will permanently remove this product.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-outline-green" onclick="closeProductConfirm()">Cancel</button>
+      <button class="btn btn-red" onclick="confirmProductDeleteAction()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Saved!</span></div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<script>
+
+// ════════════════════════════════════════════════════════
+// CREDENTIALS (stored in localStorage, changeable via settings)
+// ════════════════════════════════════════════════════════
+var ADMIN_USER = localStorage.getItem('sag_admin_user') || 'sagadmin';
+var ADMIN_PASS = localStorage.getItem('sag_admin_pass') || 'SAG@2026';
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS STATE & DEFAULTS
+// ════════════════════════════════════════════════════════
+var products = [];
+var productNextId = 100;
+var productDeleteTargetId = null;
+
+var DEFAULT_PRODUCTS = [
+  {id:101,name:'Beta 610 TC Drone',price:250000,originalPrice:null,image:'https://framerusercontent.com/images/jVJvJSfyHHJimQ3L1dJlMvmks.png',isNew:false,isOffer:false,status:'instock',waNum:'919390238537'},
+  {id:102,name:'Agri Spray Drone 10L',price:185000,originalPrice:200000,image:'https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png',isNew:true,isOffer:false,status:'instock',waNum:'919390238537'},
+  {id:103,name:'VK V9 AG FC Kit',price:42000,originalPrice:45000,image:'https://framerusercontent.com/images/0Jj398ugeqPzDZmnM5qbUhQZs.png',isNew:true,isOffer:false,status:'instock',waNum:'919390238537'},
+  {id:104,name:'Hobbywing 8L/min Pump',price:6800,originalPrice:7500,image:'https://framerusercontent.com/images/7Sk32BzwB1Yj3AHjFfUIzNMK0.jpg',isNew:false,isOffer:false,status:'instock',waNum:'919390238537'},
+  {id:105,name:'SKYRC 3000 Watt Charger',price:45000,originalPrice:50000,image:'https://framerusercontent.com/images/ccOSG205SKwpOBmfBTiG6vyFe4.jpeg',isNew:true,isOffer:true,status:'instock',waNum:'919390238537'},
+  {id:106,name:'JiYi K++ Full FC Kit',price:32000,originalPrice:35000,image:'https://framerusercontent.com/images/VDfEexOOoRK6EOM1ybMGwFQgm4.jpg',isNew:false,isOffer:true,status:'instock',waNum:'919390238537'},
+  {id:107,name:'Skydroid T12 Full RC Kit',price:19000,originalPrice:21000,image:'https://framerusercontent.com/images/tKmkl1E8aOyMTjsSN1a4jFh4fGY.jpeg',isNew:true,isOffer:false,status:'instock',waNum:'919390238537'},
+  {id:108,name:'Hobbywing CW X8 Motor Combo',price:13000,originalPrice:15000,image:'https://framerusercontent.com/images/aYSQ4cQ8alqgSNu26gG4YI9gAVY.jpg',isNew:false,isOffer:true,status:'instock',waNum:'919390238537'},
+  {id:109,name:'SiYi MK15 Transmitter Kit',price:35000,originalPrice:45000,image:'https://framerusercontent.com/images/qaHt0hSCGuIztk0xhYkDydSmzM.png',isNew:true,isOffer:true,status:'instock',waNum:'919390238537'}
+];
+
+// ════════════════════════════════════════════════════════
+// SUPABASE CONFIG
+// ════════════════════════════════════════════════════════
+var SUPABASE_URL = localStorage.getItem('sag_supabase_url') || 'https://mefmpxohxrpnezwlbchj.supabase.co';
+var SUPABASE_KEY = localStorage.getItem('sag_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
+// Clear stale cached credentials that don't match current project
+(function() {
+  var cached = localStorage.getItem('sag_supabase_url') || '';
+  if (cached && cached.indexOf('mefmpxohxrpnezwlbchj') === -1) {
+    localStorage.removeItem('sag_supabase_url');
+    localStorage.removeItem('sag_supabase_key');
+    SUPABASE_URL = 'https://mefmpxohxrpnezwlbchj.supabase.co';
+    SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
   }
-  function closeMobileMenu() {
-    document.getElementById('mobileMenu').classList.remove('open');
-    document.getElementById('hamburger').classList.remove('open');
-  }
+})();
+var supabaseClient = null;
+var realtimeChannel = null;
+var lastSync = null;
 
-  /* ── Close mobile menu on outside click ── */
-  document.addEventListener('click', function(e) {
-    var menu = document.getElementById('mobileMenu');
-    var burger = document.getElementById('hamburger');
-    if (menu.classList.contains('open') && !menu.contains(e.target) && !burger.contains(e.target)) {
-      closeMobileMenu();
+// ════════════════════════════════════════════════════════
+// DEFAULT DATA
+// ════════════════════════════════════════════════════════
+var DEFAULT_APPS = [
+  {
+    id:1, emoji:'🌸', tabLabel:'🌸 Flower Dropping',
+    title:'Flower Dropping', titleHighlight:'Drone',
+    desc:'Transform weddings, temple festivals, political rallies, and grand events with a breathtaking aerial flower shower. Our custom payload drones release flowers at precise moments, altitude, and density for maximum visual impact.',
+    badge:'Event Ready', accentColor:'#2ecc71',
+    ctaText:'Enquire for Events →', ctaLink:'tel:+918977776019',
+    features:['Payload up to 5 kg of petals or flowers per flight','Custom trigger mechanism — remote or timed release','Works for weddings, temples, political events & concerts','Safe low-altitude deployment with precision hover'],
+    imageUrl:'', status:'active', order:0
+  },
+  {
+    id:2, emoji:'💡', tabLabel:'💡 LED Light Shows',
+    title:'LED Drone', titleHighlight:'Light Shows',
+    desc:'Illuminate the night sky with synchronized drone light shows — create moving logos, animated displays, and countdown sequences with precision multi-drone choreography.',
+    badge:'Night Show', accentColor:'#4488ff',
+    ctaText:'Get a Demo →', ctaLink:'tel:+918977776019',
+    features:['Programmable full-color LED matrix panels','Visible up to 500m distance in clear night sky','Display logos, text, animations, and countdowns','Ideal for product launches, IPL matches, outdoor concerts'],
+    imageUrl:'', status:'active', order:1
+  },
+  {
+    id:3, emoji:'🎮', tabLabel:'🎮 FPV Custom Builds',
+    title:'FPV', titleHighlight:'Custom Builds',
+    desc:'We build high-performance FPV (First Person View) racing and cinematic drones from scratch — tuned for speed, agility, or ultra-smooth aerial footage.',
+    badge:'Custom Build', accentColor:'#e07030',
+    ctaText:'Start Your Build →', ctaLink:'tel:+918977776019',
+    features:['Racing frames, freestyle, and cinewhoop builds','Custom PID tuning and flight controller configuration','4K camera integration for cinematic footage','Training and support included with every build'],
+    imageUrl:'', status:'active', order:2
+  },
+  {
+    id:4, emoji:'🎥', tabLabel:'🎥 Aerial Filming',
+    title:'Aerial', titleHighlight:'Filming & Photography',
+    desc:'Capture stunning aerial footage for films, real-estate, weddings, construction progress, and corporate events.',
+    badge:'4K Cinema', accentColor:'#8060dd',
+    ctaText:'Book a Shoot →', ctaLink:'tel:+918977776019',
+    features:['4K / 6K high-resolution stabilized footage','3-axis gimbal for cinema-grade stabilization','Real-estate, weddings, events, and film production','Licensed and insured pilots for safe operations'],
+    imageUrl:'', status:'active', order:3
+  },
+  {
+    id:5, emoji:'🔍', tabLabel:'🔍 Surveillance',
+    title:'Surveillance &', titleHighlight:'Security Drones',
+    desc:'Deploy intelligent drone surveillance for border monitoring, event security, forest fire detection, and industrial inspections.',
+    badge:'Security Tech', accentColor:'#c8dc2e',
+    ctaText:'Get a Proposal →', ctaLink:'tel:+918977776019',
+    features:['Thermal + RGB dual-sensor payload options','Autonomous patrol route programming','Industrial, border, and crowd surveillance','Real-time live stream to ground control'],
+    imageUrl:'', status:'active', order:4
+  }
+];
+
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+var apps = [];
+var nextId = 10;
+var deleteTargetId = null;
+var currentPage = 'dashboard';
+var isSupabaseMode = false;
+var activityLog = [];
+
+// ════════════════════════════════════════════════════════
+// SUPABASE CONFIG BANNER
+// ════════════════════════════════════════════════════════
+function initConfigBanner() {
+  if (SUPABASE_URL && SUPABASE_KEY) {
+    document.getElementById('configBanner').classList.add('hidden');
+  } else {
+    var banner = document.getElementById('configBanner');
+    banner.style.display = '';
+  }
+}
+
+function saveSupabaseConfig() {
+  var url = document.getElementById('cfgUrl').value.trim();
+  var key = document.getElementById('cfgKey').value.trim();
+  if (!url || !key) { showToast('error', '⚠️ Please enter both URL and Key.'); return; }
+  persistSupabaseConfig(url, key);
+}
+
+function saveSupabaseConfigFromSettings() {
+  var url = document.getElementById('settingsCfgUrl').value.trim();
+  var key = document.getElementById('settingsCfgKey').value.trim();
+  if (!url || !key) { showToast('error', '⚠️ Please enter both URL and Key.'); return; }
+  persistSupabaseConfig(url, key);
+}
+
+function persistSupabaseConfig(url, key) {
+  localStorage.setItem('sag_supabase_url', url);
+  localStorage.setItem('sag_supabase_key', key);
+  SUPABASE_URL = url;
+  SUPABASE_KEY = key;
+  document.getElementById('configBanner').classList.add('hidden');
+  showToast('info', '🔌 Connecting to Supabase…');
+  initSupabase().then(function() {
+    if (isSupabaseMode) {
+      showToast('success', '✅ Supabase connected & syncing!');
+      syncFromSupabase();
     }
   });
+}
 
+function dismissConfigBanner() {
+  document.getElementById('configBanner').classList.add('hidden');
+}
+
+// ════════════════════════════════════════════════════════
+// SUPABASE INIT
+// ════════════════════════════════════════════════════════
+async function initSupabase() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    updateSupabaseStatus('disconnected', 'DB: Not configured');
+    return;
+  }
+  try {
+    // Test connection with a simple fetch
+    var testResp = await fetch(SUPABASE_URL + '/rest/v1/drone_applications?select=id&limit=1', {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      }
+    });
+    if (testResp.ok || testResp.status === 406) {
+      isSupabaseMode = true;
+      updateSupabaseStatus('connected', 'DB: Connected ✓');
+      setupRealtimeSubscription();
+    } else if (testResp.status === 404) {
+      isSupabaseMode = false;
+      updateSupabaseStatus('error', 'DB: Table missing (run SQL)');
+    } else {
+      isSupabaseMode = false;
+      updateSupabaseStatus('error', 'DB: Error ' + testResp.status);
+    }
+  } catch(e) {
+    isSupabaseMode = false;
+    updateSupabaseStatus('error', 'DB: Connection failed');
+  }
+  updateSettingsDbStatus();
+}
+
+function updateSupabaseStatus(state, text) {
+  var badge = document.getElementById('liveStatusBadge');
+  var statusText = document.getElementById('liveStatusText');
+  var dot = document.getElementById('supabaseSidebarDot');
+  var sidebarText = document.getElementById('supabaseSidebarText');
+  sidebarText.textContent = text;
+  if (state === 'connected') {
+    badge.className = 'topbar-live-badge';
+    statusText.textContent = 'LIVE';
+    dot.style.background = 'var(--green)';
+  } else if (state === 'error') {
+    badge.className = 'topbar-live-badge offline';
+    statusText.textContent = 'LOCAL';
+    dot.style.background = 'var(--red)';
+  } else {
+    badge.className = 'topbar-live-badge offline';
+    statusText.textContent = 'LOCAL';
+    dot.style.background = 'var(--amber)';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// SUPABASE REALTIME
+// ════════════════════════════════════════════════════════
+function setupRealtimeSubscription() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  // Use Supabase Realtime via WebSocket
+  var wsUrl = SUPABASE_URL.replace('https://', 'wss://').replace('http://', 'ws://')
+    + '/realtime/v1/websocket?apikey=' + SUPABASE_KEY + '&vsn=1.0.0';
+  
+  try {
+    var ws = new WebSocket(wsUrl);
+    ws.onopen = function() {
+      ws.send(JSON.stringify({
+        topic: 'realtime:public:drone_applications',
+        event: 'phx_join',
+        payload: {},
+        ref: '1'
+      }));
+    };
+    ws.onmessage = function(e) {
+      try {
+        var msg = JSON.parse(e.data);
+        if (msg.event === 'INSERT' || msg.event === 'UPDATE' || msg.event === 'DELETE') {
+          showToast('info', '🔄 Real-time update received…');
+          syncFromSupabase();
+        }
+      } catch(err){}
+    };
+    ws.onerror = function() {};
+    ws.onclose = function() {
+      // Reconnect after 5s
+      setTimeout(setupRealtimeSubscription, 5000);
+    };
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════
+// SUPABASE CRUD
+// ════════════════════════════════════════════════════════
+async function supabaseFetch(path, method, body) {
+  var opts = {
+    method: method || 'GET',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  var resp = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
+  if (!resp.ok) {
+    var err = await resp.text();
+    throw new Error('Supabase error ' + resp.status + ': ' + err);
+  }
+  var ct = resp.headers.get('content-type') || '';
+  if (ct.includes('application/json')) return await resp.json();
+  return null;
+}
+
+function appToRow(app) {
+  return {
+    emoji: app.emoji || '🚁',
+    tab_label: app.tabLabel || '',
+    title: app.title || '',
+    title_highlight: app.titleHighlight || '',
+    description: app.desc || '',
+    cta_text: app.ctaText || 'Enquire →',
+    cta_link: app.ctaLink || 'tel:+918977776019',
+    badge: app.badge || '',
+    status: app.status || 'active',
+    accent_color: app.accentColor || '#2ecc71',
+    image_url: app.imageUrl || '',
+    features: app.features || [],
+    display_order: app.order || 0,
+    updated_at: new Date().toISOString()
+  };
+}
+
+function rowToApp(row) {
+  return {
+    id: row.id,
+    emoji: row.emoji || '🚁',
+    tabLabel: row.tab_label || '',
+    title: row.title || '',
+    titleHighlight: row.title_highlight || '',
+    desc: row.description || '',
+    ctaText: row.cta_text || 'Enquire →',
+    ctaLink: row.cta_link || 'tel:+918977776019',
+    badge: row.badge || '',
+    status: row.status || 'active',
+    accentColor: row.accent_color || '#2ecc71',
+    imageUrl: row.image_url || '',
+    features: Array.isArray(row.features) ? row.features : [],
+    order: row.display_order || 0
+  };
+}
+
+async function syncFromSupabase() {
+  if (!isSupabaseMode) return;
+  try {
+    showLoading(true);
+    var rows = await supabaseFetch('drone_applications?select=*&order=display_order.asc');
+    if (Array.isArray(rows)) {
+      if (rows.length === 0) {
+        // Supabase table is empty — seed local/default apps up to it
+        showToast('info', '☁️ Supabase is empty — seeding applications…');
+        var toSeed = apps.length > 0 ? apps : JSON.parse(JSON.stringify(DEFAULT_APPS));
+        for (var i = 0; i < toSeed.length; i++) {
+          var row = appToRow(toSeed[i]);
+          row.display_order = i;
+          try { await supabaseFetch('drone_applications', 'POST', row); } catch(e2) {}
+        }
+        // Reload from Supabase to get server-assigned IDs
+        var seeded = await supabaseFetch('drone_applications?select=*&order=display_order.asc');
+        if (Array.isArray(seeded) && seeded.length > 0) {
+          rows = seeded;
+          showToast('success', '✅ Applications seeded to Supabase!');
+        } else {
+          lastSync = new Date();
+          renderAll();
+          updateSettingsDbStatus();
+          showLoading(false);
+          return;
+        }
+      } else {
+        showToast('success', '✅ Synced from Supabase (' + rows.length + ' apps)');
+      }
+      apps = rows.map(rowToApp);
+      if (apps.length > 0) {
+        nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
+      }
+      saveLocalApps();
+      lastSync = new Date();
+      renderAll();
+      updateSettingsDbStatus();
+    }
+  } catch(e) {
+    showToast('error', '❌ Sync failed: ' + e.message);
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function supabaseInsert(app) {
+  var row = appToRow(app);
+  var result = await supabaseFetch('drone_applications', 'POST', row);
+  if (Array.isArray(result) && result.length > 0) return result[0].id;
+  return null;
+}
+
+async function supabaseUpdate(app) {
+  var row = appToRow(app);
+  await supabaseFetch('drone_applications?id=eq.' + app.id, 'PATCH', row);
+}
+
+async function supabaseDelete(id) {
+  await supabaseFetch('drone_applications?id=eq.' + id, 'DELETE');
+}
+
+async function migrateLocalToSupabase() {
+  if (!isSupabaseMode) { showToast('error', '❌ Not connected to Supabase.'); return; }
+  if (!confirm('This will push all local applications to Supabase. Continue?')) return;
+  showLoading(true);
+  try {
+    for (var i = 0; i < apps.length; i++) {
+      var row = appToRow(apps[i]);
+      row.display_order = i;
+      await supabaseFetch('drone_applications', 'POST', row);
+    }
+    showToast('success', '✅ All local apps pushed to Supabase!');
+    await syncFromSupabase();
+  } catch(e) {
+    showToast('error', '❌ Migration failed: ' + e.message);
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function testSupabaseConnection() {
+  var url = document.getElementById('settingsCfgUrl').value.trim() || SUPABASE_URL;
+  var key = document.getElementById('settingsCfgKey').value.trim() || SUPABASE_KEY;
+  if (!url || !key) { showToast('error', '⚠️ Enter URL and Key first.'); return; }
+  showLoading(true);
+  try {
+    var resp = await fetch(url + '/rest/v1/drone_applications?select=id&limit=1', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    });
+    showLoading(false);
+    if (resp.ok) { showToast('success', '✅ Connection successful! Table found.'); }
+    else if (resp.status === 404) { showToast('error', '⚠️ Table not found. Please run the setup SQL.'); }
+    else { showToast('error', '❌ HTTP ' + resp.status + ' — check URL and key.'); }
+  } catch(e) {
+    showLoading(false);
+    showToast('error', '❌ Connection failed: ' + e.message);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// LOCAL STORAGE FALLBACK
+// ════════════════════════════════════════════════════════
+function loadLocalApps() {
+  try {
+    var raw = localStorage.getItem('sag_drone_apps');
+    if (raw) {
+      var parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        apps = parsed;
+        nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
+      } else {
+        // Saved array is empty — re-seed defaults
+        apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
+        nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
+        saveLocalApps();
+      }
+    } else {
+      // First-ever load — seed defaults into localStorage
+      apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
+      nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
+      saveLocalApps();
+    }
+  } catch(e) {
+    apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
+    nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
+    saveLocalApps();
+  }
+}
+function saveLocalApps() {
+  localStorage.setItem('sag_drone_apps', JSON.stringify(apps));
+}
+
+// ════════════════════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════════════════════
+function doLogin() {
+  var u = document.getElementById('loginUser').value.trim();
+  var p = document.getElementById('loginPass').value;
+  if (u === ADMIN_USER && p === ADMIN_PASS) {
+    localStorage.setItem('sag_admin_auth', '1');
+    document.getElementById('loginScreen').classList.add('hidden');
+    init();
+  } else {
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('loginPass').value = '';
+  }
+}
 document.addEventListener('DOMContentLoaded', function() {
-
-  /* ── Smooth scroll for all anchor links ── */
-  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-    anchor.addEventListener('click', function(e) {
-      var target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        var navH = document.getElementById('mainNav').offsetHeight;
-        var top = target.getBoundingClientRect().top + window.pageYOffset - navH;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }
-    });
-  });
-
-  /* ── Scroll spy: highlight active nav link ── */
-  var spySections = document.querySelectorAll('section[id]');
-  var navLinks = document.querySelectorAll('.nav-link[data-section]');
-  function onScroll() {
-    var navH = document.getElementById('mainNav').offsetHeight;
-    var offset = navH + 20;
-    var current = 'home';
-    var minDist = Infinity;
-    spySections.forEach(function(sec) {
-      var rect = sec.getBoundingClientRect();
-      /* distance from the section top to just below the nav */
-      var dist = Math.abs(rect.top - offset);
-      /* pick the section whose top is closest to (and above) the nav bottom */
-      if (rect.top - offset <= 0 && Math.abs(rect.top - offset) < minDist) {
-        minDist = Math.abs(rect.top - offset);
-        current = sec.id;
-      }
-    });
-    navLinks.forEach(function(link) {
-      link.classList.toggle('active', link.dataset.section === current);
-    });
-    /* Nav background opacity on scroll */
-    var nav = document.getElementById('mainNav');
-    nav.style.background = window.pageYOffset > 50 ? 'rgba(10,15,13,0.98)' : 'rgba(10,15,13,0.88)';
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* ── Hamburger animated lines (X on open) ── */
-  var style = document.createElement('style');
-  style.textContent = '.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}.hamburger.open span:nth-child(2){opacity:0}.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}';
-  document.head.appendChild(style);
-
-  /* ── FAQ accordion ── */
-  document.querySelectorAll('.faq-item').forEach(function(item) {
-    item.querySelector('.faq-q').addEventListener('click', function() {
-      var wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
-      if (!wasOpen) item.classList.add('open');
-    });
-  });
-
-  /* ── Counter animation ── */
-  function animateCounters() {
-    document.querySelectorAll('.stat-card .num[data-target]').forEach(function(el) {
-      var target = +el.dataset.target;
-      var suffix = el.textContent.replace(/[0-9]/g, '').trim() || '';
-      var start = 0;
-      var step = target / (1800 / 16);
-      var timer = setInterval(function() {
-        start = Math.min(start + step, target);
-        el.textContent = Math.floor(start) + suffix;
-        if (start >= target) clearInterval(timer);
-      }, 16);
-    });
-  }
-  var statsSection = document.querySelector('.stats-section');
-  if (statsSection) {
-    var cntObs = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); cntObs.disconnect(); } });
-    }, { threshold: 0.3 });
-    cntObs.observe(statsSection);
-  }
-
-  /* ── Scroll-triggered fade-in ── */
-  var fadeEls = document.querySelectorAll('.pillar-card, .service-card, .review-card, .stat-card, .faq-item');
-  fadeEls.forEach(function(el) {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(24px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  });
-  var fadeObs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.style.transform = 'translateY(0)';
-      }
-    });
-  });
-  fadeEls.forEach(function(el) { fadeObs.observe(el); });
+  document.getElementById('loginUser').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+  document.getElementById('loginPass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
 });
+function doLogout() {
+  localStorage.removeItem('sag_admin_auth');
+  location.reload();
+}
+function checkAuth() {
+  if (localStorage.getItem('sag_admin_auth') === '1') {
+    document.getElementById('loginScreen').classList.add('hidden');
+    init();
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+async function init() {
+  initConfigBanner();
+  loadLocalApps();
+  loadLocalProducts();
+  renderAll();
+  renderProductsGrid();
+  updateProductStats();
+  updateSettingsDbStatus();
+
+  // Pre-fill settings fields
+  if (SUPABASE_URL) document.getElementById('settingsCfgUrl').value = SUPABASE_URL;
+
+  await initSupabase();
+  if (isSupabaseMode) {
+    await syncFromSupabase();
+    await syncProductsFromSupabase();
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+var pageLabels = {
+  dashboard: '📊 Dashboard',
+  applications: '🚁 Drone Applications',
+  order: '↕️ Reorder',
+  products: '🛒 Products Manager',
+  settings: '⚙️ Settings & Database'
+};
+function showPage(id) {
+  currentPage = id;
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.sidebar-link').forEach(function(l){ l.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-link').forEach(function(l){
+    if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'"+id+"'")) l.classList.add('active');
+  });
+  var label = pageLabels[id] || id;
+  var parts = label.split(' ');
+  var emoji = parts[0];
+  var rest = parts.slice(1).join(' ');
+  document.getElementById('topbarTitle').innerHTML = emoji + ' <span>' + rest + '</span>';
+  if (id === 'order') renderOrderList();
+  if (id === 'settings') updateSettingsDbStatus();
+  if (id === 'products') renderProductsGrid();
+  closeSidebar();
+}
+
+// ════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════
+function sortedApps() { return apps.slice().sort(function(a,b){ return (a.order||0)-(b.order||0); }); }
+
+function renderAll() {
+  renderGrid('appsGrid', sortedApps());
+  renderGrid('dashAppGrid', sortedApps().slice(0,4));
+  updateStats();
+  document.getElementById('appCountBadge').textContent = apps.filter(function(a){ return a.status==='active'; }).length;
+  updateDashDbCard();
+}
+
+function renderGrid(containerId, list) {
+  var c = document.getElementById(containerId);
+  if (!c) return;
+  if (!list.length) {
+    c.innerHTML = '<div class="empty-state"><div class="empty-icon">🚁</div><h4>No Applications Yet</h4><p>Click "+ Add Application" to create the first one.</p></div>';
+    return;
+  }
+  c.innerHTML = list.map(function(app) {
+    var img = app.imageUrl
+      ? '<img src="'+escHtml(app.imageUrl)+'" alt="'+escHtml(app.title)+'" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'"/><div class="emoji-placeholder" style="display:none;">'+app.emoji+'</div>'
+      : '<div class="emoji-placeholder">'+app.emoji+'</div>';
+    return '<div class="app-card">'
+      + '<div class="app-card-visual" style="background:linear-gradient(135deg,#131f16,#1a2e1e);">'
+      + img
+      + '<div class="card-num">#'+((app.order||0)+1)+'</div>'
+      + '<div class="card-status status-'+(app.status||'active')+'">'+(app.status==='active'?'● Active':'● Hidden')+'</div>'
+      + '</div>'
+      + '<div class="app-card-body">'
+      + '<div class="app-card-emoji">'+app.emoji+'</div>'
+      + '<div class="app-card-title">'+escHtml(app.title)+' '+escHtml(app.titleHighlight||'')+'</div>'
+      + '<div class="app-card-desc">'+escHtml(app.desc)+'</div>'
+      + '<div class="app-card-actions">'
+      + '<button class="btn btn-amber btn-sm" onclick="openEditModal('+app.id+')">✏️ Edit</button>'
+      + '<button class="btn btn-outline-green btn-sm" onclick="toggleStatus('+app.id+')">'+(app.status==='active'?'👁 Hide':'👁 Show')+'</button>'
+      + '<button class="btn btn-red btn-sm" onclick="openConfirmDelete('+app.id+')">🗑 Delete</button>'
+      + '</div></div></div>';
+  }).join('');
+}
+
+function updateStats() {
+  var active = apps.filter(function(a){ return a.status==='active'; }).length;
+  var inactive = apps.filter(function(a){ return a.status!=='active'; }).length;
+  var avgF = apps.length ? Math.round(apps.reduce(function(s,a){ return s+(a.features?a.features.length:0); },0)/apps.length) : 0;
+  document.getElementById('statTotal').textContent = apps.length;
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statInactive').textContent = inactive;
+  document.getElementById('statFeatures').textContent = avgF;
+  var el = document.getElementById('settingStatTotal');
+  if (el) el.textContent = apps.length;
+  var src = document.getElementById('settingStorageSource');
+  if (src) src.textContent = isSupabaseMode ? 'Supabase (Real-time)' : 'Local Storage (Offline)';
+  var ls = document.getElementById('settingLastSync');
+  if (ls) ls.textContent = lastSync ? lastSync.toLocaleTimeString() : 'Never';
+}
+
+function updateDashDbCard() {
+  var el = document.getElementById('dashDbCard');
+  if (!el) return;
+  if (isSupabaseMode) {
+    el.innerHTML = '<div class="supabase-status connected"><span class="status-dot"></span>🗄️ Supabase connected — real-time sync active. Last synced: '+(lastSync?lastSync.toLocaleTimeString():'just now')+'</div>';
+  } else if (SUPABASE_URL) {
+    el.innerHTML = '<div class="supabase-status error"><span class="status-dot"></span>⚠️ Supabase configured but not connected. Check your credentials in <button onclick="showPage(\'settings\')" style="background:none;border:none;color:inherit;cursor:pointer;font-weight:700;text-decoration:underline;">Settings</button>.</div>';
+  } else {
+    el.innerHTML = '<div class="supabase-status disconnected"><span class="status-dot"></span>📦 Using local storage. <button onclick="showPage(\'settings\')" style="background:none;border:none;color:inherit;cursor:pointer;font-weight:700;text-decoration:underline;">Connect Supabase</button> for real-time sync across all devices.</div>';
+  }
+}
+
+function updateSettingsDbStatus() {
+  var el = document.getElementById('settingsDbStatus');
+  if (!el) return;
+  if (isSupabaseMode) {
+    el.innerHTML = '<div class="supabase-status connected"><span class="status-dot"></span>✅ Connected to Supabase at <strong>'+SUPABASE_URL+'</strong></div>';
+  } else if (SUPABASE_URL) {
+    el.innerHTML = '<div class="supabase-status error"><span class="status-dot"></span>❌ Credentials saved but connection failed. Verify URL and key, then test again.</div>';
+  } else {
+    el.innerHTML = '<div class="supabase-status disconnected"><span class="status-dot"></span>⚠️ No Supabase configured. Enter credentials below to enable real-time sync.</div>';
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// CRUD OPERATIONS
+// ════════════════════════════════════════════════════════
+async function saveApplication() {
+  var title = document.getElementById('fTitle').value.trim();
+  var desc = document.getElementById('fDesc').value.trim();
+  var emoji = document.getElementById('fEmoji').value.trim();
+  if (!title || !desc || !emoji) { showToast('error', '⚠️ Please fill in Emoji, Title and Description.'); return; }
+
+  var editId = document.getElementById('editId').value;
+  var isEdit = !!editId;
+  var btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Saving…';
+
+  var appData = {
+    emoji: emoji,
+    tabLabel: document.getElementById('fTabLabel').value.trim() || emoji + ' ' + title,
+    title: title,
+    titleHighlight: document.getElementById('fTitleHighlight').value.trim(),
+    desc: desc,
+    ctaText: document.getElementById('fCtaText').value.trim() || 'Enquire →',
+    ctaLink: document.getElementById('fCtaLink').value.trim() || 'tel:+918977776019',
+    badge: document.getElementById('fBadge').value.trim(),
+    status: document.getElementById('fStatus').value,
+    accentColor: document.getElementById('fColor').value,
+    imageUrl: document.getElementById('fImageUrl').value.trim(),
+    features: getFeatures()
+  };
+
+  try {
+    if (isEdit) {
+      var idx = apps.findIndex(function(a){ return a.id===parseInt(editId); });
+      if (idx < 0) return;
+      appData.id = parseInt(editId);
+      appData.order = apps[idx].order;
+      apps[idx] = Object.assign({}, apps[idx], appData);
+      if (isSupabaseMode) await supabaseUpdate(apps[idx]);
+      saveLocalApps();
+      showToast('success', '✅ Application updated!');
+    } else {
+      appData.id = nextId++;
+      appData.order = apps.length;
+      apps.push(appData);
+      if (isSupabaseMode) {
+        var newId = await supabaseInsert(appData);
+        if (newId) { apps[apps.length-1].id = newId; nextId = newId + 1; }
+      }
+      saveLocalApps();
+      showToast('success', '✅ Application added!');
+    }
+    closeModal();
+    renderAll();
+  } catch(e) {
+    showToast('error', '❌ Save failed: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Save Application';
+  }
+}
+
+async function toggleStatus(id) {
+  var app = apps.find(function(a){ return a.id===id; });
+  if (!app) return;
+  app.status = app.status==='active' ? 'inactive' : 'active';
+  if (isSupabaseMode) {
+    try { await supabaseUpdate(app); } catch(e) { showToast('error', '❌ Sync error: ' + e.message); }
+  }
+  saveLocalApps();
+  renderAll();
+  showToast('success', app.status==='active' ? '👁 Application set to Active.' : '🙈 Application hidden.');
+}
+
+async function confirmDeleteAction() {
+  if (deleteTargetId === null) return;
+  var app = apps.find(function(a){ return a.id===deleteTargetId; });
+  apps = apps.filter(function(a){ return a.id!==deleteTargetId; });
+  apps.sort(function(a,b){ return (a.order||0)-(b.order||0); }).forEach(function(a,i){ a.order=i; });
+
+  if (isSupabaseMode) {
+    try { await supabaseDelete(deleteTargetId); } catch(e) { showToast('error', '❌ Delete sync failed: ' + e.message); }
+  }
+  saveLocalApps();
+  renderAll();
+  closeConfirm();
+  showToast('success', '🗑️ Application deleted.');
+}
+
+async function saveOrder() {
+  var sorted = sortedApps();
+  sorted.forEach(function(a,i){
+    var found = apps.find(function(x){ return x.id===a.id; });
+    if (found) found.order = i;
+  });
+  saveLocalApps();
+  if (isSupabaseMode) {
+    showLoading(true);
+    try {
+      for (var i = 0; i < apps.length; i++) {
+        await supabaseFetch('drone_applications?id=eq.'+apps[i].id, 'PATCH', { display_order: apps[i].order, updated_at: new Date().toISOString() });
+      }
+      showToast('success', '↕️ Order saved & synced!');
+    } catch(e) {
+      showToast('error', '❌ Order sync failed: ' + e.message);
+    } finally {
+      showLoading(false);
+    }
+  } else {
+    showToast('success', '↕️ Order saved locally!');
+  }
+  renderAll();
+}
+
+// ════════════════════════════════════════════════════════
+// MODAL
+// ════════════════════════════════════════════════════════
+function openAddModal() {
+  document.getElementById('modalTitle').textContent = '+ Add Application';
+  document.getElementById('editId').value = '';
+  clearModalForm();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function openEditModal(id) {
+  var app = apps.find(function(a){ return a.id===id; });
+  if (!app) return;
+  document.getElementById('modalTitle').textContent = '✏️ Edit — ' + app.title;
+  document.getElementById('editId').value = id;
+  document.getElementById('fEmoji').value = app.emoji || '';
+  document.getElementById('fTabLabel').value = app.tabLabel || '';
+  document.getElementById('fTitle').value = app.title || '';
+  document.getElementById('fTitleHighlight').value = app.titleHighlight || '';
+  document.getElementById('fDesc').value = app.desc || '';
+  document.getElementById('fCtaText').value = app.ctaText || '';
+  document.getElementById('fCtaLink').value = app.ctaLink || '';
+  document.getElementById('fBadge').value = app.badge || '';
+  document.getElementById('fStatus').value = app.status || 'active';
+  document.getElementById('fColor').value = app.accentColor || '#2ecc71';
+  document.getElementById('fColorPicker').value = /^#[0-9a-fA-F]{6}$/.test(app.accentColor) ? app.accentColor : '#2ecc71';
+  document.getElementById('fImageUrl').value = app.imageUrl || '';
+  previewUrlImage();
+  renderFeaturesInModal(app.features || []);
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+function clearModalForm() {
+  ['fEmoji','fTabLabel','fTitle','fTitleHighlight','fDesc','fCtaText','fCtaLink','fBadge','fImageUrl'].forEach(function(id){
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('fStatus').value = 'active';
+  document.getElementById('fColor').value = '#2ecc71';
+  document.getElementById('fColorPicker').value = '#2ecc71';
+  document.getElementById('urlPreviewWrap').style.display = 'none';
+  renderFeaturesInModal([]);
+}
+
+// ════════════════════════════════════════════════════════
+// FEATURES
+// ════════════════════════════════════════════════════════
+function renderFeaturesInModal(features) {
+  var list = document.getElementById('featuresList');
+  list.innerHTML = (features||[]).map(function(f){
+    return '<div class="feature-item"><input class="form-control" value="'+escHtml(f)+'" placeholder="Feature description..."/>'
+      + '<button class="feature-remove" onclick="this.parentElement.remove()">✕</button></div>';
+  }).join('');
+}
+function addFeatureRow() {
+  var list = document.getElementById('featuresList');
+  var div = document.createElement('div');
+  div.className = 'feature-item';
+  div.innerHTML = '<input class="form-control" placeholder="Feature description..."/>'
+    + '<button class="feature-remove" onclick="this.parentElement.remove()">✕</button>';
+  list.appendChild(div);
+  div.querySelector('input').focus();
+}
+function getFeatures() {
+  return Array.from(document.querySelectorAll('#featuresList .feature-item input'))
+    .map(function(i){ return i.value.trim(); }).filter(Boolean);
+}
+
+// ════════════════════════════════════════════════════════
+// IMAGE / COLOR
+// ════════════════════════════════════════════════════════
+function previewUrlImage() {
+  var url = document.getElementById('fImageUrl').value.trim();
+  var wrap = document.getElementById('urlPreviewWrap');
+  var img = document.getElementById('urlPreview');
+  if (url) { img.src = url; wrap.style.display = 'block'; }
+  else { wrap.style.display = 'none'; }
+}
+function clearImageUrl() {
+  document.getElementById('fImageUrl').value = '';
+  document.getElementById('urlPreviewWrap').style.display = 'none';
+}
+function syncColorPicker() {
+  var v = document.getElementById('fColor').value.trim();
+  if (/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById('fColorPicker').value = v;
+}
+
+// ════════════════════════════════════════════════════════
+// CONFIRM DIALOG
+// ════════════════════════════════════════════════════════
+function openConfirmDelete(id) {
+  var app = apps.find(function(a){ return a.id===id; });
+  if (!app) return;
+  deleteTargetId = id;
+  document.getElementById('confirmText').textContent = 'This will permanently remove "'+app.title+' '+(app.titleHighlight||'')+'" from the homepage section.';
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  deleteTargetId = null;
+}
+
+// ════════════════════════════════════════════════════════
+// ORDER DRAG & DROP
+// ════════════════════════════════════════════════════════
+var dragSrcIdx = null;
+function renderOrderList() {
+  var list = document.getElementById('orderList');
+  var sorted = sortedApps();
+  list.innerHTML = sorted.map(function(app,i){
+    return '<div class="order-item" draggable="true" data-id="'+app.id+'" ondragstart="onDragStart(event,'+i+')" ondragover="onDragOver(event)" ondrop="onDrop(event,'+i+')" ondragleave="onDragLeave(event)">'
+      + '<span class="order-drag-handle">⠿</span>'
+      + '<span style="font-size:1.4rem;">'+app.emoji+'</span>'
+      + '<span class="order-item-title">'+escHtml(app.title)+' '+escHtml(app.titleHighlight||'')+'</span>'
+      + '<span class="order-item-num">#'+(i+1)+'</span>'
+      + '</div>';
+  }).join('');
+}
+function onDragStart(e,idx){ dragSrcIdx=idx; e.dataTransfer.effectAllowed='move'; }
+function onDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drag-over'); return false; }
+function onDragLeave(e){ e.currentTarget.classList.remove('drag-over'); }
+function onDrop(e,targetIdx){
+  e.stopPropagation(); e.currentTarget.classList.remove('drag-over');
+  if (dragSrcIdx===null||dragSrcIdx===targetIdx) return;
+  var sorted = sortedApps();
+  var moved = sorted.splice(dragSrcIdx,1)[0];
+  sorted.splice(targetIdx,0,moved);
+  sorted.forEach(function(a,i){ var app=apps.find(function(x){return x.id===a.id;}); if(app) app.order=i; });
+  dragSrcIdx=null;
+  renderOrderList();
+}
+
+// ════════════════════════════════════════════════════════
+// SETTINGS ACTIONS
+// ════════════════════════════════════════════════════════
+function updateCredentials() {
+  var u = document.getElementById('newUsername').value.trim();
+  var p = document.getElementById('newPassword').value;
+  if (!u || p.length < 6) { showToast('error', '⚠️ Username and password (min 6 chars) required.'); return; }
+  localStorage.setItem('sag_admin_user', u);
+  localStorage.setItem('sag_admin_pass', p);
+  ADMIN_USER = u; ADMIN_PASS = p;
+  showToast('success', '✅ Credentials updated!');
+  document.getElementById('newUsername').value = '';
+  document.getElementById('newPassword').value = '';
+}
+function resetToDefaults() {
+  if (!confirm('Reset all applications to default data? This cannot be undone.')) return;
+  apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
+  nextId = 10;
+  saveLocalApps();
+  renderAll();
+  showToast('success', '🔄 Reset to default applications.');
+}
+function clearAllData() {
+  if (!confirm('Clear ALL local data including auth and Supabase config? You will be logged out.')) return;
+  localStorage.clear();
+  location.reload();
+}
+
+// ════════════════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════════════════
+var toastTimer;
+function showToast(type, msg) {
+  clearTimeout(toastTimer);
+  var t = document.getElementById('toast');
+  t.className = 'show ' + type;
+  document.getElementById('toastMsg').textContent = msg;
+  toastTimer = setTimeout(function(){ t.className=''; }, 3500);
+}
+
+// ════════════════════════════════════════════════════════
+// LOADING
+// ════════════════════════════════════════════════════════
+function showLoading(v) {
+  document.getElementById('loadingOverlay').classList.toggle('show', v);
+}
+
+// ════════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════════
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ════════════════════════════════════════════════════════
+// MOBILE SIDEBAR
+// ════════════════════════════════════════════════════════
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebarOverlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════════════════
+// CLOSE ON OVERLAY CLICK
+// ════════════════════════════════════════════════════════
+// Overlay close listeners — in DOMContentLoaded to ensure elements exist
+
+// ════════════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS
+// ════════════════════════════════════════════════════════
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { closeModal(); closeConfirm(); closeProductModal(); closeProductConfirm(); }
+});
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — localStorage helpers
+// ════════════════════════════════════════════════════════
+function loadLocalProducts() {
+  var saved = localStorage.getItem('sag_products');
+  if (saved) {
+    try {
+      var parsed = JSON.parse(saved);
+      // If saved is empty array (blank state), seed defaults
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        products = parsed;
+        productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
+      } else {
+        products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+        productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
+        saveLocalProducts(); // persist defaults so products.html can read them
+      }
+    } catch(e) {
+      products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+      saveLocalProducts();
+    }
+  } else {
+    // First-ever load: seed defaults into localStorage so products.html picks them up
+    products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+    productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
+    saveLocalProducts();
+  }
+}
+function saveLocalProducts() {
+  localStorage.setItem('sag_products', JSON.stringify(products));
+}
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — Supabase sync
+// ════════════════════════════════════════════════════════
+async function syncProductsFromSupabase() {
+  if (!isSupabaseMode) return;
+  try {
+    var rows = await supabaseFetch('products?select=*&order=created_at.asc');
+    if (Array.isArray(rows)) {
+      if (rows.length === 0) {
+        // Supabase table is empty — push our local/default products up to it
+        showToast('info', '☁️ Supabase is empty — seeding products…');
+        var toSeed = products.length > 0 ? products : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+        for (var i = 0; i < toSeed.length; i++) {
+          var p = toSeed[i];
+          var row = {
+            name: p.name,
+            price: p.price,
+            original_price: p.originalPrice || null,
+            image: p.image || '',
+            is_new: !!p.isNew,
+            is_offer: !!p.isOffer,
+            status: p.status || 'instock',
+            wa_num: p.waNum || '919390238537',
+            updated_at: new Date().toISOString()
+          };
+          try { await supabaseFetch('products', 'POST', row); } catch(e2) {}
+        }
+        // Now reload from Supabase to get server-assigned IDs
+        var seeded = await supabaseFetch('products?select=*&order=created_at.asc');
+        if (Array.isArray(seeded) && seeded.length > 0) rows = seeded;
+        else { renderProductsGrid(); updateProductStats(); return; }
+        showToast('success', '✅ Products seeded to Supabase!');
+      }
+      products = rows.map(function(r){
+        return {
+          id: r.id,
+          name: r.name || '',
+          price: Number(r.price) || 0,
+          originalPrice: r.original_price ? Number(r.original_price) : null,
+          image: r.image || '',
+          isNew: !!r.is_new,
+          isOffer: !!r.is_offer,
+          status: r.status || 'instock',
+          waNum: r.wa_num || '919390238537'
+        };
+      });
+      if (products.length > 0) productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
+      saveLocalProducts();
+      renderProductsGrid();
+      updateProductStats();
+    }
+  } catch(e) { console.warn('Products sync failed:', e.message); }
+}
+
+async function pushProductToSupabase(p, isUpdate) {
+  if (!isSupabaseMode) return;
+  var row = {
+    name: p.name,
+    price: p.price,
+    original_price: p.originalPrice || null,
+    image: p.image || '',
+    is_new: !!p.isNew,
+    is_offer: !!p.isOffer,
+    status: p.status || 'instock',
+    wa_num: p.waNum || '919390238537',
+    updated_at: new Date().toISOString()
+  };
+  try {
+    if (isUpdate) {
+      await supabaseFetch('products?id=eq.' + p.id, 'PATCH', row);
+    } else {
+      await supabaseFetch('products', 'POST', row);
+    }
+  } catch(e) { console.warn('Product push failed:', e.message); }
+}
+
+async function deleteProductFromSupabase(id) {
+  if (!isSupabaseMode) return;
+  try { await supabaseFetch('products?id=eq.' + id, 'DELETE'); } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — Render grid
+// ════════════════════════════════════════════════════════
+function renderProductsGrid() {
+  var grid = document.getElementById('productsAdminGrid');
+  if (!grid) return;
+  var search = (document.getElementById('productSearchInput') ? document.getElementById('productSearchInput').value : '').toLowerCase();
+  var tagFilter = document.getElementById('productFilterTag') ? document.getElementById('productFilterTag').value : 'all';
+  var filtered = products.filter(function(p) {
+    var matchSearch = !search || p.name.toLowerCase().indexOf(search) !== -1;
+    var matchTag = tagFilter === 'all' || (tagFilter === 'new' && p.isNew) || (tagFilter === 'offer' && p.isOffer);
+    return matchSearch && matchTag;
+  });
+  if (document.getElementById('productCountLabel')) {
+    document.getElementById('productCountLabel').textContent = filtered.length + ' of ' + products.length + ' products';
+  }
+  grid.innerHTML = filtered.map(function(p) {
+    var tags = [];
+    if (p.isNew) tags.push('<span style="background:rgba(46,204,113,0.15);border:1px solid var(--green);color:var(--green);border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">NEW</span>');
+    if (p.isOffer) tags.push('<span style="background:var(--amber-glow);border:1px solid var(--amber);color:var(--amber);border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">OFFER</span>');
+    var inStock = p.status !== 'outofstock';
+    return '<div class="app-card">'
+      + '<div class="app-card-visual" style="background:var(--dark2);">'
+      + (p.image ? '<img src="'+escHtml(p.image)+'" alt="'+escHtml(p.name)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '<span class="emoji-placeholder">📦</span>')
+      + '<span class="card-status '+(inStock?'status-active':'status-inactive')+'">'+(inStock?'In Stock':'Out of Stock')+'</span>'
+      + '</div>'
+      + '<div class="app-card-body">'
+      + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">' + (tags.join('') || '') + '</div>'
+      + '<div class="app-card-title">'+escHtml(p.name)+'</div>'
+      + '<div style="margin-bottom:14px;">'
+      + '<span style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:1.3rem;color:var(--green);">₹'+Number(p.price).toLocaleString('en-IN')+'</span>'
+      + (p.originalPrice ? ' <span style="font-size:0.82rem;color:var(--muted);text-decoration:line-through;">₹'+Number(p.originalPrice).toLocaleString('en-IN')+'</span>' : '')
+      + '</div>'
+      + '<div class="app-card-actions">'
+      + '<button class="btn btn-blue btn-sm" onclick="openEditProductModal('+p.id+')">✏️ Edit</button>'
+      + '<button class="btn btn-red btn-sm" onclick="openProductConfirmDelete('+p.id+')">🗑️ Delete</button>'
+      + '</div>'
+      + '</div></div>';
+  }).join('') || '<div style="padding:48px;text-align:center;color:var(--muted);grid-column:1/-1;">No products found. <button class="btn btn-green btn-sm" onclick="openAddProductModal()" style="margin-left:10px;">+ Add Product</button></div>';
+  updateProductStats();
+}
+
+function filterProductGrid() {
+  renderProductsGrid();
+}
+
+function updateProductStats() {
+  var el = document.getElementById('statProducts');
+  if (el) el.textContent = products.length;
+  var badge = document.getElementById('productCountBadge');
+  if (badge) badge.textContent = products.length;
+}
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — Modal open/close
+// ════════════════════════════════════════════════════════
+function openAddProductModal() {
+  document.getElementById('productModalTitle').textContent = 'Add Product';
+  document.getElementById('pEditId').value = '';
+  document.getElementById('pName').value = '';
+  document.getElementById('pPrice').value = '';
+  document.getElementById('pOriginalPrice').value = '';
+  document.getElementById('pImageUrl').value = '';
+  document.getElementById('pUrlPreviewWrap').style.display = 'none';
+  document.getElementById('pIsNew').checked = false;
+  document.getElementById('pIsOffer').checked = false;
+  document.getElementById('pStatus').value = 'instock';
+  document.getElementById('pWaNum').value = '919390238537';
+  document.getElementById('productModalOverlay').classList.add('open');
+}
+
+function openEditProductModal(id) {
+  var p = products.find(function(x){return x.id===id;});
+  if (!p) return;
+  document.getElementById('productModalTitle').textContent = 'Edit Product';
+  document.getElementById('pEditId').value = p.id;
+  document.getElementById('pName').value = p.name || '';
+  document.getElementById('pPrice').value = p.price || '';
+  document.getElementById('pOriginalPrice').value = p.originalPrice || '';
+  document.getElementById('pImageUrl').value = p.image || '';
+  document.getElementById('pIsNew').checked = !!p.isNew;
+  document.getElementById('pIsOffer').checked = !!p.isOffer;
+  document.getElementById('pStatus').value = p.status || 'instock';
+  document.getElementById('pWaNum').value = p.waNum || '919390238537';
+  if (p.image) {
+    document.getElementById('pUrlPreview').src = p.image;
+    document.getElementById('pUrlPreviewWrap').style.display = 'block';
+  } else {
+    document.getElementById('pUrlPreviewWrap').style.display = 'none';
+  }
+  document.getElementById('productModalOverlay').classList.add('open');
+}
+
+function closeProductModal() {
+  document.getElementById('productModalOverlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — Save
+// ════════════════════════════════════════════════════════
+async function saveProduct() {
+  var name = document.getElementById('pName').value.trim();
+  var price = parseFloat(document.getElementById('pPrice').value);
+  if (!name || isNaN(price) || price < 0) {
+    showToast('error', '⚠️ Product name and a valid price are required.');
+    return;
+  }
+  var editId = document.getElementById('pEditId').value;
+  var p = {
+    id: editId ? parseInt(editId) : productNextId++,
+    name: name,
+    price: price,
+    originalPrice: parseFloat(document.getElementById('pOriginalPrice').value) || null,
+    image: document.getElementById('pImageUrl').value.trim(),
+    isNew: document.getElementById('pIsNew').checked,
+    isOffer: document.getElementById('pIsOffer').checked,
+    status: document.getElementById('pStatus').value,
+    waNum: document.getElementById('pWaNum').value.trim() || '919390238537'
+  };
+  showLoading(true);
+  if (editId) {
+    var idx = products.findIndex(function(x){return x.id===p.id;});
+    if (idx !== -1) products[idx] = p;
+    await pushProductToSupabase(p, true);
+    showToast('success', '✅ Product updated!');
+  } else {
+    products.push(p);
+    await pushProductToSupabase(p, false);
+    showToast('success', '✅ Product added!');
+  }
+  saveLocalProducts();
+  closeProductModal();
+  renderProductsGrid();
+  showLoading(false);
+}
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — Delete
+// ════════════════════════════════════════════════════════
+function openProductConfirmDelete(id) {
+  var p = products.find(function(x){return x.id===id;});
+  if (!p) return;
+  productDeleteTargetId = id;
+  document.getElementById('productConfirmText').textContent = 'This will permanently remove "'+p.name+'" from the products page.';
+  document.getElementById('productConfirmOverlay').classList.add('open');
+}
+function closeProductConfirm() {
+  document.getElementById('productConfirmOverlay').classList.remove('open');
+  productDeleteTargetId = null;
+}
+async function confirmProductDeleteAction() {
+  if (!productDeleteTargetId) return;
+  showLoading(true);
+  products = products.filter(function(p){return p.id!==productDeleteTargetId;});
+  await deleteProductFromSupabase(productDeleteTargetId);
+  saveLocalProducts();
+  closeProductConfirm();
+  renderProductsGrid();
+  showLoading(false);
+  showToast('success', '🗑️ Product deleted.');
+}
+
+// ════════════════════════════════════════════════════════
+// PRODUCTS — Image preview helpers
+// ════════════════════════════════════════════════════════
+function previewProductUrlImage() {
+  var url = document.getElementById('pImageUrl').value.trim();
+  var wrap = document.getElementById('pUrlPreviewWrap');
+  var img = document.getElementById('pUrlPreview');
+  if (url) { img.src = url; wrap.style.display = 'block'; }
+  else { wrap.style.display = 'none'; }
+}
+function clearProductImageUrl() {
+  document.getElementById('pImageUrl').value = '';
+  document.getElementById('pUrlPreviewWrap').style.display = 'none';
+}
+
+// ════════════════════════════════════════════════════════
+// START
+// ════════════════════════════════════════════════════════
+checkAuth();
+
 </script>
 </body>
 </html>
