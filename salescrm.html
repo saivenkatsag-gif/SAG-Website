@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAG Lead Flow CRM — Sales Lead Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{--bg:#f0f2f7;--bg2:#ffffff;--bg3:#f5f6fa;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);--accent:#2563eb;--accent2:#3b7cff;--accent-glow:rgba(37,99,235,0.10);--green:#16a34a;--green-bg:rgba(22,163,74,0.09);--amber:#d97706;--amber-bg:rgba(217,119,6,0.09);--red:#dc2626;--red-bg:rgba(220,38,38,0.09);--purple:#7c3aed;--purple-bg:rgba(124,58,237,0.09);--teal:#0891b2;--text:#111827;--text2:#4b5563;--text3:#9ca3af;--radius:10px;--radius-lg:14px;--shadow:0 2px 12px rgba(0,0,0,0.08);--font:'DM Sans',sans-serif;--mono:'DM Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:4px}
+.app{display:flex;height:100vh}
+.sidebar{width:230px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-logo{padding:22px 20px 16px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.logo-text{font-size:16px;font-weight:600;letter-spacing:-.3px}
+.logo-sub{font-size:10px;color:var(--text3);margin-top:3px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1px}
+.nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;padding:10px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:var(--radius);cursor:pointer;font-size:13px;color:var(--text2);transition:all .15s;margin-bottom:1px;position:relative}
+.nav-item:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.nav-item.active{background:var(--accent-glow);color:var(--accent2);font-weight:500}
+.nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:2px;background:var(--accent);border-radius:2px}
+.nav-icon{width:16px;height:16px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:600;padding:1px 6px;border-radius:10px;min-width:18px;text-align:center}
+.sidebar-footer{padding:14px 16px;border-top:1px solid var(--border)}
+.user-card{display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px;border-radius:var(--radius);transition:background .15s}
+.user-card:hover{background:rgba(255,255,255,.05)}
+.avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+.user-info .user-name{font-size:13px;font-weight:500}
+.user-info .user-role{font-size:11px;color:var(--text3);margin-top:1px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:12px;flex-shrink:0}
+.topbar-title{font-size:17px;font-weight:600;flex:1;letter-spacing:-.3px}
+.btn{padding:8px 16px;border-radius:var(--radius);font-size:13px;font-family:var(--font);cursor:pointer;border:1px solid var(--border2);background:rgba(255,255,255,.05);color:var(--text);transition:all .15s;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:rgba(255,255,255,.09)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:rgba(244,63,94,.2)}
+.btn-danger:hover{background:rgba(244,63,94,.2)}
+.btn-success{background:var(--green-bg);color:var(--green);border-color:rgba(34,200,122,.2)}
+.content{flex:1;overflow-y:auto;padding:24px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.stat-card:hover{border-color:var(--border2)}
+.stat-card::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.06;transform:translate(20px,-20px)}
+.stat-card.blue::after{background:var(--accent)}.stat-card.green::after{background:var(--green)}.stat-card.amber::after{background:var(--amber)}.stat-card.teal::after{background:var(--teal)}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;font-weight:500}
+.stat-value{font-size:28px;font-weight:600;margin-top:6px;letter-spacing:-1px}
+.stat-change{font-size:11px;color:var(--text3);margin-top:4px}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-size:14px;font-weight:600;letter-spacing:-.2px}
+.section-link{font-size:12px;color:var(--accent2);cursor:pointer;transition:opacity .15s}
+.section-link:hover{opacity:.8}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.table-wrap{overflow-x:auto}
+.leads-table{width:100%;min-width:820px;border-collapse:collapse}
+.leads-table thead tr{background:var(--bg3);border-bottom:1px solid var(--border)}
+.leads-table th{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;padding:10px 14px;text-align:left;white-space:nowrap}
+.leads-table tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s}
+.leads-table tbody tr:last-child{border-bottom:none}
+.leads-table tbody tr:hover{background:rgba(255,255,255,.03)}
+.leads-table td{padding:13px 14px;font-size:13px;vertical-align:middle}
+.lead-name{font-weight:500;color:var(--text)}
+.lead-company{font-size:11px;color:var(--text3);margin-top:2px}
+.lead-email{font-size:11px;color:var(--text2)}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7}
+.pill-new{background:rgba(59,124,255,.12);color:var(--accent2)}
+.pill-contacted{background:var(--amber-bg);color:var(--amber)}
+.pill-qualified{background:var(--green-bg);color:var(--green)}
+.pill-proposal{background:var(--purple-bg);color:var(--purple)}
+.pill-won{background:rgba(34,200,122,.15);color:var(--green);border:1px solid rgba(34,200,122,.2)}
+.pill-lost{background:var(--red-bg);color:var(--red)}
+.source-badge{background:#f3f4f6;color:var(--text2);font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid #e5e7eb}
+.date-overdue{color:var(--red);font-weight:500}
+.date-today{color:var(--amber);font-weight:600}
+.date-soon{color:var(--amber)}
+.date-ok{color:var(--text2)}
+.date-none{color:var(--text3)}
+.filters-bar{display:flex;align-items:center;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px;max-width:320px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--text3);pointer-events:none}
+.search-input{width:100%;padding:8px 12px 8px 32px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:var(--radius);color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text3)}
+.filter-chip{padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .15s;font-family:var(--font);white-space:nowrap}
+.filter-chip:hover{border-color:var(--border2);color:var(--text)}
+.filter-chip.active{background:var(--accent-glow);color:var(--accent2);border-color:rgba(59,124,255,.3);font-weight:500}
+.row-actions{display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.leads-table tbody tr:hover .row-actions{opacity:1}
+.act-btn{padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;border:1px solid #e5e7eb;background:#f3f4f6;color:var(--text2);font-family:var(--font);transition:all .12s}
+.act-btn:hover{background:var(--accent-glow);color:var(--accent2);border-color:rgba(59,124,255,.3)}
+.act-btn.del:hover{background:var(--red-bg);color:var(--red);border-color:rgba(244,63,94,.2)}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:1000}
+.modal-backdrop.open{display:flex;animation:fadeIn .15s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border:1px solid #e5e7eb;border-radius:var(--radius-lg);width:580px;max-width:95vw;max-height:90vh;overflow-y:auto;padding:28px;animation:slideUp .2s ease;box-shadow:0 8px 40px rgba(0,0,0,.14)}
+@keyframes slideUp{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-sm{width:420px}
+.modal-lg{width:720px}
+.modal-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px}
+.modal-title{font-size:18px;font-weight:600;letter-spacing:-.4px}
+.modal-sub{font-size:12px;color:var(--text3);margin-top:3px}
+.modal-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;color:var(--text2);font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close:hover{border-color:var(--border2);color:var(--text)}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fg.full{grid-column:1/-1}
+.fl{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.6px}
+.fl .req{color:var(--accent2);margin-left:2px}
+.fi{padding:9px 12px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:var(--radius);color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .15s;width:100%}
+.fi:focus{border-color:var(--accent);background:#eff6ff}
+.fi::placeholder{color:var(--text3)}
+select.fi{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a5f70' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px}
+textarea.fi{resize:vertical;min-height:80px;line-height:1.5}
+.fi-note{font-size:11px;color:var(--text3);margin-top:2px}
+.form-section{grid-column:1/-1}
+.form-section-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;padding:6px 0 10px;border-top:1px solid var(--border);margin-top:4px}
+.kanban{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px}
+.kanban-col{min-width:190px;flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;display:flex;flex-direction:column}
+.kanban-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.kanban-col-name{font-size:12px;font-weight:600;color:var(--text2)}
+.kanban-count{font-size:10px;font-weight:600;background:var(--bg3);color:var(--text3);padding:2px 7px;border-radius:10px;border:1px solid var(--border)}
+.kanban-cards{display:flex;flex-direction:column;gap:8px;flex:1}
+.kcard{background:#f9fafb;border:1px solid #e5e7eb;border-radius:var(--radius);padding:12px;cursor:pointer;transition:all .15s}
+.kcard:hover{border-color:var(--accent);transform:translateY(-1px)}
+.kcard-name{font-size:12px;font-weight:500;margin-bottom:4px}
+.kcard-product{font-size:11px;color:var(--text3);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kcard-footer{display:flex;align-items:center;justify-content:space-between}
+.kcard-source{font-size:10px;color:var(--text3);background:var(--bg2);padding:2px 6px;border-radius:4px;border:1px solid var(--border)}
+.kcard-date{font-size:10px;font-weight:500}
+.notif-item{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);transition:background .12s}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:rgba(255,255,255,.02)}
+.notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.notif-dot.overdue{background:var(--red);box-shadow:0 0 6px var(--red)}
+.notif-dot.today{background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.notif-dot.soon{background:var(--accent)}
+.notif-body{flex:1}
+.notif-title{font-size:13px;font-weight:500}
+.notif-meta{font-size:11px;color:var(--text3);margin-top:3px}
+.notif-time{font-size:12px;font-weight:500;white-space:nowrap}
+.detail-panel{width:320px;flex-shrink:0;background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;display:flex;flex-direction:column}
+.dp-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.dp-body{padding:20px}
+.dp-avatar-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.dp-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600}
+.dp-name{font-size:16px;font-weight:600;letter-spacing:-.3px}
+.dp-company{font-size:12px;color:var(--text3);margin-top:2px}
+.dp-section{margin-bottom:20px}
+.dp-section-title{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
+.dp-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border)}
+.dp-row:last-child{border-bottom:none}
+.dp-key{color:var(--text3)}
+.dp-val{font-weight:500;text-align:right;max-width:160px;word-break:break-word}
+.timeline-item{display:flex;gap:10px;margin-bottom:10px}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:3px}
+.tl-line{width:1px;background:var(--border);flex:1;margin:3px 3px 0}
+.tl-text{font-size:11px;color:var(--text2);flex:1}
+.chart-wrap{position:relative;height:220px}
+.reports-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.report-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+.report-title{font-size:13px;font-weight:600;margin-bottom:14px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.team-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;display:flex;align-items:center;gap:14px;transition:border-color .2s}
+.team-card:hover{border-color:var(--border2)}
+.team-card.me{border-color:rgba(59,124,255,.3)}
+.team-info{flex:1;min-width:0}
+.team-name{font-size:14px;font-weight:600}
+.team-role{font-size:11px;color:var(--text3);margin-top:2px}
+.team-stats{display:flex;gap:12px;margin-top:8px}
+.team-stat{font-size:11px;color:var(--text2)}
+.team-stat span{font-weight:600;color:var(--text)}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:2px;transition:width .4s ease}
+.drop-zone{border:1.5px dashed var(--border2);border-radius:var(--radius-lg);padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-glow)}
+.drop-title{font-size:14px;font-weight:500;color:var(--text)}
+.drop-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.csv-preview{background:#f9fafb;border:1px solid #e5e7eb;border-radius:var(--radius);overflow:hidden;font-family:var(--mono);font-size:11px;max-height:200px;overflow-y:auto}
+.csv-row{display:grid;grid-template-columns:repeat(5,1fr)}
+.csv-row>div{padding:6px 10px;border-bottom:1px solid var(--border);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.csv-row.head>div{background:#f0f2f7;color:var(--text3);font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+.csv-row:last-child>div{border-bottom:none}
+.empty-state{text-align:center;padding:60px 20px}
+.empty-icon{font-size:40px;opacity:.2;margin-bottom:12px}
+.empty-text{font-size:14px;color:var(--text2)}
+.empty-sub{font-size:12px;color:var(--text3);margin-top:4px}
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:2000;display:flex;flex-direction:column;gap:8px}
+.toast{background:#1f2937;border:1px solid #374151;border-radius:var(--radius);padding:12px 16px;font-size:13px;color:#f9fafb;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.25);animation:toastIn .25s ease;min-width:260px}
+@keyframes toastIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.vt-btn{padding:7px 12px;border:none;background:transparent;cursor:pointer;color:var(--text3);font-size:12px;font-family:var(--font);transition:all .15s}
+.vt-btn.active{background:var(--accent-glow);color:var(--accent2)}
+.user-list-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--radius);cursor:pointer;transition:background .12s;margin-bottom:4px}
+.user-list-item:hover{background:rgba(255,255,255,.05)}
+.user-list-item.active{background:var(--accent-glow)}
+.info-banner{display:flex;align-items:flex-start;gap:10px;background:rgba(59,124,255,.06);border:1px solid rgba(59,124,255,.15);border-radius:var(--radius);padding:12px 14px;margin-bottom:18px;font-size:12px;color:var(--text2);line-height:1.6}
+.info-banner svg{flex-shrink:0;margin-top:1px;color:var(--accent2)}
+.email-cfg-note{background:rgba(59,124,255,.08);border:1px solid rgba(59,124,255,.2);border-radius:var(--radius);padding:12px 16px;font-size:12px;color:var(--text2);margin-bottom:16px;line-height:1.6}
+.email-cfg-note a{color:var(--accent2);text-decoration:none}
+.lb-table{width:100%}
+.lb-table th{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:8px 12px;text-align:left}
+.lb-table td{padding:12px;font-size:13px;border-top:1px solid var(--border)}
+.lb-table tr.me td{background:var(--accent-glow)}
+.rank-badge{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.rank-1{background:rgba(245,158,11,.15);color:var(--amber)}
+.rank-2{background:rgba(148,163,184,.1);color:#94a3b8}
+.rank-3{background:rgba(180,120,80,.1);color:#b47850}
+.settings-section{margin-bottom:28px}
+.settings-title{font-size:13px;font-weight:600;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.product-row{display:grid;grid-template-columns:1fr 90px 28px;gap:6px;align-items:center}
+.product-row .fi{margin:0}
+.product-row-remove{width:28px;height:28px;border-radius:6px;border:1px solid #e5e7eb;background:#f9fafb;color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s;font-family:var(--font)}
+.product-row-remove:hover{background:var(--red-bg);border-color:rgba(220,38,38,.25)}
+
+/* ── Mobile elements: always hidden on desktop by default ── */
+.mobile-nav{display:none}
+#mob-menu-btn{display:none}
+.mobile-sidebar-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.5);backdrop-filter:blur(2px)}
+.mobile-sidebar-overlay.open{display:block}
+.mobile-sidebar-panel{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--bg2);z-index:900;transform:translateX(-100%);transition:transform .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:4px 0 20px rgba(0,0,0,.15)}
+.mobile-sidebar-overlay.open .mobile-sidebar-panel{transform:translateX(0)}
+.mob-sidebar-hdr{padding:18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mob-sidebar-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text2)}
+.mob-sidebar-nav{padding:10px;flex:1;overflow-y:auto}
+.mob-sidebar-footer{padding:14px 16px;border-top:1px solid var(--border)}
+.mob-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:transparent;font-family:var(--font);font-size:9px;font-weight:500;color:var(--text3);transition:color .15s;padding:6px 4px;position:relative}
+.mob-nav-item.active{color:var(--accent2)}
+.mob-nav-item svg{width:20px;height:20px}
+.mob-nav-badge{position:absolute;top:4px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:8px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+.btn-label{}
+
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}.reports-grid{grid-template-columns:1fr}}
+
+/* ── TABLET (769–900px): icon-only sidebar rail ── */
+@media(max-width:900px) and (min-width:769px){
+  .sidebar{width:60px}
+  .sidebar-logo{padding:16px 0;display:flex;justify-content:center}
+  .logo-text,.logo-sub,.nav-section,.nav-item span,.nav-badge,.user-info{display:none}
+  .nav-item{justify-content:center;padding:10px}
+  .nav-icon{width:20px;height:20px}
+  .sidebar-footer{padding:10px 0;display:flex;justify-content:center}
+  .user-card{justify-content:center;padding:8px 0}
+  .topbar{padding:12px 16px}
+  .content{padding:16px}
+}
+
+/* ── MOBILE (≤768px): bottom nav, full-width layout ── */
+@media(max-width:768px){
+  html,body{overflow:hidden}
+  .app{flex-direction:column}
+  .sidebar{display:none!important}
+  .mobile-nav{display:flex!important;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:500;height:58px;align-items:stretch}
+  #mob-menu-btn{display:flex!important}
+  .btn-label{display:none}
+  .topbar{padding:10px 14px;gap:8px}
+  .topbar-title{font-size:15px}
+  .btn.btn-sm{padding:6px 10px;font-size:11px}
+  .topbar .btn-primary{padding:7px 12px;font-size:12px}
+  .main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+  .content{flex:1;overflow-y:auto;padding:12px;padding-bottom:80px}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+  .stat-card{padding:14px}
+  .stat-value{font-size:22px}
+  [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  .table-wrap{display:none}
+  .filters-bar{gap:6px}
+  .search-wrap{max-width:100%;min-width:0}
+  .filter-chip{padding:5px 8px;font-size:11px}
+  .kanban-col{min-width:160px}
+  .form-grid{grid-template-columns:1fr!important}
+  .fg.full{grid-column:1/-1}
+  .modal-backdrop{align-items:flex-end}
+  .modal,.modal-sm,.modal-lg{width:100%!important;max-width:100%!important;max-height:92vh;border-bottom-left-radius:0;border-bottom-right-radius:0;border-top-left-radius:20px;border-top-right-radius:20px;padding:20px 16px;animation:slideUpMob .25s cubic-bezier(.16,1,.3,1)}
+  @keyframes slideUpMob{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .detail-panel{position:fixed;inset:0;width:100%!important;z-index:700;border-left:none;animation:slideUpMob .25s cubic-bezier(.16,1,.3,1)}
+  .reports-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr}
+  .toast-wrap{bottom:70px;right:12px;left:12px}
+  .toast{min-width:0;width:100%}
+  .otp-digit{width:40px;height:50px;font-size:20px}
+  .otp-inputs{gap:6px}
+  .login-box{padding:28px 20px}
+  .product-row{grid-template-columns:1fr 72px 28px}
+}
+
+/* LOGIN SCREEN */
+.login-screen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:0;overflow:hidden}
+.login-screen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 700px 500px at 50% 0%,rgba(37,99,235,.06) 0%,transparent 70%),radial-gradient(ellipse 400px 300px at 80% 80%,rgba(8,145,178,.04) 0%,transparent 60%);pointer-events:none}
+.login-screen::after{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.06) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;opacity:.5}
+.login-screen.hidden{display:none}
+.login-box{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:40px 44px;width:420px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.12),0 0 0 1px rgba(37,99,235,.06);animation:slideUp .3s cubic-bezier(.16,1,.3,1);position:relative;}
+.login-logo{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.login-logo-icon{width:44px;height:44px;background:linear-gradient(135deg,#2563eb 0%,#3b7cff 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(37,99,235,.3),inset 0 1px 0 rgba(255,255,255,.25)}
+.login-title{font-size:22px;font-weight:700;letter-spacing:-.5px;color:#111827;}
+.login-sub{font-size:12px;color:var(--text3);margin-top:3px;letter-spacing:.3px}
+.login-step{display:none}.login-step.active{display:block;animation:fadeSlideIn .22s ease}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.otp-inputs{display:flex;gap:10px;justify-content:center;margin:22px 0}
+.otp-digit{width:50px;height:58px;background:#f5f6fa;border:1.5px solid #d1d5db;border-radius:12px;color:var(--text);font-size:24px;font-family:var(--mono);text-align:center;outline:none;transition:all .18s;letter-spacing:0}
+.otp-digit:focus{border-color:var(--accent);background:rgba(59,124,255,.07);box-shadow:0 0 0 3px rgba(59,124,255,.15)}
+.otp-digit:not(:placeholder-shown){border-color:rgba(37,99,235,.4);color:var(--accent)}
+.otp-banner{background:rgba(244,63,94,.07);border:1px solid rgba(244,63,94,.2);border-radius:10px;padding:11px 14px;font-size:12px;color:#f43f5e;margin-bottom:16px;line-height:1.7;display:none;align-items:flex-start;gap:9px}
+.otp-banner.show{display:flex}
+.otp-banner-icon{flex-shrink:0;font-size:14px;margin-top:1px}
+.otp-banner strong{color:#ff7088;font-family:var(--mono);font-size:15px;letter-spacing:2px;display:inline-block;margin-top:2px;background:rgba(244,63,94,.1);padding:2px 8px;border-radius:5px;border:1px solid rgba(244,63,94,.2)}
+.login-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--text3);font-size:11px}
+.login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.admin-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.25);border-radius:6px;font-size:10px;font-weight:600;padding:2px 8px;letter-spacing:.4px}
+.locked-notice{display:flex;align-items:center;gap:8px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--purple);margin-bottom:14px}
+
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon"><svg viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M3 3h4v4H3zM11 3h4v4h-4zM3 11h4v4H3zM11 11h4v4h-4z"/></svg></div>
+      <div><div class="login-title">SAG LeadFlow</div><div class="login-sub">Sales CRM · Team Login</div></div>
+    </div>
+
+    <!-- Step 1: Enter email -->
+    <div class="login-step active" id="login-step-email">
+      <div style="margin-bottom:22px">
+        <div style="font-size:16px;font-weight:600;margin-bottom:5px;letter-spacing:-.3px">Sign in to your account</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6">Enter your registered email to receive a one-time passcode</div>
+      </div>
+      <div class="fg" style="margin-bottom:18px">
+        <label class="fl">Work Email <span class="req">*</span></label>
+        <input class="fi" id="login-email" type="email" placeholder="you@company.com" style="padding:11px 14px;border-radius:10px;font-size:14px"/>
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:12px 16px;font-size:14px;border-radius:12px;box-shadow:0 4px 16px rgba(59,124,255,.3)" id="btn-send-otp">Send OTP →</button>
+      <div style="margin-top:18px;padding-top:18px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);text-align:center;line-height:1.7">
+        New here? Ask your <strong style="color:var(--text2)">Admin</strong> to add your email first.
+      </div>
+    </div>
+
+    <!-- Step 2: Enter OTP -->
+    <div class="login-step" id="login-step-otp">
+      <div style="margin-bottom:18px">
+        <div style="font-size:16px;font-weight:600;margin-bottom:5px;letter-spacing:-.3px">Check your email</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.6">We sent a 6-digit code to <strong id="login-email-display" style="color:var(--text)"></strong></div>
+      </div>
+      <div class="otp-banner" id="otp-banner"><span class="otp-banner-icon">⚠️</span><div id="otp-banner-text"></div></div>
+      <div class="otp-inputs">
+        <input class="otp-digit" id="otp-0" maxlength="1" placeholder="·"/>
+        <input class="otp-digit" id="otp-1" maxlength="1" placeholder="·"/>
+        <input class="otp-digit" id="otp-2" maxlength="1" placeholder="·"/>
+        <input class="otp-digit" id="otp-3" maxlength="1" placeholder="·"/>
+        <input class="otp-digit" id="otp-4" maxlength="1" placeholder="·"/>
+        <input class="otp-digit" id="otp-5" maxlength="1" placeholder="·"/>
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:12px 16px;font-size:14px;border-radius:12px;margin-bottom:14px;box-shadow:0 4px 16px rgba(59,124,255,.3)" id="btn-verify-otp">Verify &amp; Sign In</button>
+      <div style="text-align:center;font-size:12px;color:var(--text3)">Didn't get it? <span style="color:var(--accent2);cursor:pointer;font-weight:500" id="btn-back-email">← Change email</span> or <span style="color:var(--accent2);cursor:pointer;font-weight:500" id="btn-resend-otp">resend OTP</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="app" id="app" style="display:none">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon"><svg viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M3 3h4v4H3zM11 3h4v4h-4zM3 11h4v4H3zM11 11h4v4h-4z"/></svg></div>
+        <div><div class="logo-text">SAG LeadFlow</div><div class="logo-sub">Sales CRM</div></div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg><span>Dashboard</span></div>
+      <div class="nav-item" data-view="leads"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg><span>All Leads</span></div>
+      <div class="nav-item" data-view="notifications" style="position:relative"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg><span>Notifications</span><div class="nav-badge" id="notif-badge" style="display:none">0</div></div>
+      <div class="nav-section">Analytics</div>
+      <div class="nav-item" data-view="reports"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg><span>Reports</span></div>
+      <div class="nav-section">People</div>
+      <div class="nav-item" data-view="team"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="2.5"/><path d="M0 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 11.5a3 3 0 0 1 .5 1.5"/></svg><span>Team</span></div>
+      <div class="nav-section">Tools</div>
+      <div class="nav-item" data-view="import"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 5 4-5"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg><span>Import CSV</span></div>
+      <div class="nav-item" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg><span>Settings</span></div>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-card" onclick="signOut()" title="Sign out">
+        <div class="avatar" id="sidebar-avatar">--</div>
+        <div class="user-info"><div class="user-name" id="sidebar-name">Loading</div><div class="user-role" id="sidebar-role">—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" id="main">
+    <div class="topbar">
+      <button class="btn btn-sm" id="mob-menu-btn" onclick="openMobileSidebar()" style="display:none" title="Menu">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+      </button>
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <button class="btn btn-sm" onclick="signOut()">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 8H2M6 4l-4 4 4 4"/><path d="M13 2v12"/></svg><span class="btn-label">Sign Out</span>
+      </button>
+      <button class="btn btn-primary" onclick="openAddLead()">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 1v12M1 7h12"/></svg><span class="btn-label">Add Lead</span>
+      </button>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav" id="mobile-nav" style="display:none">
+    <button class="mob-nav-item active" data-view="dashboard" onclick="setView('dashboard');updateMobileNav()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>Home
+    </button>
+    <button class="mob-nav-item" data-view="leads" onclick="setView('leads');updateMobileNav()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg>Leads
+    </button>
+    <button class="mob-nav-item" data-view="notifications" onclick="setView('notifications');updateMobileNav()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg>Alerts
+      <div class="mob-nav-badge" id="mob-notif-badge" style="display:none">0</div>
+    </button>
+    <button class="mob-nav-item" data-view="reports" onclick="setView('reports');updateMobileNav()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg>Reports
+    </button>
+    <button class="mob-nav-item" onclick="openMobileSidebar()">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M2 8h12M2 12h12"/></svg>More
+    </button>
+  </nav>
+
+  <!-- Mobile overlay sidebar -->
+  <div class="mobile-sidebar-overlay" id="mobile-sidebar-overlay" onclick="closeMobileSidebar()">
+    <div class="mobile-sidebar-panel" onclick="event.stopPropagation()">
+      <div class="mob-sidebar-hdr">
+        <div class="logo-mark">
+          <div class="logo-icon"><svg viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M3 3h4v4H3zM11 3h4v4h-4zM3 11h4v4H3zM11 11h4v4h-4z"/></svg></div>
+          <div><div class="logo-text">SAG LeadFlow</div><div class="logo-sub">Sales CRM</div></div>
+        </div>
+        <button class="mob-sidebar-close" onclick="closeMobileSidebar()">✕</button>
+      </div>
+      <div class="mob-sidebar-nav">
+        <div class="nav-section">Main</div>
+        <div class="nav-item" onclick="setView('dashboard');updateMobileNav();closeMobileSidebar()" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg><span>Dashboard</span></div>
+        <div class="nav-item" onclick="setView('leads');updateMobileNav();closeMobileSidebar()" data-view="leads"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg><span>All Leads</span></div>
+        <div class="nav-item" onclick="setView('notifications');updateMobileNav();closeMobileSidebar()" data-view="notifications"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg><span>Notifications</span><div class="nav-badge" id="mob-side-notif-badge" style="display:none">0</div></div>
+        <div class="nav-section">Analytics</div>
+        <div class="nav-item" onclick="setView('reports');updateMobileNav();closeMobileSidebar()" data-view="reports"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg><span>Reports</span></div>
+        <div class="nav-section">People</div>
+        <div class="nav-item" onclick="setView('team');updateMobileNav();closeMobileSidebar()" data-view="team"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="2.5"/><path d="M0 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 11.5a3 3 0 0 1 .5 1.5"/></svg><span>Team</span></div>
+        <div class="nav-section">Tools</div>
+        <div class="nav-item" onclick="setView('import');updateMobileNav();closeMobileSidebar()" data-view="import"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 5 4-5"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg><span>Import CSV</span></div>
+        <div class="nav-item" onclick="setView('settings');updateMobileNav();closeMobileSidebar()" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg><span>Settings</span></div>
+      </div>
+      <div class="mob-sidebar-footer">
+        <div class="user-card" onclick="signOut()">
+          <div class="avatar" id="mob-sidebar-avatar">--</div>
+          <div class="user-info"><div class="user-name" id="mob-sidebar-name">—</div><div class="user-role" id="mob-sidebar-role">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- LEAD MODAL -->
+<div class="modal-backdrop" id="lead-modal" onclick="backdropClose(event,'lead-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="lead-modal-title">Add New Lead</div><div class="modal-sub">Fill in the details for this lead</div></div>
+      <button class="modal-close" onclick="closeModal('lead-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">Full name <span class="req">*</span></label><input class="fi" id="f-name" placeholder="e.g. Ravi Kumar"/></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="f-email" type="email" placeholder="ravi@company.com"/></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" id="f-phone" placeholder="+91 98765 43210"/></div>
+      <div class="fg"><label class="fl">Company</label><input class="fi" id="f-company" placeholder="Company name"/></div>
+      <div class="form-section"><div class="form-section-title">Lead Details</div></div>
+      <div class="fg"><label class="fl">Lead source <span class="req">*</span></label>
+        <select class="fi" id="f-source"><option>Advertisement</option><option>Cold Call</option><option>Walk-in</option><option>Website</option><option>Referral</option><option>Social Media</option><option>Email Campaign</option><option>Event / Expo</option><option>Other</option></select>
+      </div>
+      <div class="fg"><label class="fl">Status</label>
+        <select class="fi" id="f-status"><option>New</option><option>Contacted</option><option>Qualified</option><option>Proposal</option><option>Won</option><option>Lost</option></select>
+      </div>
+      <div class="fg full">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <label class="fl" style="margin-bottom:0">Products of interest <span class="req">*</span></label>
+          <button type="button" class="btn btn-sm" onclick="addProductRow()" style="padding:4px 10px;font-size:11px;gap:4px">
+            <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 1v12M1 7h12"/></svg>Add Product
+          </button>
+        </div>
+        <div id="f-products-list" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+      <div class="fg"><label class="fl">Expected buy date</label><input class="fi" id="f-buydate" type="date"/><div class="fi-note">Team gets notified when this date arrives</div></div>
+      <div class="fg"><label class="fl">Assigned to</label><select class="fi" id="f-assignee"><option value="">Unassigned</option></select></div>
+      <div class="fg"><label class="fl">Deal value (₹)</label><input class="fi" id="f-value" type="number" placeholder="0" min="0"/></div>
+      <div class="fg"><label class="fl">Notification email</label><input class="fi" id="f-notif-email" type="email" placeholder="rep@company.com"/><div class="fi-note">Who to email on buy date</div></div>
+      <div class="form-section"><div class="form-section-title">Notes</div></div>
+      <div class="fg full"><textarea class="fi" id="f-notes" placeholder="Important details, follow-up points, customer preferences..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('lead-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLead()">Save Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMBER MODAL (Admin only) -->
+<div class="modal-backdrop" id="member-modal" onclick="backdropClose(event,'member-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="member-modal-title">Add Team Member</div><div class="modal-sub">Admin action — new members log in via email OTP</div></div>
+      <button class="modal-close" onclick="closeModal('member-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">Full name <span class="req">*</span></label><input class="fi" id="m-name" placeholder="Priya Sharma"/></div>
+      <div class="fg"><label class="fl">Email</label><input class="fi" id="m-email" type="email" placeholder="priya@company.com"/></div>
+      <div class="fg"><label class="fl">Role</label><select class="fi" id="m-role"><option>Sales Rep</option><option>Team Lead</option><option>Manager</option><option>Admin</option></select></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" id="m-phone" placeholder="+91 98765 43210"/></div>
+      <div class="fg"><label class="fl">Territory</label><input class="fi" id="m-territory" placeholder="South India"/></div>
+      <div class="fg"><label class="fl">Target (₹)</label><input class="fi" id="m-target" type="number" placeholder="1000000"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('member-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMember()">Save Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- SWITCH USER MODAL -->
+<div class="modal-backdrop" id="switch-user-modal" onclick="backdropClose(event,'switch-user-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Switch User</div><div class="modal-sub">Select who is currently using the CRM</div></div>
+      <button class="modal-close" onclick="closeModal('switch-user-modal')">✕</button>
+    </div>
+    <div id="switch-user-list"></div>
+    <div class="modal-footer"><button class="btn" onclick="closeModal('switch-user-modal')">Close</button></div>
+  </div>
+</div>
+
+<!-- IMPORT CONFIRM MODAL -->
+<div class="modal-backdrop" id="import-confirm-modal" onclick="backdropClose(event,'import-confirm-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Confirm Import</div><div class="modal-sub" id="import-confirm-sub">—</div></div>
+      <button class="modal-close" onclick="closeModal('import-confirm-modal')">✕</button>
+    </div>
+    <div id="import-confirm-body"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('import-confirm-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmImport()">Import Leads</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+const STATUSES=['New','Contacted','Qualified','Proposal','Won','Lost'];
+const COLORS=['#3b7cff','#f59e0b','#22c87a','#a78bfa','#f43f5e','#2dd4bf','#fb923c','#e879f9'];
+const BGCOLOR=['rgba(59,124,255,.12)','rgba(245,158,11,.1)','rgba(34,200,122,.1)','rgba(167,139,250,.1)','rgba(244,63,94,.1)','rgba(45,212,191,.1)'];
+let leads=[],team=[],currentUser=null,editLeadId=null,editMemberId=null;
+let currentView='dashboard',statusFilter='all',searchQ='',listMode='table';
+let pendingImport=[],chartReg={};
+let _pendingOTPEmail='',_currentOTP='',_otpExpiry=0;
+let teamTab='members'; // 'members' | 'activity' | 'performance'
+
+/* ── Activity Log ─────────────────────────────────────────── */
+const MAX_LOG=200;
+function getActivityLog(){try{return JSON.parse(localStorage.getItem('lf_activity_log')||'[]')}catch(e){return[]}}
+function saveActivityLog(log){try{localStorage.setItem('lf_activity_log',JSON.stringify(log.slice(0,MAX_LOG)))}catch(e){}}
+function logActivity(type,detail,userId){
+  const log=getActivityLog();
+  const uid=userId||(currentUser&&currentUser.id)||'?';
+  const uname=team.find(m=>m.id===uid)?.name||uid;
+  log.unshift({id:'a'+Date.now()+Math.random().toString(36).slice(2,5),type,detail,userId:uid,userName:uname,ts:new Date().toISOString()});
+  saveActivityLog(log);
+}
+
+const $=id=>document.getElementById(id);
+const d0=(n=0)=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]};
+const fmtDate=s=>s?new Date(s).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
+const numFmt=n=>Number(n).toLocaleString('en-IN');
+const initials=n=>(n||'?').split(' ').map(x=>x[0]).join('').toUpperCase().slice(0,2);
+
+function daysTo(s){if(!s)return null;const t=new Date();t.setHours(0,0,0,0);const g=new Date(s);g.setHours(0,0,0,0);return Math.round((g-t)/86400000)}
+function dateClass(s){const d=daysTo(s);if(d===null)return'date-none';if(d<0)return'date-overdue';if(d===0)return'date-today';if(d<=3)return'date-soon';return'date-ok'}
+function dateLabel(s){const d=daysTo(s);if(d===null)return'—';if(d<0)return Math.abs(d)+'d overdue';if(d===0)return'TODAY ⚡';if(d===1)return'Tomorrow';return fmtDate(s)}
+function getMember(id){return team.find(m=>m.id===id)}
+function memberName(id){const m=getMember(id);return m?m.name:'Unassigned'}
+function memberColor(id){const i=team.findIndex(m=>m.id===id);return COLORS[i>=0?i%COLORS.length:7]}
+function memberBg(id){const i=team.findIndex(m=>m.id===id);return BGCOLOR[i>=0?i%BGCOLOR.length:0]}
+function hotLeads(){return leads.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost'}).sort((a,b)=>daysTo(a.buyDate)-daysTo(b.buyDate))}
+
+/* ── Supabase Config ─────────────────────────────────────── */
+const SB_URL = 'https://gwyariovhutenplndfne.supabase.co/rest/v1';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3eWFyaW92aHV0ZW5wbG5kZm5lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4Mzg5MzMsImV4cCI6MjA5MjQxNDkzM30.AoqqCGWqj3W_QJNPZB4i0v48KYMwTVzIAjdVddKPGGI';
+const SB_HDR = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=representation'};
+
+async function sbFetch(path, opts={}){
+  const res = await fetch(SB_URL+path, {...opts, headers:{...SB_HDR,...(opts.headers||{})}});
+  if(!res.ok){ const t=await res.text(); console.error('Supabase error:',t); throw new Error(t); }
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : [];
+}
+
+/* Row mappers DB (snake_case) <-> app (camelCase) */
+function dbToLead(r){return{id:r.id,name:r.name,email:r.email||'',phone:r.phone||'',company:r.company||'',source:r.source||'Other',status:r.status||'New',product:r.product||'',buyDate:r.buy_date||'',assignee:r.assignee||'',value:r.value||0,notes:r.notes||'',notifEmail:r.notif_email||'',timeline:r.timeline||[],createdAt:r.created_at||new Date().toISOString()}}
+function leadToDb(l){return{id:l.id,name:l.name,email:l.email||null,phone:l.phone||null,company:l.company||null,source:l.source||'Other',status:l.status||'New',product:l.product||null,buy_date:l.buyDate||null,assignee:l.assignee||null,value:Number(l.value)||0,notes:l.notes||null,notif_email:l.notifEmail||null,timeline:l.timeline||[],created_at:l.createdAt||new Date().toISOString()}}
+function dbToMember(r){return{id:r.id,name:r.name,email:r.email||'',phone:r.phone||'',role:r.role||'Sales Rep',territory:r.territory||'',target:r.target||0,isAdmin:r.is_admin||false}}
+function memberToDb(m){return{id:m.id,name:m.name,email:m.email||null,phone:m.phone||null,role:m.role||'Sales Rep',territory:m.territory||null,target:Number(m.target)||0,is_admin:!!(m.isAdmin||(m.role==='Admin'))}}
+
+/* ── Supabase CRUD ─────────────────────────────────────────── */
+async function dbLoadAll(){
+  showAppLoading(true);
+  try {
+    const [tRows, lRows] = await Promise.all([
+      sbFetch('/team_members?order=created_at.asc'),
+      sbFetch('/leads?order=created_at.desc')
+    ]);
+    team = tRows.map(dbToMember);
+    leads = lRows.map(dbToLead);
+    // Seed if empty
+    if(team.length===0){ await dbSeedTeam(); }
+    if(leads.length===0){ await dbSeedLeads(); }
+  } catch(e){
+    toast('Could not connect to database: '+e.message,'#f43f5e');
+  } finally {
+    showAppLoading(false);
+  }
+}
+
+async function dbSeedTeam(){
+  const rows = SEED_TEAM.map(memberToDb);
+  await sbFetch('/team_members', {method:'POST', body:JSON.stringify(rows), headers:{'Prefer':'resolution=ignore-duplicates'}});
+  team = SEED_TEAM.map(m=>({...m}));
+}
+
+async function dbSeedLeads(){
+  const rows = SEED_LEADS.map(leadToDb);
+  await sbFetch('/leads', {method:'POST', body:JSON.stringify(rows), headers:{'Prefer':'resolution=ignore-duplicates'}});
+  leads = SEED_LEADS.map(l=>({...l}));
+}
+
+async function dbUpsertLead(l){
+  const row = leadToDb(l);
+  await sbFetch('/leads?id=eq.'+l.id, {method:'PATCH', body:JSON.stringify(row)});
+}
+
+async function dbInsertLead(l){
+  const row = leadToDb(l);
+  await sbFetch('/leads', {method:'POST', body:JSON.stringify(row)});
+}
+
+async function dbDeleteLead(id){
+  await sbFetch('/leads?id=eq.'+id, {method:'DELETE'});
+}
+
+async function dbUpsertMember(m){
+  const row = memberToDb(m);
+  await sbFetch('/team_members?id=eq.'+m.id, {method:'PATCH', body:JSON.stringify(row)});
+}
+
+async function dbInsertMember(m){
+  const row = memberToDb(m);
+  await sbFetch('/team_members', {method:'POST', body:JSON.stringify(row)});
+}
+
+async function dbDeleteMember(id){
+  await sbFetch('/team_members?id=eq.'+id, {method:'DELETE'});
+}
+
+/* Seed data */
+const SEED_TEAM=[
+  {id:'u0',name:'Sai Venkat',email:'saivenkat.sag@gmail.com',role:'Admin',phone:'',territory:'All India',target:0,isAdmin:true},
+  {id:'u1',name:'Priya Sharma',email:'priya@company.com',role:'Team Lead',phone:'+91 98001 11111',territory:'South India',target:2000000,isAdmin:true},
+  {id:'u2',name:'Ravi Kumar',email:'ravi@company.com',role:'Sales Rep',phone:'+91 98002 22222',territory:'West India',target:1200000},
+  {id:'u3',name:'Anita Singh',email:'anita@company.com',role:'Sales Rep',phone:'+91 98003 33333',territory:'North India',target:1000000},
+  {id:'u4',name:'Suresh Menon',email:'suresh@company.com',role:'Manager',phone:'+91 98004 44444',territory:'All India',target:5000000},
+];
+const SEED_LEADS=[
+  {id:'l1',name:'Arjun Reddy',email:'arjun@techsol.in',phone:'+91 98765 43210',company:'TechSol India',source:'Advertisement',status:'Qualified',product:'Enterprise CRM Suite',buyDate:d0(3),assignee:'u1',value:250000,notes:'Very interested. Requested demo next week.',notifEmail:'priya@company.com',createdAt:new Date(Date.now()-864e5*10).toISOString(),timeline:['Lead added','Called – showed strong interest','Demo scheduled']},
+  {id:'l2',name:'Meena Sundar',email:'meena@globalfin.com',phone:'+91 87654 32109',company:'GlobalFin',source:'Cold Call',status:'Contacted',product:'Finance Analytics Pro',buyDate:d0(1),assignee:'u2',value:80000,notes:'Decision pending next week.',notifEmail:'ravi@company.com',createdAt:new Date(Date.now()-864e5*5).toISOString(),timeline:['Lead added','Initial call done']},
+  {id:'l3',name:'Suresh Patel',email:'suresh@buildcorp.in',phone:'+91 76543 21098',company:'BuildCorp',source:'Referral',status:'New',product:'Project Management Tool',buyDate:d0(7),assignee:'u3',value:45000,notes:'Referred by existing client Ramesh.',notifEmail:'',createdAt:new Date(Date.now()-864e5*2).toISOString(),timeline:['Lead added']},
+  {id:'l4',name:'Lakshmi Iyer',email:'lakshmi@retailplus.com',phone:'+91 65432 10987',company:'RetailPlus',source:'Website',status:'Proposal',product:'Retail POS System',buyDate:d0(0),assignee:'u1',value:120000,notes:'Proposal sent. Board approval pending.',notifEmail:'priya@company.com',createdAt:new Date(Date.now()-864e5*8).toISOString(),timeline:['Lead added','Qualified','Proposal sent']},
+  {id:'l5',name:'Vikram Nair',email:'vikram@logistech.in',phone:'+91 54321 09876',company:'LogisTech',source:'Event / Expo',status:'Won',product:'Logistics Software',buyDate:d0(-2),assignee:'u2',value:350000,notes:'Deal closed! PO received.',notifEmail:'',createdAt:new Date(Date.now()-864e5*15).toISOString(),timeline:['Lead added','Qualified','Proposal','Won – Deal Closed!']},
+  {id:'l6',name:'Deepa Rao',email:'deepa@agrotech.in',phone:'+91 90001 23456',company:'AgroTech',source:'Email Campaign',status:'New',product:'Farm Management App',buyDate:d0(5),assignee:'u3',value:60000,notes:'',notifEmail:'',createdAt:new Date(Date.now()-864e5*1).toISOString(),timeline:['Lead added']},
+  {id:'l7',name:'Karthik Iyer',email:'karthik@smartbuild.com',phone:'+91 90002 34567',company:'SmartBuild',source:'Social Media',status:'Contacted',product:'Construction ERP',buyDate:d0(10),assignee:'u1',value:500000,notes:'Needs board approval first.',notifEmail:'priya@company.com',createdAt:new Date(Date.now()-864e5*3).toISOString(),timeline:['Lead added','WhatsApp sent']},
+  {id:'l8',name:'Nandini Desai',email:'nandini@finplus.com',phone:'+91 90003 45678',company:'FinPlus',source:'Advertisement',status:'Lost',product:'Accounting Suite',buyDate:'',assignee:'u2',value:75000,notes:'Went with competitor pricing.',notifEmail:'',createdAt:new Date(Date.now()-864e5*20).toISOString(),timeline:['Lead added','Called','Lost – went with competitor']},
+];
+
+function showAppLoading(on){
+  let el=document.getElementById('app-loading');
+  if(on){
+    if(!el){el=document.createElement('div');el.id='app-loading';el.style.cssText='position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px';el.innerHTML='<div style="width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite"></div><div style="font-size:13px;color:var(--text3)">Connecting to database…</div>';document.body.appendChild(el);}
+  } else {
+    if(el) el.remove();
+  }
+}
+
+function initData(){ currentUser=null; leads=[]; team=[]; }
+
+/* Legacy saveToStorage — now no-ops (Supabase handles persistence) */
+function saveToStorage(){}
+
+
+
+/* ── OTP Login ─────────────────────────────────────────── */
+function isAdmin(u){return u&&(u.isAdmin||u.role==='Admin')}
+
+const EMAILJS_SERVICE  = 'service_wzxfmeh';
+const EMAILJS_TEMPLATE = 'template_pbdck2y';
+const EMAILJS_PUBKEY   = '08Mw24QOT3yyBoG_V';
+
+function sendOTP(){
+  console.log('[OTP] sendOTP called');
+  const email=($('login-email').value||'').trim().toLowerCase();
+  console.log('[OTP] email entered:', email);
+  if(!email){toast('Please enter your email','#f59e0b');return}
+  const member=team.find(m=>(m.email||'').toLowerCase()===email);
+  console.log('[OTP] member found:', member?member.name:'NOT FOUND', '| team size:', team.length);
+  if(!member){toast('Email not found. Ask your Admin to add you first.','#f43f5e');return}
+  const otp=String(Math.floor(100000+Math.random()*900000));
+  _pendingOTPEmail=email;_currentOTP=otp;_otpExpiry=Date.now()+300000;
+  $('login-email-display').textContent=email;
+  [0,1,2,3,4,5].forEach(i=>{$('otp-'+i).value='';});
+  $('otp-banner').classList.remove('show');
+
+  const btn=$('btn-send-otp');
+  btn.textContent='Sending…';btn.disabled=true;
+
+  console.log('[OTP] emailjs type:', typeof emailjs);
+  if(typeof emailjs === 'undefined'){
+    btn.textContent='Send OTP →';btn.disabled=false;
+    toast('EmailJS library not loaded. Check internet connection.','#f43f5e');
+    return;
+  }
+
+  console.log('[OTP] Sending via EmailJS — service:', EMAILJS_SERVICE, 'template:', EMAILJS_TEMPLATE);
+  emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+    to_email:   email,
+    email:      email,
+    user_email: email,
+    to_name:    member.name,
+    name:       member.name,
+    user_name:  member.name,
+    otp_code:   otp,
+    otp:        otp,
+    passcode:   otp,
+    message:    'Your SAG LeadFlow OTP is: ' + otp
+  }).then(res=>{
+    console.log('[OTP] SUCCESS', res);
+    btn.textContent='Send OTP →';btn.disabled=false;
+    $('login-step-email').classList.remove('active');
+    $('login-step-otp').classList.add('active');
+    setTimeout(()=>$('otp-0').focus(),80);
+    toast('OTP sent to '+email,'#22c87a');
+  }).catch(err=>{
+    console.error('[OTP] FAILED', err);
+    btn.textContent='Send OTP →';btn.disabled=false;
+    const banner=$('otp-banner');
+    banner.classList.add('show');
+    $('otp-banner-text').innerHTML='Email delivery failed — use this code instead:<br><strong>'+otp+'</strong>';
+    $('login-step-email').classList.remove('active');
+    $('login-step-otp').classList.add('active');
+    setTimeout(()=>$('otp-0').focus(),80);
+    const reason=err.text||err.message||JSON.stringify(err);
+    toast('Email error: '+reason,'#f43f5e');
+  });
+}
+
+function verifyOTP(){
+  const entered=[0,1,2,3,4,5].map(i=>$('otp-'+i).value).join('');
+  if(entered.length<6){toast('Enter all 6 digits','#f59e0b');return}
+  if(Date.now()>_otpExpiry){toast('OTP expired. Please request a new one.','#f43f5e');backToEmail();return}
+  if(entered!==_currentOTP){toast('Incorrect OTP. Try again.','#f43f5e');return}
+  const member=team.find(m=>(m.email||'').toLowerCase()===_pendingOTPEmail);
+  currentUser=member;
+  try{localStorage.setItem('lf_current_user',member.id)}catch(e){}
+  logActivity('login','Signed in via OTP',member.id);
+  _pendingOTPEmail='';_currentOTP='';
+  $('login-screen').classList.add('hidden');
+  $('app').style.display='flex';
+  updateSidebarUser();render();autoCheckNotifs();initMobileLayout();
+  toast('Welcome, '+member.name+'!','#22c87a');
+}
+
+function backToEmail(){
+  $('login-step-otp').classList.remove('active');
+  $('login-step-email').classList.add('active');
+  $('otp-banner').classList.remove('show');
+  $('otp-banner-text').innerHTML='';
+}
+
+function signOut(){
+  if(currentUser) logActivity('logout','Signed out',currentUser.id);
+  currentUser=null;try{localStorage.removeItem('lf_current_user')}catch(e){}
+  $('app').style.display='none';
+  $('login-step-otp').classList.remove('active');
+  $('login-step-email').classList.add('active');
+  $('login-email').value='';
+  $('otp-banner').classList.remove('show');
+  if($('otp-banner-text'))$('otp-banner-text').innerHTML='';
+  $('login-screen').classList.remove('hidden');
+  toast('Signed out','#3b7cff');
+}
+
+function wireLoginEvents(){
+  const btnSend=$('btn-send-otp');
+  const btnVerify=$('btn-verify-otp');
+  const btnBack=$('btn-back-email');
+  const btnResend=$('btn-resend-otp');
+  const loginEmail=$('login-email');
+
+  if(!btnSend){console.error('MISSING: #btn-send-otp');return;}
+  if(!btnVerify){console.error('MISSING: #btn-verify-otp');return;}
+
+  btnSend.addEventListener('click',()=>{console.log('[OTP] Send button clicked');sendOTP();});
+  btnVerify.addEventListener('click',()=>{console.log('[OTP] Verify button clicked');verifyOTP();});
+  btnBack.addEventListener('click',backToEmail);
+  btnResend.addEventListener('click',()=>{console.log('[OTP] Resend clicked');sendOTP();});
+  loginEmail.addEventListener('keydown',e=>{if(e.key==='Enter')sendOTP();});
+  [0,1,2,3,4,5].forEach(i=>{
+    const el=$('otp-'+i);
+    el.addEventListener('input',()=>{
+      el.value=el.value.replace(/\D/g,'');
+      if(el.value&&i<5)$('otp-'+(i+1)).focus();
+      if(i===5&&el.value)verifyOTP();
+    });
+    el.addEventListener('keydown',e=>{
+      if(e.key==='Backspace'&&!el.value&&i>0)$('otp-'+(i-1)).focus();
+      if(e.key==='Enter')verifyOTP();
+    });
+  });
+  console.log('[OTP] Login events wired successfully');
+}
+
+function setView(v){
+  currentView=v;
+  document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
+  const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Notifications',reports:'Reports & Analytics',team:'Team',import:'Import CSV',settings:'Settings'};
+  $('page-title').textContent=titles[v]||v;
+  Object.values(chartReg).forEach(c=>{try{c.destroy()}catch(e){}});chartReg={};
+  render();
+}
+function updateBadge(){const c=hotLeads().length;const b=$('notif-badge');b.textContent=c;b.style.display=c?'flex':'none';const mb=$('mob-notif-badge');if(mb){mb.textContent=c;mb.style.display=c?'flex':'none';}const msb=$('mob-side-notif-badge');if(msb){msb.textContent=c;msb.style.display=c?'flex':'none';}}
+function updateSidebarUser(){
+  if(!currentUser)return;
+  const av=$('sidebar-avatar');if(av){av.textContent=initials(currentUser.name);av.style.background=memberBg(currentUser.id);av.style.color=memberColor(currentUser.id);}
+  const sn=$('sidebar-name');if(sn)sn.textContent=currentUser.name;
+  const sr=$('sidebar-role');if(sr)sr.textContent=currentUser.role;
+  // Mobile sidebar
+  const mav=$('mob-sidebar-avatar');if(mav){mav.textContent=initials(currentUser.name);mav.style.background=memberBg(currentUser.id);mav.style.color=memberColor(currentUser.id);}
+  const msn=$('mob-sidebar-name');if(msn)msn.textContent=currentUser.name;
+  const msr=$('mob-sidebar-role');if(msr)msr.textContent=currentUser.role;
+  rebuildAssigneeDropdown();
+}
+function rebuildAssigneeDropdown(){
+  const sel=$('f-assignee');if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Unassigned</option>'+team.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  sel.value=cur||(currentUser?currentUser.id:'');
+}
+
+/* ── Mobile helpers ──────────────────────────────────────── */
+function isMobile(){return window.innerWidth<=768}
+
+function initMobileLayout(){
+  const mob=isMobile();
+  const mobilNav=$('mobile-nav');
+  const mobBtn=$('mob-menu-btn');
+  if(mobilNav) mobilNav.style.display=mob?'flex':'none';
+  if(mobBtn) mobBtn.style.display=mob?'flex':'none';
+}
+
+function updateMobileNav(){
+  // Sync bottom nav active state
+  document.querySelectorAll('.mob-nav-item[data-view]').forEach(el=>{
+    el.classList.toggle('active',el.dataset.view===currentView);
+  });
+  // Sync overlay sidebar nav active state
+  document.querySelectorAll('.mobile-sidebar-panel .nav-item[data-view]').forEach(el=>{
+    el.classList.toggle('active',el.dataset.view===currentView);
+  });
+}
+
+function openMobileSidebar(){
+  const ov=$('mobile-sidebar-overlay');
+  if(ov){ov.classList.add('open');document.body.style.overflow='hidden';}
+}
+function closeMobileSidebar(){
+  const ov=$('mobile-sidebar-overlay');
+  if(ov){ov.classList.remove('open');document.body.style.overflow='';}
+}
+
+window.addEventListener('resize',()=>{
+  initMobileLayout();
+  // Re-render leads to switch between table and card list on resize
+  if(currentView==='leads') render();
+});
+
+function renderMobileLeadCards(fl){
+  if(!fl.length) return`<div class="empty-state"><div class="empty-text">No leads found</div></div>`;
+  return fl.map(l=>`
+<div onclick="openDetail('${l.id}')" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:8px;cursor:pointer;transition:border-color .15s;active:border-color:var(--accent)">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px">
+    <div style="flex:1;min-width:0">
+      <div class="lead-name" style="font-size:14px">${l.name}</div>
+      <div class="lead-company">${l.company||''}${l.email?'<span style="color:var(--text3)"> · </span>'+l.email:''}</div>
+    </div>
+    <span class="pill pill-${l.status.toLowerCase()}" style="flex-shrink:0">${l.status}</span>
+  </div>
+  <div style="font-size:12px;color:var(--text2);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${(l.products&&l.products.length?l.products.map(p=>p.product).join(', '):l.product)||'—'}</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <div style="display:flex;align-items:center;gap:6px">
+      <div class="avatar" style="width:20px;height:20px;font-size:8px;background:${memberBg(l.assignee)};color:${memberColor(l.assignee)}">${initials(memberName(l.assignee))}</div>
+      <span style="font-size:11px;color:var(--text3)">${memberName(l.assignee).split(' ')[0]}</span>
+    </div>
+    <div class="${dateClass(l.buyDate)}" style="font-size:11px;font-weight:500">${dateLabel(l.buyDate)}</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text2)">${l.value?'₹'+numFmt(l.value):'—'}</div>
+    <div style="display:flex;gap:4px" onclick="event.stopPropagation()">
+      <button class="act-btn" style="opacity:1" onclick="openEditLead('${l.id}')">Edit</button>
+      <button class="act-btn del" style="opacity:1" onclick="deleteLead('${l.id}')">Del</button>
+    </div>
+  </div>
+</div>`).join('');
+}
+
+function render(){
+  const c=$('content');
+  if(currentView==='dashboard')c.innerHTML=renderDash();
+  else if(currentView==='leads')c.innerHTML=renderLeads();
+  else if(currentView==='notifications')c.innerHTML=renderNotifs();
+  else if(currentView==='reports'){c.innerHTML=renderReports();setTimeout(initCharts,60)}
+  else if(currentView==='team')c.innerHTML=renderTeam();
+  else if(currentView==='import')c.innerHTML=renderImport();
+  else if(currentView==='settings')c.innerHTML=renderSettings();
+  // Show mobile card list, hide table on mobile
+  if(isMobile()&&currentView==='leads'){
+    const cards=$('mob-lead-cards');const tw=c.querySelector('.table-wrap');
+    if(cards)cards.style.display='block';if(tw)tw.style.display='none';
+  }
+  updateBadge();
+  updateMobileNav();
+}
+
+function renderDash(){
+  const total=leads.length,won=leads.filter(l=>l.status==='Won').length,hot=hotLeads().length;
+  const val=leads.filter(l=>l.status!=='Lost').reduce((s,l)=>s+(Number(l.value)||0),0);
+  const mine=leads.filter(l=>l.assignee===currentUser?.id);
+  const hl=hotLeads().slice(0,6);
+  const pipelineBar=STATUSES.map((s,i)=>{const c=leads.filter(l=>l.status===s).length;const p=total>0?Math.round(c/total*100):0;return`<div style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px">${s}</div><div style="font-size:22px;font-weight:600;margin-top:4px">${c}</div><div style="height:3px;background:var(--bg3);border-radius:2px;margin-top:8px"><div style="height:100%;background:${COLORS[i]};border-radius:2px;width:${p}%"></div></div></div>`}).join('');
+  return`
+<div class="stats-grid">
+  <div class="stat-card blue"><div class="stat-label">Total Leads</div><div class="stat-value" style="color:var(--accent2)">${total}</div><div class="stat-change">All sources combined</div></div>
+  <div class="stat-card green"><div class="stat-label">Deals Won</div><div class="stat-value" style="color:var(--green)">${won}</div><div class="stat-change">${total>0?Math.round(won/total*100):0}% win rate</div></div>
+  <div class="stat-card amber"><div class="stat-label">Hot Follow-ups</div><div class="stat-value" style="color:var(--amber)">${hot}</div><div class="stat-change">Due in 3 days or less</div></div>
+  <div class="stat-card teal"><div class="stat-label">Pipeline Value</div><div class="stat-value" style="font-size:20px;color:var(--teal)">₹${numFmt(val)}</div><div class="stat-change">Active deals</div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+  <div>
+    <div class="section-hdr"><div class="section-title">My Leads</div><div class="section-link" onclick="setView('leads')">View all →</div></div>
+    <div class="panel">
+      ${mine.length===0?'<div class="empty-state" style="padding:30px"><div class="empty-text">No leads assigned to you</div></div>':
+        mine.slice(0,5).map(l=>`<div style="display:grid;grid-template-columns:2fr 1fr 1fr;border-bottom:1px solid var(--border);padding:11px 16px;align-items:center;cursor:pointer;transition:background .12s" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="this.style.background=''" onclick="openDetail('${l.id}')">
+          <div><div class="lead-name">${l.name}</div><div class="lead-company">${l.company||''}</div></div>
+          <span class="pill pill-${l.status.toLowerCase()}">${l.status}</span>
+          <div class="${dateClass(l.buyDate)}" style="font-size:12px">${dateLabel(l.buyDate)}</div>
+        </div>`).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="section-hdr"><div class="section-title">Follow-up Alerts</div><div class="section-link" onclick="setView('notifications')">View all →</div></div>
+    ${hl.length===0?`<div class="panel"><div class="empty-state" style="padding:30px"><div class="empty-icon" style="font-size:24px">✓</div><div class="empty-text">All clear! No follow-ups due</div></div></div>`:`<div class="panel">${hl.map(l=>{const d=daysTo(l.buyDate);const dc=d<0?'overdue':d===0?'today':'soon';return`<div class="notif-item" onclick="openDetail('${l.id}')" style="cursor:pointer"><div class="notif-dot ${dc}"></div><div class="notif-body"><div class="notif-title">${l.name}</div><div class="notif-meta">${l.product} · ${memberName(l.assignee)}</div></div><div class="notif-time ${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</div></div>`}).join('')}</div>`}
+  </div>
+</div>
+<div>
+  <div class="section-hdr"><div class="section-title">Pipeline Overview</div></div>
+  <div style="display:flex;gap:10px">${pipelineBar}</div>
+</div>`;
+}
+
+function renderLeads(){
+  let fl=leads.filter(l=>{
+    const ms=statusFilter==='all'||l.status===statusFilter;
+    const q=searchQ.toLowerCase();
+    const mq=!q||[l.name,l.email,l.product,l.company,memberName(l.assignee)].some(f=>(f||'').toLowerCase().includes(q));
+    return ms&&mq;
+  });
+  const tableHTML=`<div class="panel"><div class="table-wrap"><table class="leads-table"><thead><tr><th>Lead</th><th>Product</th><th>Status</th><th>Source</th><th>Buy Date</th><th>Assignee</th><th>Value</th><th></th></tr></thead><tbody>
+  ${fl.length===0?`<tr><td colspan="8"><div class="empty-state"><div class="empty-text">No leads found</div></div></td></tr>`:
+    fl.map(l=>`<tr onclick="openDetail('${l.id}')">
+      <td><div class="lead-name">${l.name}</div><div class="lead-email">${l.email}</div></td>
+      <td style="font-size:12px;color:var(--text2);max-width:130px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">${l.product||'—'}</td>
+      <td><span class="pill pill-${l.status.toLowerCase()}">${l.status}</span></td>
+      <td><span class="source-badge">${l.source}</span></td>
+      <td class="${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</td>
+      <td><div style="display:flex;align-items:center;gap:7px"><div class="avatar" style="width:24px;height:24px;font-size:9px;background:${memberBg(l.assignee)};color:${memberColor(l.assignee)}">${initials(memberName(l.assignee))}</div><span style="font-size:12px;color:var(--text2)">${memberName(l.assignee).split(' ')[0]}</span></div></td>
+      <td style="font-family:var(--mono);font-size:12px">${l.value?'₹'+numFmt(l.value):'—'}</td>
+      <td onclick="event.stopPropagation()"><div class="row-actions"><button class="act-btn" onclick="openEditLead('${l.id}')">Edit</button><button class="act-btn del" onclick="deleteLead('${l.id}')">Del</button></div></td>
+    </tr>`).join('')}
+  </tbody></table></div></div>`;
+  const kanbanHTML=`<div class="kanban">${STATUSES.map(s=>{const cols=fl.filter(l=>l.status===s);return`<div class="kanban-col"><div class="kanban-col-hdr"><div class="kanban-col-name">${s}</div><div class="kanban-count">${cols.length}</div></div><div class="kanban-cards">${cols.length===0?`<div style="text-align:center;padding:20px 0;font-size:11px;color:var(--text3)">Empty</div>`:cols.map(l=>`<div class="kcard" onclick="openDetail('${l.id}')"><div class="kcard-name">${l.name}</div><div class="kcard-product">${l.product||'—'}</div><div class="kcard-footer"><span class="kcard-source">${l.source}</span><span class="kcard-date ${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</span></div></div>`).join('')}</div></div>`}).join('')}</div>`;
+  return`
+<div class="filters-bar">
+  <div class="search-wrap"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M11 11l3 3"/></svg><input class="search-input" placeholder="Search leads…" value="${searchQ}" oninput="searchQ=this.value;render()"/></div>
+  ${['all',...STATUSES].map(s=>`<button class="filter-chip ${statusFilter===s?'active':''}" onclick="statusFilter='${s}';render()">${s==='all'?'All':s}</button>`).join('')}
+  <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+    <span style="font-size:12px;color:var(--text3)">${fl.length} leads</span>
+    <div class="view-toggle"><button class="vt-btn ${listMode==='table'?'active':''}" onclick="listMode='table';render()">Table</button><button class="vt-btn ${listMode==='kanban'?'active':''}" onclick="listMode='kanban';render()">Kanban</button></div>
+    <button class="btn btn-sm btn-success" onclick="exportCSV()">Export CSV</button>
+  </div>
+</div>
+<div id="mob-lead-cards" style="display:none">${renderMobileLeadCards(fl)}</div>
+${listMode==='table'?tableHTML:kanbanHTML}`;
+}
+
+function renderNotifs(){
+  const hl=hotLeads();
+  const overdue=hl.filter(l=>daysTo(l.buyDate)<0);
+  const today=hl.filter(l=>daysTo(l.buyDate)===0);
+  const soon=hl.filter(l=>daysTo(l.buyDate)>0);
+  const block=(arr,label,bc,dt)=>arr.length===0?'':
+    `<div style="margin-bottom:20px"><div class="section-hdr" style="margin-bottom:10px"><div class="section-title" style="color:${bc}">${label} <span style="font-size:12px;color:var(--text3);font-weight:400">(${arr.length})</span></div></div>
+    <div class="panel" style="border-color:${bc}22">
+    ${arr.map(l=>`<div class="notif-item"><div class="notif-dot ${dt}"></div><div class="notif-body"><div class="notif-title">${l.name} — <strong>${l.product}</strong></div><div class="notif-meta">${memberName(l.assignee)} · ${l.source} · ${l.company||''}${l.notifEmail?' · 📧 '+l.notifEmail:''}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><div class="notif-time ${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</div><button class="btn btn-sm" onclick="triggerEmailNotif('${l.id}')">Send email</button></div></div>`).join('')}
+    </div></div>`;
+  return`
+<div class="info-banner"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 5v4M8 11v1"/></svg><div>Email notifications fire when a lead's buy date arrives. Configure EmailJS keys in <strong style="color:var(--text)">Settings → Email</strong> for real delivery. Click "Send email" to trigger manually.</div></div>
+${hl.length===0?`<div class="empty-state" style="padding:80px 20px"><div class="empty-icon">🎉</div><div class="empty-text">All clear — no follow-ups due in the next 3 days!</div></div>`:block(overdue,'Overdue','#f43f5e','overdue')+block(today,'Due Today','#f59e0b','today')+block(soon,'Upcoming (Next 3 Days)','#3b7cff','soon')}`;
+}
+
+function renderReports(){
+  const total=leads.length,wonV=leads.filter(l=>l.status==='Won').reduce((s,l)=>s+(Number(l.value)||0),0),totV=leads.reduce((s,l)=>s+(Number(l.value)||0),0),wr=total>0?Math.round(leads.filter(l=>l.status==='Won').length/total*100):0;
+  return`
+<div class="stats-grid">
+  <div class="stat-card green"><div class="stat-label">Win Rate</div><div class="stat-value" style="color:var(--green)">${wr}%</div><div class="stat-change">All time</div></div>
+  <div class="stat-card blue"><div class="stat-label">Won Value</div><div class="stat-value" style="font-size:20px;color:var(--green)">₹${numFmt(wonV)}</div><div class="stat-change">Closed deals</div></div>
+  <div class="stat-card amber"><div class="stat-label">Total Pipeline</div><div class="stat-value" style="font-size:20px;color:var(--amber)">₹${numFmt(totV)}</div></div>
+  <div class="stat-card teal"><div class="stat-label">Avg Deal Size</div><div class="stat-value" style="font-size:20px;color:var(--teal)">₹${total>0?numFmt(Math.round(totV/total)):0}</div></div>
+</div>
+<div class="reports-grid">
+  <div class="report-card"><div class="report-title">Leads by Status</div><div id="leg-status" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:11px;color:var(--text2)"></div><div class="chart-wrap"><canvas id="c-status" role="img" aria-label="Leads by status"></canvas></div></div>
+  <div class="report-card"><div class="report-title">Leads by Source</div><div id="leg-source" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:11px;color:var(--text2)"></div><div class="chart-wrap"><canvas id="c-source" role="img" aria-label="Leads by source"></canvas></div></div>
+</div>
+<div class="report-card" style="margin-bottom:14px">
+  <div class="report-title">Team Performance — Leads Assigned</div>
+  <div id="leg-team" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;font-size:11px;color:var(--text2)"></div>
+  <div style="position:relative;height:${Math.max(120,team.length*44+40)}px"><canvas id="c-team" role="img" aria-label="Leads per rep"></canvas></div>
+</div>
+<div class="report-card">
+  <div class="report-title">Deal Value by Rep (₹K)</div>
+  <div class="chart-wrap"><canvas id="c-value" role="img" aria-label="Deal value by rep"></canvas></div>
+</div>`;
+}
+
+function initCharts(){
+  const gc='rgba(255,255,255,.06)',tc='#5a5f70';
+  const mkLeg=(id,labels,colors)=>{const el=$(id);if(!el)return;el.innerHTML=labels.map((l,i)=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:9px;height:9px;border-radius:2px;background:${colors[i%colors.length]};display:inline-block"></span>${l}</span>`).join('')};
+  const c1=$('c-status');
+  if(c1&&!chartReg.status){const data=STATUSES.map(s=>leads.filter(l=>l.status===s).length);mkLeg('leg-status',STATUSES,COLORS);chartReg.status=new Chart(c1,{type:'bar',data:{labels:STATUSES,datasets:[{data,backgroundColor:COLORS.slice(0,6),borderWidth:0,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{stepSize:1,color:tc},grid:{color:gc}},x:{ticks:{color:tc},grid:{display:false}}}}});}
+  const c2=$('c-source');
+  if(c2&&!chartReg.source){const bs={};leads.forEach(l=>{bs[l.source]=(bs[l.source]||0)+1});const sk=Object.keys(bs);mkLeg('leg-source',sk,COLORS);chartReg.source=new Chart(c2,{type:'doughnut',data:{labels:sk,datasets:[{data:Object.values(bs),backgroundColor:COLORS.slice(0,sk.length),borderWidth:2,borderColor:'#13161d'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},cutout:'58%'}});}
+  const c3=$('c-team');
+  if(c3&&!chartReg.team){const tl=team.map(m=>leads.filter(l=>l.assignee===m.id).length);const tn=team.map(m=>m.name.split(' ')[0]);mkLeg('leg-team',tn,COLORS);chartReg.team=new Chart(c3,{type:'bar',data:{labels:tn,datasets:[{data:tl,backgroundColor:COLORS.slice(0,team.length),borderWidth:0,borderRadius:5}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{stepSize:1,color:tc},grid:{color:gc}},y:{ticks:{color:tc},grid:{display:false}}}}});}
+  const c4=$('c-value');
+  if(c4&&!chartReg.value){const tv=team.map(m=>Math.round(leads.filter(l=>l.assignee===m.id).reduce((s,l)=>s+(Number(l.value)||0),0)/1000));const tn=team.map(m=>m.name.split(' ')[0]);chartReg.value=new Chart(c4,{type:'bar',data:{labels:tn,datasets:[{data:tv,backgroundColor:'#185FA5',borderWidth:0,borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'₹'+v+'K',color:tc},grid:{color:gc}},x:{ticks:{color:tc},grid:{display:false}}}}});}
+}
+
+function renderTeam(){
+  const sorted=[...team].sort((a,b)=>leads.filter(l=>l.assignee===b.id&&l.status==='Won').length-leads.filter(l=>l.assignee===a.id&&l.status==='Won').length);
+  const amAdmin=isAdmin(currentUser);
+  const tabs=['members','performance',...(amAdmin?['activity']:[])];
+  const tabLabels={members:'👥 Members',performance:'📊 Performance',activity:'🔍 Activity Log'};
+
+  const membersHTML=`
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+  ${amAdmin
+    ? `<div class="admin-badge">🔑 Admin Mode</div><button class="btn btn-primary btn-sm" onclick="openAddMember()">+ Add Member</button>`
+    : `<div class="locked-notice"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Only the Admin can add or edit team members.</div><div></div>`
+  }
+</div>
+<div class="team-grid" style="margin-bottom:28px">
+  ${team.map((m,i)=>{const ml=leads.filter(l=>l.assignee===m.id),mw=ml.filter(l=>l.status==='Won').length,mv=ml.reduce((s,l)=>s+(Number(l.value)||0),0),pct=m.target?Math.min(100,Math.round(mv/m.target*100)):0,isMe=currentUser&&currentUser.id===m.id;
+  return`<div class="team-card ${isMe?'me':''}">
+    <div class="avatar" style="width:48px;height:48px;font-size:15px;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div>
+    <div class="team-info">
+      <div class="team-name">${m.name}${isMe?'<span style="font-size:10px;background:var(--accent-glow);color:var(--accent2);padding:1px 6px;border-radius:8px;margin-left:6px">You</span>':''}${isAdmin(m)?'<span class="admin-badge" style="margin-left:6px">Admin</span>':''}</div>
+      <div class="team-role">${m.role}${m.territory?' · '+m.territory:''}</div>
+      <div class="team-stats"><div class="team-stat"><span>${ml.length}</span> leads</div><div class="team-stat" style="color:var(--green)"><span style="color:var(--green)">${mw}</span> won</div><div class="team-stat"><span>₹${Math.round(mv/1000)}K</span></div></div>
+      ${m.target?`<div style="margin-top:6px"><div style="font-size:10px;color:var(--text3)">${pct}% of ₹${Math.round(m.target/1000)}K target</div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${COLORS[i%COLORS.length]}"></div></div></div>`:''}
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex-shrink:0">
+      ${amAdmin?`<button class="btn btn-sm" onclick="openEditMember('${m.id}')">Edit</button>`:''}
+      ${amAdmin&&!isMe?`<button class="btn btn-sm btn-danger" onclick="deleteMember('${m.id}')">Del</button>`:''}
+    </div>
+  </div>`}).join('')}
+</div>
+<div class="section-hdr"><div class="section-title">Leaderboard</div></div>
+<div class="panel"><table class="lb-table"><thead><tr><th style="width:40px">#</th><th>Rep</th><th>Leads</th><th>Won</th><th>Win %</th><th>Pipeline</th></tr></thead><tbody>
+  ${sorted.map((m,rank)=>{const ml=leads.filter(l=>l.assignee===m.id),mw=ml.filter(l=>l.status==='Won').length,mv=ml.reduce((s,l)=>s+(Number(l.value)||0),0),wr=ml.length>0?Math.round(mw/ml.length*100):0,i=team.indexOf(m),isMe=currentUser&&currentUser.id===m.id,rc=rank===0?'rank-1':rank===1?'rank-2':rank===2?'rank-3':'';
+  return`<tr${isMe?' class="me"':''}><td><div class="rank-badge ${rc}">${rank+1}</div></td><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar" style="width:28px;height:28px;font-size:11px;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div><div><div style="font-weight:500">${m.name}</div><div style="font-size:11px;color:var(--text3)">${m.role}</div></div></div></td><td>${ml.length}</td><td style="color:var(--green);font-weight:600">${mw}</td><td>${wr}%</td><td style="font-family:var(--mono)">₹${Math.round(mv/1000)}K</td></tr>`}).join('')}
+</tbody></table></div>`;
+
+  const performanceHTML=`
+<div style="display:flex;flex-direction:column;gap:14px">
+  ${team.map((m,i)=>{
+    const ml=leads.filter(l=>l.assignee===m.id);
+    const mw=ml.filter(l=>l.status==='Won').length;
+    const mlost=ml.filter(l=>l.status==='Lost').length;
+    const mactive=ml.filter(l=>!['Won','Lost'].includes(l.status)).length;
+    const mv=ml.reduce((s,l)=>s+(Number(l.value)||0),0);
+    const wonV=ml.filter(l=>l.status==='Won').reduce((s,l)=>s+(Number(l.value)||0),0);
+    const wr=ml.length>0?Math.round(mw/ml.length*100):0;
+    const pct=m.target?Math.min(100,Math.round(wonV/m.target*100)):0;
+    const isMe=currentUser&&currentUser.id===m.id;
+    const hot=ml.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost';}).length;
+    const statuses=['New','Contacted','Qualified','Proposal'].map(s=>({s,c:ml.filter(l=>l.status===s).length})).filter(x=>x.c>0);
+    return`<div class="panel" style="padding:20px;${isMe?'border-color:rgba(59,124,255,.3)':''}">
+      <div style="display:flex;align-items:flex-start;gap:16px;margin-bottom:16px">
+        <div class="avatar" style="width:44px;height:44px;font-size:14px;flex-shrink:0;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div>
+        <div style="flex:1">
+          <div style="font-size:15px;font-weight:600">${m.name}${isMe?' <span style="font-size:10px;background:var(--accent-glow);color:var(--accent2);padding:1px 6px;border-radius:8px">You</span>':''}${isAdmin(m)?' <span class="admin-badge">Admin</span>':''}</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:2px">${m.role}${m.territory?' · '+m.territory:''}${m.email?' · '+m.email:''}</div>
+        </div>
+        ${hot>0?`<div style="background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.25);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:600">🔥 ${hot} hot lead${hot>1?'s':''}</div>`:''}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px">
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;text-align:center"><div style="font-size:20px;font-weight:600;color:var(--accent2)">${ml.length}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Total</div></div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;text-align:center"><div style="font-size:20px;font-weight:600;color:var(--amber)">${mactive}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Active</div></div>
+        <div style="background:var(--green-bg);border-radius:8px;padding:10px 12px;text-align:center"><div style="font-size:20px;font-weight:600;color:var(--green)">${mw}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Won</div></div>
+        <div style="background:var(--red-bg);border-radius:8px;padding:10px 12px;text-align:center"><div style="font-size:20px;font-weight:600;color:var(--red)">${mlost}</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Lost</div></div>
+        <div style="background:var(--bg3);border-radius:8px;padding:10px 12px;text-align:center"><div style="font-size:18px;font-weight:600;color:var(--teal)">${wr}%</div><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Win Rate</div></div>
+      </div>
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Pipeline Value</div>
+          <div style="font-size:16px;font-weight:600;font-family:var(--mono)">₹${numFmt(mv)}</div>
+        </div>
+        <div style="flex:1;min-width:160px">
+          <div style="font-size:11px;color:var(--text3);margin-bottom:4px">Won Value</div>
+          <div style="font-size:16px;font-weight:600;font-family:var(--mono);color:var(--green)">₹${numFmt(wonV)}</div>
+        </div>
+        ${m.target?`<div style="flex:2;min-width:200px"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px"><span>Target Progress</span><span style="font-weight:600;color:var(--text)">${pct}%</span></div><div style="height:6px;background:var(--border);border-radius:3px"><div style="height:100%;background:${pct>=100?'var(--green)':COLORS[i%COLORS.length]};border-radius:3px;width:${pct}%;transition:width .4s"></div></div><div style="font-size:10px;color:var(--text3);margin-top:3px">₹${numFmt(wonV)} of ₹${numFmt(m.target)} target</div></div>`:''}
+      </div>
+      ${statuses.length?`<div style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap">${statuses.map(({s,c})=>`<span class="pill pill-${s.toLowerCase()}">${s}: ${c}</span>`).join('')}</div>`:''}
+    </div>`;
+  }).join('')}
+</div>`;
+
+  const activityHTML=amAdmin?(()=>{
+    const log=getActivityLog();
+    const typeLabels={login:'🔐 Login',logout:'🚪 Logout',lead_add:'➕ Lead Added',lead_edit:'✏️ Lead Edited',lead_delete:'🗑️ Lead Deleted',settings_change:'⚙️ Settings Changed'};
+    const typeBg={login:'rgba(34,200,122,.09)',logout:'rgba(156,163,175,.09)',lead_add:'rgba(59,124,255,.09)',lead_edit:'rgba(245,158,11,.09)',lead_delete:'rgba(220,38,38,.09)',settings_change:'rgba(124,58,237,.09)'};
+    const typeColor={login:'var(--green)',logout:'var(--text3)',lead_add:'var(--accent2)',lead_edit:'var(--amber)',lead_delete:'var(--red)',settings_change:'var(--purple)'};
+    const fmtTs=ts=>{const d=new Date(ts);const now=new Date();const diff=now-d;if(diff<60000)return'Just now';if(diff<3600000)return Math.floor(diff/60000)+'m ago';if(diff<86400000)return Math.floor(diff/3600000)+'h ago';return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})};
+    return`
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+  <div style="font-size:12px;color:var(--text3)">${log.length} events recorded (last ${MAX_LOG})</div>
+  <button class="btn btn-sm btn-danger" onclick="if(confirm('Clear all activity logs?')){localStorage.removeItem('lf_activity_log');render();}">Clear Log</button>
+</div>
+${log.length===0?`<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-text">No activity recorded yet</div><div class="empty-sub">Logins, lead changes and settings updates will appear here</div></div>`:`
+<div class="panel">
+  ${log.map(e=>`<div style="display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);transition:background .12s" onmouseover="this.style.background='rgba(255,255,255,.02)'" onmouseout="this.style.background=''">
+    <div style="width:8px;height:8px;border-radius:50%;background:${typeColor[e.type]||'var(--text3)'};flex-shrink:0;margin-top:5px;box-shadow:0 0 6px ${typeColor[e.type]||'transparent'}"></div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:12px;font-weight:600;background:${typeBg[e.type]||'var(--bg3)'};color:${typeColor[e.type]||'var(--text2)'};padding:2px 8px;border-radius:10px">${typeLabels[e.type]||e.type}</span>
+        <span style="font-size:12px;font-weight:500;color:var(--text)">${e.userName}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-top:3px">${e.detail}</div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0;margin-top:2px">${fmtTs(e.ts)}</div>
+  </div>`).join('')}
+</div>`}`;
+  })():`<div class="locked-notice"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="10" height="8" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Activity log is visible to Admins only.</div>`;
+
+  const tabContent={members:membersHTML,performance:performanceHTML,activity:activityHTML};
+  return`
+<div style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0">
+  ${tabs.map(t=>`<button onclick="teamTab='${t}';render()" style="padding:8px 16px;border:none;background:transparent;cursor:pointer;font-size:13px;font-family:var(--font);font-weight:500;color:${teamTab===t?'var(--accent2)':'var(--text3)'};border-bottom:2px solid ${teamTab===t?'var(--accent2)':'transparent'};margin-bottom:-1px;transition:all .15s">${tabLabels[t]}</button>`).join('')}
+</div>
+${tabContent[teamTab]||membersHTML}`;
+}
+
+function renderImport(){
+  return`<div style="max-width:620px">
+<div class="info-banner"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 5v4M8 11v1"/></svg><div>Upload a CSV file with lead data. First row must be column headers. Required: <code>name</code>, <code>email</code>. All other fields are optional.</div></div>
+<div class="drop-zone" id="drop-zone" onclick="$('csv-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+  <svg style="margin:0 auto 12px;display:block;opacity:.4" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6v20M10 16l10 12 10-12"/><rect x="4" y="30" width="32" height="6" rx="3"/></svg>
+  <div class="drop-title">Click to upload or drag & drop your CSV</div>
+  <div class="drop-sub">Supports .csv files up to 1,000 rows</div>
+</div>
+<input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleFileSelect(event)"/>
+<div class="section-hdr" style="margin-top:24px;margin-bottom:12px"><div class="section-title">CSV Column Reference</div><button class="btn btn-sm" onclick="downloadSampleCSV()">Download Sample</button></div>
+<div class="csv-preview"><div class="csv-row head"><div>name</div><div>email</div><div>phone</div><div>company</div><div>product</div></div><div class="csv-row"><div>Ravi Kumar</div><div>ravi@co.in</div><div>+91 9876543210</div><div>TechCo</div><div>CRM Pro</div></div><div class="csv-row"><div>Priya Iyer</div><div>priya@biz.in</div><div>+91 9876543211</div><div>BizCorp</div><div>Analytics Suite</div></div></div>
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-top:14px;font-size:12px;color:var(--text2);line-height:2">
+  <strong style="color:var(--text)">Required:</strong> name, email<br>
+  <strong style="color:var(--text)">Optional:</strong> phone, company, source, status (New/Contacted/Qualified/Proposal/Won/Lost), product, buydate (YYYY-MM-DD), value, assignee, notes, notif_email
+</div></div>`;
+}
+
+function renderSettings(){
+  const cfg=getEmailConfig();
+  return`<div style="max-width:580px">
+<div class="settings-section">
+  <div class="settings-title">Email Notifications (EmailJS)</div>
+  <div class="email-cfg-note">LeadFlow uses <a href="https://www.emailjs.com/" target="_blank">EmailJS</a> (free up to 200 emails/month) to send alerts when a buy date arrives.<br>1. Sign up → create a service → create a template → paste your keys below.<br>2. Template variables: <code>to_email</code>, <code>lead_name</code>, <code>product</code>, <code>buy_date</code>, <code>assigned_to</code>, <code>company</code>, <code>notes</code>.</div>
+  <div class="form-grid">
+    <div class="fg full"><label class="fl">EmailJS Service ID</label><input class="fi" id="s-service" placeholder="service_xxxxxxx" value="${cfg.serviceId||''}"/></div>
+    <div class="fg full"><label class="fl">EmailJS Template ID</label><input class="fi" id="s-template" placeholder="template_xxxxxxx" value="${cfg.templateId||''}"/></div>
+    <div class="fg full"><label class="fl">EmailJS Public Key</label><input class="fi" id="s-pubkey" placeholder="your_public_key" value="${cfg.publicKey||''}"/></div>
+    <div class="fg full"><label class="fl">Default notification email (fallback)</label><input class="fi" id="s-default-email" placeholder="team@yourcompany.com" value="${cfg.defaultEmail||''}"/></div>
+  </div>
+  <div style="margin-top:16px;display:flex;gap:8px">
+    <button class="btn btn-primary" onclick="saveEmailConfig()">Save Email Settings</button>
+    <button class="btn" onclick="testEmail()">Send Test Email</button>
+  </div>
+</div>
+<div class="settings-section">
+  <div class="settings-title">Notification Preferences</div>
+  <div class="form-grid"><div class="fg"><label class="fl">Alert days before buy date</label><select class="fi" id="s-days" onchange="saveNotifPref()"><option value="0" ${getNotifDays()===0?'selected':''}>On the day</option><option value="1" ${getNotifDays()===1?'selected':''}>1 day before</option><option value="2" ${getNotifDays()===2?'selected':''}>2 days before</option><option value="3" ${getNotifDays()===3?'selected':''}>3 days before</option></select></div></div>
+</div>
+<div class="settings-section">
+  <div class="settings-title">Data Management</div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn btn-success btn-sm" onclick="exportCSV()">Export All Leads (CSV)</button>
+    <button class="btn btn-sm" onclick="exportTeamCSV()">Export Team CSV</button>
+    <button class="btn btn-danger btn-sm" onclick="clearAllLeads()">Clear All Leads</button>
+  </div>
+</div>
+<div class="settings-section">
+  <div class="settings-title">About LeadFlow CRM</div>
+  <div style="font-size:12px;color:var(--text2);line-height:1.8">Version 2.0 · Standalone HTML · No server required<br>Data persists in browser localStorage · Works offline<br>Built for sales teams managing leads from ads, calls, walk-ins, referrals & more.</div>
+</div></div>`;
+}
+
+function getEmailConfig(){try{return JSON.parse(localStorage.getItem('lf_email_cfg')||'{}')}catch(e){return{}}}
+function saveEmailConfig(){const cfg={serviceId:$('s-service').value.trim(),templateId:$('s-template').value.trim(),publicKey:$('s-pubkey').value.trim(),defaultEmail:$('s-default-email').value.trim()};try{localStorage.setItem('lf_email_cfg',JSON.stringify(cfg))}catch(e){}logActivity('settings_change','Updated Email/EmailJS settings',currentUser?.id);toast('Email settings saved','#22c87a')}
+function getNotifDays(){try{return parseInt(localStorage.getItem('lf_notif_days')||'0')}catch(e){return 0}}
+function saveNotifPref(){try{localStorage.setItem('lf_notif_days',$('s-days').value)}catch(e){}toast('Preference saved','#22c87a')}
+function testEmail(){
+  const cfg=getEmailConfig();
+  if(!cfg.serviceId||!cfg.templateId||!cfg.publicKey){toast('Save your EmailJS settings first','#f59e0b');return}
+  const to=cfg.defaultEmail||prompt('Test email address:');if(!to)return;
+  emailjs.init(cfg.publicKey);
+  emailjs.send(cfg.serviceId,cfg.templateId,{to_email:to,lead_name:'Test Lead',product:'Test Product',buy_date:new Date().toLocaleDateString('en-IN'),assigned_to:currentUser?.name||'Team',company:'Test Co',notes:'This is a test notification.'})
+    .then(()=>toast('Test email sent to '+to,'#22c87a')).catch(e=>toast('Email failed: '+(e.text||e),'#f43f5e'));
+}
+
+function triggerEmailNotif(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  const cfg=getEmailConfig();
+  const to=l.notifEmail||cfg.defaultEmail;
+  if(!to){toast('No notification email set. Add one in the lead or Settings.','#f59e0b');return}
+  if(!cfg.serviceId||!cfg.templateId||!cfg.publicKey){toast('EmailJS not configured. Go to Settings → Email.','#f59e0b');return}
+  try{
+    emailjs.init(cfg.publicKey);
+    emailjs.send(cfg.serviceId,cfg.templateId,{to_email:to,lead_name:l.name,product:l.product,buy_date:fmtDate(l.buyDate),assigned_to:memberName(l.assignee),company:l.company||'',notes:l.notes||''})
+      .then(()=>{toast('Email sent to '+to,'#22c87a');if(l.timeline)l.timeline.push('Email notification sent — '+new Date().toLocaleDateString())})
+      .catch(e=>toast('Email failed: '+(e.text||e),'#f43f5e'));
+  }catch(e){toast('EmailJS error: '+e.message,'#f43f5e')}
+}
+
+function autoCheckNotifs(){
+  const hl=hotLeads();const cfg=getEmailConfig();
+  if(!cfg.serviceId||!cfg.publicKey)return;
+  const key='lf_notif_sent_'+new Date().toDateString();let sent={};
+  try{sent=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){}
+  hl.forEach(l=>{if(!sent[l.id]&&l.notifEmail&&daysTo(l.buyDate)===getNotifDays()){triggerEmailNotif(l.id);sent[l.id]=true}});
+  try{localStorage.setItem(key,JSON.stringify(sent))}catch(e){}
+}
+
+/* ── Multi-product row helpers ───────────────────────────── */
+function initProductRows(items){
+  const list=$('f-products-list');list.innerHTML='';
+  (items&&items.length?items:[{product:'',quantity:1}]).forEach(item=>addProductRow(item));
+}
+function addProductRow(item){
+  const list=$('f-products-list');
+  const idx=list.children.length;
+  const row=document.createElement('div');
+  row.className='product-row';
+  row.innerHTML=`<input class="fi prod-name" type="text" placeholder="e.g. Enterprise CRM, Model X Car…" value="${(item&&item.product)||''}"/>
+<input class="fi prod-qty" type="number" placeholder="Qty" min="1" value="${(item&&item.quantity)||1}" style="text-align:center"/>
+<button type="button" class="product-row-remove" onclick="removeProductRow(this)" title="Remove">✕</button>`;
+  list.appendChild(row);
+  // Keep at least one row — hide remove btn if only one
+  updateRemoveBtns();
+}
+function removeProductRow(btn){
+  const list=$('f-products-list');
+  if(list.children.length<=1){toast('At least one product is required','#f59e0b');return;}
+  btn.closest('.product-row').remove();
+  updateRemoveBtns();
+}
+function updateRemoveBtns(){
+  const list=$('f-products-list');
+  const btns=list.querySelectorAll('.product-row-remove');
+  btns.forEach(b=>b.style.visibility=btns.length<=1?'hidden':'visible');
+}
+function getProductRows(){
+  return Array.from($('f-products-list').querySelectorAll('.product-row')).map(row=>({
+    product:row.querySelector('.prod-name').value.trim(),
+    quantity:parseInt(row.querySelector('.prod-qty').value)||1
+  })).filter(p=>p.product);
+}
+
+function openAddLead(){
+  editLeadId=null;$('lead-modal-title').textContent='Add New Lead';
+  ['name','email','phone','company','value','notes'].forEach(k=>{const el=$('f-'+k);if(el)el.value=''});
+  $('f-buydate').value='';$('f-source').value='Advertisement';$('f-status').value='New';
+  initProductRows([{product:'',quantity:1}]);
+  rebuildAssigneeDropdown();
+  if(currentUser){$('f-assignee').value=currentUser.id;$('f-notif-email').value=currentUser.email||'';}
+  openModal('lead-modal');
+}
+function openEditLead(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;editLeadId=id;
+  $('lead-modal-title').textContent='Edit Lead';
+  $('f-name').value=l.name||'';$('f-email').value=l.email||'';$('f-phone').value=l.phone||'';$('f-company').value=l.company||'';
+  $('f-buydate').value=l.buyDate||'';$('f-value').value=l.value||'';
+  $('f-notes').value=l.notes||'';$('f-notif-email').value=l.notifEmail||'';
+  $('f-source').value=l.source||'Advertisement';$('f-status').value=l.status||'New';
+  // Load products — support legacy single-product leads
+  const prods=l.products&&l.products.length?l.products:[{product:l.product||'',quantity:l.quantity||1}];
+  initProductRows(prods);
+  rebuildAssigneeDropdown();$('f-assignee').value=l.assignee||'';openModal('lead-modal');
+}
+async function saveLead(){
+  const name=$('f-name').value.trim(),email=$('f-email').value.trim();
+  if(!name){toast('Please enter a lead name','#f59e0b');return}
+  const products=getProductRows();
+  if(!products.length||!products[0].product){toast('Please enter at least one product','#f59e0b');return}
+  // Keep legacy product/quantity fields in sync with first item for backward compat
+  const data={name,email,phone:$('f-phone').value.trim(),company:$('f-company').value.trim(),products,product:products[0].product,quantity:products[0].quantity,buyDate:$('f-buydate').value,assignee:$('f-assignee').value,value:$('f-value').value||0,notes:$('f-notes').value.trim(),notifEmail:$('f-notif-email').value.trim(),source:$('f-source').value,status:$('f-status').value};
+  try{
+    if(editLeadId){
+      const i=leads.findIndex(l=>l.id===editLeadId);
+      leads[i]={...leads[i],...data,timeline:[...(leads[i].timeline||[]),'Updated — '+new Date().toLocaleDateString()]};
+      await dbUpsertLead(leads[i]);
+      logActivity('lead_edit',`Edited lead: ${data.name}`,currentUser?.id);
+      toast('Lead updated','#22c87a');
+    } else {
+      const lead={id:'l'+Date.now(),...data,createdAt:new Date().toISOString(),timeline:['Lead added — '+new Date().toLocaleDateString()]};
+      await dbInsertLead(lead);
+      leads.push(lead);
+      logActivity('lead_add',`Added lead: ${data.name}`,currentUser?.id);
+      toast('Lead added successfully','#22c87a');
+    }
+    closeModal('lead-modal');render();
+  }catch(e){toast('Save failed: '+e.message,'#f43f5e');}
+}
+async function deleteLead(id){if(!confirm('Delete this lead? This cannot be undone.'))return;try{const l=leads.find(x=>x.id===id);await dbDeleteLead(id);leads=leads.filter(l=>l.id!==id);const dp=$('detail-panel');if(dp)dp.remove();logActivity('lead_delete',`Deleted lead: ${l?.name||id}`,currentUser?.id);toast('Lead deleted','#f43f5e');render();}catch(e){toast('Delete failed: '+e.message,'#f43f5e');}}
+
+function openDetail(id){
+  const l=leads.find(x=>x.id===id);if(!l)return;
+  let dp=$('detail-panel');
+  if(!dp){dp=document.createElement('div');dp.id='detail-panel';dp.className='detail-panel';$('main').appendChild(dp)}
+  const m=getMember(l.assignee);
+  dp.innerHTML=`<div class="dp-hdr"><div style="font-size:13px;font-weight:600">Lead Details</div><button class="modal-close" onclick="$('detail-panel').remove()">✕</button></div>
+<div class="dp-body">
+  <div class="dp-avatar-row"><div class="dp-avatar" style="background:var(--accent-glow);color:var(--accent2)">${initials(l.name)}</div><div><div class="dp-name">${l.name}</div><div class="dp-company">${l.company||'—'}</div></div></div>
+  <span class="pill pill-${l.status.toLowerCase()}" style="margin-bottom:18px;display:inline-flex">${l.status}</span>
+  <div class="dp-section"><div class="dp-section-title">Contact</div>
+    <div class="dp-row"><span class="dp-key">Email</span><span class="dp-val" style="color:var(--accent2)">${l.email}</span></div>
+    <div class="dp-row"><span class="dp-key">Phone</span><span class="dp-val">${l.phone||'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Source</span><span class="dp-val">${l.source}</span></div>
+    <div class="dp-row"><span class="dp-key">Assignee</span><span class="dp-val" style="display:flex;align-items:center;gap:6px;justify-content:flex-end">${m?`<div class="avatar" style="width:20px;height:20px;font-size:9px;background:${memberBg(m.id)};color:${memberColor(m.id)}">${initials(m.name)}</div>${m.name}`:'Unassigned'}</span></div>
+  </div>
+  <div class="dp-section"><div class="dp-section-title">Deal</div>
+    ${(()=>{const prods=l.products&&l.products.length?l.products:[{product:l.product,quantity:l.quantity||1}];return prods.filter(p=>p.product).map((p,i)=>`<div class="dp-row"><span class="dp-key">Product${prods.length>1?' '+(i+1):''}</span><span class="dp-val" style="text-align:right"><div style="font-weight:500">${p.product}</div><div style="font-size:10px;color:var(--text3);margin-top:1px">Qty: ${p.quantity||1}</div></span></div>`).join('')})()}
+    <div class="dp-row"><span class="dp-key">Value</span><span class="dp-val" style="font-family:var(--mono)">${l.value?'₹'+numFmt(l.value):'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Buy date</span><span class="dp-val ${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</span></div>
+    <div class="dp-row"><span class="dp-key">Notify email</span><span class="dp-val">${l.notifEmail||'—'}</span></div>
+  </div>
+  ${l.notes?`<div class="dp-section"><div class="dp-section-title">Notes</div><div style="font-size:12px;color:var(--text2);line-height:1.7">${l.notes}</div></div>`:''}
+  <div class="dp-section"><div class="dp-section-title">Timeline</div>
+    ${(l.timeline||[]).map((t,i,arr)=>`<div class="timeline-item"><div class="tl-dot-wrap"><div class="tl-dot"></div>${i<arr.length-1?'<div class="tl-line"></div>':''}</div><div class="tl-text">${t}</div></div>`).join('')}
+  </div>
+  <div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm" style="flex:1" onclick="openEditLead('${l.id}')">Edit Lead</button><button class="btn btn-sm" onclick="triggerEmailNotif('${l.id}')">Send Notif</button></div>
+</div>`;
+}
+
+function openAddMember(){if(!isAdmin(currentUser)){toast('Only Admin can add team members','#f43f5e');return}editMemberId=null;$('member-modal-title').textContent='Add Team Member';['name','email','phone','territory','target'].forEach(k=>{const el=$('m-'+k);if(el)el.value=''});$('m-role').value='Sales Rep';openModal('member-modal')}
+function openEditMember(id){if(!isAdmin(currentUser)){toast('Only Admin can edit team members','#f43f5e');return}const m=team.find(x=>x.id===id);if(!m)return;editMemberId=id;$('member-modal-title').textContent='Edit Team Member';$('m-name').value=m.name||'';$('m-email').value=m.email||'';$('m-phone').value=m.phone||'';$('m-role').value=m.role||'Sales Rep';$('m-territory').value=m.territory||'';$('m-target').value=m.target||'';openModal('member-modal')}
+async function saveMember(){
+  if(!isAdmin(currentUser)){toast('Only Admin can manage team members','#f43f5e');return}
+  const name=$('m-name').value.trim();if(!name){toast('Please enter a name','#f59e0b');return}
+  const email=($('m-email').value||'').trim().toLowerCase();
+  if(!email){toast('Email is required for OTP login','#f59e0b');return}
+  if(!editMemberId&&team.find(m=>(m.email||'').toLowerCase()===email)){toast('A member with this email already exists','#f59e0b');return}
+  const data={name,email,phone:$('m-phone').value.trim(),role:$('m-role').value,territory:$('m-territory').value.trim(),target:$('m-target').value||0};
+  try{
+    if(editMemberId){
+      const i=team.findIndex(m=>m.id===editMemberId);
+      const wasAdmin=team[i].isAdmin;
+      team[i]={...team[i],...data,isAdmin:wasAdmin};
+      await dbUpsertMember(team[i]);
+      logActivity('settings_change',`Edited team member: ${data.name}`,currentUser?.id);
+      toast('Member updated','#22c87a');
+    } else {
+      const member={id:'u'+Date.now(),...data,isAdmin:data.role==='Admin'};
+      await dbInsertMember(member);
+      team.push(member);
+      logActivity('settings_change',`Added new team member: ${member.name}`,currentUser?.id);
+      toast('Member added — they can now log in via email OTP','#22c87a');
+    }
+    closeModal('member-modal');render();updateSidebarUser();
+  }catch(e){toast('Save failed: '+e.message,'#f43f5e');}
+}
+async function deleteMember(id){if(!isAdmin(currentUser)){toast('Only Admin can remove team members','#f43f5e');return}if(team.length<=1){toast('Cannot remove the only team member','#f59e0b');return}if(!confirm('Remove this team member?'))return;try{const m=team.find(x=>x.id===id);await dbDeleteMember(id);if(currentUser&&currentUser.id===id)currentUser=team.find(m=>m.id!==id);team=team.filter(m=>m.id!==id);logActivity('settings_change',`Removed team member: ${m?.name||id}`,currentUser?.id);toast('Member removed','#f43f5e');render();updateSidebarUser();}catch(e){toast('Delete failed: '+e.message,'#f43f5e');}}
+function switchUser(id){const m=team.find(x=>x.id===id);if(!m)return;currentUser=m;try{localStorage.setItem('lf_current_user',id)}catch(e){}closeModal('switch-user-modal');updateSidebarUser();toast('Switched to '+m.name,'#3b7cff');render()}
+
+function renderSwitchUserList(){
+  $('switch-user-list').innerHTML=team.map(m=>`<div class="user-list-item ${currentUser&&currentUser.id===m.id?'active':''}" onclick="switchUser('${m.id}')">
+    <div class="avatar" style="background:${memberBg(m.id)};color:${memberColor(m.id)}">${initials(m.name)}</div>
+    <div><div style="font-size:13px;font-weight:500">${m.name}${currentUser&&currentUser.id===m.id?'<span style="font-size:10px;color:var(--accent2);margin-left:6px">Active</span>':''}</div><div style="font-size:11px;color:var(--text3)">${m.role}</div></div>
+  </div>`).join('');
+}
+
+function openModal(id){$(id).classList.add('open');if(id==='switch-user-modal')renderSwitchUserList()}
+function closeModal(id){$(id).classList.remove('open')}
+function backdropClose(e,id){if(e.target.id===id)closeModal(id)}
+
+function handleDrop(e){e.preventDefault();$('drop-zone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.name.endsWith('.csv'))processCSV(f);else toast('Please upload a .csv file','#f59e0b')}
+function handleFileSelect(e){const f=e.target.files[0];if(f)processCSV(f)}
+
+function processCSV(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    const rows=e.target.result.trim().split('\n').map(row=>row.split(',').map(c=>c.trim().replace(/^"|"$/g,'')));
+    if(rows.length<2){toast('CSV must have a header row and data','#f59e0b');return}
+    const hdr=rows[0].map(h=>h.toLowerCase().replace(/[\s_\-]/g,''));
+    const gi=k=>{const aliases={name:['name','fullname','leadname'],email:['email','emailaddress'],phone:['phone','phonenumber','mobile'],company:['company','companyname','org','organization'],source:['source','leadsource'],status:['status'],product:['product','productofinterest','interested'],buydate:['buydate','expecteddate','purchasedate'],value:['value','dealvalue','amount'],notes:['notes','note','comments'],assignee:['assignee','assignedto','rep','owner'],notifemail:['notifemail','notif_email','notificationemail']};const list=aliases[k]||[k];return hdr.findIndex(h=>list.includes(h))};
+    const parsed=rows.slice(1).filter(r=>r.length>1&&r.some(c=>c.trim())).map(r=>({id:'i'+Date.now()+Math.random().toString(36).slice(2,6),name:r[gi('name')]||'Unknown',email:r[gi('email')]||'',phone:r[gi('phone')]||'',company:r[gi('company')]||'',source:r[gi('source')]||'Other',status:r[gi('status')]||'New',product:r[gi('product')]||'',buyDate:r[gi('buydate')]||'',value:r[gi('value')]||0,notes:r[gi('notes')]||'',notifEmail:r[gi('notifemail')]||'',assignee:'',createdAt:new Date().toISOString(),timeline:['Imported from CSV — '+new Date().toLocaleDateString()]}));
+    if(!parsed.length){toast('No valid rows found','#f59e0b');return}
+    pendingImport=parsed;
+    $('import-confirm-sub').textContent=parsed.length+' lead'+(parsed.length!==1?'s':'')+' ready to import';
+    $('import-confirm-body').innerHTML=`<div class="csv-preview"><div class="csv-row head"><div>Name</div><div>Email</div><div>Company</div><div>Product</div><div>Status</div></div>${parsed.slice(0,8).map(r=>`<div class="csv-row"><div>${r.name}</div><div>${r.email||'—'}</div><div>${r.company||'—'}</div><div>${r.product||'—'}</div><div>${r.status}</div></div>`).join('')}${parsed.length>8?`<div style="padding:8px 10px;font-size:11px;color:var(--text3)">… and ${parsed.length-8} more rows</div>`:''}</div>`;
+    openModal('import-confirm-modal');
+  };r.readAsText(file);
+}
+async function confirmImport(){const toInsert=pendingImport;const c=toInsert.length;pendingImport=[];try{await sbFetch('/leads',{method:'POST',body:JSON.stringify(toInsert.map(leadToDb)),headers:{'Prefer':'resolution=ignore-duplicates'}});leads=[...leads,...toInsert];closeModal('import-confirm-modal');toast(c+' leads imported successfully','#22c87a');setView('leads');}catch(e){toast('Import failed: '+e.message,'#f43f5e');}}
+function downloadSampleCSV(){const csv=`name,email,phone,company,source,status,product,buydate,value,notes\nRavi Kumar,ravi@techco.in,+91 9876543210,TechCo,Advertisement,New,CRM Pro,2026-05-15,150000,Very interested\nPriya Iyer,priya@bizcorp.in,+91 9876543211,BizCorp,Cold Call,Contacted,Analytics Suite,2026-06-01,80000,Needs demo\nArun Mehta,arun@startup.in,+91 9876543212,StartupXYZ,Referral,Qualified,Starter Pack,2026-05-20,25000,Referred by client\n`;const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='leadflow_sample.csv';a.click();toast('Sample CSV downloaded','#22c87a')}
+function exportCSV(){const hdr=['Name','Email','Phone','Company','Source','Status','Product','Buy Date','Assignee','Value','Notes','Notification Email'];const rows=leads.map(l=>[l.name,l.email,l.phone,l.company,l.source,l.status,l.product,l.buyDate,memberName(l.assignee),l.value,l.notes,l.notifEmail].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='leads_export_'+new Date().toISOString().split('T')[0]+'.csv';a.click();toast('Leads exported as CSV','#22c87a')}
+function exportTeamCSV(){const hdr=['Name','Email','Phone','Role','Territory','Target'];const rows=team.map(m=>[m.name,m.email,m.phone,m.role,m.territory,m.target].map(v=>`"${(v||'').toString()}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='team_export.csv';a.click();toast('Team data exported','#22c87a')}
+async function clearAllLeads(){if(!confirm('Delete ALL leads? This cannot be undone.'))return;try{await sbFetch('/leads',{method:'DELETE',headers:{'Authorization':'Bearer '+SB_KEY,'apikey':SB_KEY}});leads=[];toast('All leads cleared','#f43f5e');render();}catch(e){toast('Clear failed: '+e.message,'#f43f5e');}}
+
+function toast(msg,color='#3b7cff'){const el=document.createElement('div');el.className='toast';el.innerHTML=`<div class="toast-dot" style="background:${color}"></div><span>${msg}</span>`;$('toast-wrap').appendChild(el);setTimeout(()=>{el.style.opacity='0';el.style.transform='translateY(8px)';el.style.transition='all .2s';setTimeout(()=>el.remove(),200)},2800)}
+
+/* Boot sequence */
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof emailjs !== 'undefined') emailjs.init(EMAILJS_PUBKEY);
+  // Add spinner keyframe
+  const style=document.createElement('style');
+  style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+
+  document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.addEventListener('click',()=>setView(el.dataset.view)));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){['lead-modal','member-modal','switch-user-modal','import-confirm-modal'].forEach(closeModal);const dp=$('detail-panel');if(dp)dp.remove()}
+    if(e.key==='n'&&(e.ctrlKey||e.metaKey)){e.preventDefault();openAddLead()}
+  });
+
+  initData();
+  wireLoginEvents();
+  initMobileLayout();
+
+  // Load data from Supabase, then restore session
+  dbLoadAll().then(()=>{
+    const cu=localStorage.getItem('lf_current_user');
+    if(cu && team.find(m=>m.id===cu)){
+      currentUser=team.find(m=>m.id===cu);
+      $('login-screen').classList.add('hidden');
+      $('app').style.display='flex';
+      updateSidebarUser();render();autoCheckNotifs();initMobileLayout();
+      setInterval(autoCheckNotifs,3600000);
+    } else {
+      $('login-screen').classList.remove('hidden');
+      $('app').style.display='none';
+    }
+  });
+});
+
+</script>
+</body>
+</html>
