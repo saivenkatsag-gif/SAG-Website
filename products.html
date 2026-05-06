@@ -127,69 +127,208 @@
   .page-hero h1 span { color: var(--green); }
   .page-hero p { font-size: 1.02rem; color: var(--muted); line-height: 1.7; max-width: 560px; margin: 0 auto; }
 
-  /* ── FILTER TABS ── */
-  .filter-bar {
-    padding: 40px 60px 0;
-    display: flex; gap: 12px; flex-wrap: wrap;
-    justify-content: center;
-  }
-  .filter-btn {
-    padding: 9px 22px; border-radius: 40px; font-size: 0.88rem; font-weight: 600;
-    cursor: pointer; border: 1.5px solid var(--border);
-    background: transparent; color: var(--muted);
-    transition: all .2s; font-family: 'DM Sans', sans-serif;
-  }
-  .filter-btn:hover { border-color: var(--green); color: var(--green); }
-  .filter-btn.active { background: var(--green); color: #0a0f0d; border-color: var(--green); }
-
-  /* ── PRODUCTS GRID ── */
-  .products-section { padding: 48px 60px 100px; }
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .product-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden;
-    transition: border-color .2s, transform .2s;
-    cursor: pointer; position: relative;
-  }
-  .product-card:hover { border-color: var(--green); transform: translateY(-5px); }
-  .product-card:hover .product-img img { transform: scale(1.05); }
-  .product-badge {
-    position: absolute; top: 14px; left: 14px; z-index: 2;
-    background: var(--green); color: #0a0f0d;
-    font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;
-    letter-spacing: .04em;
-  }
-  .product-img {
-    width: 100%; aspect-ratio: 1; overflow: hidden;
-    background: #0d1a10;
-  }
-  .product-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; display: block; }
-  .product-info { padding: 18px 20px 22px; }
-  .product-status {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 0.75rem; color: var(--green); font-weight: 600; margin-bottom: 8px;
-  }
-  .product-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; }
-  .product-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.97rem; color: var(--white); margin-bottom: 12px; line-height: 1.35; }
-  .product-price { display: flex; align-items: baseline; gap: 10px; }
-  .price-new { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--green); }
-  .price-old { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; }
-  .product-card .buy-btn {
-    display: block; margin: 16px 20px 20px;
-    padding: 10px 0; text-align: center;
-    background: transparent; border: 1.5px solid var(--green);
-    border-radius: 40px; color: var(--green);
-    font-size: 0.85rem; font-weight: 700; text-decoration: none;
-    transition: background .2s, color .2s;
-  }
-  .product-card .buy-btn:hover { background: var(--green); color: #0a0f0d; }
+  /* == SHOP LAYOUT == */
+  .shop-layout{display:flex;padding:40px 60px 100px;align-items:flex-start;}
+  .shop-sidebar{width:230px;flex-shrink:0;position:sticky;top:90px;margin-right:32px;}
+  .sidebar-search-wrap{position:relative;margin-bottom:22px;}
+  .sidebar-search{width:100%;padding:10px 16px 10px 36px;background:var(--card2);border:1.5px solid var(--border);border-radius:40px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.87rem;outline:none;transition:border-color .2s;}
+  .sidebar-search:focus{border-color:var(--green);}
+  .sidebar-search::placeholder{color:var(--muted);}
+  .sidebar-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.85rem;pointer-events:none;}
+  .sidebar-label{font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;padding:0 4px;display:block;}
+  .sidebar-cats{list-style:none;margin-bottom:22px;}
+  .sidebar-cats li{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;cursor:pointer;transition:all .2s;font-size:0.87rem;color:var(--muted);font-weight:500;}
+  .sidebar-cats li:hover{background:var(--card2);color:var(--text);}
+  .sidebar-cats li.active{background:var(--green-glow);color:var(--green);font-weight:700;}
+  .cat-count{font-size:0.7rem;background:var(--card2);border-radius:20px;padding:2px 8px;color:var(--muted);}
+  .sidebar-cats li.active .cat-count{background:rgba(46,204,113,0.18);color:var(--green);}
+  .sidebar-divider{height:1px;background:var(--border);margin:0 0 18px;}
+  .sidebar-tags{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+  .sidebar-tag-btn{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;font-size:0.87rem;color:var(--muted);font-weight:500;transition:all .2s;width:100%;text-align:left;}
+  .sidebar-tag-btn:hover{background:var(--card2);color:var(--text);}
+  .sidebar-tag-btn.active{background:var(--green-glow);color:var(--green);font-weight:700;}
+  .tag-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .shop-main{flex:1;min-width:0;}
+  .products-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap;}
+  .products-count{font-size:0.84rem;color:var(--muted);}
+  .products-count strong{color:var(--text);}
+  .products-section{padding:0;}
+  .products-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .product-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;cursor:pointer;position:relative;}
+  .product-card:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:0 12px 36px rgba(46,204,113,0.08);}
+  .product-card:hover .product-img img{transform:scale(1.05);}
+  .product-badge{position:absolute;top:10px;left:10px;z-index:2;background:var(--green);color:#0a0f0d;font-size:0.68rem;font-weight:800;padding:3px 9px;border-radius:20px;letter-spacing:.05em;text-transform:uppercase;}
+  .product-img{width:100%;aspect-ratio:4/3;overflow:hidden;background:#0d1a10;}
+  .product-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s ease;display:block;}
+  .product-info{padding:12px 14px 6px;}
+  .product-status{display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--green);font-weight:600;margin-bottom:4px;}
+  .product-status::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block;}
+  .product-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.92rem;color:var(--white);margin-bottom:7px;line-height:1.3;}
+  .product-price{display:flex;align-items:baseline;gap:8px;}
+  .price-new{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.05rem;color:var(--green);}
+  .price-old{font-size:0.78rem;color:var(--muted);text-decoration:line-through;}
+  .product-card .buy-btn{display:block;margin:10px 14px 14px;padding:8px 0;text-align:center;background:transparent;border:1.5px solid var(--green);border-radius:40px;color:var(--green);font-size:0.8rem;font-weight:700;text-decoration:none;transition:background .2s,color .2s;}
+  .product-card .buy-btn:hover{background:var(--green);color:#0a0f0d;}
+  .filter-bar{display:none;}
+  .product-card.hidden{display:none;}
 
   /* ── HIDDEN CARDS (filter) ── */
   .product-card.hidden { display: none; }
+
+  /* ── FULL DRONES SECTION ── */
+  .full-drones-section { padding: 0 60px 80px; }
+  .full-drones-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 36px; padding-top: 64px;
+    border-top: 1px solid var(--border);
+  }
+  .full-drones-header-left {}
+  .full-drones-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: clamp(1.6rem, 3vw, 2.4rem); color: var(--white); line-height: 1.1;
+  }
+  .full-drones-title span { color: var(--green); }
+  .full-drones-sub { font-size: 0.93rem; color: var(--muted); margin-top: 8px; max-width: 480px; line-height: 1.6; }
+
+  /* Drone Cards */
+  .full-drones-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+  }
+  .drone-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; overflow: hidden;
+    transition: border-color .25s, transform .25s, box-shadow .25s;
+    cursor: pointer; position: relative;
+  }
+  .drone-card:hover { border-color: var(--green); transform: translateY(-6px); box-shadow: 0 16px 48px rgba(46,204,113,0.1); }
+  .drone-card-img {
+    width: 100%; aspect-ratio: 16/10; overflow: hidden;
+    background: #0d1a10; position: relative;
+  }
+  .drone-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; display: block; }
+  .drone-card:hover .drone-card-img img { transform: scale(1.06); }
+  .drone-badge-row {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .drone-badge {
+    background: var(--green); color: #0a0f0d;
+    font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 20px;
+    letter-spacing: .05em; text-transform: uppercase;
+  }
+  .drone-badge.offer { background: #f0a030; }
+  .drone-card-body { padding: 22px 24px 24px; }
+  .drone-card-name {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: 1.3rem; color: var(--white); margin-bottom: 6px; line-height: 1.2;
+  }
+  .drone-card-tagline { font-size: 0.84rem; color: var(--muted); margin-bottom: 16px; line-height: 1.55; }
+  .drone-specs-preview {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 18px;
+  }
+  .spec-chip {
+    background: rgba(46,204,113,0.06); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 10px;
+  }
+  .spec-chip-label { font-size: 0.68rem; color: var(--muted); font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+  .spec-chip-val { font-size: 0.84rem; color: var(--text); font-weight: 600; margin-top: 2px; }
+  .drone-card-actions { display: flex; gap: 10px; }
+  .drone-btn-enquire {
+    flex: 1; display: block; padding: 10px 0; text-align: center;
+    background: var(--green); color: #0a0f0d;
+    border-radius: 40px; font-size: 0.85rem; font-weight: 700;
+    text-decoration: none; transition: background .2s; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .drone-btn-enquire:hover { background: var(--green-dark); }
+  .drone-btn-details {
+    padding: 10px 18px; border-radius: 40px; font-size: 0.85rem; font-weight: 700;
+    border: 1.5px solid var(--border); color: var(--muted); background: transparent;
+    cursor: pointer; transition: border-color .2s, color .2s;
+    font-family: 'DM Sans', sans-serif; white-space: nowrap;
+  }
+  .drone-btn-details:hover { border-color: var(--green); color: var(--green); }
+  .drone-brochure-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 18px; border-radius: 40px; font-size: 0.82rem; font-weight: 700;
+    border: 1.5px solid rgba(46,204,113,0.3); color: var(--green); background: transparent;
+    cursor: pointer; transition: border-color .2s, background .2s;
+    font-family: 'DM Sans', sans-serif; text-decoration: none; white-space: nowrap;
+  }
+  .drone-brochure-btn:hover { background: var(--green-glow); border-color: var(--green); }
+
+  /* ── DRONE DETAIL MODAL ── */
+  .drone-modal-overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(5,10,7,0.92); backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  .drone-modal-overlay.open { opacity: 1; pointer-events: all; }
+  .drone-modal {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 24px; width: 100%; max-width: 900px;
+    max-height: 92vh; overflow-y: auto;
+    transform: translateY(30px) scale(0.97); transition: transform .3s;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  .drone-modal-overlay.open .drone-modal { transform: translateY(0) scale(1); }
+  .drone-modal-close {
+    position: sticky; top: 16px; float: right; margin: 16px 16px 0 0;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--border); background: var(--card);
+    color: var(--muted); cursor: pointer; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; z-index: 10;
+  }
+  .drone-modal-close:hover { border-color: var(--green); color: var(--green); }
+  .drone-modal-hero {
+    width: 100%; aspect-ratio: 16/7; overflow: hidden;
+    background: #0d1a10; border-radius: 24px 24px 0 0;
+    position: relative;
+  }
+  .drone-modal-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .drone-modal-hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,15,13,0.85) 0%, transparent 50%);
+  }
+  .drone-modal-hero-info {
+    position: absolute; bottom: 24px; left: 28px; right: 28px; z-index: 2;
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 16px;
+  }
+  .drone-modal-name {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: clamp(1.5rem, 3vw, 2.2rem); color: var(--white); line-height: 1.1;
+  }
+  .drone-modal-price {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 800;
+    font-size: 1.6rem; color: var(--green); white-space: nowrap;
+  }
+  .drone-modal-body { padding: 28px 32px 32px; }
+  .drone-modal-tagline { font-size: 0.95rem; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+  .drone-modal-section-title {
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+    font-size: 1rem; color: var(--green); letter-spacing: .06em; text-transform: uppercase;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .drone-modal-section-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .drone-specs-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px; margin-bottom: 28px;
+  }
+  .drone-spec-item {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 16px;
+  }
+  .drone-spec-key { font-size: 0.7rem; color: var(--muted); font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 5px; }
+  .drone-spec-val { font-size: 0.92rem; color: var(--white); font-weight: 600; line-height: 1.3; }
+  .drone-modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .drone-modal-actions .drone-btn-enquire { flex: unset; padding: 12px 32px; }
+  .drone-modal-actions .drone-brochure-btn { padding: 12px 24px; }
 
   /* ── CTA STRIP ── */
   .cta-strip {
@@ -239,15 +378,24 @@
     .nav-links, .nav-cta { display: none; }
     .hamburger { display: flex; }
     .page-hero { padding: 110px 20px 56px; }
-    .filter-bar { padding: 32px 20px 0; }
-    .products-section { padding: 36px 20px 80px; }
-    .products-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .shop-layout{flex-direction:column;padding:24px 20px 80px;}
+    .shop-sidebar{position:static;width:100%;margin-right:0;margin-bottom:22px;top:auto;}
+    .sidebar-cats{display:flex;flex-wrap:wrap;gap:6px;}
+    .sidebar-cats li{border:1px solid var(--border);}
+    .products-grid{grid-template-columns:1fr 1fr;gap:12px;}
+    .full-drones-section { padding: 0 20px 80px; }
+    .full-drones-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .full-drones-grid { grid-template-columns: 1fr; }
+    .drone-modal-body { padding: 20px; }
+    .drone-modal-hero-info { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .drone-specs-grid { grid-template-columns: 1fr 1fr; }
     .footer-grid { grid-template-columns: 1fr; gap: 32px; }
     footer { padding: 56px 20px 32px; }
     .cta-strip { padding: 64px 20px; }
   }
   @media(max-width:480px) {
     .products-grid { grid-template-columns: 1fr; }
+    .drone-specs-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
@@ -290,26 +438,284 @@
   <div class="hero-grid-bg"></div>
   <div class="page-hero-inner">
     <div class="section-tag">Popular Products</div>
-    <h1>Check Out The Most<br/><span>Popular Pieces.</span></h1>
+    <h1>Check Out The Most<span>Popular Pieces.</span></h1>
     <p>Exploring the tech and design shaping the world of Agriculture. DGCA-certified drones, premium components &amp; accessories.</p>
   </div>
 </div>
 
-<!-- FILTER TABS -->
-<div class="filter-bar">
-  <button class="filter-btn active" data-filter="all">All Items</button>
-  <button class="filter-btn" data-filter="new">New Products</button>
-  <button class="filter-btn" data-filter="offer">Offers</button>
+<!-- SHOP LAYOUT -->
+<div class="shop-layout">
+  <!-- SIDEBAR -->
+  <aside class="shop-sidebar">
+    <div class="sidebar-search-wrap">
+      <span class="sidebar-search-icon">&#128269;</span>
+      <input class="sidebar-search" id="sidebarSearch" placeholder="Search products..." oninput="applyFilters()"/>
+    </div>
+    <span class="sidebar-label">Categories</span>
+    <ul class="sidebar-cats" id="catList">
+      <li class="active" data-cat="all" onclick="selectCat('all')">All Products <span class="cat-count">0</span></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <span class="sidebar-label">Filter</span>
+    <div class="sidebar-tags">
+      <button class="sidebar-tag-btn active" data-tag="all" onclick="selectTag('all')"><span class="tag-dot" style="background:var(--green)"></span>All Items</button>
+      <button class="sidebar-tag-btn" data-tag="new" onclick="selectTag('new')"><span class="tag-dot" style="background:var(--green)"></span>New Arrivals</button>
+      <button class="sidebar-tag-btn" data-tag="offer" onclick="selectTag('offer')"><span class="tag-dot" style="background:#f0a030"></span>Offers</button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <span class="sidebar-label">Status</span>
+    <div class="sidebar-tags">
+      <button class="sidebar-tag-btn active" id="statusBtn-all" onclick="selectStatus('all')"><span class="tag-dot" style="background:var(--muted)"></span>All</button>
+      <button class="sidebar-tag-btn" id="statusBtn-instock" onclick="selectStatus('instock')"><span class="tag-dot" style="background:var(--green)"></span>In Stock</button>
+    </div>
+  </aside>
+  <!-- PRODUCTS MAIN -->
+  <div class="shop-main">
+    <div class="products-toolbar">
+      <div class="products-count" id="productsCount">Loading...</div>
+    </div>
+    <div class="products-section">
+      <div class="products-grid" id="productsGrid">
+
+    <!-- Beta 610 TC Drone -->
+    <div class="product-card" data-tags="new offer">
+      <span class="product-badge">New</span>
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/JHfqfEGEY832dH8wU2FIj8e42o.png" alt="Beta 610 TC Drone" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">Beta 610 TC Drone</div>
+        <div class="product-price">
+          <span class="price-new">₹6,50,000</span>
+          <span class="price-old">₹8,00,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20Beta%20610%20TC%20Drone%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B96%2C50%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/JHfqfEGEY832dH8wU2FIj8e42o.png%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- SAG Flash Q20 TC Drone -->
+    <div class="product-card" data-tags="offer">
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/eRu3lhJevMrkK1YctwXEMpgZICM.png" alt="SAG Flash Q20 TC Drone" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">SAG Flash Q20 TC Drone</div>
+        <div class="product-price">
+          <span class="price-new">₹8,50,000</span>
+          <span class="price-old">₹10,00,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20SAG%20Flash%20Q20%20TC%20Drone%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B98%2C50%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/eRu3lhJevMrkK1YctwXEMpgZICM.png%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- 14S 22000mAh Battery -->
+    <div class="product-card" data-tags="offer">
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/oDDN2aWnPwDBOacMrdJxrPj3K8.png" alt="14S 22000mAh SAG VOLT Plus Battery" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">14S 22000mAh SAG VOLT Plus Battery</div>
+        <div class="product-price">
+          <span class="price-new">₹40,000</span>
+          <span class="price-old">₹55,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%2014S%2022000mAh%20SAG%20VOLT%20Plus%20Battery%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B940%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/oDDN2aWnPwDBOacMrdJxrPj3K8.png%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- 14S 30000mAh Battery -->
+    <div class="product-card" data-tags="new offer">
+      <span class="product-badge">New</span>
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/EIRN6BISlMewm9CBHoIWVhtzYak.png" alt="14S 30000mAh SAG VOLT Plus Battery" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">14S 30000mAh SAG VOLT Plus Battery</div>
+        <div class="product-price">
+          <span class="price-new">₹50,000</span>
+          <span class="price-old">₹65,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%2014S%2030000mAh%20SAG%20VOLT%20Plus%20Battery%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B950%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/EIRN6BISlMewm9CBHoIWVhtzYak.png%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- K3A Pro FC Kit -->
+    <div class="product-card" data-tags="offer">
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/dRPDPsr5jgfAEPLI0RIrENpcIoo.webp" alt="K3A Pro FC Kit" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">K3A Pro FC Kit</div>
+        <div class="product-price">
+          <span class="price-new">₹33,000</span>
+          <span class="price-old">₹35,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20K3A%20Pro%20FC%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B933%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/dRPDPsr5jgfAEPLI0RIrENpcIoo.webp%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- VK V9 AG FC Kit -->
+    <div class="product-card" data-tags="new offer">
+      <span class="product-badge">New</span>
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/0Jj398ugeqPzDZmnM5qbUhQZs.png" alt="VK V9 AG FC Kit" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">VK V9 AG FC Kit</div>
+        <div class="product-price">
+          <span class="price-new">₹42,000</span>
+          <span class="price-old">₹45,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20VK%20V9%20AG%20FC%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B942%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/0Jj398ugeqPzDZmnM5qbUhQZs.png%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- Hobbywing 8L/min Pump -->
+    <div class="product-card" data-tags="">
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/7Sk32BzwB1Yj3AHjFfUIzNMK0.jpg" alt="Hobbywing 8L/min Pump" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">Hobbywing 8L/min Pump</div>
+        <div class="product-price">
+          <span class="price-new">₹6,800</span>
+          <span class="price-old">₹7,500</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20Hobbywing%208L/min%20Pump%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B96%2C800%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/7Sk32BzwB1Yj3AHjFfUIzNMK0.jpg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- SKYRC 3000W Charger -->
+    <div class="product-card" data-tags="new offer">
+      <span class="product-badge">New</span>
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/ccOSG205SKwpOBmfBTiG6vyFe4.jpeg" alt="SKYRC 3000 Watt Charger" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">SKYRC 3000 Watt Charger</div>
+        <div class="product-price">
+          <span class="price-new">₹45,000</span>
+          <span class="price-old">₹50,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20SKYRC%203000%20Watt%20Charger%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B945%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/ccOSG205SKwpOBmfBTiG6vyFe4.jpeg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- JiYi K++ Full FC Kit -->
+    <div class="product-card" data-tags="offer">
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/VDfEexOOoRK6EOM1ybMGwFQgm4.jpg" alt="JiYi K++ Full FC Kit" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">JiYi K++ Full FC Kit</div>
+        <div class="product-price">
+          <span class="price-new">₹32,000</span>
+          <span class="price-old">₹35,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20JiYi%20K%2B%2B%20Full%20FC%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B932%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/VDfEexOOoRK6EOM1ybMGwFQgm4.jpg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- Skydroid T12 Full RC Kit -->
+    <div class="product-card" data-tags="new">
+      <span class="product-badge">New</span>
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/tKmkl1E8aOyMTjsSN1a4jFh4fGY.jpeg" alt="Skydroid T12 Full RC Kit" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">Skydroid T12 Full RC Kit</div>
+        <div class="product-price">
+          <span class="price-new">₹19,000</span>
+          <span class="price-old">₹21,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20Skydroid%20T12%20Full%20RC%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B919%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/tKmkl1E8aOyMTjsSN1a4jFh4fGY.jpeg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- Hobbywing CW X8 Motor Combo -->
+    <div class="product-card" data-tags="offer">
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/aYSQ4cQ8alqgSNu26gG4YI9gAVY.jpg" alt="Hobbywing CW X8 Motor Combo" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">Hobbywing CW X8 Motor Combo</div>
+        <div class="product-price">
+          <span class="price-new">₹13,000</span>
+          <span class="price-old">₹15,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20Hobbywing%20CW%20X8%20Motor%20Combo%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B913%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/aYSQ4cQ8alqgSNu26gG4YI9gAVY.jpg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+    <!-- SiYi MK15 Transmitter Kit -->
+    <div class="product-card" data-tags="new offer">
+      <span class="product-badge">New</span>
+      <div class="product-img">
+        <img src="https://framerusercontent.com/images/qaHt0hSCGuIztk0xhYkDydSmzM.png" alt="SiYi MK15 Transmitter Kit" loading="lazy"/>
+      </div>
+      <div class="product-info">
+        <div class="product-status">In Stock</div>
+        <div class="product-name">SiYi MK15 Transmitter Kit</div>
+        <div class="product-price">
+          <span class="price-new">₹35,000</span>
+          <span class="price-old">₹45,000</span>
+        </div>
+      </div>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20SiYi%20MK15%20Transmitter%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B935%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/qaHt0hSCGuIztk0xhYkDydSmzM.png%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+    </div>
+
+  </div>
 </div>
 
-<!-- PRODUCTS GRID -->
-<div class="products-section">
-  <div class="products-grid" id="productsGrid">
+<!-- FULL DRONES SECTION -->
+<div class="full-drones-section" id="fullDronesSection">
+  <div class="full-drones-header">
+    <div class="full-drones-header-left">
+      <div class="section-tag">Complete Setups</div>
+      <div class="full-drones-title">Full <span>Drones</span></div>
+      <p class="full-drones-sub">Ready-to-fly complete drone systems — everything included. DGCA-compliant, field-tested agri drones with full specifications and downloadable brochures.</p>
+    </div>
+  </div>
+  <div class="full-drones-grid" id="fullDronesGrid">
+    <div id="fullDronesEmpty" style="grid-column:1/-1;text-align:center;padding:64px 20px;color:var(--muted);font-size:0.95rem;">
+      Loading full drone catalogue…
+    </div>
+  </div>
+</div>
 
-    <!-- Products loaded dynamically from admin panel -->
-    <div id="productsLoadingMsg" style="grid-column:1/-1;text-align:center;padding:60px 20px;color:#7aab8a;">
-      <div style="font-size:2rem;margin-bottom:12px;">🔄</div>
-      <div style="font-size:0.9rem;">Loading products...</div>
+<!-- DRONE DETAIL MODAL -->
+<div class="drone-modal-overlay" id="droneModalOverlay">
+  <div class="drone-modal" id="droneModal">
+    <button class="drone-modal-close" onclick="closeDroneModalDirect()">&#x2715;</button>
+    <div class="drone-modal-hero">
+      <img id="dmHeroImg" src="" alt="Drone"/>
+      <div class="drone-modal-hero-overlay"></div>
+      <div class="drone-modal-hero-info">
+        <div class="drone-modal-name" id="dmName">—</div>
+        <div class="drone-modal-price" id="dmPrice">—</div>
+      </div>
+    </div>
+    <div class="drone-modal-body">
+      <p class="drone-modal-tagline" id="dmTagline"></p>
+      <div class="drone-modal-section-title">Specifications</div>
+      <div class="drone-specs-grid" id="dmSpecsGrid"></div>
+      <div class="drone-modal-actions">
+        <a class="drone-btn-enquire" id="dmEnquireBtn" href="#" target="_blank">&#x1F6D2; Enquire on WhatsApp</a>
+        <a class="drone-brochure-btn" id="dmBrochureBtn" href="#" target="_blank" style="display:none;">
+          &#x2B07; Download Brochure
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -394,179 +800,367 @@
       window.pageYOffset > 50 ? 'rgba(10,15,13,0.98)' : 'rgba(10,15,13,0.88)';
   }, { passive: true });
 
+  
+
   // ══════════════════════════════════════════════
-  //  ⚙️  SUPABASE CONFIG — REPLACE THESE VALUES
+  //  ⚙️  SUPABASE CONFIG — must match admin.html
   // ══════════════════════════════════════════════
   var SUPABASE_URL = localStorage.getItem('sag_supabase_url') || 'https://mefmpxohxrpnezwlbchj.supabase.co';
   var SUPABASE_KEY = localStorage.getItem('sag_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
   var TABLE = 'products';
   // ══════════════════════════════════════════════
 
-  /* ── Build a product card element ── */
-  function buildProductCard(p, i) {
-    var wa_num = p.wa_num || p.waNum || "919390238537";
-    var name = p.name || '';
-    var price = p.price || 0;
-    var originalPrice = p.original_price || p.originalPrice || null;
-    var image = p.image || '';
-    var isNew = p.is_new || p.isNew || false;
-    var isOffer = p.is_offer || p.isOffer || false;
+  /* == Products state == */
+  var allProducts = [];
+  var activeCat = 'all', activeTag = 'all', activeStatus = 'all';
 
-    var tags = [];
-    if (isNew) tags.push('new');
-    if (isOffer) tags.push('offer');
-
-    var msg = encodeURIComponent(
-      "Hello SAG Drone Technologies! \uD83D\uDC4B\n\n" +
-      "I'm interested in purchasing the following product:\n\n" +
-      "\uD83D\uDED2 *Product:* " + name + "\n" +
-      "\uD83D\uDCB0 *Price:* \u20B9" + price + "\n" +
-      (image ? "\uD83D\uDDBC\uFE0F *Image:* " + image + "\n" : "") +
-      "\nPlease share more details and help me proceed with the purchase. Thank you!"
-    );
-    var waLink = "https://wa.me/" + wa_num + "?text=" + msg;
-
-    var card = document.createElement('div');
-    card.className = 'product-card';
-    card.dataset.tags = tags.join(' ');
-
-    // Build image element safely (avoids escaped-quote artifacts)
-    var imgHtml;
-    if (image) {
-      var imgEl = document.createElement('img');
-      imgEl.src = image;
-      imgEl.alt = name;
-      imgEl.loading = 'lazy';
-      imgEl.onerror = function() {
-        this.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:0.8rem;">No Image</div>';
-      };
-      var tmpDiv = document.createElement('div');
-      tmpDiv.appendChild(imgEl);
-      imgHtml = tmpDiv.innerHTML;
-    } else {
-      imgHtml = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:0.8rem;">No Image</div>';
-    }
-
-    card.innerHTML =
-      (isNew ? '<span class="product-badge">New</span>' : '') +
-      '<div class="product-img">' + imgHtml + '</div>' +
-      '<div class="product-info">' +
-        '<div class="product-status">In Stock</div>' +
-        '<div class="product-name">' + name + '</div>' +
-        '<div class="product-price">' +
-          '<span class="price-new">&#8377;' + Number(price).toLocaleString('en-IN') + '</span>' +
-          (originalPrice ? '<span class="price-old">&#8377;' + Number(originalPrice).toLocaleString('en-IN') + '</span>' : '') +
-        '</div>' +
-      '</div>' +
-      '<a class="buy-btn" href="' + waLink + '" target="_blank">Enquire Now</a>';
-
-    // Re-attach onerror after innerHTML (it gets stripped by serialization)
-    var imgInCard = card.querySelector('.product-img img');
-    if (imgInCard) {
-      imgInCard.onerror = function() {
-        this.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:0.8rem;">No Image</div>';
-      };
-    }
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease, border-color .2s';
-    return card;
+  function getCategoryFromProduct(p) {
+    if (p.category && p.category.trim()) return p.category.trim();
+    var n = (p.name || '').toLowerCase();
+    if (n.indexOf('drone') !== -1 || n.indexOf('q20') !== -1) return 'Drones';
+    if (n.indexOf('battery') !== -1 || n.indexOf('charger') !== -1) return 'Batteries';
+    if (n.indexOf('fc kit') !== -1 || n.indexOf('k3a') !== -1 || n.indexOf('jiyi') !== -1 || n.indexOf('vk v') !== -1) return 'Flight Controller';
+    if (n.indexOf('nozzle') !== -1 || n.indexOf('pump') !== -1) return 'Nozzles';
+    if (n.indexOf('propeller') !== -1 || n.indexOf('motor') !== -1) return 'Propellers';
+    return 'Accessories';
   }
 
-  /* ── Default products (mirrors admin DEFAULT_PRODUCTS) ── */
-  var DEFAULT_PRODUCTS = [
-    {id:101,name:'Beta 610 TC Drone',price:250000,originalPrice:null,image:'https://framerusercontent.com/images/jVJvJSfyHHJimQ3L1dJlMvmks.png',isNew:false,isOffer:false,status:'instock',waNum:'919390238537'},
-    {id:102,name:'Agri Spray Drone 10L',price:185000,originalPrice:200000,image:'https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png',isNew:true,isOffer:false,status:'instock',waNum:'919390238537'},
-    {id:103,name:'VK V9 AG FC Kit',price:42000,originalPrice:45000,image:'https://framerusercontent.com/images/0Jj398ugeqPzDZmnM5qbUhQZs.png',isNew:true,isOffer:false,status:'instock',waNum:'919390238537'},
-    {id:104,name:'Hobbywing 8L/min Pump',price:6800,originalPrice:7500,image:'https://framerusercontent.com/images/7Sk32BzwB1Yj3AHjFfUIzNMK0.jpg',isNew:false,isOffer:false,status:'instock',waNum:'919390238537'},
-    {id:105,name:'SKYRC 3000 Watt Charger',price:45000,originalPrice:50000,image:'https://framerusercontent.com/images/ccOSG205SKwpOBmfBTiG6vyFe4.jpeg',isNew:true,isOffer:true,status:'instock',waNum:'919390238537'},
-    {id:106,name:'JiYi K++ Full FC Kit',price:32000,originalPrice:35000,image:'https://framerusercontent.com/images/VDfEexOOoRK6EOM1ybMGwFQgm4.jpg',isNew:false,isOffer:true,status:'instock',waNum:'919390238537'},
-    {id:107,name:'Skydroid T12 Full RC Kit',price:19000,originalPrice:21000,image:'https://framerusercontent.com/images/tKmkl1E8aOyMTjsSN1a4jFh4fGY.jpeg',isNew:true,isOffer:false,status:'instock',waNum:'919390238537'},
-    {id:108,name:'Hobbywing CW X8 Motor Combo',price:13000,originalPrice:15000,image:'https://framerusercontent.com/images/aYSQ4cQ8alqgSNu26gG4YI9gAVY.jpg',isNew:false,isOffer:true,status:'instock',waNum:'919390238537'},
-    {id:109,name:'SiYi MK15 Transmitter Kit',price:35000,originalPrice:45000,image:'https://framerusercontent.com/images/qaHt0hSCGuIztk0xhYkDydSmzM.png',isNew:true,isOffer:true,status:'instock',waNum:'919390238537'}
-  ];
-
-  function hideLoadingMsg() {
-    var msg = document.getElementById('productsLoadingMsg');
-    if (msg) msg.remove();
-  }
-
-  function renderProductList(productList, cls) {
-    var grid = document.getElementById('productsGrid');
-    hideLoadingMsg();
-    // Remove previously rendered dynamic cards
-    grid.querySelectorAll('.admin-product-card, .dynamic-product-card').forEach(function(c){ c.remove(); });
-    productList.forEach(function(p, i) {
-      var card = buildProductCard(p, i);
-      card.classList.add(cls || 'dynamic-product-card');
-      grid.appendChild(card);
-      setTimeout(function(){ card.style.opacity='1'; card.style.transform='translateY(0)'; }, 60 * (i + 1));
+  function buildCategoryList() {
+    var cats = {};
+    allProducts.forEach(function(p) {
+      var c = getCategoryFromProduct(p);
+      cats[c] = (cats[c] || 0) + 1;
+    });
+    var ul = document.getElementById('catList');
+    var allLi = document.createElement('li');
+    allLi.className = activeCat === 'all' ? 'active' : '';
+    allLi.onclick = function() { selectCat('all'); };
+    allLi.innerHTML = 'All Products <span class="cat-count">' + allProducts.length + '</span>';
+    ul.innerHTML = '';
+    ul.appendChild(allLi);
+    Object.keys(cats).sort().forEach(function(c) {
+      var li = document.createElement('li');
+      li.className = activeCat === c ? 'active' : '';
+      li.onclick = (function(cat) { return function() { selectCat(cat); }; })(c);
+      li.innerHTML = c + ' <span class="cat-count">' + cats[c] + '</span>';
+      ul.appendChild(li);
     });
   }
 
-  /* ── Load products: localStorage (admin) first, then Supabase, then defaults ── */
-  async function loadAllProducts() {
-    // 1. Try localStorage (set by admin panel)
-    var localRaw = localStorage.getItem('sag_products');
-    if (localRaw) {
-      try {
-        var localProducts = JSON.parse(localRaw);
-        if (localProducts && localProducts.length > 0) {
-          renderProductList(localProducts, 'dynamic-product-card');
-          // Silently refresh from Supabase in background
-          loadSupabaseProducts(true);
+  function selectCat(cat) {
+    activeCat = cat;
+    buildCategoryList();
+    applyFilters();
+  }
+
+  function selectTag(tag) {
+    activeTag = tag;
+    document.querySelectorAll('.sidebar-tag-btn[data-tag]').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.tag === tag);
+    });
+    applyFilters();
+  }
+
+  function selectStatus(s) {
+    activeStatus = s;
+    ['all', 'instock'].forEach(function(k) {
+      var el = document.getElementById('statusBtn-' + k);
+      if (el) el.classList.toggle('active', k === s);
+    });
+    applyFilters();
+  }
+
+  function applyFilters() {
+    var searchEl = document.getElementById('sidebarSearch');
+    var q = searchEl ? searchEl.value.toLowerCase().trim() : '';
+    var filtered = allProducts.filter(function(p) {
+      var cat = getCategoryFromProduct(p);
+      var matchCat = (activeCat === 'all') || (cat === activeCat);
+      var matchTag = (activeTag === 'all') ||
+                     (activeTag === 'new' && p.is_new) ||
+                     (activeTag === 'offer' && p.is_offer);
+      var matchStatus = (activeStatus === 'all') ||
+                        (activeStatus === 'instock' && p.status !== 'outofstock');
+      var matchSearch = !q || (p.name || '').toLowerCase().indexOf(q) !== -1;
+      return matchCat && matchTag && matchStatus && matchSearch;
+    });
+    var countEl = document.getElementById('productsCount');
+    if (countEl) {
+      countEl.innerHTML = 'Showing <strong>' + filtered.length + '</strong> of ' + allProducts.length + ' products';
+    }
+    renderProductCards(filtered);
+  }
+
+  function renderProductCards(prods) {
+    var grid = document.getElementById('productsGrid');
+    if (!grid) return;
+    if (!prods.length) {
+      var clearBtn = document.createElement('div');
+      clearBtn.style.cssText = 'grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);';
+      clearBtn.innerHTML = 'No products match your filters.';
+      var btn = document.createElement('button');
+      btn.textContent = 'Clear Filters';
+      btn.style.cssText = 'margin-left:8px;padding:6px 16px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:0.8rem;cursor:pointer;font-family:inherit;';
+      btn.onclick = function() { selectCat('all'); selectTag('all'); selectStatus('all'); };
+      clearBtn.appendChild(btn);
+      grid.innerHTML = '';
+      grid.appendChild(clearBtn);
+      return;
+    }
+    grid.innerHTML = '';
+    prods.forEach(function(p, i) {
+      var wa = (p.wa_num || '919390238537').replace(/[^0-9]/g, '');
+      var msgText = 'Hello SAG Drone Technologies!\n\nI am interested in: ' + p.name + '\nPrice: Rs.' + Number(p.price).toLocaleString('en-IN') + '\n\nPlease share more details. Thank you!';
+      var waLink = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msgText);
+      var inStock = p.status !== 'outofstock';
+
+      var card = document.createElement('div');
+      card.className = 'product-card';
+
+      // Badge
+      if (p.is_new) {
+        var badge = document.createElement('span');
+        badge.className = 'product-badge';
+        badge.textContent = 'New';
+        card.appendChild(badge);
+      } else if (p.is_offer) {
+        var badge = document.createElement('span');
+        badge.className = 'product-badge';
+        badge.style.background = '#f0a030';
+        badge.textContent = 'Offer';
+        card.appendChild(badge);
+      }
+
+      // Image
+      var imgWrap = document.createElement('div');
+      imgWrap.className = 'product-img';
+      if (p.image) {
+        var img = document.createElement('img');
+        img.src = p.image;
+        img.alt = p.name;
+        img.loading = 'lazy';
+        img.onerror = function() {
+          imgWrap.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:2rem;">&#128230;</div>';
+        };
+        imgWrap.appendChild(img);
+      } else {
+        imgWrap.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:2rem;">&#128230;</div>';
+      }
+      card.appendChild(imgWrap);
+
+      // Info
+      var info = document.createElement('div');
+      info.className = 'product-info';
+      var statusDiv = document.createElement('div');
+      statusDiv.className = 'product-status';
+      if (!inStock) statusDiv.style.color = '#e05050';
+      statusDiv.textContent = inStock ? 'In Stock' : 'Out of Stock';
+      var nameDiv = document.createElement('div');
+      nameDiv.className = 'product-name';
+      nameDiv.textContent = p.name;
+      var priceDiv = document.createElement('div');
+      priceDiv.className = 'product-price';
+      var priceNew = document.createElement('span');
+      priceNew.className = 'price-new';
+      priceNew.textContent = '\u20b9' + Number(p.price).toLocaleString('en-IN');
+      priceDiv.appendChild(priceNew);
+      if (p.original_price) {
+        var priceOld = document.createElement('span');
+        priceOld.className = 'price-old';
+        priceOld.textContent = '\u20b9' + Number(p.original_price).toLocaleString('en-IN');
+        priceDiv.appendChild(priceOld);
+      }
+      info.appendChild(statusDiv);
+      info.appendChild(nameDiv);
+      info.appendChild(priceDiv);
+      card.appendChild(info);
+
+      // Button
+      var btn = document.createElement('a');
+      btn.className = 'buy-btn';
+      btn.href = waLink;
+      btn.target = '_blank';
+      btn.textContent = 'Enquire Now';
+      card.appendChild(btn);
+
+      card.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity 0.35s ease,transform 0.35s ease,border-color .2s,box-shadow .2s';
+      grid.appendChild(card);
+      setTimeout(function(el) { return function() { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }; }(card), 50 * (i + 1));
+    });
+  }
+  /* == Load products from Supabase == */
+  async function loadAdminProducts() {
+    var grid = document.getElementById('productsGrid');
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);">Loading products...</div>';
+    try {
+      var res = await fetch(SUPABASE_URL+'/rest/v1/'+TABLE+'?order=created_at.asc&select=*', {
+        headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+      });
+      if (!res.ok) {
+        var errBody = await res.json().catch(function(){return{};});
+        var errMsg = (errBody&&errBody.message)||'';
+        if (errMsg.toLowerCase().indexOf('relation')!==-1||errMsg.toLowerCase().indexOf('does not exist')!==-1) {
+          grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);">Products table not set up yet. Configure in Admin Panel. <button onclick="loadAdminProducts()" style="margin-left:8px;padding:6px 16px;border-radius:30px;border:1.5px solid var(--green);background:transparent;color:var(--green);font-size:0.8rem;cursor:pointer;font-family:inherit;">Retry</button></div>';
           return;
         }
-      } catch(e) {}
-    }
-
-    // 2. Try Supabase
-    var supabaseLoaded = await loadSupabaseProducts(false);
-
-    // 3. Fallback to built-in default products
-    if (!supabaseLoaded) {
-      renderProductList(DEFAULT_PRODUCTS, 'dynamic-product-card');
-      // Also seed localStorage so admin picks them up
-      localStorage.setItem('sag_products', JSON.stringify(DEFAULT_PRODUCTS));
-    }
-  }
-
-  async function loadSupabaseProducts(silent) {
-    if (!SUPABASE_URL || SUPABASE_URL === 'YOUR_SUPABASE_URL') return false;
-    var grid = document.getElementById('productsGrid');
-    try {
-      var res = await fetch(SUPABASE_URL + '/rest/v1/' + TABLE + '?order=created_at.asc&select=*', {
-        headers: {
-          'apikey': SUPABASE_KEY,
-          'Authorization': 'Bearer ' + SUPABASE_KEY
-        }
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      var products = await res.json();
-      if (products.length > 0) {
-        if (!silent) {
-          renderProductList(products, 'admin-product-card');
-        } else {
-          // Silently replace existing cards with fresh Supabase data
-          hideLoadingMsg();
-          grid.querySelectorAll('.admin-product-card, .dynamic-product-card').forEach(function(c){ c.remove(); });
-          products.forEach(function(p, i) {
-            var card = buildProductCard(p, i);
-            card.classList.add('admin-product-card');
-            grid.appendChild(card);
-            setTimeout(function(){ card.style.opacity='1'; card.style.transform='translateY(0)'; }, 60 * (i + 1));
-          });
-        }
-        return true;
+        throw new Error('HTTP '+res.status);
       }
-      return false;
+      var prods = await res.json();
+      allProducts = prods;
+      if (!prods.length) {
+        grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);">No products found. Add them from the Admin Panel.</div>';
+        var el=document.getElementById('productsCount'); if(el) el.textContent='0 products';
+        return;
+      }
+      buildCategoryList();
+      applyFilters();
     } catch(e) {
-      console.warn('Supabase load failed:', e.message);
-      return false;
+      console.warn('Products load failed:',e.message);
+      grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);">Could not load products. <button onclick="loadAdminProducts()" style="margin-left:8px;padding:6px 16px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:0.8rem;cursor:pointer;font-family:inherit;">Retry</button></div>';
+    }
+  }
+  loadAdminProducts();
+
+  /* ── Full Drones: load from Supabase ── */
+  var fullDronesData = [];
+  async function loadFullDrones() {
+    var emptyEl = document.getElementById('fullDronesEmpty');
+    try {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/full_drones?order=created_at.desc&select=*', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      // Table doesn't exist yet — show setup instructions
+      if (res.status === 404 || res.status === 400) {
+        var errBody = await res.json().catch(function(){ return {}; });
+        var msg = (errBody && errBody.message) ? errBody.message : '';
+        if (res.status === 404 || msg.toLowerCase().indexOf('relation') !== -1 || msg.toLowerCase().indexOf('does not exist') !== -1 || msg.toLowerCase().indexOf('not found') !== -1) {
+          emptyEl.innerHTML =
+            '<div style="max-width:560px;margin:0 auto;text-align:left;">' +
+            '<div style="font-size:1.5rem;margin-bottom:12px;">🛠️</div>' +
+            '<div style="font-weight:700;color:var(--white);font-size:1rem;margin-bottom:8px;">Full Drones table not set up yet</div>' +
+            '<p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px;line-height:1.6;">Run this SQL once in your <a href="https://supabase.com/dashboard" target="_blank" style="color:var(--green);">Supabase SQL Editor</a> to create the table, then add drones from the Admin Panel.</p>' +
+            '<pre style="background:#0a0f0d;border:1px solid var(--border);border-radius:10px;padding:14px;font-size:0.72rem;color:#7adb8a;overflow-x:auto;text-align:left;line-height:1.7;white-space:pre-wrap;">' +
+            'CREATE TABLE IF NOT EXISTS full_drones (\n' +
+            '  id BIGSERIAL PRIMARY KEY,\n' +
+            '  name TEXT NOT NULL,\n' +
+            '  price NUMERIC NOT NULL DEFAULT 0,\n' +
+            '  original_price NUMERIC,\n' +
+            '  tagline TEXT DEFAULT \'\',\n' +
+            '  image TEXT DEFAULT \'\',\n' +
+            '  brochure_url TEXT DEFAULT \'\',\n' +
+            '  wa_num TEXT DEFAULT \'919390238537\',\n' +
+            '  is_new BOOLEAN DEFAULT false,\n' +
+            '  is_offer BOOLEAN DEFAULT false,\n' +
+            '  status TEXT DEFAULT \'instock\',\n' +
+            '  specifications JSONB DEFAULT \'[]\'::jsonb,\n' +
+            '  created_at TIMESTAMPTZ DEFAULT NOW()\n' +
+            ');\n\n' +
+            'ALTER TABLE full_drones ENABLE ROW LEVEL SECURITY;\n' +
+            'CREATE POLICY "Public read" ON full_drones FOR SELECT USING (true);\n' +
+            'CREATE POLICY "Auth write" ON full_drones FOR ALL USING (true);' +
+            '</pre>' +
+            '<button onclick="loadFullDrones()" style="margin-top:14px;padding:9px 22px;border-radius:30px;border:1.5px solid var(--green);background:transparent;color:var(--green);font-size:0.82rem;font-weight:700;cursor:pointer;font-family:inherit;">↺ Retry after running SQL</button>' +
+            '</div>';
+          emptyEl.style.display = 'block';
+          return;
+        }
+        throw new Error('HTTP ' + res.status);
+      }
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var drones = await res.json();
+      fullDronesData = drones;
+      renderFullDrones(drones);
+    } catch(e) {
+      emptyEl.innerHTML = '<div style="text-align:center;"><div style="font-size:1.5rem;margin-bottom:10px;">⚠️</div><div style="color:var(--muted);font-size:0.88rem;">Could not connect to database. Check your network and try again.</div><button onclick="loadFullDrones()" style="margin-top:12px;padding:8px 20px;border-radius:30px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:0.8rem;cursor:pointer;font-family:inherit;">↺ Retry</button></div>';
+      emptyEl.style.display = 'block';
+      console.warn('Full drones load failed:', e.message);
     }
   }
 
-  loadAllProducts();
+  function renderFullDrones(drones) {
+    var grid = document.getElementById('fullDronesGrid');
+    var empty = document.getElementById('fullDronesEmpty');
+    grid.querySelectorAll('.drone-card').forEach(function(c){ c.remove(); });
+    if (!drones || drones.length === 0) {
+      empty.style.display = 'block';
+      empty.textContent = 'No complete drone setups listed yet. Check back soon!';
+      return;
+    }
+    empty.style.display = 'none';
+    drones.forEach(function(d, i) {
+      var specs = [];
+      try { specs = typeof d.specifications === 'string' ? JSON.parse(d.specifications) : (d.specifications || []); } catch(e) {}
+      var previewSpecs = specs.slice(0, 4);
+      var wa_num = d.wa_num || '919390238537';
+      var msg = encodeURIComponent('Hello SAG Drone Technologies! 👋\n\nI am interested in: *' + d.name + '*\n\nPlease share more details and pricing. Thank you!');
+      var waLink = 'https://wa.me/' + wa_num + '?text=' + msg;
+      var card = document.createElement('div');
+      card.className = 'drone-card';
+      card.setAttribute('data-id', d.id);
+      card.innerHTML =
+        '<div class="drone-card-img">' +
+          (d.image ? '<img src="' + d.image + '" alt="' + d.name + '" loading="lazy" onerror="this.style.display=\'none\'">' : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:2rem;">🚁</div>') +
+          '<div class="drone-badge-row">' +
+            (d.is_new ? '<span class="drone-badge">New</span>' : '') +
+            (d.is_offer ? '<span class="drone-badge offer">Offer</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="drone-card-body">' +
+          '<div class="drone-card-name">' + d.name + '</div>' +
+          '<div class="drone-card-tagline">' + (d.tagline || '') + '</div>' +
+          (previewSpecs.length > 0 ?
+            '<div class="drone-specs-preview">' +
+              previewSpecs.map(function(s){ return '<div class="spec-chip"><div class="spec-chip-label">' + s.key + '</div><div class="spec-chip-val">' + s.value + '</div></div>'; }).join('') +
+            '</div>' : '') +
+          '<div class="drone-card-actions">' +
+            '<a class="drone-btn-enquire" href="' + waLink + '" target="_blank">Enquire Now</a>' +
+            '<button class="drone-btn-details" onclick="openDroneModal(' + d.id + ')">View Specs</button>' +
+          '</div>' +
+        '</div>';
+      card.style.opacity = '0'; card.style.transform = 'translateY(24px)';
+      card.style.transition = 'opacity 0.45s ease, transform 0.45s ease, border-color .25s, box-shadow .25s';
+      grid.appendChild(card);
+      setTimeout(function(){ card.style.opacity='1'; card.style.transform='translateY(0)'; }, 80 * (i + 1));
+    });
+  }
+
+  function openDroneModal(id) {
+    var d = fullDronesData.find(function(x){ return x.id == id; });
+    if (!d) return;
+    var specs = [];
+    try { specs = typeof d.specifications === 'string' ? JSON.parse(d.specifications) : (d.specifications || []); } catch(e) {}
+    document.getElementById('dmHeroImg').src = d.image || '';
+    document.getElementById('dmHeroImg').style.display = d.image ? '' : 'none';
+    document.getElementById('dmName').textContent = d.name;
+    document.getElementById('dmPrice').textContent = d.price ? '₹' + Number(d.price).toLocaleString('en-IN') : '';
+    document.getElementById('dmTagline').textContent = d.tagline || '';
+    document.getElementById('dmSpecsGrid').innerHTML = specs.length > 0
+      ? specs.map(function(s){ return '<div class="drone-spec-item"><div class="drone-spec-key">' + s.key + '</div><div class="drone-spec-val">' + s.value + '</div></div>'; }).join('')
+      : '<p style="color:var(--muted);font-size:0.88rem;">No specifications listed yet.</p>';
+    var wa_num = d.wa_num || '919390238537';
+    var msg = encodeURIComponent('Hello SAG Drone Technologies! 👋\n\nI am interested in purchasing: *' + d.name + '*\n\nPlease share more details. Thank you!');
+    document.getElementById('dmEnquireBtn').href = 'https://wa.me/' + wa_num + '?text=' + msg;
+    var brocBtn = document.getElementById('dmBrochureBtn');
+    if (d.brochure_url) {
+      brocBtn.href = d.brochure_url;
+      brocBtn.style.display = 'inline-flex';
+    } else {
+      brocBtn.style.display = 'none';
+    }
+    document.getElementById('droneModalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDroneModalDirect() {
+    document.getElementById('droneModalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('droneModalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeDroneModalDirect();
+  });
+
+  loadFullDrones();
 
   /* ── Filter tabs ── */
   document.querySelectorAll('.filter-btn').forEach(function(btn) {
