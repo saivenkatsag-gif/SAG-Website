@@ -482,116 +482,6 @@ select.form-control option{background:var(--card2);}
 .loading-overlay.show{opacity:1;pointer-events:all;}
 .spinner{width:42px;height:42px;border:3px solid var(--border-solid);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ── LIVE SYNC PANEL ── */
-.sync-panel {
-  background: var(--card); border: 1px solid var(--border-solid);
-  border-radius: var(--radius); padding: 24px; margin-bottom: 24px;
-  position: relative; overflow: hidden;
-}
-.sync-panel::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, var(--green), var(--blue), var(--green));
-  background-size: 200% 100%;
-  animation: shimmer 2.5s linear infinite;
-}
-@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-.sync-panel-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
-}
-.sync-panel-title {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.15rem; font-weight: 800; color: var(--white);
-  display: flex; align-items: center; gap: 8px;
-}
-.sync-pulse {
-  width: 8px; height: 8px; border-radius: 50%; background: var(--green);
-  animation: pulse 1.5s infinite;
-}
-.sync-pulse.inactive { background: var(--amber); }
-.sync-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.sync-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px;
-}
-.sync-card {
-  background: var(--dark2); border: 1px solid var(--border-solid);
-  border-radius: 10px; padding: 16px; position: relative; overflow: hidden;
-  transition: border-color .2s;
-}
-.sync-card:hover { border-color: var(--green); }
-.sync-card-source {
-  font-size: 0.68rem; font-weight: 700; color: var(--muted);
-  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
-  display: flex; align-items: center; gap: 5px;
-}
-.sync-card-source .src-dot {
-  width: 5px; height: 5px; border-radius: 50%; background: var(--green);
-}
-.sync-card-num {
-  font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800;
-  line-height: 1; margin-bottom: 3px;
-}
-.sync-card-label { font-size: 0.78rem; color: var(--muted); }
-.sync-card-change {
-  position: absolute; top: 12px; right: 12px;
-  font-size: 0.7rem; font-weight: 700; padding: 2px 8px;
-  border-radius: 20px;
-}
-.sync-card-change.up { background: rgba(46,204,113,0.15); color: var(--green); }
-.sync-card-change.same { background: var(--dark); color: var(--muted); }
-.sync-change-down { background: var(--red-glow); color: var(--red); }
-
-/* ── LIVE FEED ── */
-.live-feed {
-  background: var(--dark2); border: 1px solid var(--border-solid);
-  border-radius: 10px; overflow: hidden; max-height: 200px; overflow-y: auto;
-}
-.live-feed-header {
-  padding: 10px 14px;
-  background: rgba(46,204,113,0.05);
-  border-bottom: 1px solid var(--border-solid);
-  font-size: 0.72rem; font-weight: 700; color: var(--muted);
-  letter-spacing: 0.08em; text-transform: uppercase;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.feed-entry {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 9px 14px;
-  border-bottom: 1px solid rgba(30,53,34,0.4);
-  font-size: 0.8rem; color: var(--text); transition: background .15s;
-  animation: feedIn .3s ease;
-}
-@keyframes feedIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
-.feed-entry:last-child { border-bottom: none; }
-.feed-entry:hover { background: rgba(46,204,113,0.04); }
-.feed-time { font-size: 0.7rem; color: var(--muted); white-space: nowrap; margin-top: 1px; }
-.feed-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
-.feed-entry-text { flex: 1; line-height: 1.4; }
-.feed-tag {
-  display: inline-block; padding: 1px 7px; border-radius: 10px;
-  font-size: 0.65rem; font-weight: 700; margin-left: 6px;
-  vertical-align: middle;
-}
-.tag-products { background: rgba(58,154,217,0.15); color: var(--blue); }
-.tag-apps { background: rgba(46,204,113,0.12); color: var(--green); }
-.tag-sync { background: var(--amber-glow); color: var(--amber); }
-
-/* ── DIFF ALERT ── */
-.diff-alert {
-  background: rgba(240,160,48,0.08); border: 1px solid var(--amber);
-  border-radius: 10px; padding: 12px 16px; margin-top: 14px;
-  font-size: 0.83rem; color: var(--amber); display: none;
-  align-items: center; gap: 10px;
-}
-.diff-alert.show { display: flex; }
-.diff-alert strong { color: var(--white); }
-
-/* ── PAGE PREVIEW STRIP ── */
-.page-strip {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px;
-}
-
 </style>
 </head>
 <body>
@@ -657,6 +547,14 @@ select.form-control option{background:var(--card2);}
       <button class="sidebar-link" onclick="showPage('products')">
         <span class="icon">🛒</span> Manage Products
         <span class="badge" id="productCountBadge">—</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('categories')">
+        <span class="icon">🏷️</span> Categories
+        <span class="badge" id="catCountBadge">—</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('full-drones')">
+        <span class="icon">🚀</span> Full Drones
+        <span class="badge" id="fullDroneCountBadge">—</span>
       </button>
 
       <div class="sidebar-section-label">System</div>
@@ -737,128 +635,7 @@ select.form-control option{background:var(--card2);}
       </div>
 
       <!-- DB Status Card -->
-      <div id="dashDbCard" style="margin-bottom:20px;"></div>
-
-      <!-- ══ REAL-TIME SYNC PANEL ══ -->
-      <div class="sync-panel">
-        <div class="sync-panel-header">
-          <div class="sync-panel-title">
-            <span class="sync-pulse" id="syncPulseDot"></span>
-            Live Site Data — Real-Time Monitor
-          </div>
-          <div class="sync-actions">
-            <span id="lastSyncLabel" style="font-size:0.75rem;color:var(--muted);align-self:center;white-space:nowrap;">Checking…</span>
-            <button class="btn btn-outline-green btn-sm" onclick="manualSyncAll()">🔄 Sync Now</button>
-            <button class="btn btn-blue btn-sm" onclick="forcePushToPages()">⬆ Push to Pages</button>
-          </div>
-        </div>
-
-        <!-- Sync stat cards -->
-        <div class="sync-grid">
-          <div class="sync-card">
-            <div class="sync-card-source">
-              <span class="src-dot" style="background:var(--blue);"></span>
-              products.html
-            </div>
-            <div class="sync-card-num" id="syncProductCount" style="color:var(--blue);">—</div>
-            <div class="sync-card-label">Products on page</div>
-            <div class="sync-card-change same" id="syncProductDiff">—</div>
-          </div>
-          <div class="sync-card">
-            <div class="sync-card-source">
-              <span class="src-dot"></span>
-              index.html (Applications)
-            </div>
-            <div class="sync-card-num" id="syncAppCount" style="color:var(--green);">—</div>
-            <div class="sync-card-label">Applications visible</div>
-            <div class="sync-card-change same" id="syncAppDiff">—</div>
-          </div>
-          <div class="sync-card">
-            <div class="sync-card-source">
-              <span class="src-dot" style="background:var(--amber);"></span>
-              Sync Status
-            </div>
-            <div class="sync-card-num" id="syncHealthNum" style="color:var(--green);font-size:1.4rem;">✓ OK</div>
-            <div class="sync-card-label" id="syncHealthLabel">All data in sync</div>
-            <div class="sync-card-change same" id="syncHealthBadge">Live</div>
-          </div>
-        </div>
-
-        <!-- Drift alert if admin data differs from page data -->
-        <div class="diff-alert" id="syncDriftAlert">
-          ⚠️ <strong>Data drift detected.</strong>
-          <span id="syncDriftMsg">Admin data differs from what's shown on your pages.</span>
-          <button class="btn btn-amber btn-sm" style="margin-left:auto;" onclick="forcePushToPages()">Fix Now →</button>
-        </div>
-
-        <!-- Per-page preview -->
-        <div class="page-strip">
-          <div class="page-preview-card" onclick="window.open('products.html','_blank')">
-            <div class="page-preview-label">🛒 products.html — Live Data</div>
-            <div class="page-preview-row">
-              <span>Total Products</span>
-              <span class="page-preview-val" id="previewProductTotal">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>In Stock</span>
-              <span class="page-preview-val" id="previewProductInstock" style="color:var(--green);">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Out of Stock</span>
-              <span class="page-preview-val" id="previewProductOutstock" style="color:var(--red);">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Tagged "New"</span>
-              <span class="page-preview-val" id="previewProductNew" style="color:var(--amber);">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Tagged "Offer"</span>
-              <span class="page-preview-val" id="previewProductOffer" style="color:var(--blue);">—</span>
-            </div>
-          </div>
-          <div class="page-preview-card" onclick="window.open('index.html','_blank')">
-            <div class="page-preview-label">🌐 index.html — Applications Section</div>
-            <div class="page-preview-row">
-              <span>Total Applications</span>
-              <span class="page-preview-val" id="previewAppTotal">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Active / Visible</span>
-              <span class="page-preview-val" id="previewAppActive" style="color:var(--green);">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Hidden</span>
-              <span class="page-preview-val" id="previewAppHidden" style="color:var(--red);">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Avg Features</span>
-              <span class="page-preview-val" id="previewAppFeatures" style="color:var(--amber);">—</span>
-            </div>
-            <div class="page-preview-row">
-              <span>Source</span>
-              <span class="page-preview-val" id="previewAppSource" style="color:var(--blue);font-size:0.75rem;">—</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Live activity feed -->
-        <div style="margin-top:16px;">
-          <div class="live-feed">
-            <div class="live-feed-header">
-              <span>⚡ Live Activity Feed</span>
-              <button onclick="clearFeed()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.7rem;">Clear</button>
-            </div>
-            <div id="liveFeedEntries">
-              <div class="feed-entry">
-                <span class="feed-icon">ℹ️</span>
-                <span class="feed-entry-text">Dashboard loaded. Monitoring products.html and index.html…</span>
-                <span class="feed-time" id="initFeedTime"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- ══ END SYNC PANEL ══ -->
+      <div id="dashDbCard" style="margin-bottom:28px;"></div>
 
       <div style="display:grid;grid-template-columns:1fr 340px;gap:24px;">
         <div>
@@ -945,6 +722,40 @@ select.form-control option{background:var(--card2);}
       <div class="apps-grid" id="productsAdminGrid"></div>
     </div>
 
+    <!-- CATEGORIES PAGE -->
+    <div class="page" id="page-categories">
+      <div class="preview-bar">
+        <div class="preview-bar-text">
+          <h4>🏷️ Categories Manager</h4>
+          <p>Add, edit or remove product categories. These appear in the left sidebar of products.html as filters.</p>
+        </div>
+        <button class="btn btn-green" onclick="openAddCategoryModal()">+ Add Category</button>
+      </div>
+      <div class="section-hdr" style="margin-bottom:16px;">
+        <h3>Product <span>Categories</span></h3>
+        <span id="catCountLabel" style="font-size:0.82rem;color:var(--muted);"></span>
+      </div>
+      <div id="categoriesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;"></div>
+    </div>
+
+    <!-- FULL DRONES PAGE -->
+    <div class="page" id="page-full-drones">
+      <div class="preview-bar">
+        <div class="preview-bar-text">
+          <h4>🚀 Full Drones Manager</h4>
+          <p>Add, edit, or remove complete drone setups shown in the "Full Drones" section on products.html. Each drone can have custom specifications and a downloadable brochure.</p>
+        </div>
+        <button class="btn btn-green" onclick="openAddFullDroneModal()">+ Add Full Drone</button>
+      </div>
+      <div class="section-hdr" style="margin-bottom:16px;">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input class="form-control" id="fullDroneSearchInput" placeholder="🔍 Search full drones…" oninput="filterFullDroneGrid()" style="max-width:260px;padding:9px 14px;"/>
+        </div>
+        <span id="fullDroneCountLabel" style="font-size:0.82rem;color:var(--muted);"></span>
+      </div>
+      <div class="apps-grid" id="fullDronesAdminGrid"></div>
+    </div>
+
     <!-- SETTINGS PAGE -->
     <div class="page" id="page-settings">
       <div class="section-hdr">
@@ -1006,6 +817,45 @@ CREATE POLICY "Auth write" ON drone_applications FOR ALL USING (true);
 
 -- Enable realtime
 ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
+
+        <div class="settings-divider"></div>
+        <h4 style="margin-bottom:10px;font-size:1rem;">🏷️ Categories Table Setup SQL</h4>
+        <p class="settings-desc" style="margin-bottom:12px;">Run this SQL to create the <code style="background:var(--dark2);padding:2px 6px;border-radius:4px;font-size:0.8rem;color:var(--green);">categories</code> table:</p>
+        <pre style="background:var(--dark2);border:1px solid var(--border-solid);border-radius:10px;padding:16px;font-size:0.78rem;color:var(--green);overflow-x:auto;line-height:1.6;">CREATE TABLE IF NOT EXISTS categories (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL UNIQUE,
+  description TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read" ON categories FOR SELECT USING (true);
+CREATE POLICY "Auth write" ON categories FOR ALL USING (true);</pre>
+
+        <div class="settings-divider"></div>
+        <h4 style="margin-bottom:10px;font-size:1rem;">📋 Full Drones Table Setup SQL</h4>
+        <p class="settings-desc" style="margin-bottom:12px;">Also run this SQL to create the <code style="background:var(--dark2);padding:2px 6px;border-radius:4px;font-size:0.8rem;color:var(--green);">full_drones</code> table for the Full Drones section:</p>
+        <pre style="background:var(--dark2);border:1px solid var(--border-solid);border-radius:10px;padding:16px;font-size:0.78rem;color:var(--green);overflow-x:auto;line-height:1.6;">CREATE TABLE IF NOT EXISTS full_drones (
+  id BIGSERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  price NUMERIC NOT NULL DEFAULT 0,
+  original_price NUMERIC,
+  tagline TEXT DEFAULT '',
+  image TEXT DEFAULT '',
+  brochure_url TEXT DEFAULT '',
+  wa_num TEXT DEFAULT '919390238537',
+  is_new BOOLEAN DEFAULT false,
+  is_offer BOOLEAN DEFAULT false,
+  status TEXT DEFAULT 'instock',
+  specifications JSONB DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE full_drones ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read" ON full_drones FOR SELECT USING (true);
+CREATE POLICY "Auth write" ON full_drones FOR ALL USING (true);
+ALTER PUBLICATION supabase_realtime ADD TABLE full_drones;</pre>
       </div>
 
       <!-- Credentials Settings -->
@@ -1170,6 +1020,46 @@ ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
 </div>
 
 <!-- PRODUCT ADD/EDIT MODAL -->
+<!-- ADD/EDIT CATEGORY MODAL -->
+<div class="modal-overlay" id="categoryModalOverlay">
+  <div class="modal" style="max-width:460px;">
+    <div class="modal-header">
+      <h3 id="catModalTitle">Add Category</h3>
+      <button class="modal-close" onclick="closeCategoryModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="cEditId"/>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Category Name <span class="required">*</span></label>
+          <input class="form-control" id="cName" placeholder="e.g. Drones, Batteries, Accessories"/>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Description <span style="font-weight:400;color:var(--muted);font-size:0.7rem;">(optional)</span></label>
+          <input class="form-control" id="cDesc" placeholder="Short description of this category"/>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-green" onclick="closeCategoryModal()">Cancel</button>
+      <button class="btn btn-green" onclick="saveCategory()">💾 Save Category</button>
+    </div>
+  </div>
+</div>
+<div class="confirm-overlay" id="catConfirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <h4>Delete Category?</h4>
+    <p id="catConfirmText"></p>
+    <div class="confirm-actions">
+      <button class="btn btn-outline-green" onclick="closeCatConfirm()">Cancel</button>
+      <button class="btn btn-red" onclick="confirmCatDeleteAction()">Delete</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="productModalOverlay">
   <div class="modal">
     <div class="modal-header">
@@ -1182,6 +1072,13 @@ ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
         <div class="form-group">
           <label>Product Name <span class="required">*</span></label>
           <input class="form-control" id="pName" placeholder="e.g. Beta 610 TC Drone"/>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Category</label>
+          <input class="form-control" id="pCategory" list="pCategoryList" placeholder="e.g. Drones, Batteries, Accessories" autocomplete="off"/>
+          <datalist id="pCategoryList"></datalist>
         </div>
       </div>
       <div class="form-row">
@@ -1253,6 +1150,138 @@ ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
   </div>
 </div>
 
+<!-- FULL DRONE ADD/EDIT MODAL -->
+<div class="modal-overlay" id="fullDroneModalOverlay">
+  <div class="modal" style="max-width:780px;">
+    <div class="modal-header">
+      <h3 id="fullDroneModalTitle">Add Full Drone</h3>
+      <button class="modal-close" onclick="closeFullDroneModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="fdEditId"/>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Drone Name <span class="required">*</span></label>
+          <input class="form-control" id="fdName" placeholder="e.g. Beta 610 TC Agri Drone (Complete Setup)"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (₹) <span class="required">*</span></label>
+          <input class="form-control" id="fdPrice" type="number" min="0" placeholder="e.g. 450000"/>
+        </div>
+        <div class="form-group">
+          <label>Original Price (₹) <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(for strikethrough)</span></label>
+          <input class="form-control" id="fdOriginalPrice" type="number" min="0" placeholder="e.g. 500000"/>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Short Tagline / Description</label>
+          <textarea class="form-control" id="fdTagline" rows="2" placeholder="e.g. Field-tested 10L spray drone with dual GPS and obstacle avoidance."></textarea>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Status</label>
+          <select class="form-control" id="fdStatus">
+            <option value="instock">In Stock</option>
+            <option value="outofstock">Out of Stock</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tags</label>
+          <div style="display:flex;gap:14px;align-items:center;padding:10px 0;">
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;">
+              <input type="checkbox" id="fdIsNew" style="accent-color:var(--green);width:15px;height:15px;"/> New
+            </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;">
+              <input type="checkbox" id="fdIsOffer" style="accent-color:var(--green);width:15px;height:15px;"/> Offer
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Image URL <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(paste a direct image URL)</span></label>
+          <input class="form-control" id="fdImageUrl" placeholder="https://..." oninput="previewFullDroneImage()"/>
+          <div id="fdUrlPreviewWrap" style="margin-top:10px;display:none;">
+            <div class="image-preview-wrap">
+              <img id="fdUrlPreview" class="image-preview" src="" alt="Preview"/>
+              <button class="image-preview-remove" onclick="clearFullDroneImageUrl()">✕</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Brochure URL <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(PDF link — customers will download this)</span></label>
+          <input class="form-control" id="fdBrochureUrl" placeholder="https://drive.google.com/... or https://yourdomain.com/brochure.pdf"/>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>WhatsApp Enquiry Number</label>
+          <input class="form-control" id="fdWaNum" placeholder="e.g. 919390238537" value="919390238537"/>
+        </div>
+      </div>
+
+      <!-- SPECIFICATIONS -->
+      <div class="form-row single" style="margin-top:8px;">
+        <div class="form-group">
+          <label style="font-size:0.85rem;color:var(--white);text-transform:none;letter-spacing:0;font-weight:700;font-family:'Barlow Condensed',sans-serif;font-size:1rem;">
+            ⚙️ Specifications
+            <span style="font-size:0.72rem;color:var(--muted);font-weight:400;font-family:'DM Sans',sans-serif;margin-left:8px;">Add, edit, or remove specification rows</span>
+          </label>
+          <div style="background:var(--dark2);border:1px solid var(--border-solid);border-radius:12px;padding:16px;margin-top:10px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:10px;">
+              <div style="font-size:0.7rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:0 4px;">Specification Name</div>
+              <div style="font-size:0.7rem;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:0 4px;">Value</div>
+              <div></div>
+            </div>
+            <div id="fdSpecsList"></div>
+            <button class="add-feature-btn" onclick="addSpecRow()" style="margin-top:8px;">+ Add Specification Row</button>
+          </div>
+          <div style="margin-top:12px;">
+            <p style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">🚀 Quick Add common specs:</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <button onclick="quickAddSpec('Application','Agricultural Spraying')" class="btn btn-outline-green btn-sm">Application</button>
+              <button onclick="quickAddSpec('Motor Type','')" class="btn btn-outline-green btn-sm">Motor Type</button>
+              <button onclick="quickAddSpec('Payload Capacity','')" class="btn btn-outline-green btn-sm">Payload</button>
+              <button onclick="quickAddSpec('Tank Capacity','')" class="btn btn-outline-green btn-sm">Tank</button>
+              <button onclick="quickAddSpec('Battery Capacity','')" class="btn btn-outline-green btn-sm">Battery</button>
+              <button onclick="quickAddSpec('RC Type','')" class="btn btn-outline-green btn-sm">RC Type</button>
+              <button onclick="quickAddSpec('FC Model','')" class="btn btn-outline-green btn-sm">FC Model</button>
+              <button onclick="quickAddSpec('Spray Width','')" class="btn btn-outline-green btn-sm">Spray Width</button>
+              <button onclick="quickAddSpec('Flight Time','')" class="btn btn-outline-green btn-sm">Flight Time</button>
+              <button onclick="quickAddSpec('Max Speed','')" class="btn btn-outline-green btn-sm">Max Speed</button>
+              <button onclick="quickAddSpec('Frame Size','')" class="btn btn-outline-green btn-sm">Frame Size</button>
+              <button onclick="quickAddSpec('Weight','')" class="btn btn-outline-green btn-sm">Weight</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-green" onclick="closeFullDroneModal()">Cancel</button>
+      <button class="btn btn-green" id="saveFullDroneBtn" onclick="saveFullDrone()">💾 Save Drone</button>
+    </div>
+  </div>
+</div>
+
+<!-- FULL DRONE CONFIRM DELETE -->
+<div class="confirm-overlay" id="fullDroneConfirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <h4>Delete Full Drone?</h4>
+    <p id="fullDroneConfirmText">This will permanently remove this drone listing.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-outline-green" onclick="closeFullDroneConfirm()">Cancel</button>
+      <button class="btn btn-red" onclick="confirmFullDroneDeleteAction()">Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast"><span class="toast-icon" id="toastIcon">✅</span><span id="toastMsg">Saved!</span></div>
 
@@ -1260,7 +1289,6 @@ ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
 
 <script>
-
 // ════════════════════════════════════════════════════════
 // CREDENTIALS (stored in localStorage, changeable via settings)
 // ════════════════════════════════════════════════════════
@@ -1271,6 +1299,140 @@ var ADMIN_PASS = localStorage.getItem('sag_admin_pass') || 'SAG@2026';
 // PRODUCTS STATE & DEFAULTS
 // ════════════════════════════════════════════════════════
 var products = [];
+/* ===== CATEGORIES ===== */
+var categories = [];
+var catNextId = 200;
+var catDeleteTargetId = null;
+
+function saveCategoriesLocal() {
+  try { localStorage.setItem('sag_categories', JSON.stringify(categories)); } catch(e){}
+}
+function loadCategoriesLocal() {
+  try {
+    var s = localStorage.getItem('sag_categories');
+    if (s) { categories = JSON.parse(s); if(categories.length) catNextId = Math.max.apply(null,categories.map(function(c){return c.id;}))+1; }
+  } catch(e){}
+}
+loadCategoriesLocal();
+
+async function syncCategoriesFromSupabase() {
+  if (!isSupabaseMode) { renderCategoriesGrid(); populateCategoryDropdown(); return; }
+  try {
+    var res = await supabaseFetch('categories?order=name.asc');
+    if (Array.isArray(res)) {
+      categories = res.map(function(r){ return {id:r.id, name:r.name||'', desc:r.description||''}; });
+      if (categories.length) catNextId = Math.max.apply(null,categories.map(function(c){return c.id;}))+1;
+      saveCategoriesLocal();
+    }
+  } catch(e){ console.warn('Cat sync fail:',e.message); }
+  renderCategoriesGrid();
+  populateCategoryDropdown();
+}
+
+function renderCategoriesGrid() {
+  var grid = document.getElementById('categoriesGrid');
+  if (!grid) return;
+  var badge = document.getElementById('catCountBadge');
+  var label = document.getElementById('catCountLabel');
+  if (badge) badge.textContent = categories.length;
+  if (label) label.textContent = categories.length + ' categories';
+  var statEl = document.getElementById('statCategories');
+  if (statEl) statEl.textContent = categories.length;
+  if (!categories.length) {
+    grid.innerHTML = '<div style="padding:48px;text-align:center;color:var(--muted);grid-column:1/-1;">No categories yet. <button class="btn btn-green btn-sm" onclick="openAddCategoryModal()" style="margin-left:10px;">+ Add Category</button></div>';
+    return;
+  }
+  grid.innerHTML = categories.map(function(c) {
+    return '<div class="app-card">' +
+      '<div class="app-card-body">' +
+        '<div class="app-card-emoji">🏷️</div>' +
+        '<div class="app-card-title">'+escHtml(c.name)+'</div>' +
+        '<div class="app-card-desc" style="margin-bottom:14px;">'+(c.desc?escHtml(c.desc):'<em style="color:var(--muted);">No description</em>')+'</div>' +
+        '<div class="app-card-actions">' +
+          '<button class="btn btn-blue btn-sm" onclick="openEditCategoryModal('+c.id+')">✏️ Edit</button>' +
+          '<button class="btn btn-red btn-sm" onclick="openCatConfirmDelete('+c.id+')">🗑️ Delete</button>' +
+        '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function populateCategoryDropdown() {
+  var dl = document.getElementById('pCategoryList');
+  if (!dl) return;
+  dl.innerHTML = categories.map(function(c) {
+    return '<option value="' + escHtml(c.name) + '">';
+  }).join('');
+}
+
+function openAddCategoryModal() {
+  document.getElementById('catModalTitle').textContent = 'Add Category';
+  document.getElementById('cEditId').value = '';
+  document.getElementById('cName').value = '';
+  document.getElementById('cDesc').value = '';
+  document.getElementById('categoryModalOverlay').classList.add('open');
+  setTimeout(function(){ document.getElementById('cName').focus(); }, 100);
+}
+function openEditCategoryModal(id) {
+  var c = categories.find(function(x){return x.id===id;});
+  if (!c) return;
+  document.getElementById('catModalTitle').textContent = 'Edit Category';
+  document.getElementById('cEditId').value = id;
+  document.getElementById('cName').value = c.name || '';
+  document.getElementById('cDesc').value = c.desc || '';
+  document.getElementById('categoryModalOverlay').classList.add('open');
+}
+function closeCategoryModal() {
+  document.getElementById('categoryModalOverlay').classList.remove('open');
+}
+async function saveCategory() {
+  var name = (document.getElementById('cName').value||'').trim();
+  if (!name) { showToast('error','⚠️ Category name is required.'); return; }
+  var editId = document.getElementById('cEditId').value;
+  var cat = { id: editId ? parseInt(editId) : catNextId++, name: name, desc: (document.getElementById('cDesc').value||'').trim() };
+  if (editId) {
+    var idx = categories.findIndex(function(x){return x.id===cat.id;});
+    if (idx !== -1) categories[idx] = cat;
+    if (isSupabaseMode) { try { await supabaseFetch('categories?id=eq.'+cat.id,'PATCH',{name:cat.name,description:cat.desc,updated_at:new Date().toISOString()}); } catch(e){} }
+    showToast('success','✅ Category updated!');
+  } else {
+    categories.push(cat);
+    if (isSupabaseMode) {
+      try {
+        var res = await supabaseFetch('categories','POST',{name:cat.name,description:cat.desc});
+        if (Array.isArray(res)&&res[0]) { cat.id=res[0].id; catNextId=cat.id+1; }
+      } catch(e){}
+    }
+    showToast('success','✅ Category added!');
+  }
+  saveCategoriesLocal();
+  closeCategoryModal();
+  renderCategoriesGrid();
+  populateCategoryDropdown();
+}
+function openCatConfirmDelete(id) {
+  var c = categories.find(function(x){return x.id===id;});
+  if (!c) return;
+  catDeleteTargetId = id;
+  document.getElementById('catConfirmText').textContent = 'This will permanently remove "'+c.name+'" from categories.';
+  document.getElementById('catConfirmOverlay').classList.add('open');
+}
+function closeCatConfirm() {
+  document.getElementById('catConfirmOverlay').classList.remove('open');
+  catDeleteTargetId = null;
+}
+async function confirmCatDeleteAction() {
+  if (!catDeleteTargetId) return;
+  categories = categories.filter(function(x){return x.id!==catDeleteTargetId;});
+  if (isSupabaseMode) { try { await supabaseFetch('categories?id=eq.'+catDeleteTargetId,'DELETE'); } catch(e){} }
+  saveCategoriesLocal();
+  closeCatConfirm();
+  renderCategoriesGrid();
+  populateCategoryDropdown();
+  showToast('success','🗑️ Category deleted.');
+}
+document.getElementById('categoryModalOverlay').addEventListener('click',function(e){if(e.target===this)closeCategoryModal();});
+document.getElementById('catConfirmOverlay').addEventListener('click',function(e){if(e.target===this)closeCatConfirm();});
+
 var productNextId = 100;
 var productDeleteTargetId = null;
 
@@ -1570,30 +1732,6 @@ async function syncFromSupabase() {
     showLoading(true);
     var rows = await supabaseFetch('drone_applications?select=*&order=display_order.asc');
     if (Array.isArray(rows)) {
-      if (rows.length === 0) {
-        // Supabase table is empty — seed local/default apps up to it
-        showToast('info', '☁️ Supabase is empty — seeding applications…');
-        var toSeed = apps.length > 0 ? apps : JSON.parse(JSON.stringify(DEFAULT_APPS));
-        for (var i = 0; i < toSeed.length; i++) {
-          var row = appToRow(toSeed[i]);
-          row.display_order = i;
-          try { await supabaseFetch('drone_applications', 'POST', row); } catch(e2) {}
-        }
-        // Reload from Supabase to get server-assigned IDs
-        var seeded = await supabaseFetch('drone_applications?select=*&order=display_order.asc');
-        if (Array.isArray(seeded) && seeded.length > 0) {
-          rows = seeded;
-          showToast('success', '✅ Applications seeded to Supabase!');
-        } else {
-          lastSync = new Date();
-          renderAll();
-          updateSettingsDbStatus();
-          showLoading(false);
-          return;
-        }
-      } else {
-        showToast('success', '✅ Synced from Supabase (' + rows.length + ' apps)');
-      }
       apps = rows.map(rowToApp);
       if (apps.length > 0) {
         nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
@@ -1602,6 +1740,7 @@ async function syncFromSupabase() {
       lastSync = new Date();
       renderAll();
       updateSettingsDbStatus();
+      showToast('success', '✅ Synced from Supabase (' + apps.length + ' apps)');
     }
   } catch(e) {
     showToast('error', '❌ Sync failed: ' + e.message);
@@ -1671,25 +1810,14 @@ function loadLocalApps() {
   try {
     var raw = localStorage.getItem('sag_drone_apps');
     if (raw) {
-      var parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        apps = parsed;
-        nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
-      } else {
-        // Saved array is empty — re-seed defaults
-        apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
-        nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
-        saveLocalApps();
-      }
+      apps = JSON.parse(raw);
+      if (apps.length > 0) nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
     } else {
-      // First-ever load — seed defaults into localStorage
       apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
-      nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
       saveLocalApps();
     }
   } catch(e) {
     apps = JSON.parse(JSON.stringify(DEFAULT_APPS));
-    nextId = Math.max.apply(null, apps.map(function(a){ return a.id; })) + 1;
     saveLocalApps();
   }
 }
@@ -1712,10 +1840,8 @@ function doLogin() {
     document.getElementById('loginPass').value = '';
   }
 }
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('loginUser').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-  document.getElementById('loginPass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-});
+document.getElementById('loginUser').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+document.getElementById('loginPass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
 function doLogout() {
   localStorage.removeItem('sag_admin_auth');
   location.reload();
@@ -1737,6 +1863,7 @@ async function init() {
   renderAll();
   renderProductsGrid();
   updateProductStats();
+  loadFullDronesFromSupabase();
   updateSettingsDbStatus();
 
   // Pre-fill settings fields
@@ -1757,6 +1884,7 @@ var pageLabels = {
   applications: '🚁 Drone Applications',
   order: '↕️ Reorder',
   products: '🛒 Products Manager',
+  'full-drones': '🚀 Full Drones',
   settings: '⚙️ Settings & Database'
 };
 function showPage(id) {
@@ -1774,7 +1902,8 @@ function showPage(id) {
   document.getElementById('topbarTitle').innerHTML = emoji + ' <span>' + rest + '</span>';
   if (id === 'order') renderOrderList();
   if (id === 'settings') updateSettingsDbStatus();
-  if (id === 'products') renderProductsGrid();
+  if (id === 'products') { renderProductsGrid(); populateCategoryDropdown(); }
+  if (id === 'categories') { renderCategoriesGrid(); }
   closeSidebar();
 }
 
@@ -2174,7 +2303,10 @@ function closeSidebar() {
 // ════════════════════════════════════════════════════════
 // CLOSE ON OVERLAY CLICK
 // ════════════════════════════════════════════════════════
-// Overlay close listeners — in DOMContentLoaded to ensure elements exist
+document.getElementById('modalOverlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+document.getElementById('confirmOverlay').addEventListener('click', function(e){ if(e.target===this) closeConfirm(); });
+document.getElementById('productModalOverlay').addEventListener('click', function(e){ if(e.target===this) closeProductModal(); });
+document.getElementById('productConfirmOverlay').addEventListener('click', function(e){ if(e.target===this) closeProductConfirm(); });
 
 // ════════════════════════════════════════════════════════
 // KEYBOARD SHORTCUTS
@@ -2190,25 +2322,12 @@ function loadLocalProducts() {
   var saved = localStorage.getItem('sag_products');
   if (saved) {
     try {
-      var parsed = JSON.parse(saved);
-      // If saved is empty array (blank state), seed defaults
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        products = parsed;
-        productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
-      } else {
-        products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-        productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
-        saveLocalProducts(); // persist defaults so products.html can read them
-      }
-    } catch(e) {
-      products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-      saveLocalProducts();
-    }
+      products = JSON.parse(saved);
+      products.forEach(function(p){ if (!p.category) p.category = ''; });
+      if (products.length > 0) productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
+    } catch(e) { products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS)); }
   } else {
-    // First-ever load: seed defaults into localStorage so products.html picks them up
     products = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-    productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
-    saveLocalProducts();
   }
 }
 function saveLocalProducts() {
@@ -2223,35 +2342,11 @@ async function syncProductsFromSupabase() {
   try {
     var rows = await supabaseFetch('products?select=*&order=created_at.asc');
     if (Array.isArray(rows)) {
-      if (rows.length === 0) {
-        // Supabase table is empty — push our local/default products up to it
-        showToast('info', '☁️ Supabase is empty — seeding products…');
-        var toSeed = products.length > 0 ? products : JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
-        for (var i = 0; i < toSeed.length; i++) {
-          var p = toSeed[i];
-          var row = {
-            name: p.name,
-            price: p.price,
-            original_price: p.originalPrice || null,
-            image: p.image || '',
-            is_new: !!p.isNew,
-            is_offer: !!p.isOffer,
-            status: p.status || 'instock',
-            wa_num: p.waNum || '919390238537',
-            updated_at: new Date().toISOString()
-          };
-          try { await supabaseFetch('products', 'POST', row); } catch(e2) {}
-        }
-        // Now reload from Supabase to get server-assigned IDs
-        var seeded = await supabaseFetch('products?select=*&order=created_at.asc');
-        if (Array.isArray(seeded) && seeded.length > 0) rows = seeded;
-        else { renderProductsGrid(); updateProductStats(); return; }
-        showToast('success', '✅ Products seeded to Supabase!');
-      }
       products = rows.map(function(r){
         return {
           id: r.id,
           name: r.name || '',
+          category: r.category || '',
           price: Number(r.price) || 0,
           originalPrice: r.original_price ? Number(r.original_price) : null,
           image: r.image || '',
@@ -2265,6 +2360,9 @@ async function syncProductsFromSupabase() {
       saveLocalProducts();
       renderProductsGrid();
       updateProductStats();
+      // Sync categories after products so dropdown is ready for editing
+      await syncCategoriesFromSupabase();
+      populateCategoryDropdown();
     }
   } catch(e) { console.warn('Products sync failed:', e.message); }
 }
@@ -2273,6 +2371,7 @@ async function pushProductToSupabase(p, isUpdate) {
   if (!isSupabaseMode) return;
   var row = {
     name: p.name,
+    category: p.category || '',
     price: p.price,
     original_price: p.originalPrice || null,
     image: p.image || '',
@@ -2364,6 +2463,12 @@ function openAddProductModal() {
   document.getElementById('pIsOffer').checked = false;
   document.getElementById('pStatus').value = 'instock';
   document.getElementById('pWaNum').value = '919390238537';
+  document.getElementById('pCategory').value = '';
+  populateCategoryDropdown();
+  // If categories not yet loaded, fetch them
+  if (categories.length === 0 && isSupabaseMode) {
+    syncCategoriesFromSupabase();
+  }
   document.getElementById('productModalOverlay').classList.add('open');
 }
 
@@ -2380,6 +2485,13 @@ function openEditProductModal(id) {
   document.getElementById('pIsOffer').checked = !!p.isOffer;
   document.getElementById('pStatus').value = p.status || 'instock';
   document.getElementById('pWaNum').value = p.waNum || '919390238537';
+  populateCategoryDropdown();
+  var catSel = document.getElementById('pCategory');
+  if (catSel) catSel.value = p.category || '';
+  // Also fetch categories for datalist suggestions if not loaded
+  if (categories.length === 0 && isSupabaseMode) {
+    syncCategoriesFromSupabase();
+  }
   if (p.image) {
     document.getElementById('pUrlPreview').src = p.image;
     document.getElementById('pUrlPreviewWrap').style.display = 'block';
@@ -2407,6 +2519,7 @@ async function saveProduct() {
   var p = {
     id: editId ? parseInt(editId) : productNextId++,
     name: name,
+    category: (document.getElementById('pCategory')||{value:''}).value || '',
     price: price,
     originalPrice: parseFloat(document.getElementById('pOriginalPrice').value) || null,
     image: document.getElementById('pImageUrl').value.trim(),
@@ -2476,8 +2589,311 @@ function clearProductImageUrl() {
 // ════════════════════════════════════════════════════════
 // START
 // ════════════════════════════════════════════════════════
-checkAuth();
+// ════════════════════════════════════════════════════════
+// FULL DRONES STATE
+// ════════════════════════════════════════════════════════
+var fullDrones = [];
+var fullDroneNextId = 200;
+var fullDroneDeleteTargetId = null;
+var FULL_DRONES_TABLE = 'full_drones';
 
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Supabase
+// ════════════════════════════════════════════════════════
+async function loadFullDronesFromSupabase() {
+  if (!isSupabaseMode) {
+    var saved = localStorage.getItem('sag_full_drones');
+    fullDrones = saved ? JSON.parse(saved) : [];
+    renderFullDronesGrid();
+    return;
+  }
+  try {
+    var res = await fetch(SUPABASE_URL + '/rest/v1/' + FULL_DRONES_TABLE + '?order=created_at.desc&select=*', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var rows = await res.json();
+    fullDrones = rows.map(function(r) {
+      var specs = [];
+      try { specs = typeof r.specifications === 'string' ? JSON.parse(r.specifications) : (r.specifications || []); } catch(e) {}
+      return {
+        id: r.id, name: r.name, price: r.price, originalPrice: r.original_price,
+        tagline: r.tagline || '', image: r.image || '', brochureUrl: r.brochure_url || '',
+        waNum: r.wa_num || '919390238537', isNew: r.is_new, isOffer: r.is_offer,
+        status: r.status || 'instock', specifications: specs
+      };
+    });
+    renderFullDronesGrid();
+  } catch(e) {
+    console.warn('Full drones load failed:', e.message);
+    var saved = localStorage.getItem('sag_full_drones');
+    fullDrones = saved ? JSON.parse(saved) : [];
+    renderFullDronesGrid();
+  }
+}
+
+async function pushFullDroneToSupabase(d, isUpdate) {
+  if (!isSupabaseMode) { saveLocalFullDrones(); return; }
+  var payload = {
+    name: d.name, price: d.price, original_price: d.originalPrice || null,
+    tagline: d.tagline, image: d.image, brochure_url: d.brochureUrl,
+    wa_num: d.waNum, is_new: d.isNew, is_offer: d.isOffer, status: d.status,
+    specifications: JSON.stringify(d.specifications || [])
+  };
+  try {
+    if (isUpdate) {
+      await fetch(SUPABASE_URL + '/rest/v1/' + FULL_DRONES_TABLE + '?id=eq.' + d.id, {
+        method: 'PATCH',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify(payload)
+      });
+    } else {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/' + FULL_DRONES_TABLE, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        var rows = await res.json();
+        if (rows && rows[0] && rows[0].id) {
+          var idx = fullDrones.findIndex(function(x){ return x.id === d.id; });
+          if (idx !== -1) fullDrones[idx].id = rows[0].id;
+        }
+      }
+    }
+  } catch(e) { console.warn('Supabase full drone push failed:', e.message); }
+  saveLocalFullDrones();
+}
+
+async function deleteFullDroneFromSupabase(id) {
+  if (!isSupabaseMode) { saveLocalFullDrones(); return; }
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/' + FULL_DRONES_TABLE + '?id=eq.' + id, {
+      method: 'DELETE',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+  } catch(e) { console.warn('Supabase full drone delete failed:', e.message); }
+  saveLocalFullDrones();
+}
+
+function saveLocalFullDrones() {
+  try { localStorage.setItem('sag_full_drones', JSON.stringify(fullDrones)); } catch(e) {}
+}
+
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Render Grid
+// ════════════════════════════════════════════════════════
+function renderFullDronesGrid() {
+  var grid = document.getElementById('fullDronesAdminGrid');
+  if (!grid) return;
+  var search = (document.getElementById('fullDroneSearchInput') || {}).value || '';
+  var filtered = fullDrones.filter(function(d) {
+    return !search || d.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;
+  });
+  var label = document.getElementById('fullDroneCountLabel');
+  if (label) label.textContent = filtered.length + ' of ' + fullDrones.length + ' drones';
+  var badge = document.getElementById('fullDroneCountBadge');
+  if (badge) badge.textContent = fullDrones.length;
+  grid.innerHTML = filtered.map(function(d) {
+    var inStock = d.status !== 'outofstock';
+    return '<div class="app-card">'
+      + '<div class="app-card-visual" style="background:var(--dark2);">'
+      + (d.image ? '<img src="'+escHtml(d.image)+'" alt="'+escHtml(d.name)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '<span class="emoji-placeholder">🚁</span>')
+      + '<span class="card-status '+(inStock?'status-active':'status-inactive')+'">'+(inStock?'In Stock':'Out of Stock')+'</span>'
+      + '</div>'
+      + '<div class="app-card-body">'
+      + '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">'
+      + (d.isNew ? '<span style="background:rgba(46,204,113,0.15);border:1px solid var(--green);color:var(--green);border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">NEW</span>' : '')
+      + (d.isOffer ? '<span style="background:var(--amber-glow);border:1px solid var(--amber);color:var(--amber);border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">OFFER</span>' : '')
+      + (d.brochureUrl ? '<span style="background:var(--blue-glow);border:1px solid var(--blue);color:var(--blue);border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">📄 Brochure</span>' : '')
+      + '</div>'
+      + '<div class="app-card-title">'+escHtml(d.name)+'</div>'
+      + '<div style="margin-bottom:6px;">'
+      + '<span style="font-family:\'Barlow Condensed\',sans-serif;font-weight:800;font-size:1.3rem;color:var(--green);">₹'+Number(d.price).toLocaleString('en-IN')+'</span>'
+      + (d.originalPrice ? ' <span style="font-size:0.82rem;color:var(--muted);text-decoration:line-through;">₹'+Number(d.originalPrice).toLocaleString('en-IN')+'</span>' : '')
+      + '</div>'
+      + '<div style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;">⚙️ '+(d.specifications?d.specifications.length:0)+' spec(s) added</div>'
+      + '<div class="app-card-actions">'
+      + '<button class="btn btn-blue btn-sm" onclick="openEditFullDroneModal('+d.id+')">✏️ Edit</button>'
+      + '<button class="btn btn-red btn-sm" onclick="openFullDroneConfirmDelete('+d.id+')">🗑️ Delete</button>'
+      + '</div>'
+      + '</div></div>';
+  }).join('') || '<div style="padding:48px;text-align:center;color:var(--muted);grid-column:1/-1;">No full drones yet. <button class="btn btn-green btn-sm" onclick="openAddFullDroneModal()" style="margin-left:10px;">+ Add Full Drone</button></div>';
+}
+
+function filterFullDroneGrid() { renderFullDronesGrid(); }
+
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Spec rows
+// ════════════════════════════════════════════════════════
+function addSpecRow(key, value) {
+  var list = document.getElementById('fdSpecsList');
+  var row = document.createElement('div');
+  row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:center;';
+  row.innerHTML =
+    '<input class="form-control spec-key-input" placeholder="e.g. Motor Type" value="'+(key||'')+'"/>' +
+    '<input class="form-control spec-val-input" placeholder="e.g. Hobbywing X8" value="'+(value||'')+'"/>' +
+    '<button onclick="this.parentElement.remove()" style="width:30px;height:30px;border-radius:50%;border:1px solid var(--border-solid);background:none;color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;" onmouseover="this.style.borderColor=\'var(--red)\';this.style.color=\'var(--red)\'" onmouseout="this.style.borderColor=\'var(--border-solid)\';this.style.color=\'var(--muted)\'">✕</button>';
+  list.appendChild(row);
+}
+
+function quickAddSpec(key, value) {
+  // Check if key already exists
+  var list = document.getElementById('fdSpecsList');
+  var existing = Array.from(list.querySelectorAll('.spec-key-input')).find(function(i){ return i.value === key; });
+  if (existing) { existing.nextElementSibling.focus(); return; }
+  addSpecRow(key, value);
+  // Focus the value input
+  var rows = list.querySelectorAll('.spec-val-input');
+  if (rows.length) rows[rows.length-1].focus();
+}
+
+function getSpecsFromForm() {
+  var list = document.getElementById('fdSpecsList');
+  var specs = [];
+  var rows = list.querySelectorAll('div');
+  rows.forEach(function(row) {
+    var keyInput = row.querySelector('.spec-key-input');
+    var valInput = row.querySelector('.spec-val-input');
+    if (keyInput && valInput && keyInput.value.trim()) {
+      specs.push({ key: keyInput.value.trim(), value: valInput.value.trim() });
+    }
+  });
+  return specs;
+}
+
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Modal open/close
+// ════════════════════════════════════════════════════════
+function openAddFullDroneModal() {
+  document.getElementById('fullDroneModalTitle').textContent = 'Add Full Drone';
+  document.getElementById('fdEditId').value = '';
+  document.getElementById('fdName').value = '';
+  document.getElementById('fdPrice').value = '';
+  document.getElementById('fdOriginalPrice').value = '';
+  document.getElementById('fdTagline').value = '';
+  document.getElementById('fdImageUrl').value = '';
+  document.getElementById('fdUrlPreviewWrap').style.display = 'none';
+  document.getElementById('fdBrochureUrl').value = '';
+  document.getElementById('fdIsNew').checked = false;
+  document.getElementById('fdIsOffer').checked = false;
+  document.getElementById('fdStatus').value = 'instock';
+  document.getElementById('fdWaNum').value = '919390238537';
+  document.getElementById('fdSpecsList').innerHTML = '';
+  document.getElementById('fullDroneModalOverlay').classList.add('open');
+}
+
+function openEditFullDroneModal(id) {
+  var d = fullDrones.find(function(x){ return x.id === id; });
+  if (!d) return;
+  document.getElementById('fullDroneModalTitle').textContent = 'Edit Full Drone';
+  document.getElementById('fdEditId').value = d.id;
+  document.getElementById('fdName').value = d.name || '';
+  document.getElementById('fdPrice').value = d.price || '';
+  document.getElementById('fdOriginalPrice').value = d.originalPrice || '';
+  document.getElementById('fdTagline').value = d.tagline || '';
+  document.getElementById('fdImageUrl').value = d.image || '';
+  document.getElementById('fdBrochureUrl').value = d.brochureUrl || '';
+  document.getElementById('fdIsNew').checked = !!d.isNew;
+  document.getElementById('fdIsOffer').checked = !!d.isOffer;
+  document.getElementById('fdStatus').value = d.status || 'instock';
+  document.getElementById('fdWaNum').value = d.waNum || '919390238537';
+  if (d.image) {
+    document.getElementById('fdUrlPreview').src = d.image;
+    document.getElementById('fdUrlPreviewWrap').style.display = 'block';
+  } else {
+    document.getElementById('fdUrlPreviewWrap').style.display = 'none';
+  }
+  document.getElementById('fdSpecsList').innerHTML = '';
+  (d.specifications || []).forEach(function(s) { addSpecRow(s.key, s.value); });
+  document.getElementById('fullDroneModalOverlay').classList.add('open');
+}
+
+function closeFullDroneModal() {
+  document.getElementById('fullDroneModalOverlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Save
+// ════════════════════════════════════════════════════════
+async function saveFullDrone() {
+  var name = document.getElementById('fdName').value.trim();
+  var price = parseFloat(document.getElementById('fdPrice').value);
+  if (!name || isNaN(price) || price < 0) {
+    showToast('error', '⚠️ Drone name and a valid price are required.');
+    return;
+  }
+  var editId = document.getElementById('fdEditId').value;
+  var d = {
+    id: editId ? parseInt(editId) : fullDroneNextId++,
+    name: name, price: price,
+    originalPrice: parseFloat(document.getElementById('fdOriginalPrice').value) || null,
+    tagline: document.getElementById('fdTagline').value.trim(),
+    image: document.getElementById('fdImageUrl').value.trim(),
+    brochureUrl: document.getElementById('fdBrochureUrl').value.trim(),
+    waNum: document.getElementById('fdWaNum').value.trim() || '919390238537',
+    isNew: document.getElementById('fdIsNew').checked,
+    isOffer: document.getElementById('fdIsOffer').checked,
+    status: document.getElementById('fdStatus').value,
+    specifications: getSpecsFromForm()
+  };
+  showLoading(true);
+  if (editId) {
+    var idx = fullDrones.findIndex(function(x){ return x.id === d.id; });
+    if (idx !== -1) fullDrones[idx] = d;
+    await pushFullDroneToSupabase(d, true);
+    showToast('success', '✅ Drone updated!');
+  } else {
+    fullDrones.push(d);
+    await pushFullDroneToSupabase(d, false);
+    showToast('success', '✅ Drone added!');
+  }
+  closeFullDroneModal();
+  renderFullDronesGrid();
+  showLoading(false);
+}
+
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Delete
+// ════════════════════════════════════════════════════════
+function openFullDroneConfirmDelete(id) {
+  var d = fullDrones.find(function(x){ return x.id === id; });
+  if (!d) return;
+  fullDroneDeleteTargetId = id;
+  document.getElementById('fullDroneConfirmText').textContent = 'This will permanently remove "'+d.name+'" from the Full Drones section.';
+  document.getElementById('fullDroneConfirmOverlay').classList.add('open');
+}
+function closeFullDroneConfirm() {
+  document.getElementById('fullDroneConfirmOverlay').classList.remove('open');
+  fullDroneDeleteTargetId = null;
+}
+async function confirmFullDroneDeleteAction() {
+  if (!fullDroneDeleteTargetId) return;
+  showLoading(true);
+  fullDrones = fullDrones.filter(function(d){ return d.id !== fullDroneDeleteTargetId; });
+  await deleteFullDroneFromSupabase(fullDroneDeleteTargetId);
+  closeFullDroneConfirm();
+  renderFullDronesGrid();
+  showLoading(false);
+  showToast('success', '🗑️ Drone deleted.');
+}
+
+// ════════════════════════════════════════════════════════
+// FULL DRONES — Image preview
+// ════════════════════════════════════════════════════════
+function previewFullDroneImage() {
+  var url = document.getElementById('fdImageUrl').value.trim();
+  var wrap = document.getElementById('fdUrlPreviewWrap');
+  var img = document.getElementById('fdUrlPreview');
+  if (url) { img.src = url; wrap.style.display = 'block'; }
+  else { wrap.style.display = 'none'; }
+}
+function clearFullDroneImageUrl() {
+  document.getElementById('fdImageUrl').value = '';
+  document.getElementById('fdUrlPreviewWrap').style.display = 'none';
+}
+
+checkAuth();
 </script>
 </body>
 </html>
