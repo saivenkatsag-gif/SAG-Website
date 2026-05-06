@@ -373,17 +373,149 @@
   .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; text-align: center; font-size: 0.82rem; color: var(--muted); }
 
   /* ── MOBILE ── */
+  /* ── MOBILE FILTER DRAWER ── */
+  .mobile-filter-bar {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 0;
+  }
+  .mobile-search-wrap {
+    position: relative;
+    flex: 1;
+  }
+  .mobile-search-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 0.85rem; pointer-events: none;
+  }
+  .mobile-search {
+    width: 100%; padding: 10px 14px 10px 34px;
+    background: var(--card2); border: 1.5px solid var(--border);
+    border-radius: 40px; color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 0.87rem;
+    outline: none; transition: border-color .2s;
+  }
+  .mobile-search:focus { border-color: var(--green); }
+  .mobile-search::placeholder { color: var(--muted); }
+  .mobile-filter-btn {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card2); border: 1.5px solid var(--border);
+    color: var(--text); font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: all .2s;
+    position: relative;
+  }
+  .mobile-filter-btn.has-filters { border-color: var(--green); color: var(--green); background: var(--green-glow); }
+  .mobile-filter-btn .filter-dot {
+    position: absolute; top: 2px; right: 2px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green); display: none;
+    border: 1.5px solid var(--bg);
+  }
+  .mobile-filter-btn.has-filters .filter-dot { display: block; }
+
+  /* Drawer overlay */
+  .filter-drawer-overlay {
+    display: none; position: fixed; inset: 0; z-index: 900;
+    background: rgba(0,0,0,0.6); backdrop-filter: blur(2px);
+  }
+  .filter-drawer-overlay.open { display: block; }
+
+  /* Drawer panel */
+  .filter-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 901;
+    background: var(--card); border-radius: 20px 20px 0 0;
+    padding: 0 0 32px;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.32,0.72,0,1);
+    max-height: 88vh; overflow-y: auto;
+  }
+  .filter-drawer.open { transform: translateY(0); }
+  .filter-drawer-handle {
+    width: 40px; height: 4px; border-radius: 2px;
+    background: var(--border); margin: 12px auto 0;
+  }
+  .filter-drawer-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: var(--card); z-index: 1;
+  }
+  .filter-drawer-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem; font-weight: 800; color: var(--white);
+  }
+  .filter-drawer-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--card2); border: none; color: var(--muted);
+    font-size: 1rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+  }
+  .filter-drawer-body { padding: 16px 20px; }
+  .drawer-section-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem; font-weight: 700; color: var(--muted);
+    letter-spacing: .1em; text-transform: uppercase;
+    margin: 16px 0 8px; display: block;
+  }
+  .drawer-section-label:first-child { margin-top: 0; }
+  .drawer-cats {
+    list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px;
+  }
+  .drawer-cats li {
+    padding: 7px 14px; border-radius: 40px;
+    border: 1.5px solid var(--border);
+    font-size: 0.83rem; color: var(--muted); font-weight: 500;
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .drawer-cats li:hover { border-color: var(--green); color: var(--text); }
+  .drawer-cats li.active { background: var(--green-glow); border-color: var(--green); color: var(--green); font-weight: 700; }
+  .drawer-cats li .cat-count { font-size: 0.68rem; opacity: 0.7; }
+  .drawer-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .drawer-tag-btn {
+    padding: 7px 14px; border-radius: 40px;
+    border: 1.5px solid var(--border);
+    background: none; font-family: 'DM Sans', sans-serif;
+    font-size: 0.83rem; color: var(--muted); font-weight: 500;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px;
+  }
+  .drawer-tag-btn:hover { border-color: var(--green); color: var(--text); }
+  .drawer-tag-btn.active { background: var(--green-glow); border-color: var(--green); color: var(--green); font-weight: 700; }
+  .drawer-divider { height: 1px; background: var(--border); margin: 16px 0 0; }
+  .drawer-footer {
+    padding: 14px 20px 0;
+    display: flex; gap: 10px;
+  }
+  .drawer-footer .btn-clear {
+    flex: 1; padding: 11px; border-radius: 40px;
+    border: 1.5px solid var(--border); background: transparent;
+    color: var(--muted); font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem; font-weight: 600; cursor: pointer;
+    transition: all .2s;
+  }
+  .drawer-footer .btn-clear:hover { border-color: var(--green); color: var(--green); }
+  .drawer-footer .btn-apply {
+    flex: 2; padding: 11px; border-radius: 40px;
+    border: none; background: var(--green); color: #0a0f0d;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.87rem; font-weight: 700; cursor: pointer;
+    transition: opacity .2s;
+  }
+  .drawer-footer .btn-apply:hover { opacity: 0.88; }
+
   @media(max-width:900px) {
     nav { padding: 16px 20px; }
     .nav-links, .nav-cta { display: none; }
     .hamburger { display: flex; }
     .page-hero { padding: 110px 20px 56px; }
-    .shop-layout{flex-direction:column;padding:24px 20px 80px;}
-    .shop-sidebar{position:static;width:100%;margin-right:0;margin-bottom:22px;top:auto;}
-    .sidebar-cats{display:flex;flex-wrap:wrap;gap:6px;}
-    .sidebar-cats li{border:1px solid var(--border);}
-    .products-grid{grid-template-columns:1fr 1fr;gap:12px;}
-    .full-drones-section { padding: 0 20px 80px; }
+    /* Hide desktop sidebar, show mobile filter bar */
+    .shop-layout { padding: 0 0 80px; }
+    .shop-sidebar { display: none; }
+    .mobile-filter-bar { display: flex; }
+    .shop-main { padding: 12px 16px 0; }
+    .products-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .full-drones-section { padding: 0 16px 80px; }
     .full-drones-header { flex-direction: column; align-items: flex-start; gap: 12px; }
     .full-drones-grid { grid-template-columns: 1fr; }
     .drone-modal-body { padding: 20px; }
@@ -392,9 +524,18 @@
     .footer-grid { grid-template-columns: 1fr; gap: 32px; }
     footer { padding: 56px 20px 32px; }
     .cta-strip { padding: 64px 20px; }
+    /* Compact product cards for mobile */
+    .product-info { padding: 9px 10px 4px; }
+    .product-name { font-size: 0.82rem; margin-bottom: 5px; }
+    .price-new { font-size: 0.92rem; }
+    .price-old { font-size: 0.72rem; }
+    .product-card .buy-btn { margin: 8px 10px 10px; padding: 7px 0; font-size: 0.75rem; }
+    .product-badge { font-size: 0.6rem; padding: 2px 7px; top: 7px; left: 7px; }
+    .products-toolbar { margin-bottom: 10px; }
+    .products-count { font-size: 0.78rem; }
   }
   @media(max-width:480px) {
-    .products-grid { grid-template-columns: 1fr; }
+    .products-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
     .drone-specs-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
@@ -438,12 +579,60 @@
   <div class="hero-grid-bg"></div>
   <div class="page-hero-inner">
     <div class="section-tag">Popular Products</div>
-    <h1>Check Out The Most <span>Popular Pieces.</span></h1>
+    <h1>Check Out The Most<br/><span>Popular Pieces.</span></h1>
     <p>Exploring the tech and design shaping the world of Agriculture. DGCA-certified drones, premium components &amp; accessories.</p>
   </div>
 </div>
 
 <!-- SHOP LAYOUT -->
+<!-- MOBILE FILTER BAR -->
+<div class="mobile-filter-bar">
+  <div class="mobile-search-wrap">
+    <span class="mobile-search-icon">&#128269;</span>
+    <input class="mobile-search" id="mobileSearch" placeholder="Search products..." oninput="onMobileSearch()"/>
+  </div>
+  <button class="mobile-filter-btn" id="mobileFilterBtn" onclick="openFilterDrawer()" title="Filters">
+    <span>&#9776;</span>
+    <span class="filter-dot"></span>
+  </button>
+</div>
+
+<!-- FILTER DRAWER OVERLAY -->
+<div class="filter-drawer-overlay" id="filterDrawerOverlay" onclick="closeFilterDrawer()"></div>
+
+<!-- FILTER DRAWER -->
+<div class="filter-drawer" id="filterDrawer">
+  <div class="filter-drawer-handle"></div>
+  <div class="filter-drawer-header">
+    <span class="filter-drawer-title">Filters</span>
+    <button class="filter-drawer-close" onclick="closeFilterDrawer()">&#10005;</button>
+  </div>
+  <div class="filter-drawer-body">
+    <span class="drawer-section-label">Categories</span>
+    <ul class="drawer-cats" id="drawerCatList">
+      <li class="active" data-cat="all" onclick="drawerSelectCat('all')">All Products <span class="cat-count"></span></li>
+    </ul>
+    <div class="drawer-divider"></div>
+    <span class="drawer-section-label">Filter</span>
+    <div class="drawer-tags">
+      <button class="drawer-tag-btn active" data-dtag="all" onclick="drawerSelectTag('all')"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>All Items</button>
+      <button class="drawer-tag-btn" data-dtag="new" onclick="drawerSelectTag('new')"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>New Arrivals</button>
+      <button class="drawer-tag-btn" data-dtag="offer" onclick="drawerSelectTag('offer')"><span style="width:6px;height:6px;border-radius:50%;background:#f0a030;display:inline-block;"></span>Offers</button>
+    </div>
+    <div class="drawer-divider"></div>
+    <span class="drawer-section-label">Status</span>
+    <div class="drawer-tags">
+      <button class="drawer-tag-btn active" id="drawerStatusBtn-all" onclick="drawerSelectStatus('all')"><span style="width:6px;height:6px;border-radius:50%;background:var(--muted);display:inline-block;"></span>All</button>
+      <button class="drawer-tag-btn" id="drawerStatusBtn-instock" onclick="drawerSelectStatus('instock')"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;"></span>In Stock</button>
+    </div>
+  </div>
+  <div class="drawer-divider"></div>
+  <div class="drawer-footer">
+    <button class="btn-clear" onclick="clearAllFilters()">Clear All</button>
+    <button class="btn-apply" onclick="closeFilterDrawer()">Show Results</button>
+  </div>
+</div>
+
 <div class="shop-layout">
   <!-- SIDEBAR -->
   <aside class="shop-sidebar">
@@ -639,7 +828,7 @@
           <span class="price-old">₹21,000</span>
         </div>
       </div>
-      <a class="buy-btn" href="https://wa.me/918977776019?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20Skydroid%20T12%20Full%20RC%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B919%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/tKmkl1E8aOyMTjsSN1a4jFh4fGY.jpeg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
+      <a class="buy-btn" href="https://wa.me/919390238537?text=Hello%20SAG%20Drone%20Technologies%21%20%F0%9F%91%8B%0A%0AI%27m%20interested%20in%20purchasing%20the%20following%20product%3A%0A%0A%F0%9F%9B%92%20%2AProduct%3A%2A%20Skydroid%20T12%20Full%20RC%20Kit%0A%F0%9F%92%B0%20%2APrice%3A%2A%20%E2%82%B919%2C000%0A%F0%9F%96%BC%EF%B8%8F%20%2AImage%3A%2A%20https%3A//framerusercontent.com/images/tKmkl1E8aOyMTjsSN1a4jFh4fGY.jpeg%0A%0APlease%20share%20more%20details%20and%20help%20me%20proceed%20with%20the%20purchase.%20Thank%20you%21" target="_blank">Enquire Now</a>
     </div>
 
     <!-- Hobbywing CW X8 Motor Combo -->
@@ -889,6 +1078,7 @@
       countEl.innerHTML = 'Showing <strong>' + filtered.length + '</strong> of ' + allProducts.length + ' products';
     }
     renderProductCards(filtered);
+    updateFilterBtnIndicator();
   }
 
   function renderProductCards(prods) {
@@ -988,6 +1178,115 @@
       setTimeout(function(el) { return function() { el.style.opacity = '1'; el.style.transform = 'translateY(0)'; }; }(card), 50 * (i + 1));
     });
   }
+  /* == MOBILE FILTER DRAWER == */
+  var drawerCat = 'all', drawerTag = 'all', drawerStatus = 'all';
+
+  function openFilterDrawer() {
+    // Sync drawer state to current sidebar state
+    drawerCat = activeCat; drawerTag = activeTag; drawerStatus = activeStatus;
+    syncDrawerCatList();
+    syncDrawerTagBtns();
+    syncDrawerStatusBtns();
+    document.getElementById('filterDrawer').classList.add('open');
+    document.getElementById('filterDrawerOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeFilterDrawer() {
+    // Apply drawer selections to main state
+    activeCat = drawerCat; activeTag = drawerTag; activeStatus = drawerStatus;
+    // Sync sidebar to match
+    buildCategoryList();
+    document.querySelectorAll('.sidebar-tag-btn[data-tag]').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.tag === activeTag);
+    });
+    ['all','instock'].forEach(function(k) {
+      var el = document.getElementById('statusBtn-' + k);
+      if (el) el.classList.toggle('active', k === activeStatus);
+    });
+    applyFilters();
+    document.getElementById('filterDrawer').classList.remove('open');
+    document.getElementById('filterDrawerOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    updateFilterBtnIndicator();
+  }
+
+  function updateFilterBtnIndicator() {
+    var btn = document.getElementById('mobileFilterBtn');
+    if (!btn) return;
+    var hasFilter = activeCat !== 'all' || activeTag !== 'all' || activeStatus !== 'all';
+    btn.classList.toggle('has-filters', hasFilter);
+  }
+
+  function syncDrawerCatList() {
+    var ul = document.getElementById('drawerCatList');
+    if (!ul) return;
+    ul.innerHTML = '';
+    // All Products
+    var allLi = document.createElement('li');
+    allLi.className = drawerCat === 'all' ? 'active' : '';
+    allLi.onclick = function() { drawerSelectCat('all'); };
+    allLi.innerHTML = 'All <span class="cat-count">(' + allProducts.length + ')</span>';
+    ul.appendChild(allLi);
+    // Build category map
+    var cats = {};
+    allProducts.forEach(function(p) { var c = getCategoryFromProduct(p); cats[c] = (cats[c]||0)+1; });
+    Object.keys(cats).sort().forEach(function(c) {
+      var li = document.createElement('li');
+      li.className = drawerCat === c ? 'active' : '';
+      li.onclick = (function(cat) { return function() { drawerSelectCat(cat); }; })(c);
+      li.innerHTML = c + ' <span class="cat-count">(' + cats[c] + ')</span>';
+      ul.appendChild(li);
+    });
+  }
+
+  function syncDrawerTagBtns() {
+    document.querySelectorAll('.drawer-tag-btn[data-dtag]').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.dtag === drawerTag);
+    });
+  }
+
+  function syncDrawerStatusBtns() {
+    ['all','instock'].forEach(function(k) {
+      var el = document.getElementById('drawerStatusBtn-' + k);
+      if (el) el.classList.toggle('active', k === drawerStatus);
+    });
+  }
+
+  function drawerSelectCat(cat) {
+    drawerCat = cat;
+    syncDrawerCatList();
+  }
+
+  function drawerSelectTag(tag) {
+    drawerTag = tag;
+    syncDrawerTagBtns();
+  }
+
+  function drawerSelectStatus(s) {
+    drawerStatus = s;
+    syncDrawerStatusBtns();
+  }
+
+  function clearAllFilters() {
+    drawerCat = 'all'; drawerTag = 'all'; drawerStatus = 'all';
+    var mSearch = document.getElementById('mobileSearch');
+    if (mSearch) mSearch.value = '';
+    var dSearch = document.getElementById('sidebarSearch');
+    if (dSearch) dSearch.value = '';
+    syncDrawerCatList();
+    syncDrawerTagBtns();
+    syncDrawerStatusBtns();
+  }
+
+  function onMobileSearch() {
+    // Mirror mobile search into sidebar search and apply filters
+    var mVal = document.getElementById('mobileSearch').value;
+    var sSearch = document.getElementById('sidebarSearch');
+    if (sSearch) sSearch.value = mVal;
+    applyFilters();
+  }
+
   /* == Load products from Supabase == */
   async function loadAdminProducts() {
     var grid = document.getElementById('productsGrid');
