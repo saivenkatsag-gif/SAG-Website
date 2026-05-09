@@ -27,16 +27,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
   :root {
-    --green: #2ecc71;
-    --green-dark: #1a9c52;
-    --green-glow: rgba(46,204,113,0.16);
-    --dark: #0a0f0d;
-    --dark2: #101810;
-    --card: #131f16;
-    --border: rgba(46,204,113,0.13);
-    --text: #e8f5ec;
-    --muted: #7aab8a;
-    --white: #ffffff;
+    --blue: #1a6fb5;
+    --blue-dark: #1258a0;
+    --blue-glow: rgba(133,201,255,0.25);
+    --dark: #f8fbff;
+    --dark2: #edf4ff;
+    --card: #ffffff;
+    --border: rgba(133,201,255,0.45);
+    --text: #1a2940;
+    --muted: #4a6885;
+    --white: #0d1b2a;
     --radius: 16px;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -48,24 +48,24 @@
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
     padding: 18px 60px;
-    background: rgba(10,15,13,0.88);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
   }
   .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .nav-logo img { height: 60px; width: auto; }
-  .nav-logo span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; color: var(--green); letter-spacing: 0.02em; }
+  .nav-logo span { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 1rem; color: var(--blue); letter-spacing: 0.02em; }
   .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-  .hamburger span { width: 24px; height: 2px; background: var(--green); border-radius: 2px; transition: .3s; }
+  .hamburger span { width: 24px; height: 2px; background: var(--blue); border-radius: 2px; transition: .3s; }
   .nav-links { display: flex; gap: 28px; list-style: none; }
   .nav-links a { color: var(--text); text-decoration: none; font-size: 0.93rem; font-weight: 500; transition: color .2s; }
-  .nav-links a:hover, .nav-links a.active { color: var(--green); }
+  .nav-links a:hover, .nav-links a.active { color: var(--blue); }
   .nav-cta {
-    background: var(--green); color: #0a0f0d; padding: 10px 24px;
+    background: var(--blue); color: #0d1b2a; padding: 10px 24px;
     border-radius: 40px; font-weight: 700; font-size: 0.88rem;
     text-decoration: none; transition: background .2s, transform .15s; white-space: nowrap;
   }
-  .nav-cta:hover { background: var(--green-dark); transform: scale(1.03); }
+  .nav-cta:hover { background: var(--blue-dark); transform: scale(1.03); }
 
   /* ── HERO ── */
   .rpto-hero {
@@ -80,22 +80,22 @@
   }
   .hero-glow {
     position: absolute; inset: 0;
-    background: radial-gradient(ellipse 65% 55% at 55% 45%, rgba(46,204,113,0.11), transparent 70%),
-                radial-gradient(ellipse 35% 45% at 10% 80%, rgba(46,204,113,0.06), transparent 60%);
+    background: radial-gradient(ellipse 65% 55% at 55% 45%, rgba(133,201,255,0.15), transparent 70%),
+                radial-gradient(ellipse 35% 45% at 10% 80%, rgba(133,201,255,0.10), transparent 60%);
   }
   .hero-inner { position: relative; z-index: 2; max-width: 720px; width: 100%; }
   .company-tag {
     font-size: 0.75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-    color: var(--green); margin-bottom: 14px; opacity: 0.8;
+    color: var(--blue); margin-bottom: 14px; opacity: 0.8;
   }
   h1 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(2.4rem,5.5vw,4.2rem); line-height: 1.08; color: var(--white); margin-bottom: 20px; animation: fadeUp .7s ease both; }
-  h1 span { color: var(--green); }
+  h1 span { color: var(--blue); }
   .hero-sub { font-size: 1.08rem; color: var(--muted); line-height: 1.7; margin-bottom: 36px; animation: fadeUp .7s .15s ease both; }
   .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; animation: fadeUp .7s .25s ease both; }
-  .btn-primary { background: var(--green); color: #0a0f0d; padding: 14px 32px; border-radius: 40px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: background .2s, transform .15s; display: inline-block; }
-  .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
-  .btn-outline { border: 1.5px solid var(--green); color: var(--green); padding: 14px 32px; border-radius: 40px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: background .2s, transform .15s; display: inline-block; }
-  .btn-outline:hover { background: var(--green-glow); transform: translateY(-2px); }
+  .btn-primary { background: var(--blue); color: #0d1b2a; padding: 14px 32px; border-radius: 40px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: background .2s, transform .15s; display: inline-block; }
+  .btn-primary:hover { background: var(--blue-dark); transform: translateY(-2px); }
+  .btn-outline { border: 1.5px solid var(--blue); color: var(--blue); padding: 14px 32px; border-radius: 40px; font-weight: 700; font-size: 0.95rem; text-decoration: none; transition: background .2s, transform .15s; display: inline-block; }
+  .btn-outline:hover { background: var(--blue-glow); transform: translateY(-2px); }
   .hero-drone-img {
     position: absolute; right: 0; top: 50%; transform: translateY(-50%);
     width: 46%; z-index: 1; opacity: 0.8;
@@ -107,7 +107,7 @@
 
   /* ── SECTIONS ── */
   section { padding: 100px 60px; }
-  .section-tag { display: inline-block; background: var(--green-glow); border: 1px solid var(--green); border-radius: 40px; padding: 5px 16px; font-size: 0.78rem; color: var(--green); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px; }
+  .section-tag { display: inline-block; background: var(--blue-glow); border: 1px solid var(--blue); border-radius: 40px; padding: 5px 16px; font-size: 0.78rem; color: var(--blue); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 18px; }
   h2 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: clamp(1.9rem,4vw,2.9rem); color: var(--white); line-height: 1.2; }
   .section-intro { color: var(--muted); font-size: 1.02rem; line-height: 1.7; margin-top: 14px; max-width: 640px; }
 
@@ -116,7 +116,7 @@
   .about-rpto-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-top: 56px; align-items: start; }
   .about-rpto-text blockquote {
     font-style: italic; font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
-    font-size: 1.15rem; color: var(--green); border-left: 3px solid var(--green);
+    font-size: 1.15rem; color: var(--blue); border-left: 3px solid var(--blue);
     padding-left: 20px; margin-bottom: 28px; line-height: 1.55;
   }
   .about-rpto-text p { color: var(--muted); font-size: 0.97rem; line-height: 1.8; margin-bottom: 16px; }
@@ -127,11 +127,11 @@
     background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 28px; transition: border-color .2s, transform .2s;
   }
-  .rpto-pillar:hover { border-color: var(--green); transform: translateY(-4px); }
+  .rpto-pillar:hover { border-color: var(--blue); transform: translateY(-4px); }
   .rpto-pillar img { width: 52px; height: 52px; object-fit: cover; border-radius: 10px; margin-bottom: 16px; }
   .rpto-pillar h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 0.98rem; font-weight: 700; color: var(--white); margin-bottom: 12px; }
   .rpto-pillar .checks { display: flex; flex-direction: column; gap: 5px; }
-  .rpto-pillar .checks span { font-size: 0.87rem; color: var(--green); }
+  .rpto-pillar .checks span { font-size: 0.87rem; color: var(--blue); }
 
   /* ── COURSES ── */
   .courses-section { background: var(--dark); }
@@ -140,25 +140,25 @@
     background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
     padding: 36px; position: relative; overflow: hidden; transition: border-color .2s, transform .2s;
   }
-  .course-card:hover { border-color: var(--green); transform: translateY(-4px); }
+  .course-card:hover { border-color: var(--blue); transform: translateY(-4px); }
   .course-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--green), var(--green-dark));
+    background: linear-gradient(90deg, var(--blue), var(--blue-dark));
     border-radius: var(--radius) var(--radius) 0 0;
   }
   .course-badge {
-    display: inline-block; background: var(--green-glow); border: 1px solid var(--green);
-    border-radius: 40px; padding: 4px 14px; font-size: 0.77rem; color: var(--green);
+    display: inline-block; background: var(--blue-glow); border: 1px solid var(--blue);
+    border-radius: 40px; padding: 4px 14px; font-size: 0.77rem; color: var(--blue);
     font-weight: 700; margin-bottom: 20px; letter-spacing: .06em; text-transform: uppercase;
   }
   .course-card h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; font-weight: 800; color: var(--white); margin-bottom: 6px; }
   .course-subtitle { font-size: 0.88rem; color: var(--muted); margin-bottom: 24px; }
-  .course-price { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--green); margin-bottom: 4px; }
+  .course-price { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--blue); margin-bottom: 4px; }
   .course-price-note { font-size: 0.8rem; color: var(--muted); margin-bottom: 28px; }
   .course-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .course-features li { list-style: none; font-size: 0.9rem; color: var(--text); display: flex; align-items: flex-start; gap: 10px; }
-  .course-features li::before { content: '✔'; color: var(--green); flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
-  .course-note { background: rgba(46,204,113,0.06); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+  .course-features li::before { content: '✔'; color: var(--blue); flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+  .course-note { background: rgba(133,201,255,0.10); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
   .course-note strong { color: var(--text); }
 
   /* ── FAQ ── */
@@ -166,7 +166,7 @@
   .faq-list { margin-top: 48px; max-width: 860px; }
   .faq-item { border-bottom: 1px solid var(--border); padding: 22px 0; cursor: pointer; }
   .faq-q { display: flex; justify-content: space-between; align-items: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 1.5rem; color: var(--white); }
-  .faq-q .icon { color: var(--green); font-size: 1.5rem; transition: transform .3s; flex-shrink: 0; }
+  .faq-q .icon { color: var(--blue); font-size: 1.5rem; transition: transform .3s; flex-shrink: 0; }
   .faq-a { font-size: 0.93rem; color: var(--muted); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height .35s ease, margin .3s; }
   .faq-item.open .faq-a { max-height: 300px; margin-top: 14px; }
   .faq-item.open .icon { transform: rotate(45deg); }
@@ -175,12 +175,12 @@
 
   /* ── CONTACT ── */
   .contact-section {
-    background: linear-gradient(135deg, #0d1f10, #0a160c);
+    background: linear-gradient(135deg, #e0f0ff, #edf7ff);
     border-top: 1px solid var(--border); position: relative; overflow: hidden;
   }
   .contact-section::before {
     content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(46,204,113,0.09), transparent 70%);
+    background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(133,201,255,0.12), transparent 70%);
     pointer-events: none;
   }
   .contact-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
@@ -188,8 +188,8 @@
   .contact-info p { color: var(--muted); font-size: 1rem; line-height: 1.7; margin-bottom: 36px; }
   .contact-details { display: flex; flex-direction: column; gap: 18px; }
   .contact-item { display: flex; align-items: flex-start; gap: 16px; }
-  .contact-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--green-glow); border: 1px solid var(--green); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-  .contact-item-text strong { display: block; font-size: 0.82rem; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+  .contact-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--blue-glow); border: 1px solid var(--blue); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .contact-item-text strong { display: block; font-size: 0.82rem; color: var(--blue); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
   .contact-item-text span { font-size: 0.93rem; color: var(--text); }
   .contact-form { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 40px; }
   .contact-form h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--white); margin-bottom: 24px; }
@@ -202,27 +202,27 @@
     font-family: 'DM Sans', sans-serif; font-size: 0.93rem;
     transition: border-color .2s; outline: none;
   }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--green); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--blue); }
   .form-group select option { background: var(--dark); }
   .form-group textarea { resize: vertical; min-height: 100px; }
-  .form-submit { width: 100%; background: var(--green); color: #0a0f0d; padding: 14px; border: none; border-radius: 40px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background .2s, transform .15s; margin-top: 6px; }
-  .form-submit:hover { background: var(--green-dark); transform: translateY(-2px); }
+  .form-submit { width: 100%; background: var(--blue); color: #0d1b2a; padding: 14px; border: none; border-radius: 40px; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; transition: background .2s, transform .15s; margin-top: 6px; }
+  .form-submit:hover { background: var(--blue-dark); transform: translateY(-2px); }
 
   /* ── FOOTER ── */
-  footer { background: #080d09; border-top: 1px solid var(--border); padding: 72px 60px 40px; }
+  footer { background: #f0f7ff; border-top: 1px solid var(--border); padding: 72px 60px 40px; }
   .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.2fr; gap: 48px; margin-bottom: 56px; }
   .footer-brand img { height: 40px; margin-bottom: 16px; }
   .footer-brand p { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 18px; }
   .footer-contact-info { font-size: 0.85rem; color: var(--muted); line-height: 2; }
   .footer-contact-info a { color: var(--muted); text-decoration: none; }
-  .footer-contact-info a:hover { color: var(--green); }
+  .footer-contact-info a:hover { color: var(--blue); }
   .footer-col h4 { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--white); margin-bottom: 16px; letter-spacing: .04em; }
   .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
   .footer-col ul a { color: var(--muted); text-decoration: none; font-size: 0.87rem; transition: color .2s; }
-  .footer-col ul a:hover { color: var(--green); }
+  .footer-col ul a:hover { color: var(--blue); }
   .footer-social { display: flex; gap: 12px; margin-top: 20px; }
   .social-btn { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; color: var(--muted); transition: border-color .2s, color .2s, background .2s; }
-  .social-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-glow); }
+  .social-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
   .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; text-align: center; font-size: 0.82rem; color: var(--muted); }
 
   /* ── MOBILE ── */
@@ -230,7 +230,7 @@
   .nav-mobile-menu {
     display: none;
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(10,15,13,0.97);
+    background: rgba(255,255,255,0.98);
     backdrop-filter: blur(16px);
     z-index: 200;
     flex-direction: column;
@@ -244,10 +244,10 @@
     font-family: 'Barlow Condensed', sans-serif; font-size: 1.5rem; font-weight: 700;
     transition: color .2s;
   }
-  .nav-mobile-menu a:hover { color: var(--green); }
+  .nav-mobile-menu a:hover { color: var(--blue); }
   .nav-mobile-close {
     position: absolute; top: 24px; right: 28px;
-    font-size: 2rem; color: var(--green); cursor: pointer;
+    font-size: 2rem; color: var(--blue); cursor: pointer;
     background: none; border: none; line-height: 1;
   }
 
@@ -281,6 +281,85 @@
     h1 { font-size: clamp(2rem, 8vw, 3rem); word-break: break-word; }
     footer { padding: 56px 20px 32px; }
   }
+
+  /* ── LIGHT THEME POLISH ── */
+  body { background: #f8fbff; color: #1a2940; }
+  nav { border-bottom: 1px solid rgba(133,201,255,0.4); box-shadow: 0 2px 20px rgba(133,201,255,0.15); }
+  .nav-links a { color: #1a2940; }
+  h1, h2, h3, h4 { color: #0d1b2a; }
+  .hero-bg { background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(133,201,255,0.18) 0%, transparent 70%), radial-gradient(ellipse 40% 50% at 20% 80%, rgba(133,201,255,0.10) 0%, transparent 60%); }
+  .pillar-card, .service-card, .review-card, .stat-card, .course-card, .drone-card, .product-card, .rpto-pillar { background: #ffffff; box-shadow: 0 2px 12px rgba(133,201,255,0.12); }
+  .pillar-card:hover, .service-card:hover, .review-card:hover, .stat-card:hover { box-shadow: 0 8px 32px rgba(133,201,255,0.25); }
+  .section-tag { background: rgba(133,201,255,0.20); color: #1a6fb5; border-color: rgba(133,201,255,0.6); }
+  .hero-badge { background: rgba(133,201,255,0.18); border-color: rgba(133,201,255,0.6); color: #1a6fb5; }
+  .hero-badge .dot { background: #85c9ff; }
+  .hero-grid { background-image: linear-gradient(rgba(133,201,255,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(133,201,255,0.25) 1px, transparent 1px); }
+  .review-stars { color: #f0a030; }
+  .review-avatar { background: rgba(133,201,255,0.20); border-color: #1a6fb5; color: #1a6fb5; }
+  .stat-num { color: #0d1b2a; }
+  .app-tab { border-color: rgba(133,201,255,0.45); color: #4a6885; }
+  .app-tab.active { background: #85c9ff; color: #0d1b2a; border-color: #1a6fb5; }
+  .app-dot { background: rgba(133,201,255,0.35); }
+  .app-dot.active { background: #85c9ff; }
+  .app-panel-info { background: #f0f7ff; }
+  .app-panel-info .app-num { color: rgba(133,201,255,0.5); }
+  .faq-q { color: #0d1b2a; }
+  .brands-section { background: #f0f7ff; border-color: rgba(133,201,255,0.35); }
+  .brands-title { color: #4a6885; }
+  .brand-logo { filter: grayscale(1) brightness(0.5); }
+  footer { background: #edf4ff; border-top-color: rgba(133,201,255,0.35); }
+  .footer-bottom { color: #4a6885; }
+  .footer-brand p, .footer-contact, .footer-contact a { color: #4a6885; }
+  .footer-col h4 { color: #0d1b2a; }
+  .footer-col ul a { color: #4a6885; }
+  .footer-col ul a:hover { color: #1a6fb5; }
+  .stats-section { background: #edf4ff; }
+  .stats-copy { color: #4a6885; }
+  .stats-copy strong { color: #0d1b2a; }
+  .cta-section { background: linear-gradient(135deg, #e0f0ff 0%, #edf7ff 100%); }
+  .social-btn { border-color: rgba(133,201,255,0.4); color: #4a6885; }
+  .social-btn:hover { border-color: #1a6fb5; color: #1a6fb5; background: rgba(133,201,255,0.15); }
+  .btn-primary { background: #85c9ff; color: #0d1b2a; }
+  .btn-primary:hover { background: #5aafee; }
+  .btn-outline { border-color: #1a6fb5; color: #1a6fb5; }
+  .btn-outline:hover { background: rgba(133,201,255,0.18); }
+  .nav-cta { background: #85c9ff; color: #0d1b2a; }
+  .nav-cta:hover { background: #5aafee; }
+  .spec-chip { background: rgba(133,201,255,0.10); border-color: rgba(133,201,255,0.35); }
+  .spec-chip-val { color: #1a2940; }
+  .drone-card-name, .full-drones-title { color: #0d1b2a; }
+  .drone-btn-enquire { background: #85c9ff; color: #0d1b2a; }
+  .drone-btn-enquire:hover { background: #5aafee; }
+  .drone-btn-details { border-color: rgba(133,201,255,0.4); color: #4a6885; }
+  .drone-btn-details:hover { border-color: #1a6fb5; color: #1a6fb5; }
+  .drone-brochure-btn { border-color: rgba(133,201,255,0.5); color: #1a6fb5; }
+  .drone-brochure-btn:hover { background: rgba(133,201,255,0.18); }
+  .drone-modal { background: #ffffff; }
+  .drone-modal-close { background: #ffffff; border-color: rgba(133,201,255,0.4); color: #4a6885; }
+  .drone-modal-close:hover { border-color: #1a6fb5; color: #1a6fb5; }
+  .sidebar-search { background: #f0f7ff; border-color: rgba(133,201,255,0.45); color: #1a2940; }
+  .sidebar-cats li.active { background: rgba(133,201,255,0.20); color: #1a6fb5; }
+  .sidebar-tag-btn.active { background: rgba(133,201,255,0.20); color: #1a6fb5; }
+  .cat-count { background: #f0f7ff; }
+  .product-card { background: #ffffff; }
+  .product-name { color: #0d1b2a; }
+  .price-new { color: #1a6fb5; }
+  .product-card .buy-btn { border-color: #1a6fb5; color: #1a6fb5; }
+  .product-card .buy-btn:hover { background: #85c9ff; color: #0d1b2a; }
+  .product-badge, .drone-badge { background: #85c9ff; color: #0d1b2a; }
+  .form-group input, .form-group select, .form-group textarea { background: #f0f7ff; border-color: rgba(133,201,255,0.45); color: #1a2940; }
+  .form-group select option { background: #f0f7ff; }
+  .form-submit { background: #85c9ff; color: #0d1b2a; }
+  .form-submit:hover { background: #5aafee; }
+  .nav-mobile-menu { background: rgba(255,255,255,0.98); }
+  .nav-mobile-menu a { color: #1a2940; }
+  .nav-mobile-menu a:hover { color: #1a6fb5; }
+  .nav-mobile-close { color: #1a6fb5; }
+  .contact-form { background: #ffffff; border-color: rgba(133,201,255,0.35); }
+  .contact-form h3 { color: #0d1b2a; }
+  .contact-icon { background: rgba(133,201,255,0.18); border-color: rgba(133,201,255,0.5); }
+  .page-hero { background: #edf4ff; }
+  .shop-layout { background: #f8fbff; }
 </style>
 </head>
 <body>
@@ -288,7 +367,7 @@
 <!-- NAV -->
 <nav id="mainNav">
   <a class="nav-logo" href="index.html">
-    <img src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt="SAG Logo"/>
+    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo"/>
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -313,7 +392,7 @@
   <a href="rpto.html" onclick="closeMobileMenu()">RPTO</a>
   <a href="products.html" onclick="closeMobileMenu()">Products</a>
   <a href="index.html#reviews" onclick="closeMobileMenu()">Testimonials</a>
-  <a href="tel:+918977771705" style="color:var(--green);border:1.5px solid var(--green);padding:12px 32px;border-radius:40px;text-decoration:none;">Get a Free Quote</a>
+  <a href="tel:+918977771705" style="color:var(--blue);border:1.5px solid var(--blue);padding:12px 32px;border-radius:40px;text-decoration:none;">Get a Free Quote</a>
 </div>
 
 <!-- HERO -->
@@ -337,7 +416,7 @@
 <!-- ABOUT RPTO -->
 <section class="about-rpto">
   <div class="section-tag">About RPTO</div>
-  <h2>About Remote Pilot Training <span style="color:var(--green)">Organization</span></h2>
+  <h2>About Remote Pilot Training <span style="color:var(--blue)">Organization</span></h2>
   <div class="about-rpto-inner">
     <div class="about-rpto-text">
       <blockquote>"Empowering Andhra Pradesh with its First Home-Grown DGCA-Approved RPTO."</blockquote>
@@ -384,7 +463,7 @@
 <!-- COURSES -->
 <section class="courses-section" id="courses">
   <div class="section-tag">Training Programs</div>
-  <h2>Become a Certified <span style="color:var(--green)">Drone Pilot Today</span></h2>
+  <h2>Become a Certified <span style="color:var(--blue)">Drone Pilot Today</span></h2>
   <p class="section-intro">Choose the course that fits your goals. All programs are DGCA-compliant with certified instructors and practical flying hours.</p>
   <div class="courses-grid">
 
@@ -481,7 +560,7 @@
   <div class="contact-inner">
     <div class="contact-info">
       <div class="section-tag">Contact Us</div>
-      <h2>Let's Take Your Drone Career to the <span style="color:var(--green)">Next Level.</span></h2>
+      <h2>Let's Take Your Drone Career to the <span style="color:var(--blue)">Next Level.</span></h2>
       <p>Reach out to our RPTO team for admissions, enquiries, or any questions about our training programs.</p>
       <div class="contact-details">
         <div class="contact-item">
@@ -654,7 +733,7 @@ document.addEventListener('DOMContentLoaded', function() {
   /* ── Nav background on scroll ── */
   window.addEventListener('scroll', function() {
     var nav = document.getElementById('mainNav');
-    nav.style.background = window.pageYOffset > 50 ? 'rgba(10,15,13,0.98)' : 'rgba(10,15,13,0.88)';
+    nav.style.background = window.pageYOffset > 50 ? 'rgba(255,255,255,0.99)' : 'rgba(255,255,255,0.92)';
   }, { passive: true });
 
   /* ── Hamburger X animation ── */
