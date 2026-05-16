@@ -1,25 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+  <!-- Homepage -->
   <url>
     <loc>https://sagdrones.com/</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
+  <!-- Products catalogue — highest commercial priority -->
   <url>
     <loc>https://sagdrones.com/products.html</loc>
-    <lastmod>2026-04-24</lastmod>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://framerusercontent.com/images/JHfqfEGEY832dH8wU2FIj8e42o.png</image:loc>
+      <image:title>Beta 610 TC Drone – SAG Drone Technologies</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://framerusercontent.com/images/eRu3lhJevMrkK1YctwXEMpgZICM.png</image:loc>
+      <image:title>SAG Flash Q20 TC Drone – SAG Drone Technologies</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://framerusercontent.com/images/oDDN2aWnPwDBOacMrdJxrPj3K8.png</image:loc>
+      <image:title>14S 22000mAh SAG VOLT Plus Battery</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://framerusercontent.com/images/EIRN6BISlMewm9CBHoIWVhtzYak.png</image:loc>
+      <image:title>14S 30000mAh SAG VOLT Plus Battery</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://framerusercontent.com/images/qaHt0hSCGuIztk0xhYkDydSmzM.png</image:loc>
+      <image:title>SiYi MK15 Transmitter Kit</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://framerusercontent.com/images/ccOSG205SKwpOBmfBTiG6vyFe4.jpeg</image:loc>
+      <image:title>SKYRC 3000 Watt Drone Battery Charger</image:title>
+    </image:image>
+  </url>
+
+  <!-- RPTO – Drone Pilot Training -->
+  <url>
+    <loc>https://sagdrones.com/rpto.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
+  <!-- Sales CRM (internal — lower priority, still indexable) -->
   <url>
-    <loc>https://sagdrones.com/rpto.html</loc>
-    <lastmod>2026-04-24</lastmod>
+    <loc>https://sagdrones.com/salescrm.html</loc>
+    <lastmod>2026-05-16</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.5</priority>
   </url>
 
 </urlset>
