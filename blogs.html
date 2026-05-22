@@ -1,0 +1,1095 @@
+cat > /mnt/user-data/outputs/blogs.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Blog – SAG Drone Technologies | Agri-Drone Insights & News</title>
+<meta name="description" content="Stay updated with the latest news, insights, and guides from SAG Drone Technologies — DGCA regulations, agri-drone tips, pilot training, and precision farming."/>
+<meta name="author" content="SAG Drone Technologies"/>
+<meta name="robots" content="index, follow"/>
+<link rel="canonical" href="https://sagdrones.com/blogs.html"/>
+<meta property="og:title" content="Blog – SAG Drone Technologies"/>
+<meta property="og:description" content="Agri-drone insights, DGCA updates, pilot tips, and precision farming news."/>
+<meta property="og:url" content="https://sagdrones.com/blogs.html"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="icon" type="image/png" href="/logo.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+<style>
+  :root {
+    --blue:#1a6fb5; --blue-dark:#1258a0; --blue-glow:rgba(133,201,255,0.25);
+    --dark:#f8fbff; --dark2:#edf4ff; --card:#ffffff;
+    --border:rgba(133,201,255,0.45); --text:#1a2940; --muted:#4a6885; --radius:16px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;}
+  body.lang-te{font-family:'Noto Sans Telugu','DM Sans',sans-serif;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 60px;background:rgba(255,255,255,0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);box-shadow:0 2px 20px rgba(133,201,255,0.15);}
+  .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+  .nav-logo img{height:60px;width:auto;}
+  .nav-right{display:flex;align-items:center;gap:16px;}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:24px;height:2px;background:var(--blue);border-radius:2px;transition:.3s;}
+  .nav-links{display:flex;gap:28px;list-style:none;}
+  .nav-links a{color:var(--text);text-decoration:none;font-size:0.93rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--blue);}
+  .nav-cta{background:#85c9ff;color:#0d1b2a;padding:10px 24px;border-radius:40px;font-weight:700;font-size:0.88rem;text-decoration:none;transition:background .2s,transform .15s;white-space:nowrap;}
+  .nav-cta:hover{background:#5aafee;transform:scale(1.03);}
+
+  /* LANGUAGE TOGGLE */
+  .lang-toggle{display:flex;align-items:center;background:var(--dark2);border:1.5px solid var(--border);border-radius:40px;overflow:hidden;flex-shrink:0;}
+  .lang-btn{padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .2s;font-family:inherit;white-space:nowrap;}
+  .lang-btn.active{background:var(--blue);color:#fff;}
+
+  /* MOBILE MENU */
+  .nav-mobile-menu{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,0.98);backdrop-filter:blur(16px);z-index:200;flex-direction:column;align-items:center;justify-content:center;gap:32px;}
+  .nav-mobile-menu.open{display:flex;}
+  .nav-mobile-menu a{color:#1a2940;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:700;transition:color .2s;}
+  .nav-mobile-menu a:hover{color:var(--blue);}
+  .nav-mobile-close{position:absolute;top:24px;right:28px;font-size:2rem;color:var(--blue);cursor:pointer;background:none;border:none;line-height:1;}
+
+  /* HERO */
+  .blog-hero{padding:140px 60px 72px;background:var(--dark2);position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+  .blog-hero-bg{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:56px 56px;opacity:.3;}
+  .blog-hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 20% 60%,rgba(133,201,255,0.14),transparent 65%);}
+  .blog-hero-inner{position:relative;z-index:2;max-width:700px;}
+  .section-tag{display:inline-block;background:rgba(133,201,255,0.20);border:1px solid rgba(133,201,255,0.6);border-radius:40px;padding:5px 16px;font-size:0.78rem;color:var(--blue);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;}
+  .blog-hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(2.4rem,5vw,3.8rem);line-height:1.08;color:#0d1b2a;margin-bottom:18px;}
+  body.lang-te .blog-hero h1{font-family:'Noto Sans Telugu',sans-serif;font-size:clamp(1.8rem,4vw,3rem);}
+  .blog-hero h1 span{color:var(--blue);}
+  .blog-hero p{font-size:1.05rem;color:var(--muted);line-height:1.7;max-width:560px;}
+
+  /* LAYOUT */
+  .blog-layout{display:grid;grid-template-columns:1fr 300px;gap:48px;max-width:1200px;margin:0 auto;padding:72px 60px;}
+
+  /* FEATURED */
+  .featured-post{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:48px;display:grid;grid-template-columns:1fr 1fr;transition:border-color .2s,box-shadow .2s;cursor:pointer;}
+  .featured-post:hover{border-color:var(--blue);box-shadow:0 8px 32px rgba(133,201,255,0.18);}
+  .featured-post-img{position:relative;min-height:300px;overflow:hidden;}
+  .featured-post-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+  .featured-post:hover .featured-post-img img{transform:scale(1.04);}
+  .featured-badge{position:absolute;top:16px;left:16px;background:var(--blue);color:#fff;font-size:0.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:40px;}
+  .featured-post-body{padding:40px;display:flex;flex-direction:column;justify-content:center;}
+  .post-cat{display:inline-block;font-size:0.75rem;font-weight:700;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+  .featured-post-body h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.65rem;color:#0d1b2a;line-height:1.2;margin-bottom:14px;}
+  body.lang-te .featured-post-body h2{font-family:'Noto Sans Telugu',sans-serif;font-size:1.2rem;}
+  .featured-post-body p{font-size:0.93rem;color:var(--muted);line-height:1.7;margin-bottom:24px;}
+  .post-meta{display:flex;align-items:center;gap:16px;font-size:0.8rem;color:var(--muted);margin-bottom:24px;flex-wrap:wrap;}
+  .read-more{display:inline-flex;align-items:center;gap:8px;color:var(--blue);font-weight:700;font-size:0.88rem;cursor:pointer;transition:gap .2s;background:none;border:none;font-family:inherit;}
+  .read-more:hover{gap:12px;}
+
+  /* FILTER */
+  .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;}
+  .filter-btn{border:1.5px solid var(--border);background:var(--card);color:var(--muted);padding:7px 18px;border-radius:40px;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--blue);color:var(--blue);background:var(--blue-glow);}
+
+  /* GRID */
+  .blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .blog-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .2s,transform .2s,box-shadow .2s;cursor:pointer;}
+  .blog-card:hover{border-color:var(--blue);transform:translateY(-4px);box-shadow:0 10px 28px rgba(133,201,255,0.18);}
+  .blog-card-img{position:relative;height:180px;overflow:hidden;}
+  .blog-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+  .blog-card:hover .blog-card-img img{transform:scale(1.05);}
+  .blog-card-cat{position:absolute;bottom:12px;left:14px;background:rgba(13,27,42,0.75);backdrop-filter:blur(6px);color:#fff;font-size:0.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:40px;}
+  .blog-card-body{padding:22px 22px 20px;}
+  .blog-card-body h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.08rem;color:#0d1b2a;line-height:1.3;margin-bottom:10px;}
+  body.lang-te .blog-card-body h3{font-family:'Noto Sans Telugu',sans-serif;font-size:0.95rem;}
+  .blog-card-body p{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+  .blog-card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:14px;}
+  .blog-card-meta{font-size:0.78rem;color:var(--muted);}
+  .blog-card-link{font-size:0.82rem;font-weight:700;color:var(--blue);text-decoration:none;cursor:pointer;background:none;border:none;font-family:inherit;transition:letter-spacing .2s;}
+  .blog-card-link:hover{letter-spacing:.03em;}
+
+  /* LOAD MORE */
+  .load-more-wrap{margin-top:40px;text-align:center;}
+  .btn-outline{border:1.5px solid var(--blue);color:var(--blue);padding:12px 32px;border-radius:40px;font-weight:700;font-size:0.9rem;transition:background .2s,transform .15s;display:inline-block;background:transparent;cursor:pointer;font-family:inherit;}
+  .btn-outline:hover{background:var(--blue-glow);transform:translateY(-2px);}
+
+  /* SIDEBAR */
+  .blog-sidebar{display:flex;flex-direction:column;gap:32px;}
+  .sidebar-widget{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;}
+  .sidebar-widget h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:#0d1b2a;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.05em;}
+  body.lang-te .sidebar-widget h4{font-family:'Noto Sans Telugu',sans-serif;font-size:0.9rem;}
+  .sidebar-search-wrap{position:relative;}
+  .sidebar-search{width:100%;background:var(--dark2);border:1px solid var(--border);border-radius:10px;padding:11px 42px 11px 16px;color:var(--text);font-family:inherit;font-size:0.88rem;outline:none;transition:border-color .2s;}
+  .sidebar-search:focus{border-color:var(--blue);}
+  .sidebar-search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem;pointer-events:none;}
+  .sidebar-cats{list-style:none;display:flex;flex-direction:column;gap:4px;}
+  .sidebar-cats li{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:0.88rem;color:var(--text);transition:background .2s,color .2s;}
+  .sidebar-cats li:hover,.sidebar-cats li.active{background:var(--blue-glow);color:var(--blue);}
+  .cat-count{background:var(--dark2);border-radius:40px;padding:2px 9px;font-size:0.75rem;color:var(--muted);font-weight:600;}
+  .recent-posts{display:flex;flex-direction:column;gap:14px;}
+  .recent-post{display:flex;gap:12px;align-items:flex-start;cursor:pointer;}
+  .recent-post-img{width:62px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;}
+  .recent-post-img img{width:100%;height:100%;object-fit:cover;}
+  .recent-post-info h5{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.9rem;color:#0d1b2a;line-height:1.3;margin-bottom:4px;transition:color .2s;}
+  body.lang-te .recent-post-info h5{font-family:'Noto Sans Telugu',sans-serif;font-size:0.82rem;}
+  .recent-post:hover .recent-post-info h5{color:var(--blue);}
+  .recent-post-info span{font-size:0.75rem;color:var(--muted);}
+  .sidebar-tags{display:flex;flex-wrap:wrap;gap:8px;}
+  .sidebar-tag{border:1px solid var(--border);border-radius:40px;padding:5px 13px;font-size:0.78rem;color:var(--muted);cursor:pointer;transition:all .2s;background:var(--dark2);}
+  .sidebar-tag:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-glow);}
+  .sidebar-cta-widget{background:linear-gradient(135deg,#1a6fb5,#1258a0);border:none;color:#fff;text-align:center;}
+  .sidebar-cta-widget h4{color:#fff;border-bottom-color:rgba(255,255,255,0.2);}
+  .sidebar-cta-widget p{font-size:0.88rem;color:rgba(255,255,255,0.82);line-height:1.6;margin-bottom:20px;}
+  .btn-white{display:inline-block;background:#fff;color:var(--blue);padding:11px 24px;border-radius:40px;font-weight:700;font-size:0.85rem;text-decoration:none;transition:background .2s,transform .15s;}
+  .btn-white:hover{background:#e8f3ff;transform:translateY(-2px);}
+
+  /* ARTICLE VIEW */
+  #articleView{display:none;max-width:1200px;margin:0 auto;padding:100px 60px 72px;animation:fadeSlideIn .4s ease;}
+  #articleView.visible{display:block;}
+  @keyframes fadeSlideIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+  .article-back{display:inline-flex;align-items:center;gap:8px;background:var(--dark2);border:1px solid var(--border);color:var(--blue);font-weight:700;font-size:0.88rem;padding:10px 20px;border-radius:40px;cursor:pointer;margin-bottom:40px;transition:background .2s,transform .15s;font-family:inherit;text-decoration:none;}
+  .article-back:hover{background:var(--blue-glow);transform:translateX(-3px);}
+  .article-lang-switch{display:inline-flex;align-items:center;background:var(--dark2);border:1.5px solid var(--border);border-radius:40px;overflow:hidden;margin-left:12px;vertical-align:middle;}
+  .article-lang-btn{padding:6px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);transition:all .2s;font-family:inherit;}
+  .article-lang-btn.active{background:var(--blue);color:#fff;}
+  .article-hero-img{width:100%;height:420px;object-fit:cover;border-radius:var(--radius);margin-bottom:40px;border:1px solid var(--border);}
+  .article-cat-badge{display:inline-block;background:var(--blue-glow);border:1px solid rgba(133,201,255,0.6);border-radius:40px;padding:5px 16px;font-size:0.75rem;color:var(--blue);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;}
+  .article-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:clamp(2rem,4vw,3rem);line-height:1.1;color:#0d1b2a;margin-bottom:20px;}
+  body.lang-te .article-title{font-family:'Noto Sans Telugu',sans-serif;font-size:clamp(1.5rem,3vw,2.2rem);}
+  .article-meta{display:flex;align-items:center;gap:20px;font-size:0.85rem;color:var(--muted);margin-bottom:36px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--border);}
+  .article-body{font-size:1rem;line-height:1.85;color:var(--text);max-width:780px;}
+  .article-body h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;color:#0d1b2a;margin:40px 0 16px;}
+  body.lang-te .article-body h2{font-family:'Noto Sans Telugu',sans-serif;font-size:1.3rem;}
+  .article-body h3{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.25rem;color:#0d1b2a;margin:28px 0 12px;}
+  .article-body p{margin-bottom:18px;}
+  .article-body ul,.article-body ol{margin:0 0 18px 24px;}
+  .article-body li{margin-bottom:8px;}
+  .article-body .highlight-box{background:var(--dark2);border-left:4px solid var(--blue);border-radius:0 12px 12px 0;padding:20px 24px;margin:28px 0;font-size:0.95rem;color:var(--muted);}
+  .article-body strong{color:#0d1b2a;font-weight:600;}
+  .article-tags{margin-top:40px;padding-top:28px;border-top:1px solid var(--border);}
+  .article-tags-label{font-size:0.8rem;color:var(--muted);font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:.06em;}
+  .article-share{margin-top:48px;padding:32px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  .article-share h4{font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:700;color:#0d1b2a;}
+  .share-btns{display:flex;gap:10px;}
+  .share-btn{padding:9px 18px;border-radius:40px;font-size:0.82rem;font-weight:700;border:1.5px solid var(--border);color:var(--muted);cursor:pointer;background:transparent;font-family:inherit;transition:all .2s;}
+  .share-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-glow);}
+  .article-nav{display:flex;gap:20px;margin-top:48px;flex-wrap:wrap;}
+  .article-nav-btn{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;cursor:pointer;transition:all .2s;text-align:left;}
+  .article-nav-btn:hover{border-color:var(--blue);box-shadow:0 6px 20px rgba(133,201,255,0.15);}
+  .article-nav-btn .nav-dir{font-size:0.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+  .article-nav-btn h5{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:#0d1b2a;line-height:1.3;}
+  body.lang-te .article-nav-btn h5{font-family:'Noto Sans Telugu',sans-serif;font-size:0.9rem;}
+
+  /* NEWSLETTER */
+  .newsletter-section{background:var(--dark2);border-top:1px solid var(--border);padding:72px 60px;text-align:center;}
+  .newsletter-inner{max-width:520px;margin:0 auto;}
+  .newsletter-inner h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:2rem;color:#0d1b2a;margin-bottom:12px;}
+  body.lang-te .newsletter-inner h2{font-family:'Noto Sans Telugu',sans-serif;font-size:1.6rem;}
+  .newsletter-inner h2 span{color:var(--blue);}
+  .newsletter-inner p{color:var(--muted);font-size:0.95rem;margin-bottom:28px;line-height:1.7;}
+  .newsletter-form{display:flex;gap:10px;}
+  .newsletter-input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:40px;padding:13px 20px;color:var(--text);font-family:inherit;font-size:0.9rem;outline:none;transition:border-color .2s;}
+  .newsletter-input:focus{border-color:var(--blue);}
+  .btn-primary{background:#85c9ff;color:#0d1b2a;padding:13px 28px;border-radius:40px;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;transition:background .2s,transform .15s;font-family:inherit;display:inline-block;white-space:nowrap;}
+  .btn-primary:hover{background:#5aafee;transform:translateY(-2px);}
+
+  /* FOOTER */
+  footer{background:#edf4ff;border-top:1px solid var(--border);padding:72px 60px 40px;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.2fr;gap:48px;margin-bottom:56px;}
+  .footer-brand img{height:40px;margin-bottom:16px;}
+  .footer-brand p{font-size:0.88rem;color:#4a6885;line-height:1.7;margin-bottom:18px;}
+  .footer-contact-info{font-size:0.85rem;color:#4a6885;line-height:2;}
+  .footer-contact-info a{color:#4a6885;text-decoration:none;}
+  .footer-contact-info a:hover{color:var(--blue);}
+  .footer-col h4{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.9rem;color:#0d1b2a;margin-bottom:16px;letter-spacing:.04em;}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+  .footer-col ul a{color:#4a6885;text-decoration:none;font-size:0.87rem;transition:color .2s;}
+  .footer-col ul a:hover{color:var(--blue);}
+  .footer-social{display:flex;gap:12px;margin-top:20px;}
+  .social-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(133,201,255,0.4);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1rem;color:#4a6885;transition:border-color .2s,color .2s,background .2s;}
+  .social-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-glow);}
+  .footer-bottom{border-top:1px solid var(--border);padding-top:28px;text-align:center;font-size:0.82rem;color:#4a6885;}
+
+  /* MOBILE */
+  @media(max-width:1024px){
+    .blog-layout{grid-template-columns:1fr;padding:56px 20px;}
+    .blog-sidebar{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+    #articleView{padding:100px 20px 56px;}
+  }
+  @media(max-width:900px){
+    nav{padding:16px 20px;}
+    .nav-links,.nav-cta{display:none;}
+    .hamburger{display:flex;}
+    .blog-hero{padding:110px 20px 56px;}
+    .featured-post{grid-template-columns:1fr;}
+    .featured-post-img{min-height:220px;}
+    .blog-grid{grid-template-columns:1fr;}
+    .newsletter-section{padding:56px 20px;}
+    .newsletter-form{flex-direction:column;}
+    footer{padding:56px 20px 32px;}
+    .footer-grid{grid-template-columns:1fr;gap:32px;}
+    .article-hero-img{height:240px;}
+    .article-share{flex-direction:column;}
+  }
+  @media(max-width:640px){
+    .blog-sidebar{grid-template-columns:1fr;}
+    .lang-toggle{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo"/>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" data-en="Home">Home</a></li>
+    <li><a href="index.html#about-us" data-en="About Us">About Us</a></li>
+    <li><a href="index.html#our-services" data-en="Services">Services</a></li>
+    <li><a href="rpto.html">RPTO</a></li>
+    <li><a href="products.html" data-en="Products">Products</a></li>
+    <li><a href="blogs.html" class="active" data-en="Blog">Blog</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')" id="btnEn">EN</button>
+      <button class="lang-btn" onclick="setLang('te')" id="btnTe">తెలుగు</button>
+    </div>
+    <a class="nav-cta" href="tel:+918977771705" data-en="Get a Free Quote">Get a Free Quote</a>
+    <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="nav-mobile-menu" id="mobileMenu">
+  <button class="nav-mobile-close" onclick="closeMobileMenu()">&times;</button>
+  <a href="index.html" onclick="closeMobileMenu()" data-en="Home">Home</a>
+  <a href="index.html#about-us" onclick="closeMobileMenu()" data-en="About Us">About Us</a>
+  <a href="index.html#our-services" onclick="closeMobileMenu()" data-en="Services">Services</a>
+  <a href="rpto.html" onclick="closeMobileMenu()">RPTO</a>
+  <a href="products.html" onclick="closeMobileMenu()" data-en="Products" >Products</a>
+  <a href="blogs.html" onclick="closeMobileMenu()" data-en="Blog">Blog</a>
+  <!-- Mobile lang toggle -->
+  <div class="lang-toggle" style="display:flex;">
+    <button class="lang-btn active" onclick="setLang('en')" id="btnEnM">EN</button>
+    <button class="lang-btn" onclick="setLang('te')" id="btnTeM">తెలుగు</button>
+  </div>
+  <a href="tel:+918977771705" style="color:var(--blue);border:1.5px solid var(--blue);padding:12px 32px;border-radius:40px;text-decoration:none;" data-en="Get a Free Quote" data-te="ఉచిత కోట్">Get a Free Quote</a>
+</div>
+
+<!-- HERO -->
+<div class="blog-hero" id="blogHero">
+  <div class="blog-hero-bg"></div>
+  <div class="blog-hero-glow"></div>
+  <div class="blog-hero-inner">
+    <div class="section-tag" data-en="SAG Insights">SAG Insights</div>
+    <h1 data-en="Drone Knowledge.<br/><span>Built for Farmers.</span>">Drone Knowledge.<br/><span>Built for Farmers.</span></h1>
+    <p data-en="Guides, updates, and stories from India's agri-drone frontier — DGCA news, pilot tips, crop spraying techniques, and precision farming breakthroughs.">Guides, updates, and stories from India's agri-drone frontier — DGCA news, pilot tips, crop spraying techniques, and precision farming breakthroughs.</p>
+  </div>
+</div>
+
+<!-- BLOG LIST VIEW -->
+<div id="blogListView">
+  <div class="blog-layout">
+    <div class="blog-main">
+
+      <!-- Featured -->
+      <div class="featured-post" onclick="openArticle('featured')">
+        <div class="featured-post-img">
+          <img src="https://framerusercontent.com/images/BQEa9rjTYAf4kKL8dgOkEQhxI.jpg" alt="DGCA Drone Regulations 2025"/>
+          <div class="featured-badge" data-en="Featured" data-te="ముఖ్యమైనది">Featured</div>
+        </div>
+        <div class="featured-post-body">
+          <span class="post-cat" data-en="📋 DGCA &amp; Regulations" data-te="📋 DGCA &amp; నిబంధనలు">📋 DGCA &amp; Regulations</span>
+          <h2 data-en="Everything You Need to Know About DGCA Drone Rules in 2025" data-te="2025లో DGCA డ్రోన్ నిబంధనల గురించి మీకు తెలుసుకోవలసినదంతా">Everything You Need to Know About DGCA Drone Rules in 2025</h2>
+          <div class="post-meta">
+            <span>🗓 12 May 2025</span>
+            <span>⏱ 6 <span data-en="min read" data-te="నిమిషాల చదువు">min read</span></span>
+            <span>👤 SAG Team</span>
+          </div>
+          <p data-en="India's drone regulations have evolved rapidly. From Digital Sky Platform approvals to Remote Pilot Certificates — here's a complete breakdown of what every drone operator must know before flying in 2025." data-te="భారతదేశంలో డ్రోన్ నిబంధనలు వేగంగా అభివృద్ధి చెందాయి. డిజిటల్ స్కై ప్లాట్‌ఫారమ్ ఆమోదాల నుండి రిమోట్ పైలట్ సర్టిఫికేట్ల వరకు — 2025లో ప్రతి డ్రోన్ ఆపరేటర్ తప్పనిసరిగా తెలుసుకోవలసిన విషయాల పూర్తి వివరణ ఇక్కడ ఉంది.">India's drone regulations have evolved rapidly. From Digital Sky Platform approvals to Remote Pilot Certificates — here's a complete breakdown of what every drone operator must know before flying in 2025.</p>
+          <button class="read-more" onclick="event.stopPropagation();openArticle('featured')" data-en="Read Article →" data-te="వ్యాసం చదవండి →">Read Article →</button>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterPosts('all',this)" data-en="All Posts">All Posts</button>
+        <button class="filter-btn" onclick="filterPosts('regulations',this)" data-en="DGCA &amp; Regulations">DGCA &amp; Regulations</button>
+        <button class="filter-btn" onclick="filterPosts('training',this)" data-en="Pilot Training">Pilot Training</button>
+        <button class="filter-btn" onclick="filterPosts('farming',this)" data-en="Precision Farming">Precision Farming</button>
+        <button class="filter-btn" onclick="filterPosts('technology',this)" data-en="Technology">Technology</button>
+      </div>
+
+      <!-- Blog Grid -->
+      <div class="blog-grid" id="blogGrid">
+
+        <div class="blog-card" data-cat="farming" onclick="openArticle('pesticide')">
+          <div class="blog-card-img">
+            <img src="https://framerusercontent.com/images/W3YWoSFln8Ebxxy6WivnNrF48g.png" alt="Agri Drone Spraying"/>
+            <div class="blog-card-cat" data-en="Precision Farming" data-te="ఖచ్చితమైన వ్యవసాయం">Precision Farming</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="How Agri-Drones Are Reducing Pesticide Use by 30% in Andhra Pradesh" data-te="ఆంధ్రప్రదేశ్‌లో అగ్రి-డ్రోన్లు పురుగుమందుల వినియోగాన్ని 30% తగ్గిస్తున్న విధానం">How Agri-Drones Are Reducing Pesticide Use by 30% in Andhra Pradesh</h3>
+            <p data-en="Farmers across Andhra Pradesh are switching to drone spraying and seeing dramatic reductions in input costs and chemical usage." data-te="ఆంధ్రప్రదేశ్ అంతటా రైతులు డ్రోన్ పిచికారీకి మారుతున్నారు మరియు పెట్టుబడి వ్యయం మరియు రసాయన వినియోగంలో నాటకీయ తగ్గింపులను చూస్తున్నారు.">Farmers across Andhra Pradesh are switching to drone spraying and seeing dramatic reductions in input costs and chemical usage.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 3 Apr 2025 · 4 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('pesticide')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="training" onclick="openArticle('pilot5things')">
+          <div class="blog-card-img">
+            <img src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt="Drone Pilot Training"/>
+            <div class="blog-card-cat" data-en="Pilot Training" data-te="పైలట్ శిక్షణ">Pilot Training</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="5 Things Every Aspiring Drone Pilot Should Know Before Enrolling" data-te="నమోదు చేసుకునే ముందు ప్రతి ఆశావహ డ్రోన్ పైలట్ తెలుసుకోవలసిన 5 విషయాలు">5 Things Every Aspiring Drone Pilot Should Know Before Enrolling</h3>
+            <p data-en="From eligibility criteria and course structure to exam tips and career scope — a practical guide for first-time trainees." data-te="అర్హత ప్రమాణాలు మరియు కోర్సు నిర్మాణం నుండి పరీక్ష చిట్కాలు మరియు కెరీర్ వ్యాప్తి వరకు — మొదటిసారి శిక్షణ పొందేవారికి ఆచరణాత్మక మార్గదర్శి.">From eligibility criteria and course structure to exam tips and career scope — a practical guide for first-time trainees.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 18 Mar 2025 · 5 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('pilot5things')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="technology" onclick="openArticle('dronesize')">
+          <div class="blog-card-img">
+            <img src="https://framerusercontent.com/images/s7jWNKFDt4kbVwESltnIdw299PQ.webp" alt="Drone Technology"/>
+            <div class="blog-card-cat" data-en="Technology" data-te="సాంకేతికత">Technology</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="Small vs Medium Class Drones: Which Is Right for Your Farm?" data-te="చిన్న వర్సెస్ మీడియం క్లాస్ డ్రోన్లు: మీ వ్యవసాయానికి ఏది సరైనది?">Small vs Medium Class Drones: Which Is Right for Your Farm?</h3>
+            <p data-en="A side-by-side comparison of payload capacity, coverage area, cost, and maintenance requirements to help you decide." data-te="పేలోడ్ సామర్థ్యం, కవరేజ్ ఏరియా, ఖర్చు మరియు నిర్వహణ అవసరాలను పక్కపక్కన పోల్చి మీకు నిర్ణయించుకోవడంలో సహాయపడుతుంది.">A side-by-side comparison of payload capacity, coverage area, cost, and maintenance requirements to help you decide.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 7 Feb 2025 · 4 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('dronesize')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="regulations" onclick="openArticle('rpc')">
+          <div class="blog-card-img">
+            <img src="https://framerusercontent.com/images/TmEe0Bfwy52yUGB7vkBzEygNA4.png" alt="DGCA Certificate"/>
+            <div class="blog-card-cat" data-en="DGCA &amp; Regulations" data-te="DGCA &amp; నిబంధనలు">DGCA &amp; Regulations</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="Remote Pilot Certificate (RPC): Step-by-Step Application Guide" data-te="రిమోట్ పైలట్ సర్టిఫికేట్ (RPC): దశల వారీ దరఖాస్తు మార్గదర్శి">Remote Pilot Certificate (RPC): Step-by-Step Application Guide</h3>
+            <p data-en="A clear walkthrough of the Digital Sky Platform, document requirements, and what to expect on exam day." data-te="డిజిటల్ స్కై ప్లాట్‌ఫారమ్, పత్రాల అవసరాలు మరియు పరీక్ష రోజున ఏమి ఆశించాలో స్పష్టమైన వివరణ.">A clear walkthrough of the Digital Sky Platform, document requirements, and what to expect on exam day.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 22 Jan 2025 · 6 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('rpc')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="farming" onclick="openArticle('paddy')">
+          <div class="blog-card-img">
+            <img src="https://framerusercontent.com/images/Yi7o292da9z47oNypxDapOCFQ.webp" alt="Rice Crop Spraying"/>
+            <div class="blog-card-cat" data-en="Precision Farming" data-te="ఖచ్చితమైన వ్యవసాయం">Precision Farming</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="Best Drone Spraying Practices for Paddy and Rice Crops" data-te="వరి మరియు వడ్లు పంటలకు ఉత్తమ డ్రోన్ పిచికారీ పద్ధతులు">Best Drone Spraying Practices for Paddy and Rice Crops</h3>
+            <p data-en="Optimal flight altitude, nozzle settings, spray timing, and weather windows for maximum coverage on paddy fields." data-te="వరి పొలాలపై గరిష్ట కవరేజ్ కోసం అనుకూలమైన విమాన ఎత్తు, నాజిల్ సెట్టింగ్లు, పిచికారీ సమయం మరియు వాతావరణ విండోలు.">Optimal flight altitude, nozzle settings, spray timing, and weather windows for maximum coverage on paddy fields.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 10 Jan 2025 · 5 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('paddy')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="blog-card" data-cat="training" onclick="openArticle('rpto5day')">
+          <div class="blog-card-img">
+            <img src="https://framerusercontent.com/images/BQEa9rjTYAf4kKL8dgOkEQhxI.jpg" alt="Batch Training"/>
+            <div class="blog-card-cat" data-en="Pilot Training" data-te="పైలట్ శిక్షణ">Pilot Training</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="From Zero to Certified: A Day-by-Day Look at Our 5-Day RPTO Program" data-te="సున్నా నుండి సర్టిఫైడ్ వరకు: మా 5-రోజుల RPTO కార్యక్రమాన్ని రోజువారీగా చూద్దాం">From Zero to Certified: A Day-by-Day Look at Our 5-Day RPTO Program</h3>
+            <p data-en="What actually happens across theory days, simulator sessions, and live flying — straight from our batch graduates." data-te="సిద్ధాంత రోజులు, సిమ్యులేటర్ సెషన్లు మరియు లైవ్ ఫ్లైయింగ్‌లో నిజంగా ఏమి జరుగుతుందో — మా బ్యాచ్ గ్రాడ్యుయేట్ల నుండి నేరుగా.">What actually happens across theory days, simulator sessions, and live flying — straight from our batch graduates.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 5 Dec 2024 · 7 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('rpto5day')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="load-more-wrap">
+        <button class="btn-outline" id="loadMoreBtn" onclick="loadMore()" data-en="Load More Articles" >Load More Articles</button>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="blog-sidebar">
+      <div class="sidebar-widget">
+        <h4 data-en="🔍 Search">🔍 Search</h4>
+        <div class="sidebar-search-wrap">
+          <input class="sidebar-search" type="text" data-en-placeholder="Search articles…" placeholder="Search articles…" oninput="searchPosts(this.value)"/>
+          <span class="sidebar-search-icon">⌕</span>
+        </div>
+      </div>
+      <div class="sidebar-widget">
+        <h4 data-en="📂 Categories" data-te="📂 వర్గాలు">📂 Categories</h4>
+        <ul class="sidebar-cats">
+          <li class="active" onclick="filterFromSidebar('all',this)" data-en="All Posts">All Posts <span class="cat-count">7</span></li>
+          <li onclick="filterFromSidebar('regulations',this)" data-en="DGCA &amp; Regulations">DGCA &amp; Regulations <span class="cat-count">2</span></li>
+          <li onclick="filterFromSidebar('training',this)" data-en="Pilot Training">Pilot Training <span class="cat-count">2</span></li>
+          <li onclick="filterFromSidebar('farming',this)" data-en="Precision Farming">Precision Farming <span class="cat-count">2</span></li>
+          <li onclick="filterFromSidebar('technology',this)" data-en="Technology">Technology <span class="cat-count">1</span></li>
+        </ul>
+      </div>
+      <div class="sidebar-widget">
+        <h4 data-en="🕐 Recent Posts" data-te="🕐 తాజా పోస్టులు">🕐 Recent Posts</h4>
+        <div class="recent-posts">
+          <div class="recent-post" onclick="openArticle('pesticide')">
+            <div class="recent-post-img"><img src="https://framerusercontent.com/images/W3YWoSFln8Ebxxy6WivnNrF48g.png" alt=""/></div>
+            <div class="recent-post-info">
+              <h5 data-en="How Agri-Drones Are Reducing Pesticide Use by 30%" data-te="అగ్రి-డ్రోన్లు పురుగుమందుల వాడకాన్ని 30% తగ్గిస్తున్న విధానం">How Agri-Drones Are Reducing Pesticide Use by 30%</h5>
+              <span>3 Apr 2025</span>
+            </div>
+          </div>
+          <div class="recent-post" onclick="openArticle('pilot5things')">
+            <div class="recent-post-img"><img src="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png" alt=""/></div>
+            <div class="recent-post-info">
+              <h5 data-en="5 Things Every Aspiring Drone Pilot Should Know" data-te="ప్రతి ఆశావహ డ్రోన్ పైలట్ తెలుసుకోవలసిన 5 విషయాలు">5 Things Every Aspiring Drone Pilot Should Know</h5>
+              <span>18 Mar 2025</span>
+            </div>
+          </div>
+          <div class="recent-post" onclick="openArticle('rpc')">
+            <div class="recent-post-img"><img src="https://framerusercontent.com/images/TmEe0Bfwy52yUGB7vkBzEygNA4.png" alt=""/></div>
+            <div class="recent-post-info">
+              <h5 data-en="Remote Pilot Certificate: Step-by-Step Guide" data-te="రిమోట్ పైలట్ సర్టిఫికేట్: దశల వారీ మార్గదర్శి">Remote Pilot Certificate: Step-by-Step Guide</h5>
+              <span>22 Jan 2025</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-widget">
+        <h4 data-en="🏷 Tags">🏷 Tags</h4>
+        <div class="sidebar-tags">
+          <span class="sidebar-tag" onclick="filterPosts('regulations',null)" data-en="DGCA" data-te="DGCA">DGCA</span>
+          <span class="sidebar-tag" onclick="filterPosts('farming',null)" data-en="Agri Drone" data-te="వ్యవసాయ డ్రోన్">Agri Drone</span>
+          <span class="sidebar-tag" onclick="filterPosts('training',null)" data-en="RPTO" data-te="RPTO">RPTO</span>
+          <span class="sidebar-tag" onclick="filterPosts('training',null)" data-en="Pilot Training" data-te="పైలట్ శిక్షణ">Pilot Training</span>
+          <span class="sidebar-tag" onclick="filterPosts('farming',null)" data-en="Paddy" data-te="వరి">Paddy</span>
+          <span class="sidebar-tag" onclick="filterPosts('farming',null)" data-en="Crop Spraying" data-te="పంట పిచికారీ">Crop Spraying</span>
+          <span class="sidebar-tag" data-en="Andhra Pradesh" data-te="ఆంధ్రప్రదేశ్">Andhra Pradesh</span>
+          <span class="sidebar-tag" onclick="filterPosts('regulations',null)" data-en="Remote Pilot" data-te="రిమోట్ పైలట్">Remote Pilot</span>
+          <span class="sidebar-tag" onclick="filterPosts('regulations',null)" data-en="Certification" data-te="సర్టిఫికేషన్">Certification</span>
+          <span class="sidebar-tag" onclick="filterPosts('farming',null)" data-en="Precision Farming" data-te="ఖచ్చితమైన వ్యవసాయం">Precision Farming</span>
+        </div>
+      </div>
+      <div class="sidebar-widget sidebar-cta-widget">
+        <h4 data-en="🚁 Join Our RPTO" data-te="🚁 మా RPTO లో చేరండి">🚁 Join Our RPTO</h4>
+        <p data-en="Get DGCA-certified in just 5 days. Limited seats available for the upcoming batch." data-te="కేవలం 5 రోజుల్లో DGCA సర్టిఫైడ్ అవ్వండి. రాబోయే బ్యాచ్‌కు పరిమిత సీట్లు అందుబాటులో ఉన్నాయి.">Get DGCA-certified in just 5 days. Limited seats available for the upcoming batch.</p>
+        <a class="btn-white" href="https://wa.me/917070807749?text=Hi%2C%20I%20came%20across%20your%20website%20and%20would%20like%20to%20join%20for%20pilot%20training%20in%20the%20next%20batch.%20Please%20share%20the%20details." target="_blank" data-en="Enquire on WhatsApp" data-te="WhatsApp లో విచారించండి">Enquire on WhatsApp</a>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- ARTICLE VIEW -->
+<div id="articleView">
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:40px;">
+    <button class="article-back" onclick="closeArticle()" data-en="← Back to Blog" data-te="← బ్లాగ్‌కు తిరిగి వెళ్ళండి">← Back to Blog</button>
+    <div class="article-lang-switch">
+      <button class="article-lang-btn active" onclick="setLang('en')" id="btnEnA">EN</button>
+      <button class="article-lang-btn" onclick="setLang('te')" id="btnTeA">తెలుగు</button>
+    </div>
+  </div>
+  <img id="articleImg" class="article-hero-img" src="" alt=""/>
+  <div id="articleCat" class="article-cat-badge"></div>
+  <h1 id="articleTitle" class="article-title"></h1>
+  <div id="articleMeta" class="article-meta"></div>
+  <div id="articleBody" class="article-body"></div>
+  <div class="article-tags">
+    <div class="article-tags-label" data-en="Tags" data-te="ట్యాగ్లు">Tags</div>
+    <div class="sidebar-tags" id="articleTags"></div>
+  </div>
+  <div class="article-share">
+    <h4 data-en="Found this useful? Share it." data-te="ఉపయోగకరంగా అనిపించిందా? షేర్ చేయండి.">Found this useful? Share it.</h4>
+    <div class="share-btns">
+      <button class="share-btn" onclick="shareArticle('whatsapp')">📱 WhatsApp</button>
+      <button class="share-btn" onclick="shareArticle('twitter')">🐦 Twitter</button>
+      <button class="share-btn" onclick="shareArticle('copy')" data-en="🔗 Copy Link" data-te="🔗 లింక్ కాపీ">🔗 Copy Link</button>
+    </div>
+  </div>
+  <div class="article-nav" id="articleNav"></div>
+</div>
+
+<!-- NEWSLETTER -->
+<div class="newsletter-section">
+  <div class="newsletter-inner">
+    <div class="section-tag" data-en="Stay Updated">Stay Updated</div>
+    <h2 data-en="Get Drone Insights <span>in Your Inbox</span>" >Get Drone Insights <span>in Your Inbox</span></h2>
+    <p data-en="Subscribe for the latest DGCA updates, agri-drone tips, and news from SAG Drone Technologies." >Subscribe for the latest DGCA updates, agri-drone tips, and news from SAG Drone Technologies.</p>
+    <div class="newsletter-form">
+      <input class="newsletter-input" type="email" data-en-placeholder="Enter your email address" placeholder="Enter your email address"/>
+      <button class="btn-primary" onclick="subscribeNewsletter()">Subscribe</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo"/>
+      <p data-en="Book your drone now and take your farming to the next level with SAG Drone Technologies — India's trusted agri-drone ecosystem builder.">Book your drone now and take your farming to the next level with SAG Drone Technologies — India's trusted agri-drone ecosystem builder.</p>
+      <div class="footer-contact-info">
+        <div>📧 <a href="mailto:sagtechinfo@gmail.com">sagtechinfo@gmail.com</a></div>
+        <div>📞 <a href="tel:+917070807749">+91 707080 7749</a> / <a href="tel:+918977771705">897777 1705</a></div>
+        <div>📍 Opp. FCI Godowns, Nidadavole, A.P</div>
+      </div>
+      <div class="footer-social">
+        <a class="social-btn" href="https://www.youtube.com/@SAGDroneTechnologies" target="_blank">▶</a>
+        <a class="social-btn" href="https://www.instagram.com/sagdronetechnologies/" target="_blank">📷</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4 data-en="Home">Home</h4>
+      <ul>
+        <li><a href="index.html#about-us" data-en="About">About</a></li>
+        <li><a href="index.html#our-services" data-en="Services">Services</a></li>
+        <li><a href="index.html#reviews" data-en="Testimonials">Testimonials</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-en="Branches">Branches</h4>
+      <ul>
+        <li><a href="#">MARTUR</a></li>
+        <li><a href="#">NIDADAVOLE</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4 data-en="Quick Links">Quick Links</h4>
+      <ul>
+        <li><a href="rpto.html" data-en="RPTO Training">RPTO Training</a></li>
+        <li><a href="products.html" data-en="Products">Products</a></li>
+        <li><a href="blogs.html" data-en="Blog">Blog</a></li>
+        <li><a href="tel:+918977771705" data-en="Contact Us">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">@2026, SAG Drone Technologies. All Rights Reserved.</div>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════
+   LANGUAGE SYSTEM
+══════════════════════════════════════════ */
+var currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.body.classList.toggle('lang-te', lang === 'te');
+
+  // Sync all toggle buttons
+  ['btnEn','btnEnM','btnEnA'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.toggle('active', lang === 'en');
+  });
+  ['btnTe','btnTeM','btnTeA'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.toggle('active', lang === 'te');
+  });
+
+  // Translate all [data-en] / [data-te] elements
+  document.querySelectorAll('[data-en]').forEach(function(el) {
+    var val = el.getAttribute('data-' + lang);
+    if (!val) return;
+    // Use innerHTML for elements that may contain HTML tags
+    if (el.tagName === 'H1' || el.tagName === 'H2' || el.tagName === 'P' || el.classList.contains('newsletter-inner')) {
+      el.innerHTML = val;
+    } else {
+      el.textContent = val;
+    }
+  });
+
+  // Translate placeholder attributes
+  document.querySelectorAll('[data-en-placeholder]').forEach(function(el) {
+    el.placeholder = el.getAttribute('data-' + lang + '-placeholder') || el.getAttribute('data-en-placeholder');
+  });
+
+  // If an article is open, re-render its content in the new language
+  if (currentArticleId) {
+    renderArticleContent(currentArticleId);
+  }
+}
+
+/* ══════════════════════════════════════════
+   ARTICLE DATA
+══════════════════════════════════════════ */
+var ARTICLES = {
+  featured: {
+    id: 'featured',
+    cat:    { en: '📋 DGCA & Regulations',    te: '📋 DGCA & నిబంధనలు' },
+    catKey: 'regulations',
+    title:  { en: 'Everything You Need to Know About DGCA Drone Rules in 2025',
+               te: '2025లో DGCA డ్రోన్ నిబంధనల గురించి మీకు తెలుసుకోవలసినదంతా' },
+    date: '12 May 2025', readTime: '6', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/BQEa9rjTYAf4kKL8dgOkEQhxI.jpg',
+    tags: { en: ['DGCA','Regulations','Remote Pilot','Certification','Digital Sky'],
+             te: ['DGCA','నిబంధనలు','రిమోట్ పైలట్','సర్టిఫికేషన్','డిజిటల్ స్కై'] },
+    body: {
+      en: `<p>India's drone sector has undergone a sea change since the government introduced the Drone Rules 2021. For operators, farmers, and businesses relying on aerial platforms, staying compliant isn't optional — it's essential. Here's everything you need to know about DGCA's framework in 2025.</p>
+      <h2>The Three-Category System</h2>
+      <p>DGCA classifies drones into three broad categories based on weight:</p>
+      <ul><li><strong>Nano (under 250g):</strong> Minimal regulation. No Remote Pilot Certificate required for operations below 50 feet in uncontrolled airspace.</li>
+      <li><strong>Micro (250g – 2kg):</strong> Requires registration on the Digital Sky Platform and, for commercial use, a Remote Pilot Certificate (RPC).</li>
+      <li><strong>Small to Large (2kg+):</strong> Full compliance required — RPC, type certificate, insurance, and prior permission for most flight zones.</li></ul>
+      <div class="highlight-box">💡 Agricultural drones used for spraying typically fall in the Small or Medium category (10–25 kg MTOW) and require full DGCA compliance including a DGCA-approved RPTO training certificate.</div>
+      <h2>The Digital Sky Platform</h2>
+      <p>All drone registrations, Remote Pilot Licences (RPL), and flight permissions are managed through India's <strong>Digital Sky Platform</strong> (digitalsky.dgca.gov.in). Key things you'll need to do on this platform:</p>
+      <ul><li>Register your drone and get a Unique Identification Number (UIN)</li>
+      <li>Apply for your Remote Pilot Certificate after completing RPTO training</li>
+      <li>File flight plans for controlled airspace operations</li>
+      <li>Check the interactive airspace map before every flight</li></ul>
+      <h2>No-Permission, No-Takeoff (NPNT)</h2>
+      <p>All drones above the Nano category must be NPNT-compliant — meaning the drone's software must check and receive digital clearance before it can arm and take off. This is enforced through a hardware-level restriction on approved drone models.</p>
+      <h2>Green, Yellow, and Red Zones</h2>
+      <p>India's airspace is colour-coded on the Digital Sky map. <strong>Green zones</strong> allow flights without prior permission. <strong>Yellow zones</strong> require advance notice. <strong>Red zones</strong> are completely off-limits without special clearance.</p>
+      <div class="highlight-box">⚠️ Flying in a Red or Yellow zone without proper clearance can result in fines up to ₹1 lakh and confiscation of equipment. Always check the map before every operation.</div>
+      <h2>What's Changed in 2025?</h2>
+      <p>The most notable updates this year include streamlined RPC renewal processes, expanded Green zone coverage in rural agricultural areas, and new guidelines for BVLOS experimental corridors in select states. SAG Drone Technologies keeps our operators and RPTO students up to date with every regulatory change.</p>`,
+      te: `<p>ప్రభుత్వం 2021లో డ్రోన్ నిబంధనలు అమలు చేసినప్పటి నుండి భారతదేశపు డ్రోన్ రంగంలో భారీ మార్పు వచ్చింది. ఆపరేటర్లు, రైతులు మరియు వ్యాపారులకు సమ్మతిగా ఉండటం ఐచ్ఛికం కాదు — ఇది తప్పనిసరి. 2025లో DGCA నిర్మాణం గురించి మీకు తెలుసుకోవలసినదంతా ఇక్కడ ఉంది.</p>
+      <h2>మూడు-వర్గాల వ్యవస్థ</h2>
+      <p>DGCA డ్రోన్లను బరువు ఆధారంగా మూడు విశాల వర్గాలుగా వర్గీకరిస్తుంది:</p>
+      <ul><li><strong>నానో (250 గ్రాముల కంటే తక్కువ):</strong> కనిష్ట నిబంధన. అనియంత్రిత వాయు స్థలంలో 50 అడుగుల కంటే తక్కువ కార్యకలాపాలకు రిమోట్ పైలట్ సర్టిఫికేట్ అవసరం లేదు.</li>
+      <li><strong>మైక్రో (250g – 2kg):</strong> డిజిటల్ స్కై ప్లాట్‌ఫారమ్‌లో నమోదు మరియు వాణిజ్య వినియోగానికి రిమోట్ పైలట్ సర్టిఫికేట్ (RPC) అవసరం.</li>
+      <li><strong>చిన్న నుండి పెద్ద (2kg+):</strong> పూర్తి సమ్మతి అవసరం — RPC, టైప్ సర్టిఫికేట్, బీమా మరియు చాలా విమాన జోన్లకు ముందస్తు అనుమతి.</li></ul>
+      <div class="highlight-box">💡 పిచికారీ కోసం ఉపయోగించే వ్యవసాయ డ్రోన్లు సాధారణంగా చిన్న లేదా మీడియం వర్గంలో (10–25 కిలోల MTOW) వస్తాయి మరియు DGCA-ఆమోదిత RPTO శిక్షణ సర్టిఫికేట్‌తో సహా పూర్తి DGCA సమ్మతి అవసరం.</div>
+      <h2>డిజిటల్ స్కై ప్లాట్‌ఫారమ్</h2>
+      <p>అన్ని డ్రోన్ నమోదులు, రిమోట్ పైలట్ లైసెన్స్‌లు (RPL) మరియు విమాన అనుమతులు భారతదేశపు <strong>డిజిటల్ స్కై ప్లాట్‌ఫారమ్</strong> (digitalsky.dgca.gov.in) ద్వారా నిర్వహించబడతాయి:</p>
+      <ul><li>మీ డ్రోన్ నమోదు చేసి యూనీక్ ఐడెంటిఫికేషన్ నంబర్ (UIN) పొందండి</li>
+      <li>RPTO శిక్షణ పూర్తి చేసిన తర్వాత రిమోట్ పైలట్ సర్టిఫికేట్ కోసం దరఖాస్తు చేయండి</li>
+      <li>నియంత్రిత వాయు స్థల కార్యకలాపాలకు విమాన ప్రణాళికలు సమర్పించండి</li>
+      <li>ప్రతి విమానానికి ముందు ఇంటరాక్టివ్ వాయు స్థల మ్యాప్ తనిఖీ చేయండి</li></ul>
+      <h2>అనుమతి లేదు, టేకాఫ్ లేదు (NPNT)</h2>
+      <p>నానో వర్గం పైన ఉన్న అన్ని డ్రోన్లు NPNT-సమ్మతిగా ఉండాలి — అంటే డ్రోన్ సాఫ్ట్‌వేర్ ఆర్మ్ మరియు టేకాఫ్ చేయడానికి ముందే డిజిటల్ అనుమతి తనిఖీ చేసి పొందాలి.</p>
+      <h2>ఆకుపచ్చ, పసుపు మరియు ఎర్ర జోన్లు</h2>
+      <p>డిజిటల్ స్కై మ్యాప్‌లో భారతదేశపు వాయు స్థలం రంగు-కోడ్ చేయబడింది. <strong>ఆకుపచ్చ జోన్లు</strong> ముందస్తు అనుమతి లేకుండా విమానాలను అనుమతిస్తాయి. <strong>పసుపు జోన్లు</strong> ముందస్తు నోటీసు అవసరం. <strong>ఎర్ర జోన్లు</strong> ప్రత్యేక అనుమతి లేకుండా పూర్తిగా నిషేధించబడ్డాయి.</p>
+      <div class="highlight-box">⚠️ సరైన అనుమతి లేకుండా ఎర్ర లేదా పసుపు జోన్‌లో ఎగురడం ₹1 లక్ష వరకు జరిమానాలు మరియు పరికరాలు స్వాధీనానికి దారితీయవచ్చు. ప్రతి ఆపరేషన్‌కు ముందే మ్యాప్ తనిఖీ చేయండి.</div>
+      <h2>2025లో ఏమి మారింది?</h2>
+      <p>ఈ సంవత్సరం గమనించదగిన నవీకరణలలో సరళీకృత RPC పునరుద్ధరణ ప్రక్రియలు, గ్రామీణ వ్యవసాయ ప్రాంతాలలో విస్తరించిన ఆకుపచ్చ జోన్ కవరేజ్ మరియు ఎంపిక రాష్ట్రాలలో BVLOS ప్రయోగాత్మక కారిడార్లకు కొత్త మార్గదర్శకాలు ఉన్నాయి. SAG డ్రోన్ టెక్నాలజీస్ ప్రతి నియంత్రణ మార్పుతో మా ఆపరేటర్లు మరియు RPTO విద్యార్థులను అప్‌డేట్‌గా ఉంచుతుంది.</p>`
+    }
+  },
+
+  pesticide: {
+    id: 'pesticide',
+    cat:    { en: '🌾 Precision Farming', te: '🌾 ఖచ్చితమైన వ్యవసాయం' },
+    catKey: 'farming',
+    title:  { en: 'How Agri-Drones Are Reducing Pesticide Use by 30% in Andhra Pradesh',
+               te: 'ఆంధ్రప్రదేశ్‌లో అగ్రి-డ్రోన్లు పురుగుమందుల వినియోగాన్ని 30% తగ్గిస్తున్న విధానం' },
+    date: '3 Apr 2025', readTime: '4', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/W3YWoSFln8Ebxxy6WivnNrF48g.png',
+    tags: { en: ['Agri Drone','Precision Farming','Pesticide','Andhra Pradesh','Crop Spraying'],
+             te: ['వ్యవసాయ డ్రోన్','ఖచ్చితమైన వ్యవసాయం','పురుగుమందు','ఆంధ్రప్రదేశ్','పంట పిచికారీ'] },
+    body: {
+      en: `<p>Across paddy fields and chilli farms in West Godavari, Krishna, and Guntur districts, a quiet revolution is taking place. Farmers who once spent days manually applying pesticides are switching to agri-drone spraying and reporting input cost reductions of up to 30%.</p>
+      <h2>The Problem with Manual Spraying</h2>
+      <p>Traditional knapsack sprayers have two fundamental problems: coverage uniformity and operator exposure. Manual spraying often misses the underside of leaves — where pests like brown planthopper lay eggs — and exposes farm workers to harmful chemicals for hours at a stretch.</p>
+      <div class="highlight-box">🌿 Studies show drone spraying achieves 15–22% better canopy penetration compared to manual knapsack spraying in dense paddy stands.</div>
+      <h2>Why Drones Change the Equation</h2>
+      <p>Agri-drones with rotary atomiser nozzles generate droplets in the 50–150 micron range — fine enough to coat both surfaces of a leaf without runoff. The downwash from rotors also creates an upward air current that flips leaves, improving coverage on undersides.</p>
+      <ul><li><strong>Manual spraying:</strong> 20–40 litres/acre, 2–3 workers, 4–6 hours/acre</li>
+      <li><strong>Drone spraying:</strong> 10–12 litres/acre, 1 operator, 5–6 minutes/acre</li>
+      <li><strong>Pesticide saving:</strong> 70–80% less chemical volume needed</li>
+      <li><strong>Labour saving:</strong> Up to 85% time reduction</li></ul>
+      <h2>Real Numbers from SAG Operators</h2>
+      <p>Farmers who booked our X6 Plus Type Certified Drone for paddy spraying in the Nidadavole and Bhimavaram blocks reported average savings of ₹3,000–₹4,000 per Day per spray cycle. Over two spray cycles per season, that's ₹1,600–₹2,400 per acre saved.</p>
+      <h2>Environmental Benefits</h2>
+      <p>Fewer chemicals reaching the soil means less groundwater contamination, lower residue on produce, and healthier farm ecosystems. Some farmers in our network have reported a comeback of beneficial insects after switching to drone-based IPM protocols.</p>`,
+      te: `<p>పశ్చిమ గోదావరి, కృష్ణా మరియు గుంటూరు జిల్లాలలో వరి పొలాలు మరియు మిర్చి తోటలలో ఒక నిశ్శబ్ద విప్లవం జరుగుతోంది. ఒకప్పుడు రోజుల తరబడి చేతితో పురుగుమందులు వేసిన రైతులు ఇప్పుడు డ్రోన్ పిచికారీకి మారి పెట్టుబడి వ్యయంలో 30% వరకు తగ్గింపు నివేదిస్తున్నారు.</p>
+      <h2>చేతితో పిచికారీ సమస్య</h2>
+      <p>సాంప్రదాయ నాప్‌సాక్ స్ప్రేయర్లకు రెండు ప్రాథమిక సమస్యలు ఉన్నాయి: కవరేజ్ ఏకరూపత మరియు ఆపరేటర్ బహిర్గత. చేతితో పిచికారీ చేస్తే తరచుగా ఆకుల అడుగు భాగం వదిలిపోతుంది — అక్కడే బ్రౌన్ ప్లాంట్‌హాపర్ వంటి తెగుళ్ళు గుడ్లు పెడతాయి.</p>
+      <div class="highlight-box">🌿 పరిశోధనలు చూపిస్తున్నాయి — దట్టమైన వరి పంటలో చేతి పిచికారీతో పోల్చితే డ్రోన్ పిచికారీ 15–22% మెరుగైన కానోపి చొచ్చుకుపోవడాన్ని సాధిస్తుంది.</div>
+      <h2>డ్రోన్లు సమీకరణాన్ని ఎందుకు మారుస్తున్నాయి</h2>
+      <p>రొటరీ అటోమైజర్ నాజిల్లతో కూడిన అగ్రి-డ్రోన్లు 50–150 మైక్రాన్ పరిధిలో చుక్కలను ఉత్పత్తి చేస్తాయి — ఇవి ఆకు రెండు వైపులనూ కోటింగ్ చేయగలవు.</p>
+      <ul><li><strong>చేతితో పిచికారీ:</strong> 20–40 లీటర్లు/ఎకరం, 2–3 కార్మికులు, 4–6 గంటలు/ఎకరం</li>
+      <li><strong>డ్రోన్ పిచికారీ:</strong> 10–15 లీటర్లు/ఎకరం, 1 ఆపరేటర్, 5–6 నిమిషాలు/ఎకరం</li>
+      <li><strong>పురుగుమందు ఆదా:</strong> 70–80% తక్కువ రసాయన వాల్యూమ్ అవసరం</li>
+      <li><strong>కార్మిక ఆదా:</strong> 85% వరకు సమయ తగ్గింపు</li></ul>
+      <h2>SAG ఆపరేటర్ల నుండి నిజమైన సంఖ్యలు</h2>
+      <p>నిడదవోలు మరియు భీమవరం బ్లాక్‌లలో వరి పిచికారీ కోసం మా X6 Plus Type Certified Drone బుక్ చేసిన రైతులు సగటున ప్రతి పిచికారీ చక్రానికి రోజుకి ₹3,000–₹4,000 ఆదా నివేదించారు. సీజన్‌కు రెండు పిచికారీ చక్రాలలో ఎకరానికి ₹1,600–₹2,400 ఆదా అవుతుంది.</p>
+      <h2>పర్యావరణ ప్రయోజనాలు</h2>
+      <p>తక్కువ రసాయనాలు నేలకు చేరడం వల్ల భూగర్భ జల కాలుష్యం తక్కువగా ఉంటుంది, ఉత్పత్తిపై అవశేషాలు తక్కువగా ఉంటాయి మరియు వ్యవసాయ పర్యావరణ వ్యవస్థ ఆరోగ్యకరంగా ఉంటుంది. డ్రోన్-ఆధారిత IPM ప్రోటోకాల్‌లకు మారిన తర్వాత మా నెట్‌వర్క్‌లోని కొందరు రైతులు ప్రయోజనకర కీటకాలు తిరిగి వచ్చినట్లు నివేదించారు.</p>`
+    }
+  },
+
+  pilot5things: {
+    id: 'pilot5things',
+    cat:    { en: '🎓 Pilot Training', te: '🎓 పైలట్ శిక్షణ' },
+    catKey: 'training',
+    title:  { en: '5 Things Every Aspiring Drone Pilot Should Know Before Enrolling',
+               te: 'నమోదు చేసుకునే ముందు ప్రతి ఆశావహ డ్రోన్ పైలట్ తెలుసుకోవలసిన 5 విషయాలు' },
+    date: '18 Mar 2025', readTime: '5', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png',
+    tags: { en: ['Pilot Training','RPTO','DGCA','Certification','Career'],
+             te: ['పైలట్ శిక్షణ','RPTO','DGCA','సర్టిఫికేషన్','కెరీర్'] },
+    body: {
+      en: `<p>So you've decided to become a certified drone pilot. Smart move — India's agri-drone sector is on a steep growth curve and trained pilots are in high demand. But before you enrol in any RPTO, here are five things you absolutely must know.</p>
+      <h2>1. Eligibility Requirements Are Non-Negotiable</h2>
+      <ul><li>Minimum age: <strong>18 years</strong></li>
+      <li>Educational qualification: <strong>Class 10 pass</strong> or equivalent</li>
+      <li>Medical fitness: No disqualifying conditions for the drone category</li>
+      <li>Valid government-issued ID for Digital Sky Platform registration</li></ul>
+      <div class="highlight-box">✅ If you're under 18, you can complete training but cannot appear for the DGCA exam or receive your RPC until you turn 18.</div>
+      <h2>2. Not All RPTOs Are Equal</h2>
+      <p>An RPTO must be DGCA-approved and listed on the Digital Sky Portal. Training at an unapproved organisation means your certificate won't be recognised. Always verify the RPTO's approval status and check which drone categories they're authorised to train for.</p>
+      <h2>3. The Theory Exam Is Harder Than You Think</h2>
+      <p>The DGCA theory exam covers air regulations, meteorology, navigation basics, airspace classification, and drone systems. Many candidates fail on their first attempt without proper preparation. At SAG RPTO, we include comprehensive theory coaching and mock tests as part of our 5-day program.</p>
+      <h2>4. Flying Hours Matter — and They're Logged</h2>
+      <p>Minimum flying hours are specified by DGCA for each drone category and logged on the Digital Sky Platform. Make sure the RPTO gives you adequate stick time on actual drones — not just simulators.</p>
+      <h2>5. Your Certificate Has an Expiry Date</h2>
+      <p>The Remote Pilot Certificate (RPC) is valid for 10 years from the date of issue. Mark your renewal dates well in advance to avoid flying with a lapsed licence. Contact SAG Drone Technologies to know about our upcoming RPTO batches.</p>`,
+      te: `<p>మీరు సర్టిఫైడ్ డ్రోన్ పైలట్ కావాలని నిర్ణయించుకున్నారు. తెలివైన నిర్ణయం — భారతదేశపు అగ్రి-డ్రోన్ రంగం వేగంగా వృద్ధి చెందుతోంది మరియు శిక్షణ పొందిన పైలట్లకు అధిక డిమాండ్ ఉంది. కానీ ఏదైనా RPTO లో చేరే ముందు, మీరు తప్పనిసరిగా తెలుసుకోవలసిన ఐదు విషయాలు ఇక్కడ ఉన్నాయి.</p>
+      <h2>1. అర్హత అవసరాలు తప్పనిసరి</h2>
+      <ul><li>కనిష్ట వయస్సు: <strong>18 సంవత్సరాలు</strong></li>
+      <li>విద్యార్హత: <strong>10వ తరగతి పాస్</strong> లేదా సమానం</li>
+      <li>వైద్య దృఢత: డ్రోన్ వర్గానికి అనర్హత కలిగించే పరిస్థితులు లేకపోవడం</li>
+      <li>డిజిటల్ స్కై ప్లాట్‌ఫారమ్ నమోదు కోసం చెల్లుబాటు అయ్యే ప్రభుత్వ ID</li></ul>
+      <div class="highlight-box">✅ మీకు 18 సంవత్సరాల కంటే తక్కువ వయస్సు ఉంటే, మీరు శిక్షణ పూర్తి చేయవచ్చు కానీ 18 సంవత్సరాలు వచ్చే వరకు DGCA పరీక్షకు హాజరు కాలేరు లేదా RPC పొందలేరు.</div>
+      <h2>2. అన్ని RPTOలు ఒకేలా ఉండవు</h2>
+      <p>RPTO తప్పనిసరిగా DGCA-ఆమోదిత మరియు డిజిటల్ స్కై పోర్టల్‌లో నమోదైనదై ఉండాలి. ఆమోదించబడని సంస్థలో శిక్షణ అంటే మీ సర్టిఫికేట్ గుర్తింపు పొందదు. ఎల్లప్పుడూ RPTO ఆమోద స్థితిని ధృవీకరించండి.</p>
+      <h2>3. సిద్ధాంత పరీక్ష మీరు అనుకున్నదానికంటే కష్టంగా ఉంటుంది</h2>
+      <p>DGCA సిద్ధాంత పరీక్ష వాయు నిబంధనలు, వాతావరణ శాస్త్రం, నావిగేషన్ ప్రాథమికాలు, వాయు స్థల వర్గీకరణ మరియు డ్రోన్ సిస్టమ్‌లను కవర్ చేస్తుంది. తగిన తయారీ లేకుండా చాలా మంది అభ్యర్థులు మొదటి ప్రయత్నంలో విఫలమవుతారు. SAG RPTO లో మేము మా 5-రోజుల కార్యక్రమంలో సమగ్ర సిద్ధాంత కోచింగ్ మరియు మాక్ టెస్టులను చేర్చాము.</p>
+      <h2>4. ఎగిరే గంటలు ముఖ్యమైనవి — అవి నమోదు చేయబడతాయి</h2>
+      <p>ప్రతి డ్రోన్ వర్గానికి కనిష్ట ఎగిరే గంటలు DGCA నిర్దేశిస్తుంది మరియు డిజిటల్ స్కై ప్లాట్‌ఫారమ్‌లో నమోదు చేయబడతాయి. RPTO మీకు అసలు డ్రోన్లపై తగినంత స్టిక్ సమయం ఇస్తుందని నిర్ధారించుకోండి.</p>
+      <h2>5. మీ సర్టిఫికేట్‌కు గడువు ఉంది</h2>
+      <p>రిమోట్ పైలట్ సర్టిఫికేట్ (RPC) జారీ చేసిన తేదీ నుండి 10 సంవత్సరాల పాటు చెల్లుతుంది. గడువు ముగిసిన లైసెన్స్‌తో ఎగురకుండా ఉండటానికి మీ పునరుద్ధరణ తేదీలను ముందే గమనించండి. మా రాబోయే RPTO బ్యాచ్‌ల గురించి SAG డ్రోన్ టెక్నాలజీస్‌ను సంప్రదించండి.</p>`
+    }
+  },
+
+  dronesize: {
+    id: 'dronesize',
+    cat:    { en: '⚙️ Technology', te: '⚙️ సాంకేతికత' },
+    catKey: 'technology',
+    title:  { en: 'Small vs Medium Class Drones: Which Is Right for Your Farm?',
+               te: 'చిన్న వర్సెస్ మీడియం క్లాస్ డ్రోన్లు: మీ వ్యవసాయానికి ఏది సరైనది?' },
+    date: '7 Feb 2025', readTime: '4', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/s7jWNKFDt4kbVwESltnIdw299PQ.webp',
+    tags: { en: ['Technology','Agri Drone','Precision Farming','Drone Comparison'],
+             te: ['సాంకేతికత','వ్యవసాయ డ్రోన్','ఖచ్చితమైన వ్యవసాయం','డ్రోన్ పోలిక'] },
+    body: {
+      en: `<p>Choosing between a small-class and a medium-class agri-drone isn't just about price — it affects how fast you can work, how much you carry, and what crops you can serve effectively.</p>
+      <h2>Classification by DGCA</h2>
+      <ul><li><strong>Small class:</strong> MTOW of 2kg to 25kg</li><li><strong>Medium class:</strong> MTOW of 25kg to 150kg</li></ul>
+      <p>Popular models: DJI Agras T10 (10L tank, ~23.5kg MTOW) = Small. DJI Agras T40 (40L tank, ~67.5kg MTOW) = Medium.</p>
+      <div class="highlight-box">
+      <strong>Small Class (e.g. T10/T20P):</strong> Tank: 10–20L | Coverage: 8–12 acres/hour | Cost: ₹5–8 lakh | Best for: Small holdings, orchards<br/><br/>
+      <strong>Medium Class (e.g. T40/T50):</strong> Tank: 40–50L | Coverage: 20–40 acres/hour | Cost: ₹12–18 lakh | Best for: Large paddy tracts, commercial operators</div>
+      <h2>When to Choose Small Class</h2>
+      <ul><li>Average field block under 5 acres</li><li>Orchards, vineyards, or crops with overhead obstructions</li><li>Starting out with lower capital investment</li><li>Need portability — small drones fit in an SUV</li></ul>
+      <h2>When to Choose Medium Class</h2>
+      <ul><li>Operating as a commercial drone spraying service provider</li><li>Large, open paddy or sugarcane fields</li><li>Fastest possible turnaround per tank refill</li><li>Accessing state subsidy schemes (often heavier for medium-class)</li></ul>
+      <h2>Maintenance Considerations</h2>
+      <p>Budget an annual maintenance cost of 8–12% of drone cost for medium class versus 4–6% for small class. Not sure which is right? Talk to our team at SAG Drone Technologies — we'll help you run the numbers.</p>`,
+      te: `<p>చిన్న-క్లాస్ మరియు మీడియం-క్లాస్ అగ్రి-డ్రోన్ మధ్య ఎంచుకోవడం కేవలం ధర గురించి కాదు — ఇది మీరు ఎంత వేగంగా పని చేయగలరు, ఎంత మోయగలరు మరియు ఏ పంటలకు సేవ చేయగలరు అనే విషయాలను ప్రభావితం చేస్తుంది.</p>
+      <h2>DGCA వర్గీకరణ</h2>
+      <ul><li><strong>చిన్న క్లాస్:</strong> 2kg నుండి 25kg MTOW</li><li><strong>మీడియం క్లాస్:</strong> 25kg నుండి 150kg MTOW</li></ul>
+      <p>ప్రసిద్ధ మోడళ్ళు: DJI Agras T10 (10L ట్యాంక్, ~23.5kg MTOW) = చిన్న. DJI Agras T40 (40L ట్యాంక్, ~67.5kg MTOW) = మీడియం.</p>
+      <div class="highlight-box">
+      <strong>చిన్న క్లాస్ (T10/T20P):</strong> ట్యాంక్: 10–20L | కవరేజ్: 8–12 ఎకరాలు/గంట | ఖర్చు: ₹5–8 లక్ష | ఉత్తమం: చిన్న భూముల కోసం, తోటలు<br/><br/>
+      <strong>మీడియం క్లాస్ (T40/T50):</strong> ట్యాంక్: 40–50L | కవరేజ్: 20–40 ఎకరాలు/గంట | ఖర్చు: ₹12–18 లక్ష | ఉత్తమం: పెద్ద వరి పొలాలు, వాణిజ్య ఆపరేటర్లు</div>
+      <h2>చిన్న క్లాస్ ఎప్పుడు ఎంచుకోవాలి</h2>
+      <ul><li>సగటు పొలం బ్లాక్ 5 ఎకరాల కంటే తక్కువ</li><li>తోటలు, ద్రాక్ష తోటలు లేదా అడ్డంకులు ఉన్న పంటలు</li><li>తక్కువ మూలధన పెట్టుబడితో ప్రారంభించడానికి</li><li>చిన్న డ్రోన్లు SUV లో సులభంగా తీసుకెళ్ళవచ్చు</li></ul>
+      <h2>మీడియం క్లాస్ ఎప్పుడు ఎంచుకోవాలి</h2>
+      <ul><li>వాణిజ్య డ్రోన్ పిచికారీ సేవా ప్రదాతగా పని చేస్తున్నప్పుడు</li><li>పెద్ద, బహిరంగ వరి లేదా చెరకు పొలాలు</li><li>ట్యాంక్ నింపిన తర్వాత వేగవంతమైన టర్నరౌండ్</li><li>రాష్ట్ర సబ్సిడీ పథకాలు పొందడానికి</li></ul>
+      <h2>నిర్వహణ పరిగణనలు</h2>
+      <p>మీడియం క్లాస్‌కు వార్షిక నిర్వహణ బడ్జెట్‌గా డ్రోన్ ధరలో 8–12% మరియు చిన్న క్లాస్‌కు 4–6% అంచనా వేయండి. ఏది సరైనదో నిర్ణయించలేకపోతే SAG డ్రోన్ టెక్నాలజీస్ బృందంతో మాట్లాడండి.</p>`
+    }
+  },
+
+  rpc: {
+    id: 'rpc',
+    cat:    { en: '📋 DGCA & Regulations', te: '📋 DGCA & నిబంధనలు' },
+    catKey: 'regulations',
+    title:  { en: 'Remote Pilot Certificate (RPC): Step-by-Step Application Guide',
+               te: 'రిమోట్ పైలట్ సర్టిఫికేట్ (RPC): దశల వారీ దరఖాస్తు మార్గదర్శి' },
+    date: '22 Jan 2025', readTime: '6', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/TmEe0Bfwy52yUGB7vkBzEygNA4.png',
+    tags: { en: ['DGCA','Remote Pilot','Certification','Digital Sky','RPC'],
+             te: ['DGCA','రిమోట్ పైలట్','సర్టిఫికేషన్','డిజిటల్ స్కై','RPC'] },
+    body: {
+      en: `<p>The Remote Pilot Certificate (RPC) is the mandatory qualification for anyone operating a drone commercially in India. The process is entirely online through the DGCA's Digital Sky Platform.</p>
+      <h2>Step 1: Complete Approved RPTO Training</h2>
+      <p>You must complete training at a DGCA-approved RPTO covering: Air regulations and DGCA rules, Meteorology and flight planning, UAS systems and maintenance basics, Simulator sessions, and Live flying hours. Your RPTO issues a Training Completion Certificate on completion.</p>
+      <h2>Step 2: Register on Digital Sky Platform</h2>
+      <p>Go to <strong>digitalsky.dgca.gov.in</strong> and create an account with your Aadhaar and mobile number. Upload identity documents and complete your profile. Your drone must also be registered and have a valid UIN.</p>
+      <div class="highlight-box">📋 Documents needed: Aadhaar card, Class 10 certificate, Training Completion Certificate, passport-size photograph, and your drone's UIN certificate.</div>
+      <h2>Step 3: DGCA Theory Examination</h2>
+      <p>The theory exam is online on the Digital Sky Platform — multiple-choice, covering your RPTO training syllabus. You need to score above the passing threshold (typically 70%) to proceed. Focus on airspace classification, NPNT rules, and the Drone Rules 2021 notification.</p>
+      <h2>Step 4: Skill Test</h2>
+      <p>After passing the theory exam, demonstrate flying skills in a Skill Test conducted by a DGCA examiner. The test assesses basic manoeuvres, emergency procedures, and safe operation protocols. This is usually coordinated through your RPTO.</p>
+      <h2>Step 5: Submit the RPC Application Online</h2>
+      <p>Log into Digital Sky → Licences → Apply for RPC, upload all documents, pay the fee, and submit. Processing typically takes 7–21 working days. You'll receive SMS and email notification when your RPC is issued.</p>
+      <h2>Validity and Renewal</h2>
+      <p>Your RPC is valid for <strong>10 years</strong>. Renewal requires a refresher course and re-appearing for the Skill Test. At SAG Drone Technologies, we guide all RPTO graduates through the Digital Sky application process.</p>`,
+      te: `<p>రిమోట్ పైలట్ సర్టిఫికేట్ (RPC) భారతదేశంలో వాణిజ్యపరంగా డ్రోన్ ఆపరేట్ చేసే ఏ వ్యక్తికైనా తప్పనిసరి అర్హత. ఈ ప్రక్రియ పూర్తిగా DGCA డిజిటల్ స్కై ప్లాట్‌ఫారమ్ ద్వారా ఆన్‌లైన్‌లో జరుగుతుంది.</p>
+      <h2>దశ 1: ఆమోదిత RPTO శిక్షణ పూర్తి చేయండి</h2>
+      <p>మీరు తప్పనిసరిగా DGCA-ఆమోదిత RPTO లో శిక్షణ పూర్తి చేయాలి: వాయు నిబంధనలు, వాతావరణ శాస్త్రం, UAS సిస్టమ్‌లు, సిమ్యులేటర్ సెషన్లు మరియు లైవ్ ఎగురే గంటలు. పూర్తయిన తర్వాత మీ RPTO శిక్షణ పూర్తి సర్టిఫికేట్ ఇస్తుంది.</p>
+      <h2>దశ 2: డిజిటల్ స్కై ప్లాట్‌ఫారమ్‌లో నమోదు చేయండి</h2>
+      <p><strong>digitalsky.dgca.gov.in</strong> కి వెళ్ళి మీ ఆధార్ మరియు మొబైల్ నంబర్‌తో ఖాతా తయారు చేయండి. గుర్తింపు పత్రాలు అప్‌లోడ్ చేసి మీ ప్రొఫైల్ పూర్తి చేయండి.</p>
+      <div class="highlight-box">📋 అవసరమైన పత్రాలు: ఆధార్ కార్డు, 10వ తరగతి సర్టిఫికేట్, శిక్షణ పూర్తి సర్టిఫికేట్, పాస్‌పోర్ట్ సైజు ఫోటో మరియు మీ డ్రోన్ UIN సర్టిఫికేట్.</div>
+      <h2>దశ 3: DGCA సిద్ధాంత పరీక్ష</h2>
+      <p>సిద్ధాంత పరీక్ష డిజిటల్ స్కై ప్లాట్‌ఫారమ్‌లో ఆన్‌లైన్‌లో జరుగుతుంది — మల్టీపుల్ చాయిస్ ఫార్మాట్‌లో. పాస్ అవ్వడానికి సాధారణంగా 70% స్కోర్ అవసరం. వాయు స్థల వర్గీకరణ, NPNT నిబంధనలు మరియు డ్రోన్ నిబంధనలు 2021 అధిసూచనపై దృష్టి పెట్టండి.</p>
+      <h2>దశ 4: నైపుణ్య పరీక్ష</h2>
+      <p>సిద్ధాంత పరీక్షలో ఉత్తీర్ణత తర్వాత DGCA పరీక్షకుడు నిర్వహించే నైపుణ్య పరీక్షలో ఎగురే నైపుణ్యాలు నిరూపించాలి. ఇది సాధారణంగా మీ RPTO ద్వారా సమన్వయించబడుతుంది.</p>
+      <h2>దశ 5: RPC దరఖాస్తు ఆన్‌లైన్‌లో సమర్పించండి</h2>
+      <p>డిజిటల్ స్కై → లైసెన్స్‌లు → RPC కోసం దరఖాస్తు చేయడానికి లాగిన్ అవ్వండి, అన్ని పత్రాలు అప్‌లోడ్ చేయండి, రుసుమ చెల్లించండి మరియు సమర్పించండి. ప్రాసెసింగ్ సాధారణంగా 7–21 పని రోజులు పడుతుంది.</p>
+      <h2>చెల్లుబాటు మరియు పునరుద్ధరణ</h2>
+      <p>మీ RPC <strong>10 సంవత్సరాలు</strong> చెల్లుతుంది. పునరుద్ధరణకు రిఫ్రెషర్ కోర్సు మరియు నైపుణ్య పరీక్ష తిరిగి చేయాలి. SAG డ్రోన్ టెక్నాలజీస్ వద్ద మేము అన్ని RPTO గ్రాడ్యుయేట్లకు డిజిటల్ స్కై దరఖాస్తు ప్రక్రియలో మార్గనిర్దేశం చేస్తాము.</p>`
+    }
+  },
+
+  paddy: {
+    id: 'paddy',
+    cat:    { en: '🌾 Precision Farming', te: '🌾 ఖచ్చితమైన వ్యవసాయం' },
+    catKey: 'farming',
+    title:  { en: 'Best Drone Spraying Practices for Paddy and Rice Crops',
+               te: 'వరి మరియు వడ్లు పంటలకు ఉత్తమ డ్రోన్ పిచికారీ పద్ధతులు' },
+    date: '10 Jan 2025', readTime: '5', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/Yi7o292da9z47oNypxDapOCFQ.webp',
+    tags: { en: ['Paddy','Crop Spraying','Precision Farming','Agri Drone','Rice'],
+             te: ['వరి','పంట పిచికారీ','ఖచ్చితమైన వ్యవసాయం','వ్యవసాయ డ్రోన్','బియ్యం'] },
+    body: {
+      en: `<p>Paddy is Andhra Pradesh's most important crop, and drone spraying has rapidly become the preferred method for pesticide and nutrient application across paddy tracts. But getting the best results requires following the right protocols.</p>
+      <h2>Optimal Flight Parameters</h2>
+      <ul><li><strong>Flight altitude:</strong> 1.5 to 2.5 metres above the crop canopy</li>
+      <li><strong>Flight speed:</strong> 3–5 m/s for standard applications, 2–3 m/s for dense canopy</li>
+      <li><strong>Swath width:</strong> 4–6 metres depending on rotor downwash spread</li>
+      <li><strong>Application rate:</strong> 1–1.5 litres per acre (ultra-low volume formulations)</li></ul>
+      <div class="highlight-box">⚠️ Flying too high (above 3m) reduces downwash penetration. Flying too low risks crop damage from rotor turbulence and GPS interference near tall bunds.</div>
+      <h2>Nozzle and Droplet Size Selection</h2>
+      <p>For systemic pesticides, use <strong>flat fan nozzles</strong> producing medium droplets (150–300 microns). For contact pesticides and fungicides, rotary atomisers generating fine droplets (50–150 microns) improve surface coverage.</p>
+      <h2>Best Time Windows for Spraying</h2>
+      <ul><li><strong>Early morning (6:00–9:00 AM):</strong> Best — low temperature, low wind, stomata open</li>
+      <li><strong>Evening (4:30–6:30 PM):</strong> Acceptable — temperature dropping, wind low</li>
+      <li><strong>Avoid:</strong> Midday heat, wind above 15 km/h, active rain or heavy dew</li></ul>
+      <h2>Crop-Specific Tips for Paddy</h2>
+      <p>For brown planthopper (BPH) control, slightly increase application volume and reduce speed to ensure chemical reaches the lower canopy. Sheath blight fungicide applications benefit from faster coverage — the pathogen is present throughout the canopy.</p>
+      <h2>Post-Spray Protocol</h2>
+      <ul><li>Flush the spray system with clean water after every session</li>
+      <li>Log the chemical, rate, GPS track, and field details</li>
+      <li>Maintain a 7–14 day re-entry interval in treated fields</li>
+      <li>Notify the farmer to check efficacy within 5–7 days</li></ul>`,
+      te: `<p>వరి ఆంధ్రప్రదేశ్ యొక్క అత్యంత ముఖ్యమైన పంట, మరియు డ్రోన్ పిచికారీ వరి పొలాలలో పురుగుమందులు మరియు పోషకాల అనువర్తనానికి వేగంగా ప్రాధాన్య పద్ధతిగా మారింది. కానీ ఉత్తమ ఫలితాలు పొందడానికి సరైన ప్రోటోకాల్‌లు పాటించడం అవసరం.</p>
+      <h2>అనుకూలమైన విమాన పారామీటర్లు</h2>
+      <ul><li><strong>విమాన ఎత్తు:</strong> పంట కానోపీకి 1.5 నుండి 2.5 మీటర్ల పైన</li>
+      <li><strong>విమాన వేగం:</strong> సాధారణ అనువర్తనాలకు 3–5 మీ/సె, దట్టమైన కానోపీకి 2–3 మీ/సె</li>
+      <li><strong>స్వాత్ వెడల్పు:</strong> రోటర్ డౌన్‌వాష్ వ్యాప్తిని బట్టి 4–6 మీటర్లు</li>
+      <li><strong>అనువర్తన రేటు:</strong> ఎకరానికి 1–1.5 లీటర్లు (అతి-తక్కువ వాల్యూమ్ ఫార్ములేషన్లు)</li></ul>
+      <div class="highlight-box">⚠️ చాలా ఎత్తుగా (3 మీటర్లకు పైన) ఎగరడం డౌన్‌వాష్ చొచ్చుకుపోవడాన్ని తగ్గిస్తుంది. చాలా తక్కువగా ఎగరడం రోటర్ అలజడి మరియు GPS జోక్యం వల్ల పంటకు హాని చేయవచ్చు.</div>
+      <h2>నాజిల్ మరియు చుక్క పరిమాణ ఎంపిక</h2>
+      <p>సిస్టమిక్ పురుగుమందుల కోసం మీడియం చుక్కలు (150–300 మైక్రాన్లు) ఉత్పత్తి చేసే <strong>ఫ్లాట్ ఫాన్ నాజిల్లు</strong> వినియోగించండి. కాంటాక్ట్ పురుగుమందులు మరియు శిలీంధ్రనాశనులకు, చక్కటి చుక్కలు (50–150 మైక్రాన్లు) ఉత్పత్తి చేసే రొటరీ అటోమైజర్లు ఉపరితల కవరేజ్ మెరుగుపరుస్తాయి.</p>
+      <h2>పిచికారీకి ఉత్తమ సమయ విండోలు</h2>
+      <ul><li><strong>తెల్లవారు జామున (6:00–9:00):</strong> ఉత్తమం — తక్కువ ఉష్ణోగ్రత, తక్కువ గాలి, స్టోమాటా తెరుచుకుని ఉంటాయి</li>
+      <li><strong>సాయంత్రం (4:30–6:30):</strong> ఆమోదయోగ్యం — ఉష్ణోగ్రత తగ్గుతోంది, గాలి సాధారణంగా తక్కువగా ఉంటుంది</li>
+      <li><strong>నివారించండి:</strong> మిట్టమధ్యాహ్న వేడి, 15 కిమీ/గంట కంటే ఎక్కువ గాలి, వర్షం లేదా భారీ మంచు</li></ul>
+      <h2>వరికి నిర్దిష్ట చిట్కాలు</h2>
+      <p>బ్రౌన్ ప్లాంట్‌హాపర్ (BPH) నియంత్రణ కోసం, రసాయనం దిగువ కానోపీకి చేరేలా అనువర్తన వాల్యూమ్ కొంచెం పెంచి వేగాన్ని తగ్గించండి. షీత్ బ్లైట్ శిలీంధ్రనాశని అనువర్తనాలు వేగవంతమైన కవరేజ్ నుండి ప్రయోజనం పొందుతాయి.</p>
+      <h2>పిచికారీ తర్వాత ప్రోటోకాల్</h2>
+      <ul><li>ప్రతి సెషన్ తర్వాత స్ప్రే వ్యవస్థను శుభ్రమైన నీళ్ళతో కడగండి</li>
+      <li>రసాయనం, రేటు, GPS ట్రాక్ మరియు పొలం వివరాలు నమోదు చేయండి</li>
+      <li>చికిత్స చేయబడిన పొలాల్లో 7–14 రోజుల పునఃప్రవేశ విరామం పాటించండి</li>
+      <li>రైతుకు 5–7 రోజులలో ప్రభావాన్ని తనిఖీ చేయమని తెలియజేయండి</li></ul>`
+    }
+  },
+
+  rpto5day: {
+    id: 'rpto5day',
+    cat:    { en: '🎓 Pilot Training', te: '🎓 పైలట్ శిక్షణ' },
+    catKey: 'training',
+    title:  { en: 'From Zero to Certified: A Day-by-Day Look at Our 5-Day RPTO Program',
+               te: 'సున్నా నుండి సర్టిఫైడ్ వరకు: మా 5-రోజుల RPTO కార్యక్రమాన్ని రోజువారీగా చూద్దాం' },
+    date: '5 Dec 2024', readTime: '7', author: 'SAG Team',
+    img: 'https://framerusercontent.com/images/BQEa9rjTYAf4kKL8dgOkEQhxI.jpg',
+    tags: { en: ['RPTO','Pilot Training','DGCA','Certification','Nidadavole'],
+             te: ['RPTO','పైలట్ శిక్షణ','DGCA','సర్టిఫికేషన్','నిడదవోలు'] },
+    body: {
+      en: `<p>A lot of prospective trainees ask us the same question: "What actually happens during the 5 days?" Here's a candid, day-by-day look at our RPTO program at Nidadavole.</p>
+      <h2>Day 1: Theory Foundation</h2>
+      <p>Registration, orientation, then core theory modules: Introduction to the UAS ecosystem in India, Drone Rules 2021 and DGCA regulatory framework, Airspace classification — Green, Yellow, and Red zones, and Digital Sky Platform walkthrough. Evening includes a mock quiz to identify knowledge gaps.</p>
+      <h2>Day 2: Systems and Meteorology</h2>
+      <p>Drone components — propulsion, avionics, spray systems, battery management. Pre-flight and post-flight checklists. Basic meteorology — wind, temperature inversions, rain, and their impact on flight. Emergency procedures and abnormal situations.</p>
+      <div class="highlight-box">🔧 Trainees physically disassemble and reassemble a drone motor assembly during Day 2 — it makes component knowledge stick in a way no lecture can.</div>
+      <h2>Day 3: Simulator Sessions</h2>
+      <p>Every trainee gets extensive time on our flight simulator replicating the DJI Agras T40: Takeoff and landing procedures, Manual flight paths (box pattern, figure-eight), Simulated GPS loss and emergency land, Spraying mission planning and waypoint setting.</p>
+      <h2>Day 4: Live Flying — Supervised</h2>
+      <p>Each trainee gets supervised flight time on the actual Agras T40. The session starts with ground school review, then: Supervised hover and basic manoeuvres, Boundary-pattern flight over a practice plot, Water spray simulation run, Instructor-led debrief after each rotation. Small batch sizes (6–8 trainees) mean every participant gets meaningful stick time.</p>
+      <h2>Day 5: Solo Assessment and Theory Mock Exam</h2>
+      <p>Each trainee completes a solo flight evaluation (with an instructor observing). We also run a full mock DGCA theory exam under timed conditions. The program closes with certificate distribution, Digital Sky guidance session, and Q&A on next steps.</p>
+      <h2>What Comes After?</h2>
+      <p>Our team stays available post-training to help graduates navigate the Digital Sky Platform, coordinate their DGCA examiner visit, and answer operational questions. Several of our graduates now operate their own drone spraying businesses across AP and Telangana. Contact SAG Drone Technologies on WhatsApp to confirm your seat in the next batch.</p>`,
+      te: `<p>చాలా మంది భవిష్యత్ శిక్షణార్థులు మాకు అదే ప్రశ్న అడుగుతారు: "5 రోజులలో నిజంగా ఏమి జరుగుతుంది?" నిడదవోలులో మా RPTO కార్యక్రమాన్ని రోజువారీగా నిజాయితీగా చూద్దాం.</p>
+      <h2>రోజు 1: సిద్ధాంత పునాది</h2>
+      <p>నమోదు, ధోరణి, తర్వాత ప్రధాన సిద్ధాంత మాడ్యూల్లు: భారతదేశంలో UAS పర్యావరణ వ్యవస్థకు పరిచయం, డ్రోన్ నిబంధనలు 2021 మరియు DGCA నియంత్రణ నిర్మాణం, వాయు స్థల వర్గీకరణ మరియు డిజిటల్ స్కై ప్లాట్‌ఫారమ్ వాక్‌త్రూ. సాయంత్రం జ్ఞాన లోపాలను గుర్తించడానికి మాక్ క్విజ్ నిర్వహించబడుతుంది.</p>
+      <h2>రోజు 2: సిస్టమ్‌లు మరియు వాతావరణ శాస్త్రం</h2>
+      <p>డ్రోన్ భాగాలు — ప్రొపల్షన్, అవియానిక్స్, స్ప్రే సిస్టమ్‌లు, బ్యాటరీ నిర్వహణ. ప్రీ-ఫ్లైట్ మరియు పోస్ట్-ఫ్లైట్ చెక్‌లిస్టులు. ప్రాథమిక వాతావరణ శాస్త్రం — గాలి, ఉష్ణోగ్రత విలోమాలు, వర్షం మరియు విమానంపై వాటి ప్రభావం. అత్యవసర విధానాలు.</p>
+      <div class="highlight-box">🔧 రోజు 2లో శిక్షణార్థులు డ్రోన్ మోటర్ అసెంబ్లీని శారీరకంగా విడదీసి తిరిగి అసెంబుల్ చేస్తారు — ఇది ఏ లెక్చర్ కూడా చేయలేని విధంగా భాగ జ్ఞానాన్ని మనసులో నిలబెడుతుంది.</div>
+      <h2>రోజు 3: సిమ్యులేటర్ సెషన్లు</h2>
+      <p>ప్రతి శిక్షణార్థి DJI Agras T40 ని అనుకరించే మా ఫ్లైట్ సిమ్యులేటర్‌పై విస్తారమైన సమయం పొందుతారు: టేకాఫ్ మరియు ల్యాండింగ్ విధానాలు, మానవ విమాన మార్గాలు, GPS కోల్పోవడం సిమ్యులేషన్ మరియు అత్యవసర ల్యాండింగ్, స్ప్రేయింగ్ మిషన్ ప్రణాళిక.</p>
+      <h2>రోజు 4: లైవ్ ఫ్లైయింగ్ — పర్యవేక్షించబడిన</h2>
+      <p>ప్రతి శిక్షణార్థి అసలు Agras T40 పై పర్యవేక్షించబడిన విమాన సమయం పొందుతారు. పర్యవేక్షించబడిన హోవర్ మరియు ప్రాథమిక మానోయువ్రులు, బౌండరీ-పేటర్న్ విమానం, నీటి స్ప్రే సిమ్యులేషన్ రన్, మరియు ప్రతి రొటేషన్ తర్వాత ఇన్స్ట్రక్టర్-నేతృత్వంలో డిబ్రీఫ్ జరుగుతాయి. చిన్న బ్యాచ్ సైజులు (6–8 శిక్షణార్థులు) అందరికీ అర్థవంతమైన స్టిక్ సమయం నిర్ధారిస్తాయి.</p>
+      <h2>రోజు 5: సోలో అసెస్‌మెంట్ మరియు సిద్ధాంత మాక్ పరీక్ష</h2>
+      <p>ప్రతి శిక్షణార్థి సోలో ఫ్లైట్ మూల్యాంకనం పూర్తి చేస్తారు (ఇన్స్ట్రక్టర్ పరిశీలిస్తారు). సమయ పరిమితులో పూర్తి మాక్ DGCA సిద్ధాంత పరీక్ష కూడా నిర్వహించబడుతుంది. కార్యక్రమం సర్టిఫికేట్ పంపిణీ, డిజిటల్ స్కై మార్గదర్శన సెషన్ మరియు తదుపరి దశలపై Q&A తో ముగుస్తుంది.</p>
+      <h2>తర్వాత ఏమి జరుగుతుంది?</h2>
+      <p>మా బృందం శిక్షణ తర్వాత గ్రాడ్యుయేట్లకు డిజిటల్ స్కై దరఖాస్తు ప్రక్రియలో నావిగేట్ చేయడానికి మరియు DGCA పరీక్షకుడి సందర్శనను సమన్వయించడానికి అందుబాటులో ఉంటుంది. మా అనేక గ్రాడ్యుయేట్లు ఇప్పుడు AP మరియు తెలంగాణ అంతటా తమ స్వంత డ్రోన్ పిచికారీ వ్యాపారాలు నిర్వహిస్తున్నారు. తదుపరి బ్యాచ్‌లో మీ సీటు నిర్ధారించడానికి SAG డ్రోన్ టెక్నాలజీస్‌ను WhatsApp లో సంప్రదించండి.</p>`
+    }
+  }
+};
+
+var ARTICLE_ORDER = ['featured','pesticide','pilot5things','dronesize','rpc','paddy','rpto5day'];
+var currentArticleId = null;
+
+/* ══════════════════════════════════════════
+   RENDER ARTICLE
+══════════════════════════════════════════ */
+function renderArticleContent(id) {
+  var art = ARTICLES[id];
+  var L = currentLang;
+  document.getElementById('articleCat').textContent = art.cat[L];
+  document.getElementById('articleTitle').textContent = art.title[L];
+  var minLabel = L === 'te' ? 'నిమిషాల చదువు' : 'min read';
+  document.getElementById('articleMeta').innerHTML =
+    '<span>🗓 ' + art.date + '</span>' +
+    '<span>⏱ ' + art.readTime + ' ' + minLabel + '</span>' +
+    '<span>👤 ' + art.author + '</span>';
+  document.getElementById('articleBody').innerHTML = art.body[L];
+  var tagsHtml = art.tags[L].map(function(t){ return '<span class="sidebar-tag">'+t+'</span>'; }).join('');
+  document.getElementById('articleTags').innerHTML = tagsHtml;
+
+  // Prev/Next
+  var idx = ARTICLE_ORDER.indexOf(id);
+  var navHtml = '';
+  var prevLabel = L==='te'?'← మునుపటి వ్యాసం':'← Previous Article';
+  var nextLabel = L==='te'?'తదుపరి వ్యాసం →':'Next Article →';
+  if (idx > 0) {
+    var prev = ARTICLES[ARTICLE_ORDER[idx-1]];
+    navHtml += '<div class="article-nav-btn" onclick="openArticle(\''+prev.id+'\')">' +
+      '<div class="nav-dir">'+prevLabel+'</div>' +
+      '<h5>'+prev.title[L]+'</h5></div>';
+  }
+  if (idx < ARTICLE_ORDER.length-1) {
+    var next = ARTICLES[ARTICLE_ORDER[idx+1]];
+    navHtml += '<div class="article-nav-btn" onclick="openArticle(\''+next.id+'\')">' +
+      '<div class="nav-dir">'+nextLabel+'</div>' +
+      '<h5>'+next.title[L]+'</h5></div>';
+  }
+  document.getElementById('articleNav').innerHTML = navHtml;
+}
+
+function openArticle(id) {
+  var art = ARTICLES[id];
+  if (!art) return;
+  currentArticleId = id;
+  document.getElementById('articleImg').src = art.img;
+  document.getElementById('articleImg').alt = art.title[currentLang];
+  renderArticleContent(id);
+  document.getElementById('blogHero').style.display = 'none';
+  document.getElementById('blogListView').style.display = 'none';
+  var av = document.getElementById('articleView');
+  av.classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.title = art.title[currentLang] + ' – SAG Drone Technologies';
+}
+
+function closeArticle() {
+  document.getElementById('blogHero').style.display = '';
+  document.getElementById('blogListView').style.display = '';
+  document.getElementById('articleView').classList.remove('visible');
+  currentArticleId = null;
+  document.title = 'Blog – SAG Drone Technologies | Agri-Drone Insights & News';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════════════════════════════════
+   SHARE
+══════════════════════════════════════════ */
+function shareArticle(platform) {
+  var art = currentArticleId ? ARTICLES[currentArticleId] : null;
+  var title = art ? art.title[currentLang] : 'SAG Drone Technologies Blog';
+  var url = window.location.href;
+  if (platform==='whatsapp') window.open('https://wa.me/?text='+encodeURIComponent(title+'\n'+url),'_blank');
+  else if (platform==='twitter') window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url),'_blank');
+  else if (platform==='copy') {
+    navigator.clipboard.writeText(url).then(function(){ alert(currentLang==='te'?'లింక్ కాపీ చేయబడింది!':'Link copied to clipboard!'); })
+    .catch(function(){ alert(url); });
+  }
+}
+
+/* ══════════════════════════════════════════
+   MOBILE MENU
+══════════════════════════════════════════ */
+function toggleMobileMenu(){document.getElementById('mobileMenu').classList.toggle('open');document.getElementById('hamburger').classList.toggle('open');}
+function closeMobileMenu(){document.getElementById('mobileMenu').classList.remove('open');document.getElementById('hamburger').classList.remove('open');}
+document.addEventListener('click',function(e){var m=document.getElementById('mobileMenu'),b=document.getElementById('hamburger');if(m.classList.contains('open')&&!m.contains(e.target)&&!b.contains(e.target))closeMobileMenu();});
+var st=document.createElement('style');st.textContent='.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}.hamburger.open span:nth-child(2){opacity:0}.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}';document.head.appendChild(st);
+
+/* ══════════════════════════════════════════
+   NAV SCROLL
+══════════════════════════════════════════ */
+window.addEventListener('scroll',function(){var n=document.getElementById('mainNav');n.style.background=window.pageYOffset>50?'rgba(255,255,255,0.99)':'rgba(255,255,255,0.92)';},{passive:true});
+
+/* ══════════════════════════════════════════
+   FILTER
+══════════════════════════════════════════ */
+function filterPosts(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  document.querySelectorAll('#blogGrid .blog-card').forEach(function(card){card.style.display=(cat==='all'||card.dataset.cat===cat)?'':'none';});
+  document.querySelectorAll('.sidebar-cats li').forEach(function(li){li.classList.toggle('active',li.dataset.cat===cat||(cat==='all'&&!li.dataset.cat));});
+}
+function filterFromSidebar(cat,li){
+  document.querySelectorAll('.sidebar-cats li').forEach(function(l){l.classList.remove('active');});
+  li.classList.add('active');
+  document.querySelectorAll('#blogGrid .blog-card').forEach(function(card){card.style.display=(cat==='all'||card.dataset.cat===cat)?'':'none';});
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  var mb=document.querySelector('.filter-btn[onclick*="\''+cat+'\'"]');
+  if(mb)mb.classList.add('active');
+}
+
+/* ══════════════════════════════════════════
+   SEARCH
+══════════════════════════════════════════ */
+function searchPosts(q){
+  q=q.toLowerCase();
+  document.querySelectorAll('#blogGrid .blog-card').forEach(function(card){card.style.display=card.innerText.toLowerCase().includes(q)?'':'none';});
+}
+
+/* ══════════════════════════════════════════
+   LOAD MORE
+══════════════════════════════════════════ */
+function loadMore(){
+  var btn=document.getElementById('loadMoreBtn');
+  btn.textContent=currentLang==='te'?'త్వరలో మరిన్ని వ్యాసాలు వస్తాయి!':'More articles coming soon!';
+  btn.disabled=true;btn.style.opacity='0.5';
+}
+
+/* ══════════════════════════════════════════
+   NEWSLETTER
+══════════════════════════════════════════ */
+function subscribeNewsletter(){
+  var input=document.querySelector('.newsletter-input'),email=input.value.trim();
+  if(!email||!email.includes('@')){alert(currentLang==='te'?'దయచేసి చెల్లుబాటు అయ్యే ఇమెయిల్ చిరునామా నమోదు చేయండి.':'Please enter a valid email address.');return;}
+  input.value='';
+  alert(currentLang==='te'?'సబ్‌స్క్రైబ్ చేసినందుకు ధన్యవాదాలు! మేము మిమ్మల్ని అప్‌డేట్‌గా ఉంచుతాము.':'Thank you for subscribing! We\'ll keep you updated.');
+}
+
+/* ══════════════════════════════════════════
+   SCROLL FADE-IN
+══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',function(){
+  var els=document.querySelectorAll('.blog-card,.featured-post,.sidebar-widget');
+  els.forEach(function(el){el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';});
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:0.1});
+  els.forEach(function(el){obs.observe(el);});
+});
+</script>
+</body>
+</html>
