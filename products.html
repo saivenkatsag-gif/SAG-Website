@@ -2572,7 +2572,10 @@
     transition: background .2s, transform .2s; padding: 0;
   }
   .ad-dot.active { background: #fff; transform: scale(1.25); }
-  @media (max-width: 768px) { #adCarousel { margin-top: 92px; } }
+  @media (max-width: 768px) { 
+    #adCarousel { margin-top: 92px; }
+    .ad-slide img { height: 220px; object-fit: cover; }
+  }
 </style>
 
 <div id="adCarousel" style="display:none;">
