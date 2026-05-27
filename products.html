@@ -2534,15 +2534,116 @@
   <a href="tel:+918977771705" style="color:var(--blue);border:1.5px solid var(--blue);padding:12px 32px;border-radius:40px;text-decoration:none;">Get a Free Quote</a>
 </div>
 
-<!-- HERO -->
-<div class="page-hero">
-  <div class="hero-grid-bg"></div>
-  <div class="page-hero-inner">
-    <div class="section-tag">Popular Products</div>
-    <h1>Check Out The Most<br/><span>Popular Pieces.</span></h1>
-    <p>Exploring the tech and design shaping the world of Agriculture. DGCA-certified drones, premium components &amp; accessories.</p>
-  </div>
+<!-- AD POSTERS CAROUSEL -->
+<style>
+  #adCarousel {
+    position: relative; width: 100%; overflow: hidden;
+    background: #000; line-height: 0;
+    border-bottom: 1px solid var(--border);
+    margin-top: 96px;
+  }
+  .ad-slides { display: flex; transition: transform 0.5s ease; will-change: transform; }
+  .ad-slide {
+    flex-shrink: 0; width: 100%;
+    text-decoration: none; display: block; line-height: 0;
+  }
+  .ad-slide img {
+    width: 100%; height: auto; object-fit: contain;
+    display: block; background: #000;
+  }
+  .ad-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.45); color: #fff;
+    border: none; cursor: pointer; z-index: 10;
+    width: 44px; height: 44px; border-radius: 50%;
+    font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+    transition: background .2s;
+  }
+  .ad-arrow:hover { background: rgba(0,0,0,0.72); }
+  .ad-arrow-left  { left: 16px; }
+  .ad-arrow-right { right: 16px; }
+  .ad-dots {
+    position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 7px; z-index: 10;
+  }
+  .ad-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.5); border: none; cursor: pointer;
+    transition: background .2s, transform .2s; padding: 0;
+  }
+  .ad-dot.active { background: #fff; transform: scale(1.25); }
+  @media (max-width: 768px) { #adCarousel { margin-top: 92px; } }
+</style>
+
+<div id="adCarousel" style="display:none;">
+  <div class="ad-slides" id="adSlides"></div>
+  <button class="ad-arrow ad-arrow-left" onclick="adPrev()">&#8249;</button>
+  <button class="ad-arrow ad-arrow-right" onclick="adNext()">&#8250;</button>
+  <div class="ad-dots" id="adDots"></div>
 </div>
+
+<script>
+(function() {
+  var SUPABASE_URL = localStorage.getItem('sag_supabase_url') || 'https://mefmpxohxrpnezwlbchj.supabase.co';
+  var SUPABASE_KEY = localStorage.getItem('sag_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
+
+  var adIndex = 0, adTotal = 0, adTimer = null;
+
+  window.adGoTo = function(i) {
+    adIndex = (i + adTotal) % adTotal;
+    document.getElementById('adSlides').style.transform = 'translateX(-' + (adIndex * 100) + '%)';
+    document.querySelectorAll('.ad-dot').forEach(function(d, idx) {
+      d.classList.toggle('active', idx === adIndex);
+    });
+  };
+  window.adNext = function() { adGoTo(adIndex + 1); resetAdTimer(); };
+  window.adPrev = function() { adGoTo(adIndex - 1); resetAdTimer(); };
+
+  function resetAdTimer() {
+    clearInterval(adTimer);
+    adTimer = setInterval(function() { adGoTo(adIndex + 1); }, 4500);
+  }
+
+  async function loadAdPosters() {
+    try {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/ad_posters?order=sort_order.asc&select=*', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      if (!res.ok) return;
+      var posters = await res.json();
+      if (!posters || !posters.length) return;
+
+      adTotal = posters.length;
+      var slides = document.getElementById('adSlides');
+      var dots   = document.getElementById('adDots');
+
+      slides.innerHTML = posters.map(function(p) {
+        var tag   = p.link_url ? 'a' : 'div';
+        var attrs = p.link_url ? ' href="' + p.link_url + '" target="_blank" rel="noopener"' : '';
+        return '<' + tag + ' class="ad-slide"' + attrs + '>' +
+          '<img src="' + p.image_url + '" alt="' + (p.title || 'Ad') + '" loading="lazy"/>' +
+        '</' + tag + '>';
+      }).join('');
+
+      dots.innerHTML = posters.map(function(_, i) {
+        return '<button class="ad-dot' + (i === 0 ? ' active' : '') + '" onclick="adGoTo(' + i + ')"></button>';
+      }).join('');
+
+      /* Hide arrows & dots when only one poster */
+      if (adTotal === 1) {
+        document.querySelector('.ad-arrow-left').style.display  = 'none';
+        document.querySelector('.ad-arrow-right').style.display = 'none';
+        dots.style.display = 'none';
+      }
+
+      document.getElementById('adCarousel').style.display = 'block';
+      resetAdTimer();
+    } catch(e) {}
+  }
+
+  loadAdPosters();
+})();
+</script>
 
 <!-- SHOP LAYOUT -->
 <!-- MOBILE FILTER BAR -->
@@ -2963,13 +3064,8 @@
   var allProducts = [];
   var activeCat = 'all', activeTag = 'all', activeStatus = 'all';
 
-  /* allCategories holds the admin-managed category names from Supabase */
-  var allCategories = [];
-
   function getCategoryFromProduct(p) {
-    /* Always trust the category field set in admin — never override it */
     if (p.category && p.category.trim()) return p.category.trim();
-    /* Fallback for products with no category assigned (legacy / unset) */
     var n = (p.name || '').toLowerCase();
     if (n.indexOf('drone') !== -1 || n.indexOf('q20') !== -1) return 'Drones';
     if (n.indexOf('battery') !== -1 || n.indexOf('charger') !== -1) return 'Batteries';
@@ -2980,18 +3076,11 @@
   }
 
   function buildCategoryList() {
-    /* Count products per category */
     var cats = {};
     allProducts.forEach(function(p) {
       var c = getCategoryFromProduct(p);
       cats[c] = (cats[c] || 0) + 1;
     });
-
-    /* Merge in admin-managed categories so they always appear (even if 0 products) */
-    allCategories.forEach(function(name) {
-      if (!(name in cats)) cats[name] = 0;
-    });
-
     var ul = document.getElementById('catList');
     var allLi = document.createElement('li');
     allLi.className = activeCat === 'all' ? 'active' : '';
@@ -3264,17 +3353,6 @@
     var grid = document.getElementById('productsGrid');
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);">Loading products...</div>';
     try {
-      /* Fetch admin-managed categories list (best-effort — don't block if table missing) */
-      try {
-        var catRes = await fetch(SUPABASE_URL + '/rest/v1/categories?order=name.asc&select=name', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
-        if (catRes.ok) {
-          var catData = await catRes.json();
-          allCategories = catData.map(function(r) { return r.name; }).filter(Boolean);
-        }
-      } catch(ce) { /* categories table may not exist yet — ignore */ }
-
       var res = await fetch(SUPABASE_URL+'/rest/v1/'+TABLE+'?order=created_at.asc&select=*', {
         headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
       });
@@ -3292,7 +3370,6 @@
       if (!prods.length) {
         grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:56px 20px;color:var(--muted);">No products found. Add them from the Admin Panel.</div>';
         var el=document.getElementById('productsCount'); if(el) el.textContent='0 products';
-        buildCategoryList(); /* still render admin categories even with 0 products */
         return;
       }
       buildCategoryList();
