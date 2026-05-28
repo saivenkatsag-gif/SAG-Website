@@ -1,7 +1,8 @@
 {
+  "cleanUrls": true,
   "headers": [
     {
-      "source": "/admin.html",
+      "source": "/admin",
       "headers": [
         {
           "key": "X-Robots-Tag",
