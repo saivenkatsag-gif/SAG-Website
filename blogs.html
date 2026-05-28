@@ -7,10 +7,10 @@
 <meta name="description" content="Stay updated with the latest news, insights, and guides from SAG Drone Technologies — DGCA regulations, agri-drone tips, pilot training, and precision farming."/>
 <meta name="author" content="SAG Drone Technologies"/>
 <meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://sagdrones.com/blogs.html"/>
+<link rel="canonical" href="https://sagdrones.com/blogs"/>
 <meta property="og:title" content="Blog – SAG Drone Technologies"/>
 <meta property="og:description" content="Agri-drone insights, DGCA updates, pilot tips, and precision farming news."/>
-<meta property="og:url" content="https://sagdrones.com/blogs.html"/>
+<meta property="og:url" content="https://sagdrones.com/blogs"/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -997,6 +997,20 @@ function openArticle(id) {
   av.classList.add('visible');
   window.scrollTo({top:0,behavior:'smooth'});
   document.title = art.title[currentLang] + ' – SAG Drone Technologies';
+  // Push clean shareable URL: /blogs#featured
+  if (window.location.hash !== '#' + id) {
+    history.pushState({articleId: id}, document.title, '#' + id);
+  }
+  // Update canonical and OG meta for sharing
+  var url = 'https://sagdrones.com/blogs#' + id;
+  var canon = document.querySelector('link[rel="canonical"]');
+  if (canon) canon.setAttribute('href', url);
+  var ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', url);
+  var ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', art.title[currentLang] + ' – SAG Drone Technologies');
+  var ogDesc = document.querySelector('meta[name="description"]');
+  if (ogDesc) ogDesc.setAttribute('content', art.body[currentLang].replace(/<[^>]+>/g,'').substring(0,160));
 }
 
 function closeArticle() {
@@ -1006,6 +1020,15 @@ function closeArticle() {
   currentArticleId = null;
   document.title = 'Blog – SAG Drone Technologies | Agri-Drone Insights & News';
   window.scrollTo({top:0,behavior:'smooth'});
+  // Restore clean URL without hash
+  history.pushState({}, document.title, window.location.pathname);
+  // Restore canonical and OG meta
+  var canon = document.querySelector('link[rel="canonical"]');
+  if (canon) canon.setAttribute('href', 'https://sagdrones.com/blogs');
+  var ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', 'https://sagdrones.com/blogs');
+  var ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', 'Blog – SAG Drone Technologies');
 }
 
 /* ══════════════════════════════════════════
@@ -1014,7 +1037,9 @@ function closeArticle() {
 function shareArticle(platform) {
   var art = currentArticleId ? ARTICLES[currentArticleId] : null;
   var title = art ? art.title[currentLang] : 'SAG Drone Technologies Blog';
-  var url = window.location.href;
+  var url = art
+    ? 'https://sagdrones.com/blogs#' + currentArticleId
+    : window.location.href;
   if (platform==='whatsapp') window.open('https://wa.me/?text='+encodeURIComponent(title+'\n'+url),'_blank');
   else if (platform==='twitter') window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url),'_blank');
   else if (platform==='copy') {
@@ -1089,6 +1114,38 @@ document.addEventListener('DOMContentLoaded',function(){
   els.forEach(function(el){el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';});
   var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:0.1});
   els.forEach(function(el){obs.observe(el);});
+
+  // Open article from URL hash on page load (e.g. /blogs#featured)
+  var hash = window.location.hash.replace('#','');
+  if (hash && ARTICLES[hash]) {
+    openArticle(hash);
+  }
+});
+
+// Handle browser back/forward navigation
+window.addEventListener('popstate', function(e) {
+  var hash = window.location.hash.replace('#','');
+  if (hash && ARTICLES[hash]) {
+    // Re-open without pushing another history entry
+    var art = ARTICLES[hash];
+    currentArticleId = hash;
+    document.getElementById('articleImg').src = art.img;
+    document.getElementById('articleImg').alt = art.title[currentLang];
+    renderArticleContent(hash);
+    document.getElementById('blogHero').style.display = 'none';
+    document.getElementById('blogListView').style.display = 'none';
+    document.getElementById('articleView').classList.add('visible');
+    document.title = art.title[currentLang] + ' – SAG Drone Technologies';
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    // No hash — go back to blog list
+    document.getElementById('blogHero').style.display = '';
+    document.getElementById('blogListView').style.display = '';
+    document.getElementById('articleView').classList.remove('visible');
+    currentArticleId = null;
+    document.title = 'Blog – SAG Drone Technologies | Agri-Drone Insights & News';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
 });
 </script>
 </body>
