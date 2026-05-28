@@ -7,10 +7,10 @@
 <meta name="description" content="Stay updated with the latest news, insights, and guides from SAG Drone Technologies — DGCA regulations, agri-drone tips, pilot training, and precision farming."/>
 <meta name="author" content="SAG Drone Technologies"/>
 <meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://sagdrones.com/blogs"/>
+<link rel="canonical" href="https://sagdrones.com/blogs.html"/>
 <meta property="og:title" content="Blog – SAG Drone Technologies"/>
 <meta property="og:description" content="Agri-drone insights, DGCA updates, pilot tips, and precision farming news."/>
-<meta property="og:url" content="https://sagdrones.com/blogs"/>
+<meta property="og:url" content="https://sagdrones.com/blogs.html"/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
@@ -401,6 +401,21 @@
           </div>
         </div>
 
+        <div class="blog-card" data-cat="technology" onclick="openArticle('x8g2review')">
+          <div class="blog-card-img">
+            <img src="https://www.hobbywing.com/en/uploads/image/20250902/31022aa5563819292cebf078990221c8.jpg" alt="Hobbywing X8 G2 Motor System"/>
+            <div class="blog-card-cat" data-en="Technology" data-te="టెక్నాలజీ">Technology</div>
+          </div>
+          <div class="blog-card-body">
+            <h3 data-en="Hobbywing X8 Gen2 Motors: The Agri-Drone Propulsion Upgrade Worth Knowing About" data-te="హాబీవింగ్ X8 జెన్2 మోటార్లు: తెలుసుకోవలసిన అగ్రి-డ్రోన్ ప్రొపల్షన్ అప్‌గ్రేడ్">Hobbywing X8 Gen2 Motors: The Agri-Drone Propulsion Upgrade Worth Knowing About</h3>
+            <p data-en="A deep dive into Hobbywing's new X8 G2 integrated propulsion system — specs, real-world agri-drone performance, and how it compares to the original X8." data-te="హాబీవింగ్ కొత్త X8 G2 ఇంటిగ్రేటెడ్ ప్రొపల్షన్ సిస్టమ్ లోతైన సమీక్ష — స్పెక్స్, వాస్తవ ప్రపంచ అగ్రి-డ్రోన్ పనితీరు మరియు అసలు X8 తో ఎలా పోల్చవచ్చు.">A deep dive into Hobbywing's new X8 G2 integrated propulsion system — specs, real-world agri-drone performance, and how it compares to the original X8.</p>
+            <div class="blog-card-footer">
+              <span class="blog-card-meta">🗓 28 May 2025 · 6 <span data-en="min" data-te="నిమి">min</span></span>
+              <button class="blog-card-link" onclick="event.stopPropagation();openArticle('x8g2review')" data-en="Read More →" data-te="మరింత చదవండి →">Read More →</button>
+            </div>
+          </div>
+        </div>
+
         <div class="blog-card" data-cat="training" onclick="openArticle('rpto5day')">
           <div class="blog-card-img">
             <img src="https://framerusercontent.com/images/BQEa9rjTYAf4kKL8dgOkEQhxI.jpg" alt="Batch Training"/>
@@ -435,16 +450,23 @@
       <div class="sidebar-widget">
         <h4 data-en="📂 Categories" data-te="📂 వర్గాలు">📂 Categories</h4>
         <ul class="sidebar-cats">
-          <li class="active" onclick="filterFromSidebar('all',this)" data-en="All Posts">All Posts <span class="cat-count">7</span></li>
+          <li class="active" onclick="filterFromSidebar('all',this)" data-en="All Posts">All Posts <span class="cat-count">8</span></li>
           <li onclick="filterFromSidebar('regulations',this)" data-en="DGCA &amp; Regulations">DGCA &amp; Regulations <span class="cat-count">2</span></li>
           <li onclick="filterFromSidebar('training',this)" data-en="Pilot Training">Pilot Training <span class="cat-count">2</span></li>
           <li onclick="filterFromSidebar('farming',this)" data-en="Precision Farming">Precision Farming <span class="cat-count">2</span></li>
-          <li onclick="filterFromSidebar('technology',this)" data-en="Technology">Technology <span class="cat-count">1</span></li>
+          <li onclick="filterFromSidebar('technology',this)" data-en="Technology">Technology <span class="cat-count">2</span></li>
         </ul>
       </div>
       <div class="sidebar-widget">
         <h4 data-en="🕐 Recent Posts" data-te="🕐 తాజా పోస్టులు">🕐 Recent Posts</h4>
         <div class="recent-posts">
+          <div class="recent-post" onclick="openArticle('x8g2review')">
+            <div class="recent-post-img"><img src="https://www.hobbywing.com/en/uploads/image/20250902/31022aa5563819292cebf078990221c8.jpg" alt=""/></div>
+            <div class="recent-post-info">
+              <h5 data-en="Hobbywing X8 Gen2 Motors: Agri-Drone Propulsion Review" data-te="హాబీవింగ్ X8 జెన్2 మోటార్లు: అగ్రి-డ్రోన్ ప్రొపల్షన్ సమీక్ష">Hobbywing X8 Gen2 Motors: Agri-Drone Propulsion Review</h5>
+              <span>28 May 2025</span>
+            </div>
+          </div>
           <div class="recent-post" onclick="openArticle('pesticide')">
             <div class="recent-post-img"><img src="https://framerusercontent.com/images/W3YWoSFln8Ebxxy6WivnNrF48g.png" alt=""/></div>
             <div class="recent-post-info">
@@ -477,6 +499,7 @@
           <span class="sidebar-tag" onclick="filterPosts('training',null)" data-en="Pilot Training" data-te="పైలట్ శిక్షణ">Pilot Training</span>
           <span class="sidebar-tag" onclick="filterPosts('farming',null)" data-en="Paddy" data-te="వరి">Paddy</span>
           <span class="sidebar-tag" onclick="filterPosts('farming',null)" data-en="Crop Spraying" data-te="పంట పిచికారీ">Crop Spraying</span>
+          <span class="sidebar-tag" onclick="filterPosts('technology',null)" data-en="Hobbywing" data-te="హాబీవింగ్">Hobbywing</span>
           <span class="sidebar-tag" data-en="Andhra Pradesh" data-te="ఆంధ్రప్రదేశ్">Andhra Pradesh</span>
           <span class="sidebar-tag" onclick="filterPosts('regulations',null)" data-en="Remote Pilot" data-te="రిమోట్ పైలట్">Remote Pilot</span>
           <span class="sidebar-tag" onclick="filterPosts('regulations',null)" data-en="Certification" data-te="సర్టిఫికేషన్">Certification</span>
@@ -676,6 +699,94 @@ var ARTICLES = {
       <div class="highlight-box">⚠️ సరైన అనుమతి లేకుండా ఎర్ర లేదా పసుపు జోన్‌లో ఎగురడం ₹1 లక్ష వరకు జరిమానాలు మరియు పరికరాలు స్వాధీనానికి దారితీయవచ్చు. ప్రతి ఆపరేషన్‌కు ముందే మ్యాప్ తనిఖీ చేయండి.</div>
       <h2>2025లో ఏమి మారింది?</h2>
       <p>ఈ సంవత్సరం గమనించదగిన నవీకరణలలో సరళీకృత RPC పునరుద్ధరణ ప్రక్రియలు, గ్రామీణ వ్యవసాయ ప్రాంతాలలో విస్తరించిన ఆకుపచ్చ జోన్ కవరేజ్ మరియు ఎంపిక రాష్ట్రాలలో BVLOS ప్రయోగాత్మక కారిడార్లకు కొత్త మార్గదర్శకాలు ఉన్నాయి. SAG డ్రోన్ టెక్నాలజీస్ ప్రతి నియంత్రణ మార్పుతో మా ఆపరేటర్లు మరియు RPTO విద్యార్థులను అప్‌డేట్‌గా ఉంచుతుంది.</p>`
+    }
+  },
+
+  x8g2review: {
+    id: 'x8g2review',
+    cat:    { en: '⚙️ Technology', te: '⚙️ టెక్నాలజీ' },
+    catKey: 'technology',
+    title:  { en: 'Hobbywing X8 Gen2 Motors: The Agri-Drone Propulsion Upgrade Worth Knowing About',
+               te: 'హాబీవింగ్ X8 జెన్2 మోటార్లు: తెలుసుకోవలసిన అగ్రి-డ్రోన్ ప్రొపల్షన్ అప్‌గ్రేడ్' },
+    date: '28 May 2025', readTime: '6', author: 'SAG Team',
+    img: 'https://www.hobbywing.com/en/uploads/image/20250902/31022aa5563819292cebf078990221c8.jpg',
+    tags: { en: ['Hobbywing','X8 G2','Drone Motor','Agri Drone','Propulsion System','Technology'],
+             te: ['హాబీవింగ్','X8 G2','డ్రోన్ మోటార్','వ్యవసాయ డ్రోన్','ప్రొపల్షన్ సిస్టమ్','టెక్నాలజీ'] },
+    body: {
+      en: `<p>If you've spent any time around serious agri-drone operators in India, you've heard the name Hobbywing. Their X8 integrated propulsion system became a benchmark for agricultural spraying drones — trusted, field-proven, and widely deployed across AP, Telangana, and beyond. Now Hobbywing has released the X8 Gen2 (X8 G2), and it's a meaningful step forward. Here's what you need to know.</p>
+
+      <h2>What Is the Hobbywing X8 G2?</h2>
+      <p>The X8 G2 is an all-in-one integrated propulsion unit — motor, ESC, and propeller combined into a single optimised system designed for agricultural and industrial drones. It builds directly on the original X8's reputation but introduces hardware and software upgrades aimed at higher speed, better endurance, and expanded application versatility across agriculture, logistics, training, and aerial inspection.</p>
+      <div class="highlight-box">💡 The X8 G2 is a drop-in replacement for the original X8 — it supports both 3011S and 3011 propellers interchangeably, so existing drone frames can be upgraded without modification.</div>
+
+      <h2>Key Specifications at a Glance</h2>
+      <ul>
+        <li><strong>Rated thrust:</strong> 5–7.5 kg per rotor</li>
+        <li><strong>Maximum thrust:</strong> Up to 15.3 kg per rotor</li>
+        <li><strong>Motor type:</strong> PMSM (Permanent Magnet Synchronous Motor) with FOC (Field-Oriented Control)</li>
+        <li><strong>Max flight speed:</strong> 20 m/s — a 40% improvement over the original X8</li>
+        <li><strong>Endurance gain:</strong> ~10% improvement over the X8 at the same battery capacity</li>
+        <li><strong>Propeller:</strong> New 3011S folding propeller — 5% lighter than the 3011, same maximum thrust</li>
+        <li><strong>Compatible arm tubes:</strong> 30mm and 35mm carbon fibre</li>
+      </ul>
+
+      <h2>The PMSM + FOC Difference</h2>
+      <p>One of the most important things to understand about the X8 G2 — and the X8 series generally — is the underlying motor technology. Rather than a conventional BLDC (Brushless DC) motor, Hobbywing uses a PMSM architecture driven by a Field-Oriented Control algorithm. In practical terms this means lower electrical noise, smoother throttle response at all RPM ranges, higher power density per kilogram, reduced pulsating torque, and more precise control during automated spray missions.</p>
+      <p>For an agricultural drone operator, this translates to more consistent coverage at varying flight speeds, better handling in crosswind conditions, and less motor heat buildup over a long day of operations.</p>
+
+      <h2>What's New in Gen2 vs the Original X8?</h2>
+      <p>The original X8 was already a solid performer. The G2 improves on it in three specific areas:</p>
+      <ul>
+        <li><strong>Speed:</strong> The jump from roughly 14 m/s to 20 m/s maximum flight speed is significant for logistics and coverage efficiency. For agri spraying, faster transit between field sections means more acres covered per battery cycle.</li>
+        <li><strong>Propeller update:</strong> The new 3011S folding prop sheds 5% of the blade weight while matching the thrust output of the old 3011. Less rotational mass means quicker spin-up response and slightly reduced vibration through the airframe.</li>
+        <li><strong>Remote tuning:</strong> The G2 introduces the ability to adjust drive parameters, motor rotation direction, and LED indicator colour directly through a remote controller or the Hobbywing DataLink software — without physically accessing the drone. This is a big quality-of-life improvement for operators managing multi-unit fleets.</li>
+      </ul>
+      <div class="highlight-box">⚡ The ~10% endurance gain doesn't come from a bigger battery — it comes from improved propulsion efficiency. At a forward speed of 20 m/s vs 12 m/s (carrying rated payload at sea level), the G2 covers the same distance while consuming measurably less battery capacity.</div>
+
+      <h2>Protection Features</h2>
+      <p>Field durability matters as much as raw performance. The X8 G2 carries a comprehensive protection stack built into the integrated ESC: over-current protection, motor stall detection, throttle signal loss safety mode, and real-time monitoring of both voltage and temperature anomalies. The CNC-machined aluminium alloy motor housing is specifically designed to absorb impact and resist field damage — important when you're landing on uneven soil or handling logistics drops.</p>
+
+      <h2>Which Drones Is It Suited For?</h2>
+      <p>The X8 G2 targets the sweet spot of Indian agri-drones — systems with a 10–25 kg MTOW carrying a 10–16 litre spray tank. It pairs naturally with quadcopter and hexacopter frames in the medium-size agricultural segment, as well as logistics drones and DGCA-approved training platforms. Its compatibility with existing 30/35mm arm systems means most established agri-drone manufacturers can integrate the G2 without redesigning their frame.</p>
+
+      <h2>SAG's Take: Is It Worth the Upgrade?</h2>
+      <p>If you're building a new agri-drone or replacing worn propulsion units on a mid-size fleet, the X8 G2 is the obvious choice over the original X8. The speed and efficiency gains are real, the remote tuning feature reduces maintenance downtime, and the lighter 3011S propeller is a welcome improvement for high-cycle daily operations.</p>
+      <p>For operators running perfectly functional original X8 systems, the upgrade calculus depends on your daily usage intensity. High-volume commercial spraying operations — 50+ acres per day — will likely see the endurance and speed gains pay back the replacement cost within a season. Lower-intensity operations can continue with the X8 until natural replacement cycles arise.</p>
+      <p>At SAG Drone Technologies, we stay current with every major propulsion development because our RPTO trainees and our own service fleet depend on reliable, efficient hardware. The Hobbywing X8 G2 is a system we're watching closely — and one you should know about if drone performance matters to your operation.</p>`,
+
+      te: `<p>భారతదేశంలో తీవ్రమైన అగ్రి-డ్రోన్ ఆపరేటర్ల దగ్గర కొంత సమయం గడిపిన వారికి హాబీవింగ్ పేరు తెలుసు. వారి X8 ఇంటిగ్రేటెడ్ ప్రొపల్షన్ సిస్టమ్ వ్యవసాయ పిచికారీ డ్రోన్లకు ఒక ప్రమాణంగా మారింది — నమ్మకమైన, ఫీల్డ్-ప్రూవ్డ్, మరియు AP, తెలంగాణ అంతటా విస్తృతంగా మోహరింపబడింది. ఇప్పుడు హాబీవింగ్ X8 జెన్2 (X8 G2) విడుదల చేసింది, మరియు ఇది ముందడుగు. మీరు తెలుసుకోవలసినది ఇక్కడ ఉంది.</p>
+
+      <h2>హాబీవింగ్ X8 G2 అంటే ఏమిటి?</h2>
+      <p>X8 G2 అనేది ఆల్-ఇన్-వన్ ఇంటిగ్రేటెడ్ ప్రొపల్షన్ యూనిట్ — మోటార్, ESC, మరియు ప్రొపెల్లర్ ఒకే ఆప్టిమైజ్డ్ సిస్టమ్‌లో కలిపారు. ఇది అసలు X8 యొక్క పనితీరు ఆధారంగా నిర్మించబడింది కానీ వ్యవసాయం, లాజిస్టిక్స్, శిక్షణ మరియు వైమానిక తనిఖీ అంతటా అనువర్తనాలకు అనుగుణంగా అప్‌గ్రేడ్‌లను పరిచయం చేస్తుంది.</p>
+      <div class="highlight-box">💡 X8 G2 అసలు X8 కు డ్రాప్-ఇన్ రీప్లేస్‌మెంట్ — ఇది 3011S మరియు 3011 ప్రొపెల్లర్ రెండింటికి మద్దతు ఇస్తుంది, కాబట్టి ఇప్పటికే ఉన్న డ్రోన్ ఫ్రేమ్‌లు సవరణ లేకుండా అప్‌గ్రేడ్ చేయవచ్చు.</div>
+
+      <h2>ముఖ్య స్పెసిఫికేషన్లు</h2>
+      <ul>
+        <li><strong>రేటెడ్ థ్రస్ట్:</strong> రోటర్ కు 5–7.5 కిలోలు</li>
+        <li><strong>గరిష్ట థ్రస్ట్:</strong> రోటర్ కు 15.3 కిలోల వరకు</li>
+        <li><strong>మోటార్ రకం:</strong> FOC తో PMSM</li>
+        <li><strong>గరిష్ట విమాన వేగం:</strong> 20 m/s — అసలు X8 కంటే 40% మెరుగుదల</li>
+        <li><strong>ఎండ్యూరెన్స్ లాభం:</strong> అదే బ్యాటరీ సామర్థ్యంతో X8 కంటే ~10% మెరుగుదల</li>
+        <li><strong>ప్రొపెల్లర్:</strong> కొత్త 3011S ఫోల్డింగ్ ప్రొపెల్లర్ — 3011 కంటే 5% తేలికగా</li>
+      </ul>
+
+      <h2>PMSM + FOC వ్యత్యాసం</h2>
+      <p>X8 G2 యొక్క అతి ముఖ్యమైన విషయం ఏమిటంటే మోటార్ సాంకేతికత. సాంప్రదాయ BLDC మోటార్ కాకుండా, హాబీవింగ్ FOC అల్గారిథమ్ ద్వారా నడిచే PMSM ఆర్కిటెక్చర్ ఉపయోగిస్తుంది. ఆచరణలో ఇది అంటే తక్కువ విద్యుత్ శబ్దం, మృదువైన థ్రొటిల్ స్పందన, అధిక విద్యుత్ సాంద్రత, తగ్గించిన స్పందించే టార్క్ మరియు ఆటోమేటెడ్ స్ప్రే మిషన్లలో మరింత ఖచ్చితమైన నియంత్రణ అని అర్థం.</p>
+
+      <h2>జెన్2 vs అసలు X8లో ఏమి కొత్తది?</h2>
+      <ul>
+        <li><strong>వేగం:</strong> 14 m/s నుండి 20 m/s కు దూకడం లాజిస్టిక్స్ మరియు కవరేజ్ సామర్థ్యానికి ముఖ్యమైనది.</li>
+        <li><strong>ప్రొపెల్లర్ నవీకరణ:</strong> కొత్త 3011S ఫోల్డింగ్ ప్రొప్ పాత 3011 యొక్క థ్రస్ట్ అవుట్‌పుట్‌ను సరిపోల్చుతూ 5% బ్లేడ్ బరువు తగ్గిస్తుంది.</li>
+        <li><strong>రిమోట్ ట్యూనింగ్:</strong> G2 రిమోట్ కంట్రోలర్ లేదా DataLink సాఫ్ట్‌వేర్ ద్వారా డ్రైవ్ పారామీటర్లు, మోటార్ రొటేషన్ దిశ మరియు LED రంగు సర్దుబాటు చేయగల సామర్థ్యాన్ని పరిచయం చేస్తుంది.</li>
+      </ul>
+      <div class="highlight-box">⚡ ~10% ఎండ్యూరెన్స్ లాభం పెద్ద బ్యాటరీ నుండి రాదు — ఇది మెరుగైన ప్రొపల్షన్ సామర్థ్యం నుండి వస్తుంది.</div>
+
+      <h2>రక్షణ లక్షణాలు</h2>
+      <p>X8 G2 ఇంటిగ్రేటెడ్ ESCలో నిర్మించిన సమగ్ర రక్షణ స్టాక్‌ను కలిగి ఉంది: అతి-కరెంట్ రక్షణ, మోటార్ స్టాల్ గుర్తింపు, థ్రొటిల్ సిగ్నల్ లాస్ సేఫ్టీ మోడ్, మరియు వోల్టేజ్ మరియు ఉష్ణోగ్రత విసంగతుల రియల్-టైమ్ పర్యవేక్షణ. CNC-మెషీన్డ్ అల్యూమినియం అలాయ్ మోటార్ హౌసింగ్ ప్రత్యేకంగా ఫీల్డ్ నష్టాన్ని తట్టుకోవడానికి రూపొందించబడింది.</p>
+
+      <h2>SAG యొక్క అభిప్రాయం: అప్‌గ్రేడ్ విలువైనదా?</h2>
+      <p>కొత్త అగ్రి-డ్రోన్ నిర్మిస్తున్నా లేదా మధ్యస్థ ఫ్లీట్‌లో అరిగిన ప్రొపల్షన్ యూనిట్లను భర్తీ చేస్తున్నా, X8 G2 అసలు X8 కంటే స్పష్టమైన ఎంపిక. వేగం మరియు సామర్థ్య లాభాలు నిజమైనవి, రిమోట్ ట్యూనింగ్ ఫీచర్ నిర్వహణ ముగింపు సమయాన్ని తగ్గిస్తుంది, మరియు తేలికైన 3011S ప్రొపెల్లర్ అధిక-సైకిల్ రోజువారీ ఆపరేషన్లకు స్వాగతయోగ్యమైన మెరుగుదల.</p>
+      <p>SAG డ్రోన్ టెక్నాలజీస్‌లో, మేము మా RPTO శిక్షణార్థులు మరియు మా సొంత సర్వీస్ ఫ్లీట్ నమ్మకమైన, సమర్థవంతమైన హార్డ్‌వేర్‌పై ఆధారపడటం వలన ప్రతి ముఖ్యమైన ప్రొపల్షన్ అభివృద్ధితో అప్‌డేట్‌గా ఉంటాము. హాబీవింగ్ X8 G2 మేము దగ్గరగా గమనిస్తున్న సిస్టమ్ — మీ ఆపరేషన్‌కు డ్రోన్ పనితీరు ముఖ్యమైతే మీరు తెలుసుకోవలసిన ఒకటి.</p>`
     }
   },
 
@@ -944,7 +1055,7 @@ var ARTICLES = {
   }
 };
 
-var ARTICLE_ORDER = ['featured','pesticide','pilot5things','dronesize','rpc','paddy','rpto5day'];
+var ARTICLE_ORDER = ['featured','x8g2review','pesticide','pilot5things','dronesize','rpc','paddy','rpto5day'];
 var currentArticleId = null;
 
 /* ══════════════════════════════════════════
@@ -997,20 +1108,6 @@ function openArticle(id) {
   av.classList.add('visible');
   window.scrollTo({top:0,behavior:'smooth'});
   document.title = art.title[currentLang] + ' – SAG Drone Technologies';
-  // Push clean shareable URL: /blogs#featured
-  if (window.location.hash !== '#' + id) {
-    history.pushState({articleId: id}, document.title, '#' + id);
-  }
-  // Update canonical and OG meta for sharing
-  var url = 'https://sagdrones.com/blogs#' + id;
-  var canon = document.querySelector('link[rel="canonical"]');
-  if (canon) canon.setAttribute('href', url);
-  var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.setAttribute('content', url);
-  var ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', art.title[currentLang] + ' – SAG Drone Technologies');
-  var ogDesc = document.querySelector('meta[name="description"]');
-  if (ogDesc) ogDesc.setAttribute('content', art.body[currentLang].replace(/<[^>]+>/g,'').substring(0,160));
 }
 
 function closeArticle() {
@@ -1020,15 +1117,6 @@ function closeArticle() {
   currentArticleId = null;
   document.title = 'Blog – SAG Drone Technologies | Agri-Drone Insights & News';
   window.scrollTo({top:0,behavior:'smooth'});
-  // Restore clean URL without hash
-  history.pushState({}, document.title, window.location.pathname);
-  // Restore canonical and OG meta
-  var canon = document.querySelector('link[rel="canonical"]');
-  if (canon) canon.setAttribute('href', 'https://sagdrones.com/blogs');
-  var ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) ogUrl.setAttribute('content', 'https://sagdrones.com/blogs');
-  var ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', 'Blog – SAG Drone Technologies');
 }
 
 /* ══════════════════════════════════════════
@@ -1037,9 +1125,7 @@ function closeArticle() {
 function shareArticle(platform) {
   var art = currentArticleId ? ARTICLES[currentArticleId] : null;
   var title = art ? art.title[currentLang] : 'SAG Drone Technologies Blog';
-  var url = art
-    ? 'https://sagdrones.com/blogs#' + currentArticleId
-    : window.location.href;
+  var url = window.location.href;
   if (platform==='whatsapp') window.open('https://wa.me/?text='+encodeURIComponent(title+'\n'+url),'_blank');
   else if (platform==='twitter') window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(title)+'&url='+encodeURIComponent(url),'_blank');
   else if (platform==='copy') {
@@ -1114,38 +1200,6 @@ document.addEventListener('DOMContentLoaded',function(){
   els.forEach(function(el){el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';});
   var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});},{threshold:0.1});
   els.forEach(function(el){obs.observe(el);});
-
-  // Open article from URL hash on page load (e.g. /blogs#featured)
-  var hash = window.location.hash.replace('#','');
-  if (hash && ARTICLES[hash]) {
-    openArticle(hash);
-  }
-});
-
-// Handle browser back/forward navigation
-window.addEventListener('popstate', function(e) {
-  var hash = window.location.hash.replace('#','');
-  if (hash && ARTICLES[hash]) {
-    // Re-open without pushing another history entry
-    var art = ARTICLES[hash];
-    currentArticleId = hash;
-    document.getElementById('articleImg').src = art.img;
-    document.getElementById('articleImg').alt = art.title[currentLang];
-    renderArticleContent(hash);
-    document.getElementById('blogHero').style.display = 'none';
-    document.getElementById('blogListView').style.display = 'none';
-    document.getElementById('articleView').classList.add('visible');
-    document.title = art.title[currentLang] + ' – SAG Drone Technologies';
-    window.scrollTo({top:0,behavior:'smooth'});
-  } else {
-    // No hash — go back to blog list
-    document.getElementById('blogHero').style.display = '';
-    document.getElementById('blogListView').style.display = '';
-    document.getElementById('articleView').classList.remove('visible');
-    currentArticleId = null;
-    document.title = 'Blog – SAG Drone Technologies | Agri-Drone Insights & News';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
 });
 </script>
 </body>
