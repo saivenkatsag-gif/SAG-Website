@@ -1,5 +1,12 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/test-redirect",
+      "destination": "https://google.com",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/blog/:slug",
@@ -10,10 +17,7 @@
     {
       "source": "/admin",
       "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     }
   ]
