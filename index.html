@@ -1291,27 +1291,11 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 
 document.addEventListener('DOMContentLoaded', function() {
 
-  // Load applications dynamically
-  loadDroneApplications();
-
-  /* ── Smooth scroll for all anchor links ── */
-  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
-    anchor.addEventListener('click', function(e) {
-      var target = document.querySelector(this.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        var navH = document.getElementById('mainNav').offsetHeight;
-        var top = target.getBoundingClientRect().top + window.pageYOffset - navH;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }
-    });
-  });
-
-  /* ── Scroll spy: highlight active nav link ── */
+  /* ── Scroll spy setup: read layout FIRST, before any DOM writes below force a reflow ── */
   var spySections = document.querySelectorAll('section[id]');
   var navLinks = document.querySelectorAll('.nav-link[data-section]');
   var mainNavEl = document.getElementById('mainNav');
-  var navH = mainNavEl.offsetHeight; // read once, not on every scroll frame
+  var navH = mainNavEl.offsetHeight; // read once, before loadDroneApplications() writes to the DOM
   window.addEventListener('resize', function() { navH = mainNavEl.offsetHeight; }, { passive: true });
 
   var scrollTicking = false;
@@ -1339,7 +1323,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
-  updateScrollState();
+  // #home is already marked active in the HTML and scrollY is 0 on load, so defer
+  // this first read to rAF rather than forcing it synchronously in the same task
+  // as the DOM writes below (loadDroneApplications, hamburger style injection, etc.)
+  requestAnimationFrame(updateScrollState);
+
+  // Load applications dynamically
+  loadDroneApplications();
+
+  /* ── Smooth scroll for all anchor links ── */
+  document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+    anchor.addEventListener('click', function(e) {
+      var target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        var clickNavH = mainNavEl.offsetHeight;
+        var top = target.getBoundingClientRect().top + window.pageYOffset - clickNavH;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    });
+  });
 
   /* ── Hamburger animated lines (X on open) ── */
   var style = document.createElement('style');
