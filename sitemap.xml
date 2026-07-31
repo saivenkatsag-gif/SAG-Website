@@ -58,4 +58,62 @@
     <priority>0.5</priority>
   </url>
 
+  <!-- Blog index -->
+  <url>
+    <loc>https://sagdrones.com/blogs</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Individual blog posts -->
+  <url>
+    <loc>https://sagdrones.com/blog/dgca-drone-rules-2025</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/hobbywing-x8-gen2-motor-review</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/reducing-pesticide-use-with-agri-drones</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/5-things-before-enrolling-drone-pilot-training</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/small-vs-medium-drones-for-farms</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/remote-pilot-certificate-application-guide</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/drone-spraying-practices-paddy-rice-crops</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sagdrones.com/blog/rpto-5-day-training-program</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>
