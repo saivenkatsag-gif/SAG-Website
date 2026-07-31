@@ -1,12 +1,12 @@
 {
   "cleanUrls": true,
-  "redirects": [
+  "rewrites": [
     {
-      "source": "/test-redirect",
-      "destination": "https://google.com",
-      "permanent": false
+      "source": "/blog/:slug",
+      "destination": "/blogs"
     }
-  ],
+  ]
+}
   "rewrites": [
     {
       "source": "/blog/:slug",
