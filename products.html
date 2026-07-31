@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Drone Products – SAG Drone Technologies | Buy Drones in India</title>
+
+<!-- Early connection hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+
      <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2"></script>
 <script>
@@ -27,9 +36,6 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Drone Products – SAG Drone Technologies | Buy Drones in India</title>
 <meta name="description" content="Explore SAG Drone Technologies' product catalogue — agricultural drones, surveillance drones, and more. Buy certified drones at competitive prices in India."/>
 <meta name="keywords" content="buy drones india, agricultural drones, surveillance drones, SAG drone products, racing drones, drone applications, drone catalogue, agri drone price"/>
 <meta name="author" content="SAG Drone Technologies"/>
@@ -412,7 +418,8 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   }
 }
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/></noscript>
 <style>
   :root {
     --blue: #1a6fb5;
@@ -2531,7 +2538,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 <!-- NAV -->
 <nav id="mainNav">
   <a class="nav-logo" href="index.html">
-    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo"/>
+    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
     <span></span>
   </a>
   <ul class="nav-links">
@@ -3010,7 +3017,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo"/>
+      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
       <p>Book your drone now and take your farming to the next level with SAG Drone Technologies — India's trusted agri-drone ecosystem builder.</p>
       <div class="footer-contact">
         <div>📧 <a href="mailto:sagtechinfo@gmail.com">sagtechinfo@gmail.com</a></div>
@@ -3051,6 +3058,11 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 </footer>
 
 <script>
+  /* ── Cloudinary image optimizer: auto-format/quality + resize on the fly ── */
+  function cldOpt(url, width) {
+    if (!url || url.indexOf('res.cloudinary.com') === -1 || url.indexOf('/upload/') === -1) return url;
+    return url.replace('/upload/', '/upload/f_auto,q_auto,w_' + width + '/');
+  }
   /* ── Mobile menu ── */
   function toggleMobileMenu() {
     document.getElementById('mobileMenu').classList.toggle('open');
@@ -3216,7 +3228,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       imgWrap.className = 'product-img';
       if (p.image) {
         var img = document.createElement('img');
-        img.src = p.image;
+        img.src = cldOpt(p.image, 400);
         img.alt = p.name;
         img.loading = 'lazy';
         img.onerror = function() {
@@ -3488,7 +3500,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       card.setAttribute('data-id', d.id);
       card.innerHTML =
         '<div class="drone-card-img">' +
-          (d.image ? '<img src="' + d.image + '" alt="' + d.name + '" loading="lazy" onerror="this.style.display=\'none\'">' : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:2rem;">🚁</div>') +
+          (d.image ? '<img src="' + cldOpt(d.image, 400) + '" alt="' + d.name + '" loading="lazy" onerror="this.style.display=\'none\'">' : '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#7aab8a;font-size:2rem;">🚁</div>') +
           '<div class="drone-badge-row">' +
             (d.is_new ? '<span class="drone-badge">New</span>' : '') +
             (d.is_offer ? '<span class="drone-badge offer">Offer</span>' : '') +
@@ -3518,7 +3530,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
     if (!d) return;
     var specs = [];
     try { specs = typeof d.specifications === 'string' ? JSON.parse(d.specifications) : (d.specifications || []); } catch(e) {}
-    document.getElementById('dmHeroImg').src = d.image || '';
+    document.getElementById('dmHeroImg').src = cldOpt(d.image, 800) || '';
     document.getElementById('dmHeroImg').style.display = d.image ? '' : 'none';
     document.getElementById('dmName').textContent = d.name;
     document.getElementById('dmPrice').textContent = d.price ? '₹' + Number(d.price).toLocaleString('en-IN') : '';
