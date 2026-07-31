@@ -1,5 +1,11 @@
 {
   "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/blog/:slug",
+      "destination": "/blogs.html"
+    }
+  ],
   "headers": [
     {
       "source": "/admin",
