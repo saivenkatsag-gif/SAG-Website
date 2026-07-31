@@ -7,12 +7,12 @@
 <meta name="description" content="Stay updated with the latest news, insights, and guides from SAG Drone Technologies — DGCA regulations, agri-drone tips, pilot training, and precision farming."/>
 <meta name="author" content="SAG Drone Technologies"/>
 <meta name="robots" content="index, follow"/>
-<link rel="canonical" href="https://sagdrones.com/blogs.html"/>
-<meta property="og:title" content="Blog – SAG Drone Technologies"/>
-<meta property="og:description" content="Agri-drone insights, DGCA updates, pilot tips, and precision farming news."/>
-<meta property="og:url" content="https://sagdrones.com/blogs.html"/>
-<meta property="og:type" content="website"/>
-<meta property="og:image" content="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png"/>
+<link rel="canonical" href="https://sagdrones.com/blogs" id="canonicalLink"/>
+<meta property="og:title" content="Blog – SAG Drone Technologies" id="ogTitle"/>
+<meta property="og:description" content="Agri-drone insights, DGCA updates, pilot tips, and precision farming news." id="ogDesc"/>
+<meta property="og:url" content="https://sagdrones.com/blogs" id="ogUrl"/>
+<meta property="og:type" content="website" id="ogType"/>
+<meta property="og:image" content="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png" id="ogImage"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <link rel="icon" type="image/png" href="/logo.png"/>
 <link rel="icon" type="image/png" href="/logo.png"/>
@@ -650,6 +650,7 @@ function setLang(lang) {
 var ARTICLES = {
   featured: {
     id: 'featured',
+    slug: 'dgca-drone-rules-2025',
     cat:    { en: '📋 DGCA & Regulations',    te: '📋 DGCA & నిబంధనలు' },
     catKey: 'regulations',
     title:  { en: 'Everything You Need to Know About DGCA Drone Rules in 2025',
@@ -704,6 +705,7 @@ var ARTICLES = {
 
   x8g2review: {
     id: 'x8g2review',
+    slug: 'hobbywing-x8-gen2-motor-review',
     cat:    { en: '⚙️ Technology', te: '⚙️ టెక్నాలజీ' },
     catKey: 'technology',
     title:  { en: 'Hobbywing X8 Gen2 Motors: The Agri-Drone Propulsion Upgrade Worth Knowing About',
@@ -792,6 +794,7 @@ var ARTICLES = {
 
   pesticide: {
     id: 'pesticide',
+    slug: 'reducing-pesticide-use-with-agri-drones',
     cat:    { en: '🌾 Precision Farming', te: '🌾 ఖచ్చితమైన వ్యవసాయం' },
     catKey: 'farming',
     title:  { en: 'How Agri-Drones Are Reducing Pesticide Use by 30% in Andhra Pradesh',
@@ -834,6 +837,7 @@ var ARTICLES = {
 
   pilot5things: {
     id: 'pilot5things',
+    slug: '5-things-before-enrolling-drone-pilot-training',
     cat:    { en: '🎓 Pilot Training', te: '🎓 పైలట్ శిక్షణ' },
     catKey: 'training',
     title:  { en: '5 Things Every Aspiring Drone Pilot Should Know Before Enrolling',
@@ -878,6 +882,7 @@ var ARTICLES = {
 
   dronesize: {
     id: 'dronesize',
+    slug: 'small-vs-medium-drones-for-farms',
     cat:    { en: '⚙️ Technology', te: '⚙️ సాంకేతికత' },
     catKey: 'technology',
     title:  { en: 'Small vs Medium Class Drones: Which Is Right for Your Farm?',
@@ -918,6 +923,7 @@ var ARTICLES = {
 
   rpc: {
     id: 'rpc',
+    slug: 'remote-pilot-certificate-application-guide',
     cat:    { en: '📋 DGCA & Regulations', te: '📋 DGCA & నిబంధనలు' },
     catKey: 'regulations',
     title:  { en: 'Remote Pilot Certificate (RPC): Step-by-Step Application Guide',
@@ -960,6 +966,7 @@ var ARTICLES = {
 
   paddy: {
     id: 'paddy',
+    slug: 'drone-spraying-practices-paddy-rice-crops',
     cat:    { en: '🌾 Precision Farming', te: '🌾 ఖచ్చితమైన వ్యవసాయం' },
     catKey: 'farming',
     title:  { en: 'Best Drone Spraying Practices for Paddy and Rice Crops',
@@ -1014,6 +1021,7 @@ var ARTICLES = {
 
   rpto5day: {
     id: 'rpto5day',
+    slug: 'rpto-5-day-training-program',
     cat:    { en: '🎓 Pilot Training', te: '🎓 పైలట్ శిక్షణ' },
     catKey: 'training',
     title:  { en: 'From Zero to Certified: A Day-by-Day Look at Our 5-Day RPTO Program',
@@ -1058,6 +1066,10 @@ var ARTICLES = {
 var ARTICLE_ORDER = ['featured','x8g2review','pesticide','pilot5things','dronesize','rpc','paddy','rpto5day'];
 var currentArticleId = null;
 
+/* Build slug -> id lookup for clean per-post URLs */
+var SLUG_TO_ID = {};
+ARTICLE_ORDER.forEach(function(aid){ SLUG_TO_ID[ARTICLES[aid].slug] = aid; });
+
 /* ══════════════════════════════════════════
    RENDER ARTICLE
 ══════════════════════════════════════════ */
@@ -1095,7 +1107,7 @@ function renderArticleContent(id) {
   document.getElementById('articleNav').innerHTML = navHtml;
 }
 
-function openArticle(id) {
+function openArticle(id, skipHistory) {
   var art = ARTICLES[id];
   if (!art) return;
   currentArticleId = id;
@@ -1107,17 +1119,89 @@ function openArticle(id) {
   var av = document.getElementById('articleView');
   av.classList.add('visible');
   window.scrollTo({top:0,behavior:'smooth'});
-  document.title = art.title[currentLang] + ' – SAG Drone Technologies';
+
+  var pageTitle = art.title[currentLang] + ' – SAG Drone Technologies';
+  document.title = pageTitle;
+  updateArticleMeta(art, pageTitle);
+
+  if (!skipHistory) {
+    var url = '/blog/' + art.slug;
+    if (window.location.pathname !== url) {
+      history.pushState({ articleId: id }, pageTitle, url);
+    }
+  }
 }
 
-function closeArticle() {
+function closeArticle(skipHistory) {
   document.getElementById('blogHero').style.display = '';
   document.getElementById('blogListView').style.display = '';
   document.getElementById('articleView').classList.remove('visible');
   currentArticleId = null;
   document.title = 'Blog – SAG Drone Technologies | Agri-Drone Insights & News';
+  resetBlogMeta();
   window.scrollTo({top:0,behavior:'smooth'});
+
+  if (!skipHistory && window.location.pathname !== '/blogs' && window.location.pathname !== '/blogs.html') {
+    history.pushState({ articleId: null }, document.title, '/blogs');
+  }
 }
+
+/* ══════════════════════════════════════════
+   PER-ARTICLE SEO / SOCIAL META
+══════════════════════════════════════════ */
+function updateArticleMeta(art, pageTitle) {
+  var desc = (art.body[currentLang] || art.body.en).replace(/<[^>]+>/g,'').trim().slice(0,160);
+  var url = 'https://sagdrones.com/blog/' + art.slug;
+  var canonical = document.getElementById('canonicalLink');
+  if (canonical) canonical.setAttribute('href', url);
+  var ogTitle = document.getElementById('ogTitle');
+  if (ogTitle) ogTitle.setAttribute('content', pageTitle);
+  var ogDesc = document.getElementById('ogDesc');
+  if (ogDesc) ogDesc.setAttribute('content', desc);
+  var ogUrl = document.getElementById('ogUrl');
+  if (ogUrl) ogUrl.setAttribute('content', url);
+  var ogType = document.getElementById('ogType');
+  if (ogType) ogType.setAttribute('content', 'article');
+  var ogImage = document.getElementById('ogImage');
+  if (ogImage) ogImage.setAttribute('content', art.img);
+}
+
+function resetBlogMeta() {
+  var canonical = document.getElementById('canonicalLink');
+  if (canonical) canonical.setAttribute('href', 'https://sagdrones.com/blogs');
+  var ogTitle = document.getElementById('ogTitle');
+  if (ogTitle) ogTitle.setAttribute('content', 'Blog – SAG Drone Technologies');
+  var ogDesc = document.getElementById('ogDesc');
+  if (ogDesc) ogDesc.setAttribute('content', 'Agri-drone insights, DGCA updates, pilot tips, and precision farming news.');
+  var ogUrl = document.getElementById('ogUrl');
+  if (ogUrl) ogUrl.setAttribute('content', 'https://sagdrones.com/blogs');
+  var ogType = document.getElementById('ogType');
+  if (ogType) ogType.setAttribute('content', 'website');
+  var ogImage = document.getElementById('ogImage');
+  if (ogImage) ogImage.setAttribute('content', 'https://res.cloudinary.com/drfl8crbx/image/upload/v1778349547/Untitled_design_5_vhb4s1.png');
+}
+
+/* ══════════════════════════════════════════
+   URL ROUTING — open the right article on load
+   and support browser back/forward buttons
+══════════════════════════════════════════ */
+function getSlugFromPath() {
+  var m = window.location.pathname.match(/^\/blog\/([a-z0-9-]+)\/?$/i);
+  return m ? m[1] : null;
+}
+
+function routeFromLocation(skipHistory) {
+  var slug = getSlugFromPath();
+  var id = slug ? SLUG_TO_ID[slug] : null;
+  if (id) {
+    openArticle(id, true);
+  } else {
+    closeArticle(true);
+  }
+}
+
+window.addEventListener('popstate', function(){ routeFromLocation(true); });
+document.addEventListener('DOMContentLoaded', function(){ routeFromLocation(true); });
 
 /* ══════════════════════════════════════════
    SHARE
