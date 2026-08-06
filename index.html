@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 <!-- LCP element: start fetching the hero image immediately, at the size it's actually displayed -->
-<link rel="preload" as="image" fetchpriority="high" imagesrcset="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_420/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 420w, https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 800w" imagesizes="(max-width: 767px) 420px, 800px">
+<link rel="preload" as="image" fetchpriority="high" imagesrcset="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_420/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 420w, https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 800w" imagesizes="(max-width: 767px) 420px, 800px">
 
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2"></script>
@@ -21,18 +21,37 @@
 
   gtag('config', 'G-JWGHNBH0J2');
 </script>
-<!-- Meta Pixel Code -->
+<!-- Meta Pixel Code — deferred to idle/first-interaction so it never
+     competes with critical above-the-fold resources for bandwidth/CPU -->
 <script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1597811208730856');
-fbq('track', 'PageView');
+(function() {
+  function loadPixel() {
+    if (window._fbPixelLoaded) return;
+    window._fbPixelLoaded = true;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1597811208730856');
+    fbq('track', 'PageView');
+  }
+  var fired = false;
+  function trigger() { if (fired) return; fired = true; loadPixel(); }
+  ['scroll','mousemove','keydown','touchstart'].forEach(function(evt) {
+    window.addEventListener(evt, trigger, { once: true, passive: true });
+  });
+  // Safety net: load anyway after idle time even with zero interaction,
+  // so pageview tracking still fires on very short/passive visits.
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(trigger, { timeout: 4000 });
+  } else {
+    setTimeout(trigger, 3000);
+  }
+})();
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
@@ -718,9 +737,9 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
     </div>
   </div>
   <div class="hero-img">
-    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp"
-         srcset="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_420/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 420w,
-                 https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 800w"
+    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp"
+         srcset="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_420/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 420w,
+                 https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 800w"
          sizes="(max-width: 767px) 420px, 800px"
          alt="Drone Hero" fetchpriority="high" loading="eager"/>
   </div>
@@ -1224,27 +1243,32 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   }
 
   // ══════════════════════════════════════════════════════
-  // LOAD: localStorage first → Supabase fallback
+  // LOAD: render instantly from cache/defaults, refresh from
+  // Supabase in the background once the browser is idle — this
+  // keeps the network request off the critical rendering path.
   // ══════════════════════════════════════════════════════
   async function loadDroneApplications() {
-    // 1. Try localStorage (written by admin panel)
+    var renderedFromCache = false;
     var localRaw = localStorage.getItem('sag_drone_apps');
     if (localRaw) {
       try {
         var local = JSON.parse(localRaw);
         if (local && local.length > 0) {
           renderApps(local);
-          // Then silently refresh from Supabase in background
-          fetchFromSupabase();
-          return;
+          renderedFromCache = true;
         }
       } catch(e) {}
     }
-    // 2. Try Supabase directly
-    var supaApps = await fetchFromSupabase();
-    // 3. If both fail, use hardcoded defaults
-    if (!supaApps || supaApps.length === 0) {
+    if (!renderedFromCache) {
       renderApps(DEFAULT_APPS);
+    }
+    // Refresh from Supabase once idle so this request never competes
+    // with above-the-fold critical resources during initial load.
+    var refresh = function() { fetchFromSupabase(); };
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(refresh, { timeout: 2000 });
+    } else {
+      setTimeout(refresh, 300);
     }
   }
 
