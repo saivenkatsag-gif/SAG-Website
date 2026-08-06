@@ -12,22 +12,28 @@
 <!-- LCP element: start fetching the hero image immediately, at the size it's actually displayed -->
 <link rel="preload" as="image" fetchpriority="high" imagesrcset="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_420/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 420w, https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto:eco,w_800/v1785491656/Rj3kVKO8jf8ObPTfoIuf4HVhCFY_p6noji.webp 800w" imagesizes="(max-width: 767px) 420px, 800px">
 
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-JWGHNBH0J2');
-</script>
-<!-- Meta Pixel Code — deferred to idle/first-interaction so it never
-     competes with critical above-the-fold resources for bandwidth/CPU -->
+<!-- Analytics: GTM + Meta Pixel, deferred to idle/first-interaction so
+     they never compete with critical above-the-fold resources for
+     bandwidth/CPU. Both still fire before most visits end. -->
 <script>
 (function() {
-  function loadPixel() {
-    if (window._fbPixelLoaded) return;
-    window._fbPixelLoaded = true;
+  var fired = false;
+  function loadAnalytics() {
+    if (fired) return;
+    fired = true;
+
+    // Google tag (gtag.js)
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-JWGHNBH0J2');
+    var gtagScript = document.createElement('script');
+    gtagScript.async = true;
+    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2';
+    document.head.appendChild(gtagScript);
+
+    // Meta Pixel
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -39,24 +45,22 @@
     fbq('init', '1597811208730856');
     fbq('track', 'PageView');
   }
-  var fired = false;
-  function trigger() { if (fired) return; fired = true; loadPixel(); }
   ['scroll','mousemove','keydown','touchstart'].forEach(function(evt) {
-    window.addEventListener(evt, trigger, { once: true, passive: true });
+    window.addEventListener(evt, loadAnalytics, { once: true, passive: true });
   });
   // Safety net: load anyway after idle time even with zero interaction,
   // so pageview tracking still fires on very short/passive visits.
   if ('requestIdleCallback' in window) {
-    requestIdleCallback(trigger, { timeout: 4000 });
+    requestIdleCallback(loadAnalytics, { timeout: 4000 });
   } else {
-    setTimeout(trigger, 3000);
+    setTimeout(loadAnalytics, 3000);
   }
 })();
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 /></noscript>
-<!-- End Meta Pixel Code -->
+<!-- End Analytics -->
 <meta name="description" content="SAG Drone Technologies – India's certified agri-drone ecosystem builder. We train DGCA-certified drone pilots, deploy compliant drone services, and enable modern precision farming at scale."/>
 <meta name="keywords" content="SAG Drone Technologies, agricultural drone India, DGCA certified drone, agri drone training, drone pilot training India, buy agricultural drone, precision farming drone, drone spraying service"/>
 <meta name="author" content="SAG Drone Technologies"/>
@@ -591,7 +595,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   .app-dot::after { background: rgba(133,201,255,0.35); }
   .app-dot.active::after { background: #85c9ff; }
   .app-panel-info { background: #f0f7ff; }
-  .app-panel-info .app-num { color: rgba(133,201,255,0.5); }
+  .app-panel-info .app-num { color: rgba(13,27,42,0.55); }
   .faq-q { color: #0d1b2a; }
   .brands-section { background: #f0f7ff; border-color: rgba(133,201,255,0.35); }
   .brands-title { color: #4a6885; }
