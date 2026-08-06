@@ -210,7 +210,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 
 <nav id="mainNav">
   <a class="nav-logo" href="index.html">
-    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
+    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_webp,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
   </a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
@@ -244,7 +244,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 <footer>
   <div class="footer-grid">
     <div class="footer-brand">
-      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_auto,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
+      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_webp,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
       <p>Book your drone now and take your farming to the next level with SAG Drone Technologies — India's trusted agri-drone ecosystem builder.</p>
       <div class="footer-contact">
         <div>📧 <a href="mailto:sagtechinfo@gmail.com">sagtechinfo@gmail.com</a></div>
@@ -314,8 +314,14 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   var TABLE = 'products';
 
   function cldOpt(url, width) {
-    if (!url || url.indexOf('res.cloudinary.com') === -1 || url.indexOf('/upload/') === -1) return url;
-    return url.replace('/upload/', '/upload/f_auto,q_auto,w_' + width + '/');
+    if (!url) return url;
+    if (url.indexOf('res.cloudinary.com') !== -1 && url.indexOf('/upload/') !== -1) {
+      return url.replace(/\/upload\/(?:[^/]+\/)?/, '/upload/f_webp,q_auto,w_' + width + '/');
+    }
+    if (url.indexOf('res.cloudinary.com') !== -1 && url.indexOf('/fetch/') !== -1) {
+      return url.replace(/\/fetch\/[^/]+\//, '/fetch/f_webp,q_auto,w_' + width + '/');
+    }
+    return 'https://res.cloudinary.com/drfl8crbx/image/fetch/f_webp,q_auto,w_' + width + '/' + url;
   }
 
   function getParam(name) {
