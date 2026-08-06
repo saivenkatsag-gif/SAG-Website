@@ -3208,6 +3208,9 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 
       var card = document.createElement('div');
       card.className = 'product-card';
+      card.onclick = function(pid) {
+        return function() { window.location.href = 'product.html?id=' + pid; };
+      }(p.id);
 
       // Badge
       if (p.is_new) {
@@ -3273,6 +3276,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       btn.href = waLink;
       btn.target = '_blank';
       btn.textContent = 'Enquire Now';
+      btn.onclick = function(e) { e.stopPropagation(); };
       card.appendChild(btn);
 
       card.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity 0.35s ease,transform 0.35s ease,border-color .2s,box-shadow .2s';
