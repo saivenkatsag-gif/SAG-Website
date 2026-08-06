@@ -12,17 +12,28 @@
 //  instead of the actual product.
 //
 //  WHAT THIS DOES
-//  For requests to /product.html?id=... from a known bot user-agent,
-//  it fetches the product from Supabase, self-fetches the *real*
+//  For requests to /product?id=... from a known bot user-agent, it
+//  fetches the product from Supabase, self-fetches the *real*
 //  product.html (so markup/CSS/JS stay a single source of truth), and
 //  rewrites only the placeholder <head> tags (title, meta description,
 //  canonical, OG/Twitter tags, JSON-LD) before returning it. Regular
 //  users and any request that doesn't match are passed straight
 //  through untouched.
+//
+//  NOTE ON CLEAN URLS
+//  vercel.json has "cleanUrls": true, so the live site actually serves
+//  (and WhatsApp/Facebook/etc. actually request) the extensionless
+//  "/product?id=..." — NOT "/product.html?id=...". Edge Middleware
+//  runs on the raw incoming request, before Vercel's own cleanUrls
+//  redirect logic, so the matcher below has to target "/product"
+//  directly. "/product.html" is included too in case an old link with
+//  the extension is shared/crawled directly — Vercel will normally
+//  308-redirect that to "/product" and the crawler follows it, but
+//  matching it here avoids the extra hop.
 // ═══════════════════════════════════════════════════════════════════
 
 export const config = {
-  matcher: '/product.html',
+  matcher: ['/product', '/product.html'],
 };
 
 // Recognized link-preview / search crawlers.
@@ -139,7 +150,10 @@ function buildProductHtml(rawHtml, product, pageUrl) {
       (product.category ? ' — ' + product.category : '') +
       '. Certified quality, pan-India delivery.';
   const title = product.name + ' – SAG Drone Technologies';
-  const canonicalUrl = 'https://sagdrones.com/product.html?id=' + product.id;
+  // Extensionless to match the live, cleanUrls-served URL — pointing
+  // canonical/og:url at the .html path would point crawlers at a URL
+  // that just 308-redirects to this one.
+  const canonicalUrl = 'https://sagdrones.com/product?id=' + product.id;
 
   let html = rawHtml;
   html = setTextById(html, 'pageTitle', escapeHtml(title));
@@ -205,7 +219,11 @@ export default async function middleware(request) {
       return; // let the normal "not found" client-side flow handle it
     }
 
+    // Force the extensionless path for the self-fetch regardless of
+    // which variant the bot actually requested, so we don't waste a
+    // redirect hop internally.
     const originUrl = new URL(request.url);
+    originUrl.pathname = '/product';
     originUrl.searchParams.set('__prerendered', '1');
     const originRes = await fetch(originUrl.toString(), {
       headers: { 'user-agent': ua },
