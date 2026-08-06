@@ -10,32 +10,55 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 
-     <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2"></script>
+<!-- Analytics: GTM + Meta Pixel, deferred to idle/first-interaction so
+     they never compete with critical above-the-fold resources for
+     bandwidth/CPU. Both still fire before most visits end. -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+(function() {
+  var fired = false;
+  function loadAnalytics() {
+    if (fired) return;
+    fired = true;
 
-  gtag('config', 'G-JWGHNBH0J2');
-</script>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1597811208730856');
-fbq('track', 'PageView');
+    // Google tag (gtag.js)
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-JWGHNBH0J2');
+    var gtagScript = document.createElement('script');
+    gtagScript.async = true;
+    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2';
+    document.head.appendChild(gtagScript);
+
+    // Meta Pixel
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1597811208730856');
+    fbq('track', 'PageView');
+  }
+  ['scroll','mousemove','keydown','touchstart'].forEach(function(evt) {
+    window.addEventListener(evt, loadAnalytics, { once: true, passive: true });
+  });
+  // Safety net: load anyway after idle time even with zero interaction,
+  // so pageview tracking still fires on very short/passive visits.
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadAnalytics, { timeout: 4000 });
+  } else {
+    setTimeout(loadAnalytics, 3000);
+  }
+})();
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 /></noscript>
-<!-- End Meta Pixel Code -->
+<!-- End Analytics -->
 <meta name="description" content="Explore SAG Drone Technologies' product catalogue — agricultural drones, surveillance drones, and more. Buy certified drones at competitive prices in India."/>
 <meta name="keywords" content="buy drones india, agricultural drones, surveillance drones, SAG drone products, racing drones, drone applications, drone catalogue, agri drone price"/>
 <meta name="author" content="SAG Drone Technologies"/>
@@ -954,7 +977,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   .app-dot { background: rgba(133,201,255,0.35); }
   .app-dot.active { background: #85c9ff; }
   .app-panel-info { background: #f0f7ff; }
-  .app-panel-info .app-num { color: rgba(133,201,255,0.5); }
+  .app-panel-info .app-num { color: rgba(13,27,42,0.55); }
   .faq-q { color: #0d1b2a; }
   .brands-section { background: #f0f7ff; border-color: rgba(133,201,255,0.35); }
   .brands-title { color: #4a6885; }
