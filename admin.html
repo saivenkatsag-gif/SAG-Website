@@ -1161,6 +1161,18 @@ ALTER PUBLICATION supabase_realtime ADD TABLE full_drones;</pre>
           <input class="form-control" id="pWaNum" placeholder="e.g. 919390238537" value="919390238537"/>
         </div>
       </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Description <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(shown on the product's detail page)</span></label>
+          <textarea class="form-control" id="pDescription" rows="4" placeholder="Full product description, specs, use case, etc."></textarea>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Package Includes <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(one item per line)</span></label>
+          <textarea class="form-control" id="pPackageIncludes" rows="4" placeholder="e.g.&#10;1x Hobbywing 8L Pump&#10;1x Pressure Nozzle Set&#10;1x User Manual"></textarea>
+        </div>
+      </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-outline-green" onclick="closeProductModal()">Cancel</button>
@@ -2385,7 +2397,9 @@ async function syncProductsFromSupabase() {
           isNew: !!r.is_new,
           isOffer: !!r.is_offer,
           status: r.status || 'instock',
-          waNum: r.wa_num || '919390238537'
+          waNum: r.wa_num || '919390238537',
+          description: r.description || '',
+          packageIncludes: r.package_includes ? String(r.package_includes).split('\n').map(function(s){return s.trim();}).filter(Boolean) : []
         };
       });
       if (products.length > 0) productNextId = Math.max.apply(null, products.map(function(p){return p.id;})) + 1;
@@ -2411,6 +2425,8 @@ async function pushProductToSupabase(p, isUpdate) {
     is_offer: !!p.isOffer,
     status: p.status || 'instock',
     wa_num: p.waNum || '919390238537',
+    description: p.description || '',
+    package_includes: Array.isArray(p.packageIncludes) ? p.packageIncludes.join('\n') : (p.packageIncludes || ''),
     updated_at: new Date().toISOString()
   };
   try {
@@ -2496,6 +2512,8 @@ function openAddProductModal() {
   document.getElementById('pStatus').value = 'instock';
   document.getElementById('pWaNum').value = '919390238537';
   document.getElementById('pCategory').value = '';
+  document.getElementById('pDescription').value = '';
+  document.getElementById('pPackageIncludes').value = '';
   populateCategoryDropdown();
   // If categories not yet loaded, fetch them
   if (categories.length === 0 && isSupabaseMode) {
@@ -2517,6 +2535,8 @@ function openEditProductModal(id) {
   document.getElementById('pIsOffer').checked = !!p.isOffer;
   document.getElementById('pStatus').value = p.status || 'instock';
   document.getElementById('pWaNum').value = p.waNum || '919390238537';
+  document.getElementById('pDescription').value = p.description || '';
+  document.getElementById('pPackageIncludes').value = Array.isArray(p.packageIncludes) ? p.packageIncludes.join('\n') : (p.packageIncludes || '');
   populateCategoryDropdown();
   var catSel = document.getElementById('pCategory');
   if (catSel) catSel.value = p.category || '';
@@ -2558,7 +2578,10 @@ async function saveProduct() {
     isNew: document.getElementById('pIsNew').checked,
     isOffer: document.getElementById('pIsOffer').checked,
     status: document.getElementById('pStatus').value,
-    waNum: document.getElementById('pWaNum').value.trim() || '919390238537'
+    waNum: document.getElementById('pWaNum').value.trim() || '919390238537',
+    description: document.getElementById('pDescription').value.trim(),
+    packageIncludes: document.getElementById('pPackageIncludes').value.trim()
+      .split('\n').map(function(s){ return s.trim(); }).filter(Boolean)
   };
   showLoading(true);
   if (editId) {
