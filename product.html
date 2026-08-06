@@ -1,251 +1,500 @@
-// ═══════════════════════════════════════════════════════════════════
-//  Vercel Edge Middleware — bot pre-rendering for /product.html
-//
-//  WHY THIS EXISTS
-//  product.html renders its title/description/OG image via client-side
-//  JS after fetching the product from Supabase. That's fine for users
-//  and for Googlebot (which executes JS), but link-preview crawlers
-//  (WhatsApp, Facebook, Twitter/X, Slack, Telegram, LinkedIn, Discord…)
-//  do NOT execute JavaScript — they only read the raw <head> that's
-//  served on the very first response. Without this, every shared
-//  product link shows the generic fallback title/description/image
-//  instead of the actual product.
-//
-//  WHAT THIS DOES
-//  For requests to /product?id=... from a known bot user-agent, it
-//  fetches the product from Supabase, self-fetches the *real*
-//  product.html (so markup/CSS/JS stay a single source of truth), and
-//  rewrites only the placeholder <head> tags (title, meta description,
-//  canonical, OG/Twitter tags, JSON-LD) before returning it. Regular
-//  users and any request that doesn't match are passed straight
-//  through untouched.
-//
-//  NOTE ON CLEAN URLS
-//  vercel.json has "cleanUrls": true, so the live site actually serves
-//  (and WhatsApp/Facebook/etc. actually request) the extensionless
-//  "/product?id=..." — NOT "/product.html?id=...". Edge Middleware
-//  runs on the raw incoming request, before Vercel's own cleanUrls
-//  redirect logic, so the matcher below has to target "/product"
-//  directly. "/product.html" is included too in case an old link with
-//  the extension is shared/crawled directly — Vercel will normally
-//  308-redirect that to "/product" and the crawler follows it, but
-//  matching it here avoids the extra hop.
-// ═══════════════════════════════════════════════════════════════════
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title id="pageTitle">Product – SAG Drone Technologies</title>
 
-export const config = {
-  matcher: ['/product', '/product.html'],
-};
+<!-- Early connection hints -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 
-// Recognized link-preview / search crawlers.
-// Add more here if you notice a bot's preview isn't picking this up.
-const BOT_UA_REGEX = new RegExp(
-  [
-    'facebookexternalhit',
-    'Facebot',
-    'WhatsApp',
-    'Twitterbot',
-    'Slackbot',
-    'Slack-ImgProxy',
-    'TelegramBot',
-    'LinkedInBot',
-    'Discordbot',
-    'redditbot',
-    'SkypeUriPreview',
-    'Pinterest',
-    'vkShare',
-    'W3C_Validator',
-    'Googlebot',
-    'Google-InspectionTool',
-    'AdsBot-Google',
-    'bingbot',
-    'DuckDuckBot',
-    'YandexBot',
-    'Baiduspider',
-    'Applebot',
-    'ia_archiver',
-    'bot',
-    'crawl',
-    'spider',
-  ].join('|'),
-  'i'
-);
+<!-- Analytics: GTM + Meta Pixel, deferred to idle/first-interaction so
+     they never compete with critical above-the-fold resources for
+     bandwidth/CPU. Both still fire before most visits end. -->
+<script>
+(function() {
+  var fired = false;
+  function loadAnalytics() {
+    if (fired) return;
+    fired = true;
 
-// Same Supabase project product.html already talks to. Override via
-// Vercel project env vars (SUPABASE_URL / SUPABASE_ANON_KEY) if you
-// ever rotate the anon key — these hardcoded values are just the
-// existing public fallback already shipped in product.html's JS.
-const SUPABASE_URL =
-  (typeof process !== 'undefined' && process.env && process.env.SUPABASE_URL) ||
-  'https://mefmpxohxrpnezwlbchj.supabase.co';
-const SUPABASE_KEY =
-  (typeof process !== 'undefined' && process.env && process.env.SUPABASE_ANON_KEY) ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
-const TABLE = 'products';
+    // Google tag (gtag.js)
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-JWGHNBH0J2');
+    var gtagScript = document.createElement('script');
+    gtagScript.async = true;
+    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2';
+    document.head.appendChild(gtagScript);
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, function (c) {
-    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    // Meta Pixel
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1597811208730856');
+    fbq('track', 'PageView');
+  }
+  ['scroll','mousemove','keydown','touchstart'].forEach(function(evt) {
+    window.addEventListener(evt, loadAnalytics, { once: true, passive: true });
   });
-}
-
-function escapeAttr(s) {
-  return escapeHtml(s).replace(/`/g, '&#96;');
-}
-
-// Mirrors cldOpt() in product.html so the OG image matches what users see.
-function cldOpt(url, width) {
-  if (!url) return url;
-  if (url.indexOf('res.cloudinary.com') !== -1 && url.indexOf('/upload/') !== -1) {
-    return url.replace(/\/upload\/(?:[^/]+\/)?/, '/upload/f_webp,q_auto,w_' + width + '/');
-  }
-  if (url.indexOf('res.cloudinary.com') !== -1 && url.indexOf('/fetch/') !== -1) {
-    return url.replace(/\/fetch\/[^/]+\//, '/fetch/f_webp,q_auto,w_' + width + '/');
-  }
-  return 'https://res.cloudinary.com/drfl8crbx/image/fetch/f_webp,q_auto,w_' + width + '/' + url;
-}
-
-async function fetchProduct(id) {
-  const res = await fetch(
-    SUPABASE_URL + '/rest/v1/' + TABLE + '?id=eq.' + encodeURIComponent(id) + '&select=*',
-    { headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY } }
-  );
-  if (!res.ok) return null;
-  const rows = await res.json();
-  return rows.length ? rows[0] : null;
-}
-
-// Replaces the value of `attr="..."` inside a tag matched by its id="X".
-// Works whether the id attribute appears before or after the target attr.
-function setAttrById(html, elementId, attr, value) {
-  const tagRegex = new RegExp('(<[^>]*\\bid=["\']' + elementId + '["\'][^>]*>)', 'i');
-  const match = html.match(tagRegex);
-  if (!match) return html;
-  const tag = match[1];
-  const attrRegex = new RegExp('(' + attr + '=)(["\'])(.*?)\\2', 'i');
-  let newTag;
-  if (attrRegex.test(tag)) {
-    newTag = tag.replace(attrRegex, '$1$2' + value.replace(/\$/g, '$$$$') + '$2');
+  // Safety net: load anyway after idle time even with zero interaction,
+  // so pageview tracking still fires on very short/passive visits.
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadAnalytics, { timeout: 4000 });
   } else {
-    newTag = tag.replace(/>$/, ' ' + attr + '="' + value + '">');
+    setTimeout(loadAnalytics, 3000);
   }
-  return html.replace(tag, newTag);
-}
+})();
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Analytics -->
 
-function setTextById(html, elementId, text) {
-  const regex = new RegExp('(<[^>]*\\bid=["\']' + elementId + '["\'][^>]*>)([\\s\\S]*?)(<\\/[^>]+>)', 'i');
-  return html.replace(regex, function (_m, open, _old, close) {
-    return open + text + close;
+<meta id="metaDescription" name="description" content="Buy drones and drone parts from SAG Drone Technologies. Certified quality, competitive prices, pan-India delivery."/>
+<meta name="robots" content="index, follow"/>
+<link id="canonicalLink" rel="canonical" href="https://sagdrones.com/product.html"/>
+
+<!-- Open Graph -->
+<meta id="ogTitle" property="og:title" content="Product – SAG Drone Technologies"/>
+<meta id="ogDescription" property="og:description" content="Browse our range of certified drones for agriculture, surveillance, and more."/>
+<meta id="ogUrl" property="og:url" content="https://sagdrones.com/product.html"/>
+<meta property="og:type" content="product"/>
+<meta id="ogImage" property="og:image" content="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png"/>
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image"/>
+<meta id="twitterTitle" name="twitter:title" content="Product – SAG Drone Technologies"/>
+<meta id="twitterDescription" name="twitter:description" content="Browse our range of certified drones for agriculture, surveillance, and more."/>
+<meta id="twitterImage" name="twitter:image" content="https://framerusercontent.com/images/J2SsjH2XcUHn6jAVX44tSmKJ8.png"/>
+
+<link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
+<link rel="icon" type="image/png" href="/logo.png"/>
+
+<!-- Structured data injected once the product loads -->
+<script id="productSchema" type="application/ld+json"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/></noscript>
+
+<style>
+  :root {
+    --blue: #1a6fb5;
+    --blue-dark: #1258a0;
+    --blue-glow: rgba(133,201,255,0.25);
+    --dark: #f8fbff;
+    --dark2: #edf4ff;
+    --card: #ffffff;
+    --card2: #f0f7ff;
+    --border: rgba(133,201,255,0.45);
+    --text: #1a2940;
+    --muted: #4a6885;
+    --white: #0d1b2a;
+    --radius: 16px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    transition: background .3s;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-logo img { height: 60px; width: auto; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { width: 24px; height: 2px; background: var(--blue); border-radius: 2px; transition: .3s; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { color: var(--text); text-decoration: none; font-size: 0.93rem; font-weight: 500; transition: color .2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--blue); }
+  .nav-cta {
+    background: var(--blue); color: #0d1b2a; padding: 10px 24px;
+    border-radius: 40px; font-weight: 700; font-size: 0.88rem;
+    text-decoration: none; transition: background .2s, transform .15s; white-space: nowrap;
+  }
+  .nav-cta:hover { background: var(--blue-dark); transform: scale(1.03); }
+
+  .nav-mobile-menu {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: #ffffff; z-index: 200;
+    flex-direction: column; align-items: center; justify-content: center; gap: 26px;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a { color: var(--text); text-decoration: none; font-size: 1.1rem; font-weight: 600; }
+  .nav-mobile-close { position: absolute; top: 22px; right: 26px; background: none; border: none; font-size: 2rem; color: var(--text); cursor: pointer; }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 20px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+  }
+
+  /* ── FOOTER ── */
+  footer { background: var(--white); color: #cfe0ee; padding: 56px 60px 24px; margin-top: 60px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 32px; max-width: 1200px; margin: 0 auto; }
+  .footer-brand img { height: 50px; margin-bottom: 14px; }
+  .footer-brand p { font-size: 0.85rem; color: #9fb8cc; line-height: 1.6; margin-bottom: 14px; max-width: 320px; }
+  .footer-contact div { font-size: 0.85rem; margin-bottom: 6px; }
+  .footer-contact a { color: #cfe0ee; text-decoration: none; }
+  .footer-social { display: flex; gap: 10px; margin-top: 14px; }
+  .social-btn { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; text-decoration: none; color: #cfe0ee; }
+  .footer-col h4 { font-size: 0.9rem; margin-bottom: 14px; color: #fff; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-col a { color: #9fb8cc; text-decoration: none; font-size: 0.85rem; }
+  .footer-col a:hover { color: var(--blue); }
+  .footer-bottom { text-align: center; font-size: 0.78rem; color: #6f8aa2; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); }
+  @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } footer { padding: 40px 24px 20px; } }
+  @media (max-width: 560px) { .footer-grid { grid-template-columns: 1fr; } }
+
+  /* ── PRODUCT DETAIL ── */
+  .pd-wrap { max-width: 1100px; margin: 0 auto; padding: 130px 24px 60px; }
+  .pd-breadcrumb { font-size: 0.82rem; color: var(--muted); margin-bottom: 24px; }
+  .pd-breadcrumb a { color: var(--muted); text-decoration: none; }
+  .pd-breadcrumb a:hover { color: var(--blue); }
+  .pd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .pd-img-wrap {
+    background: var(--card2); border: 1px solid var(--border); border-radius: var(--radius);
+    aspect-ratio: 1/1; overflow: hidden; position: relative;
+  }
+  .pd-img-wrap img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .pd-badge {
+    position: absolute; top: 14px; left: 14px; z-index: 2;
+    background: var(--blue); color: #fff; font-size: 0.72rem; font-weight: 800;
+    padding: 4px 12px; border-radius: 20px; letter-spacing: .05em; text-transform: uppercase;
+  }
+  .pd-status { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 600; color: var(--blue); margin-bottom: 10px; }
+  .pd-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); display: inline-block; }
+  .pd-status.oos { color: #d0403f; }
+  .pd-status.oos::before { background: #d0403f; }
+  .pd-category { font-size: 0.78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .pd-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: 2rem; line-height: 1.2; margin-bottom: 16px; color: var(--white); }
+  .pd-price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 22px; }
+  .pd-price-new { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--blue); }
+  .pd-price-old { font-size: 1.1rem; color: var(--muted); text-decoration: line-through; }
+  .pd-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+  .pd-btn-primary {
+    display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff;
+    padding: 13px 30px; border-radius: 40px; font-weight: 700; font-size: 0.92rem;
+    text-decoration: none; transition: background .2s, transform .15s;
+  }
+  .pd-btn-primary:hover { background: var(--blue-dark); transform: scale(1.02); }
+  .pd-btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px; background: transparent; color: var(--blue);
+    border: 1.5px solid var(--blue); padding: 12px 26px; border-radius: 40px; font-weight: 700; font-size: 0.92rem;
+    text-decoration: none; transition: background .2s, color .2s;
+  }
+  .pd-btn-secondary:hover { background: var(--blue); color: #fff; }
+  .pd-note { font-size: 0.85rem; color: var(--muted); line-height: 1.6; background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+  .pd-section { margin-top: 30px; }
+  .pd-section h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; color: var(--white); margin-bottom: 10px; }
+  .pd-desc { font-size: 0.94rem; color: var(--text); line-height: 1.7; white-space: pre-line; }
+  .pd-includes { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .pd-includes li { font-size: 0.92rem; color: var(--text); display: flex; align-items: flex-start; gap: 8px; }
+  .pd-includes li::before { content: '✓'; color: var(--blue); font-weight: 800; flex-shrink: 0; }
+
+  .pd-loading, .pd-error { text-align: center; padding: 120px 20px; color: var(--muted); }
+  .pd-error h2 { font-family: 'Barlow Condensed', sans-serif; color: var(--white); margin-bottom: 10px; font-size: 1.4rem; }
+
+  .pd-related { margin-top: 70px; }
+  .pd-related h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.3rem; color: var(--white); margin-bottom: 18px; }
+  .pd-related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .rp-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; text-decoration: none; display: block; transition: transform .2s, box-shadow .2s; }
+  .rp-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(133,201,255,0.15); }
+  .rp-img { width: 100%; aspect-ratio: 4/3; background: var(--card2); overflow: hidden; }
+  .rp-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .rp-info { padding: 10px 12px 14px; }
+  .rp-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.86rem; color: var(--white); margin-bottom: 6px; line-height: 1.3; }
+  .rp-price { font-size: 0.86rem; font-weight: 700; color: var(--blue); }
+
+  @media (max-width: 800px) {
+    .pd-wrap { padding: 110px 18px 40px; }
+    .pd-grid { grid-template-columns: 1fr; gap: 24px; }
+    .pd-name { font-size: 1.5rem; }
+    .pd-related-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <a class="nav-logo" href="index.html">
+    <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_webp,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about-us">About Us</a></li>
+    <li><a href="index.html#our-services">Services</a></li>
+    <li><a href="rpto.html">RPTO</a></li>
+    <li><a href="products.html" class="active">Products</a></li>
+    <li><a href="blogs.html">Blogs</a></li>
+  </ul>
+  <a class="nav-cta" href="tel:+918977771705">Get a Free Quote</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="nav-mobile-menu" id="mobileMenu">
+  <button class="nav-mobile-close" onclick="closeMobileMenu()">&times;</button>
+  <a href="index.html" onclick="closeMobileMenu()">Home</a>
+  <a href="index.html#about-us" onclick="closeMobileMenu()">About Us</a>
+  <a href="index.html#our-services" onclick="closeMobileMenu()">Services</a>
+  <a href="rpto.html" onclick="closeMobileMenu()">RPTO</a>
+  <a href="products.html" onclick="closeMobileMenu()" style="color:var(--blue)">Products</a>
+  <a href="blogs.html" onclick="closeMobileMenu()">Blogs</a>
+  <a href="tel:+918977771705" style="color:var(--blue);border:1.5px solid var(--blue);padding:12px 32px;border-radius:40px;text-decoration:none;">Get a Free Quote</a>
+</div>
+
+<div class="pd-wrap" id="pdWrap">
+  <div class="pd-loading" id="pdLoading">Loading product…</div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/f_webp,q_auto,w_140/v1778349547/Untitled_design_5_vhb4s1.png" alt="SAG Logo" width="140" height="60" loading="lazy"/>
+      <p>Book your drone now and take your farming to the next level with SAG Drone Technologies — India's trusted agri-drone ecosystem builder.</p>
+      <div class="footer-contact">
+        <div>📧 <a href="mailto:sagtechinfo@gmail.com">sagtechinfo@gmail.com</a></div>
+        <div>📞 <a href="tel:+918977776019">+91 897777 6019</a> / <a href="tel:+918977771705">897777 1705</a></div>
+        <div>📍 Konidena Road, Martur, A.P</div>
+      </div>
+      <div class="footer-social">
+        <a class="social-btn" href="https://www.youtube.com/@SAGDroneTechnologies" target="_blank" title="YouTube">▶</a>
+        <a class="social-btn" href="https://www.instagram.com/sagdronetechnologies/" target="_blank" title="Instagram">📷</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Home</h4>
+      <ul>
+        <li><a href="index.html#about-us">About</a></li>
+        <li><a href="index.html#our-services">Services</a></li>
+        <li><a href="index.html#reviews">Testimonials</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Branches</h4>
+      <ul>
+        <li><a href="#">MARTUR</a></li>
+        <li><a href="#">NIDADAVOLE</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+918977776019">Contact Us</a></li>
+        <li><a href="blogs.html">Blogs</a></li>
+        <li><a href="rpto.html">RPTO</a></li>
+        <li><a href="products.html">Products</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">@2026, SAG Drone Technologies. All Rights Reserved.</div>
+</footer>
+
+<script>
+  /* ── Mobile menu ── */
+  function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.getElementById('hamburger').classList.toggle('open');
+  }
+  function closeMobileMenu() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+  }
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('mobileMenu');
+    var burger = document.getElementById('hamburger');
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !burger.contains(e.target)) {
+      closeMobileMenu();
+    }
   });
-}
+  window.addEventListener('scroll', function() {
+    document.getElementById('mainNav').style.background =
+      window.pageYOffset > 50 ? 'rgba(255,255,255,0.99)' : 'rgba(255,255,255,0.92)';
+  }, { passive: true });
 
-function buildProductHtml(rawHtml, product, pageUrl) {
-  const inStock = product.status !== 'outofstock';
-  const img = cldOpt(product.image, 800);
-  const desc = product.description
-    ? String(product.description).slice(0, 155)
-    : product.name +
-      ' available at \u20b9' +
-      Number(product.price).toLocaleString('en-IN') +
-      ' from SAG Drone Technologies' +
-      (product.category ? ' — ' + product.category : '') +
-      '. Certified quality, pan-India delivery.';
-  const title = product.name + ' – SAG Drone Technologies';
-  // Extensionless to match the live, cleanUrls-served URL — pointing
-  // canonical/og:url at the .html path would point crawlers at a URL
-  // that just 308-redirects to this one.
-  const canonicalUrl = 'https://sagdrones.com/product?id=' + product.id;
+  // ══════════════════════════════════════════════
+  //  ⚙️  SUPABASE CONFIG — must match products.html / admin.html
+  // ══════════════════════════════════════════════
+  var SUPABASE_URL = localStorage.getItem('sag_supabase_url') || 'https://mefmpxohxrpnezwlbchj.supabase.co';
+  var SUPABASE_KEY = localStorage.getItem('sag_supabase_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lZm1weG9oeHJwbmV6d2xiY2hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyMTk3MjEsImV4cCI6MjA5Mjc5NTcyMX0.PbTag81xO1_X8vuxkizhVYjfhj3lz5CO3yjn8zlnNoM';
+  var TABLE = 'products';
 
-  let html = rawHtml;
-  html = setTextById(html, 'pageTitle', escapeHtml(title));
-  html = setAttrById(html, 'metaDescription', 'content', escapeAttr(desc));
-  html = setAttrById(html, 'canonicalLink', 'href', canonicalUrl);
-  html = setAttrById(html, 'ogTitle', 'content', escapeAttr(title));
-  html = setAttrById(html, 'ogDescription', 'content', escapeAttr(desc));
-  html = setAttrById(html, 'ogUrl', 'content', canonicalUrl);
-  html = setAttrById(html, 'twitterTitle', 'content', escapeAttr(title));
-  html = setAttrById(html, 'twitterDescription', 'content', escapeAttr(desc));
-  if (img) {
-    html = setAttrById(html, 'ogImage', 'content', escapeAttr(img));
-    html = setAttrById(html, 'twitterImage', 'content', escapeAttr(img));
-  }
-
-  const schema = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: desc,
-    image: img ? [img] : undefined,
-    category: product.category || undefined,
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'INR',
-      price: product.price,
-      availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-      url: canonicalUrl,
-    },
-  };
-  html = html.replace(
-    /(<script id="productSchema" type="application\/ld\+json">)([\s\S]*?)(<\/script>)/i,
-    function (_m, open, _old, close) {
-      return open + JSON.stringify(schema) + close;
+  function cldOpt(url, width) {
+    if (!url) return url;
+    if (url.indexOf('res.cloudinary.com') !== -1 && url.indexOf('/upload/') !== -1) {
+      return url.replace(/\/upload\/(?:[^/]+\/)?/, '/upload/f_webp,q_auto,w_' + width + '/');
     }
-  );
-
-  return html;
-}
-
-export default async function middleware(request) {
-  const url = new URL(request.url);
-
-  // Prevents the internal self-fetch below from re-triggering this
-  // same logic and looping forever.
-  if (url.searchParams.get('__prerendered') === '1') {
-    return; // fall through to the static file untouched
+    if (url.indexOf('res.cloudinary.com') !== -1 && url.indexOf('/fetch/') !== -1) {
+      return url.replace(/\/fetch\/[^/]+\//, '/fetch/f_webp,q_auto,w_' + width + '/');
+    }
+    return 'https://res.cloudinary.com/drfl8crbx/image/fetch/f_webp,q_auto,w_' + width + '/' + url;
   }
 
-  const ua = request.headers.get('user-agent') || '';
-  if (!BOT_UA_REGEX.test(ua)) {
-    return; // real users get the normal client-rendered SPA page
+  function getParam(name) {
+    return new URLSearchParams(window.location.search).get(name);
   }
 
-  const id = url.searchParams.get('id');
-  if (!id) {
-    return; // no product id (e.g. bare /product.html) — nothing to inject
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
   }
 
-  try {
-    const product = await fetchProduct(id);
-    if (!product) {
-      return; // let the normal "not found" client-side flow handle it
+  function waLinkFor(p) {
+    var wa = (p.wa_num || '919390238537').replace(/[^0-9]/g, '');
+    var msg = 'Hello SAG Drone Technologies! \uD83D\uDC4B\n\n' +
+      "I'm interested in purchasing the following product:\n\n" +
+      '\uD83D\uDED2 *Product:* ' + p.name + '\n' +
+      '\uD83D\uDCB0 *Price:* \u20b9' + Number(p.price).toLocaleString('en-IN') + '\n' +
+      (p.image ? '\uD83D\uDDBC\uFE0F *Image:* ' + p.image + '\n' : '') +
+      '\nPlease share more details and help me proceed with the purchase. Thank you!';
+    return 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg);
+  }
+
+  function renderNotFound() {
+    document.getElementById('pdWrap').innerHTML =
+      '<div class="pd-error">' +
+        '<h2>Product not found</h2>' +
+        '<p>This product may have been removed or the link is incorrect.</p>' +
+        '<div style="margin-top:20px;"><a class="pd-btn-secondary" href="products.html">&larr; Back to Products</a></div>' +
+      '</div>';
+  }
+
+  function renderProduct(p) {
+    var inStock = p.status !== 'outofstock';
+    var img = cldOpt(p.image, 800);
+    var badge = p.is_new ? 'New' : (p.is_offer ? 'Offer' : '');
+    var packageIncludesList = p.package_includes
+      ? String(p.package_includes).split('\n').map(function(s){ return s.trim(); }).filter(Boolean)
+      : [];
+
+    document.title = p.name + ' – SAG Drone Technologies';
+    var desc = p.description
+      ? p.description.slice(0, 155)
+      : (p.name + ' available at \u20b9' + Number(p.price).toLocaleString('en-IN') +
+         ' from SAG Drone Technologies' + (p.category ? ' — ' + p.category : '') + '. Certified quality, pan-India delivery.');
+    document.getElementById('metaDescription').setAttribute('content', desc);
+    document.getElementById('ogTitle').setAttribute('content', p.name + ' – SAG Drone Technologies');
+    document.getElementById('ogDescription').setAttribute('content', desc);
+    document.getElementById('ogUrl').setAttribute('content', 'https://sagdrones.com/product.html?id=' + p.id);
+    document.getElementById('twitterTitle').setAttribute('content', p.name + ' – SAG Drone Technologies');
+    document.getElementById('twitterDescription').setAttribute('content', desc);
+    document.getElementById('canonicalLink').setAttribute('href', 'https://sagdrones.com/product.html?id=' + p.id);
+    if (img) {
+      document.getElementById('ogImage').setAttribute('content', img);
+      document.getElementById('twitterImage').setAttribute('content', img);
     }
 
-    // Force the extensionless path for the self-fetch regardless of
-    // which variant the bot actually requested, so we don't waste a
-    // redirect hop internally.
-    const originUrl = new URL(request.url);
-    originUrl.pathname = '/product';
-    originUrl.searchParams.set('__prerendered', '1');
-    const originRes = await fetch(originUrl.toString(), {
-      headers: { 'user-agent': ua },
-    });
-    if (!originRes.ok) return;
+    var schema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": p.name,
+      "image": img ? [img] : undefined,
+      "category": p.category || undefined,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "INR",
+        "price": p.price,
+        "availability": inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        "url": 'https://sagdrones.com/product.html?id=' + p.id
+      }
+    };
+    document.getElementById('productSchema').textContent = JSON.stringify(schema);
 
-    const rawHtml = await originRes.text();
-    const finalHtml = buildProductHtml(rawHtml, product, url);
+    var html =
+      '<div class="pd-breadcrumb">' +
+        '<a href="index.html">Home</a> &rsaquo; <a href="products.html">Products</a> &rsaquo; ' + escapeHtml(p.name) +
+      '</div>' +
+      '<div class="pd-grid">' +
+        '<div class="pd-img-wrap">' +
+          (badge ? '<span class="pd-badge">' + badge + '</span>' : '') +
+          (img ? '<img src="' + img + '" alt="' + escapeHtml(p.name) + '"/>' : '') +
+        '</div>' +
+        '<div class="pd-info">' +
+          '<div class="pd-status' + (inStock ? '' : ' oos') + '">' + (inStock ? 'In Stock' : 'Out of Stock') + '</div>' +
+          (p.category ? '<div class="pd-category">' + escapeHtml(p.category) + '</div>' : '') +
+          '<h1 class="pd-name">' + escapeHtml(p.name) + '</h1>' +
+          '<div class="pd-price-row">' +
+            '<span class="pd-price-new">\u20b9' + Number(p.price).toLocaleString('en-IN') + '</span>' +
+            (p.original_price ? '<span class="pd-price-old">\u20b9' + Number(p.original_price).toLocaleString('en-IN') + '</span>' : '') +
+          '</div>' +
+          '<div class="pd-actions">' +
+            '<a class="pd-btn-primary" href="' + waLinkFor(p) + '" target="_blank">\uD83D\uDCAC Enquire on WhatsApp</a>' +
+            '<a class="pd-btn-secondary" href="products.html">&larr; Back to Products</a>' +
+          '</div>' +
+          '<div class="pd-note">Have questions about specs, availability or bulk pricing? Message us on WhatsApp and our team will get back to you shortly.</div>' +
+        '</div>' +
+      '</div>' +
+      (p.description ? '<div class="pd-section"><h3>Description</h3><div class="pd-desc">' + escapeHtml(p.description) + '</div></div>' : '') +
+      (packageIncludesList.length ? '<div class="pd-section"><h3>Package Includes</h3><ul class="pd-includes">' +
+        packageIncludesList.map(function(item){ return '<li>' + escapeHtml(item) + '</li>'; }).join('') +
+      '</ul></div>' : '') +
+      '<div class="pd-related" id="pdRelated"></div>';
 
-    return new Response(finalHtml, {
-      status: 200,
-      headers: {
-        'content-type': 'text/html; charset=utf-8',
-        // Cache at the edge so repeated bot hits (WhatsApp re-crawls,
-        // Googlebot revisits) don't hammer Supabase every time.
-        'cache-control': 'public, max-age=0, s-maxage=1800, stale-while-revalidate=86400',
-        'x-prerendered-for-bot': '1',
-      },
-    });
-  } catch (err) {
-    // Any failure (Supabase down, network hiccup, etc.) — fail open
-    // and just serve the normal page rather than erroring out.
-    return;
+    document.getElementById('pdWrap').innerHTML = html;
+    loadRelated(p);
   }
-}
+
+  async function loadRelated(current) {
+    try {
+      var url = SUPABASE_URL + '/rest/v1/' + TABLE + '?select=*&id=neq.' + current.id + '&limit=4';
+      if (current.category) {
+        url += '&category=eq.' + encodeURIComponent(current.category);
+      }
+      var res = await fetch(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      if (!res.ok) return;
+      var rows = await res.json();
+      if (!rows.length) return;
+      var cardsHtml = rows.map(function(p) {
+        return '<a class="rp-card" href="product.html?id=' + p.id + '">' +
+          '<div class="rp-img"><img src="' + cldOpt(p.image, 300) + '" alt="' + escapeHtml(p.name) + '" loading="lazy"/></div>' +
+          '<div class="rp-info"><div class="rp-name">' + escapeHtml(p.name) + '</div>' +
+          '<div class="rp-price">\u20b9' + Number(p.price).toLocaleString('en-IN') + '</div></div>' +
+        '</a>';
+      }).join('');
+      document.getElementById('pdRelated').innerHTML =
+        '<h3>You may also like</h3><div class="pd-related-grid">' + cardsHtml + '</div>';
+    } catch (e) { /* related products are a nice-to-have; fail silently */ }
+  }
+
+  async function loadProduct() {
+    var id = getParam('id');
+    if (!id) { renderNotFound(); return; }
+    try {
+      var res = await fetch(SUPABASE_URL + '/rest/v1/' + TABLE + '?id=eq.' + encodeURIComponent(id) + '&select=*', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      if (!res.ok) { renderNotFound(); return; }
+      var rows = await res.json();
+      if (!rows.length) { renderNotFound(); return; }
+      renderProduct(rows[0]);
+    } catch (e) {
+      document.getElementById('pdWrap').innerHTML =
+        '<div class="pd-error"><h2>Could not load product</h2><p>Please check your connection and try again.</p>' +
+        '<div style="margin-top:20px;"><button class="pd-btn-secondary" style="cursor:pointer;border:1.5px solid var(--blue);background:none;" onclick="loadProduct()">Retry</button></div></div>';
+    }
+  }
+
+  loadProduct();
+</script>
+
+</body>
+</html>
