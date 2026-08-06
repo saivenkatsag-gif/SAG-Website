@@ -50,14 +50,6 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Sales CRM (internal — lower priority, still indexable) -->
-  <url>
-    <loc>https://sagdrones.com/salescrm.html</loc>
-    <lastmod>2026-05-16</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
   <!-- Blog index -->
   <url>
     <loc>https://sagdrones.com/blogs</loc>
