@@ -10,31 +10,55 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2"></script>
+<!-- Analytics: GTM + Meta Pixel, deferred to idle/first-interaction so
+     they never compete with critical above-the-fold resources for
+     bandwidth/CPU. Both still fire before most visits end. -->
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-JWGHNBH0J2');
-</script>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1597811208730856');
-fbq('track', 'PageView');
+(function() {
+  var fired = false;
+  function loadAnalytics() {
+    if (fired) return;
+    fired = true;
+
+    // Google tag (gtag.js)
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', 'G-JWGHNBH0J2');
+    var gtagScript = document.createElement('script');
+    gtagScript.async = true;
+    gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-JWGHNBH0J2';
+    document.head.appendChild(gtagScript);
+
+    // Meta Pixel
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1597811208730856');
+    fbq('track', 'PageView');
+  }
+  ['scroll','mousemove','keydown','touchstart'].forEach(function(evt) {
+    window.addEventListener(evt, loadAnalytics, { once: true, passive: true });
+  });
+  // Safety net: load anyway after idle time even with zero interaction,
+  // so pageview tracking still fires on very short/passive visits.
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(loadAnalytics, { timeout: 4000 });
+  } else {
+    setTimeout(loadAnalytics, 3000);
+  }
+})();
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 /></noscript>
-<!-- End Meta Pixel Code -->
+<!-- End Analytics -->
 
 <meta id="metaDescription" name="description" content="Buy drones and drone parts from SAG Drone Technologies. Certified quality, competitive prices, pan-India delivery."/>
 <meta name="robots" content="index, follow"/>
