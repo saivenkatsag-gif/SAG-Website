@@ -46,55 +46,63 @@
   "sameAs": [
     "https://www.youtube.com/@SAGDroneTechnologies",
     "https://www.instagram.com/sagdronetechnologies/"
-  ],
-  "hasCourse": [
-    {
-      "@type": "Course",
-      "name": "Small Class Rotorcraft Remote Pilot Training",
-      "description": "DGCA-compliant 5-day Remote Pilot Training course covering drones from 250g up to 25kg, with 3 days theory and 2 days practical flying.",
-      "provider": {
-        "@type": "EducationalOrganization",
-        "name": "SAG Drone Technologies RPTO",
-        "sameAs": "https://sagdrones.com/rpto.html"
-      },
-      "hasCourseInstance": {
-        "@type": "CourseInstance",
-        "courseMode": "In person",
-        "courseWorkload": "P5D"
-      },
-      "offers": {
-        "@type": "Offer",
-        "category": "Paid",
-        "price": "25000",
-        "priceCurrency": "INR",
-        "availability": "https://schema.org/InStock",
-        "url": "https://sagdrones.com/rpto.html#courses"
-      }
-    },
-    {
-      "@type": "Course",
-      "name": "Medium Class Rotorcraft Remote Pilot Training",
-      "description": "DGCA-compliant 5-day Remote Pilot Training course covering drones above 25kg up to 50kg, with 3 days theory and 2 days practical flying.",
-      "provider": {
-        "@type": "EducationalOrganization",
-        "name": "SAG Drone Technologies RPTO",
-        "sameAs": "https://sagdrones.com/rpto.html"
-      },
-      "hasCourseInstance": {
-        "@type": "CourseInstance",
-        "courseMode": "In person",
-        "courseWorkload": "P5D"
-      },
-      "offers": {
-        "@type": "Offer",
-        "category": "Paid",
-        "price": "35000",
-        "priceCurrency": "INR",
-        "availability": "https://schema.org/InStock",
-        "url": "https://sagdrones.com/rpto.html#courses"
-      }
-    }
   ]
+}
+</script>
+
+<!-- Course schema — Small Class (standalone so review widget can attach a live aggregateRating) -->
+<script id="courseSchemaSmall" type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Small Class Rotorcraft Remote Pilot Training",
+  "description": "DGCA-compliant 5-day Remote Pilot Training course covering drones from 250g up to 25kg, with 3 days theory and 2 days practical flying.",
+  "provider": {
+    "@type": "EducationalOrganization",
+    "name": "SAG Drone Technologies RPTO",
+    "sameAs": "https://sagdrones.com/rpto.html"
+  },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "In person",
+    "courseWorkload": "P5D"
+  },
+  "offers": {
+    "@type": "Offer",
+    "category": "Paid",
+    "price": "25000",
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock",
+    "url": "https://sagdrones.com/rpto.html#courses"
+  }
+}
+</script>
+
+<!-- Course schema — Medium Class (standalone so review widget can attach a live aggregateRating) -->
+<script id="courseSchemaMedium" type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "Medium Class Rotorcraft Remote Pilot Training",
+  "description": "DGCA-compliant 5-day Remote Pilot Training course covering drones above 25kg up to 50kg, with 3 days theory and 2 days practical flying.",
+  "provider": {
+    "@type": "EducationalOrganization",
+    "name": "SAG Drone Technologies RPTO",
+    "sameAs": "https://sagdrones.com/rpto.html"
+  },
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "In person",
+    "courseWorkload": "P5D"
+  },
+  "offers": {
+    "@type": "Offer",
+    "category": "Paid",
+    "price": "35000",
+    "priceCurrency": "INR",
+    "availability": "https://schema.org/InStock",
+    "url": "https://sagdrones.com/rpto.html#courses"
+  }
 }
 </script>
 
@@ -441,6 +449,9 @@
   .social-btn { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; text-decoration: none; font-size: 1rem; color: var(--muted); transition: border-color .2s, color .2s, background .2s; }
   .social-btn:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-glow); }
   .footer-bottom { border-top: 1px solid var(--border); padding-top: 28px; text-align: center; font-size: 0.82rem; color: var(--muted); }
+  .footer-legal { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 12px; }
+  .footer-legal a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color .2s; }
+  .footer-legal a:hover { color: var(--blue); }
 
   /* ── MOBILE ── */
   /* ── MOBILE MENU OVERLAY ── */
@@ -702,6 +713,7 @@
         <strong>Note:</strong> Flying hours may vary depending on number of trainees, unexpected situations like weather or technical issues, DGCA guidance, and temporary flight restrictions.
       </div>
       <a class="btn-primary" href="#contact-rpto" style="display:block;text-align:center;">Apply Now</a>
+      <div class="sag-reviews" data-target-type="course" data-target-id="rpto-small-class" data-target-name="Small Class Rotorcraft Training" data-schema-id="courseSchemaSmall" style="margin-top:28px;border-top:1px solid var(--border);padding-top:22px;"></div>
     </div>
 
     <!-- Medium Class -->
@@ -722,6 +734,7 @@
         <strong>Note:</strong> Flying hours may vary depending on number of trainees, unexpected situations like weather or technical issues, DGCA guidance, and temporary flight restrictions.
       </div>
       <a class="btn-primary" href="#contact-rpto" style="display:block;text-align:center;">Apply Now</a>
+      <div class="sag-reviews" data-target-type="course" data-target-id="rpto-medium-class" data-target-name="Medium Class Rotorcraft Training" data-schema-id="courseSchemaMedium" style="margin-top:28px;border-top:1px solid var(--border);padding-top:22px;"></div>
     </div>
 
   </div>
@@ -1002,7 +1015,10 @@
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">@2026, SAG Drone Technologies. All Rights Reserved.</div>
+  <div class="footer-bottom">
+    <div>@2026, SAG Drone Technologies. All Rights Reserved.</div>
+    <div class="footer-legal"><a href="privacy-policy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="refund-policy.html">Refund Policy</a><a href="shipping-policy.html">Shipping Policy</a></div>
+  </div>
 </footer>
 
 <script>
@@ -1149,5 +1165,6 @@ document.addEventListener('DOMContentLoaded', function() {
   fadeEls.forEach(function(el) { fadeObs.observe(el); });
 });
 </script>
+<script src="review-widget.js" defer></script>
 </body>
 </html>
