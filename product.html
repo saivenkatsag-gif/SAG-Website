@@ -447,9 +447,14 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       (packageIncludesList.length ? '<div class="pd-section"><h3>Package Includes</h3><ul class="pd-includes">' +
         packageIncludesList.map(function(item){ return '<li>' + escapeHtml(item) + '</li>'; }).join('') +
       '</ul></div>' : '') +
+      '<div class="pd-section">' +
+        '<h3>Customer Reviews</h3>' +
+        '<div class="sag-reviews" data-target-type="product" data-target-id="' + escapeHtml(String(p.id)) + '" data-target-name="' + escapeHtml(p.name) + '" data-schema-id="productSchema"></div>' +
+      '</div>' +
       '<div class="pd-related" id="pdRelated"></div>';
 
     document.getElementById('pdWrap').innerHTML = html;
+    if (window.sagReviewsInit) window.sagReviewsInit();
     loadRelated(p);
   }
 
@@ -495,6 +500,8 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
 
   loadProduct();
 </script>
+
+<script src="review-widget.js" defer></script>
 
 </body>
 </html>
