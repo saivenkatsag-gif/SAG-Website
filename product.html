@@ -413,14 +413,31 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       "@context": "https://schema.org",
       "@type": "Product",
       "name": p.name,
+      "description": p.description || desc,
       "image": img ? [img] : undefined,
+      "sku": String(p.id),
+      "mpn": String(p.id),
+      "brand": { "@type": "Brand", "name": "SAG Drone Technologies" },
       "category": p.category || undefined,
+      "url": 'https://sagdrones.com/product.html?id=' + p.id,
       "offers": {
         "@type": "Offer",
+        "url": 'https://sagdrones.com/product.html?id=' + p.id,
         "priceCurrency": "INR",
         "price": p.price,
+        "priceValidUntil": "2026-12-31",
+        "validFrom": "2026-08-01T00:00:00+05:30",
         "availability": inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
-        "url": 'https://sagdrones.com/product.html?id=' + p.id
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": { "@type": "Organization", "name": "SAG Drone Technologies" },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "IN",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 2,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
+        }
       }
     };
     document.getElementById('productSchema').textContent = JSON.stringify(schema);
