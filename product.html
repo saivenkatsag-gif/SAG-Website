@@ -216,6 +216,15 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   .pd-section { margin-top: 30px; }
   .pd-section h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.15rem; color: var(--white); margin-bottom: 10px; }
   .pd-desc { font-size: 0.94rem; color: var(--text); line-height: 1.7; white-space: pre-line; }
+  .pd-desc ul, .pd-desc ol, .pd-includes-rich ul, .pd-includes-rich ol { margin: 8px 0 8px 22px; padding: 0; }
+  .pd-desc li, .pd-includes-rich li { margin-bottom: 6px; }
+  .pd-desc b, .pd-desc strong, .pd-includes-rich b, .pd-includes-rich strong { color: var(--white); font-weight: 700; }
+  .pd-desc p, .pd-includes-rich p { margin: 0 0 10px; }
+  .pd-desc p:last-child, .pd-includes-rich p:last-child { margin-bottom: 0; }
+  .pd-includes-rich { font-size: 0.92rem; color: var(--text); line-height: 1.7; }
+  .pd-includes-rich ul { list-style: none; margin-left: 0; }
+  .pd-includes-rich ul li { position: relative; padding-left: 22px; }
+  .pd-includes-rich ul li::before { content: '✓'; position: absolute; left: 0; color: var(--blue); font-weight: 800; }
   .pd-includes { list-style: none; display: flex; flex-direction: column; gap: 8px; }
   .pd-includes li { font-size: 0.92rem; color: var(--text); display: flex; align-items: flex-start; gap: 8px; }
   .pd-includes li::before { content: '✓'; color: var(--blue); font-weight: 800; flex-shrink: 0; }
@@ -373,6 +382,17 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
     });
   }
 
+  function isRichHtml(s) {
+    return /<[a-z][\s\S]*>/i.test(String(s || ''));
+  }
+
+  // Renders admin-entered rich text (bold/italic/lists from the admin editor)
+  // while staying backward-compatible with older plain-text entries.
+  function renderRichText(s) {
+    if (!s) return '';
+    return isRichHtml(s) ? s : escapeHtml(s).replace(/\n/g, '<br>');
+  }
+
   function waLinkFor(p, qty) {
     qty = Math.max(1, parseInt(qty, 10) || 1);
     var wa = (p.wa_num || '919390238537').replace(/[^0-9]/g, '');
@@ -440,13 +460,19 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
     var inStock = p.status !== 'outofstock';
     var img = cldOpt(p.image, 800);
     var badge = p.is_new ? 'New' : (p.is_offer ? 'Offer' : '');
-    var packageIncludesList = p.package_includes
-      ? String(p.package_includes).split('\n').map(function(s){ return s.trim(); }).filter(Boolean)
-      : [];
+    var pkgRaw = p.package_includes || '';
+    var packageHtml = '';
+    if (isRichHtml(pkgRaw)) {
+      packageHtml = '<div class="pd-includes-rich">' + pkgRaw + '</div>';
+    } else if (pkgRaw.trim()) {
+      var packageIncludesList = pkgRaw.split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+      packageHtml = '<ul class="pd-includes">' + packageIncludesList.map(function(item){ return '<li>' + escapeHtml(item) + '</li>'; }).join('') + '</ul>';
+    }
 
     document.title = p.name + ' – SAG Drone Technologies';
-    var desc = p.description
-      ? p.description.slice(0, 155)
+    var plainDesc = String(p.description || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    var desc = plainDesc
+      ? plainDesc.slice(0, 155)
       : (p.name + ' available at \u20b9' + Number(p.price).toLocaleString('en-IN') +
          ' from SAG Drone Technologies' + (p.category ? ' — ' + p.category : '') + '. Certified quality, pan-India delivery.');
     document.getElementById('metaDescription').setAttribute('content', desc);
@@ -465,7 +491,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       "@context": "https://schema.org",
       "@type": "Product",
       "name": p.name,
-      "description": p.description || desc,
+      "description": plainDesc || desc,
       "image": img ? [img] : undefined,
       "sku": String(p.id),
       "mpn": String(p.id),
@@ -527,10 +553,8 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
           '<div class="pd-note">Have questions about specs, availability or bulk pricing? Message us on WhatsApp +91 897777 1705 or +91 897777 6019. Our team will get back to you shortly.</div>' +
         '</div>' +
       '</div>' +
-      (p.description ? '<div class="pd-section"><h3>Description</h3><div class="pd-desc">' + escapeHtml(p.description) + '</div></div>' : '') +
-      (packageIncludesList.length ? '<div class="pd-section"><h3>Package Includes</h3><ul class="pd-includes">' +
-        packageIncludesList.map(function(item){ return '<li>' + escapeHtml(item) + '</li>'; }).join('') +
-      '</ul></div>' : '') +
+      (p.description ? '<div class="pd-section"><h3>Description</h3><div class="pd-desc">' + renderRichText(p.description) + '</div></div>' : '') +
+      (packageHtml ? '<div class="pd-section"><h3>Package Includes</h3>' + packageHtml + '</div>' : '') +
       '<div class="pd-section">' +
         '<h3>Customer Reviews</h3>' +
         '<div class="sag-reviews" data-target-type="product" data-target-id="' + escapeHtml(String(p.id)) + '" data-target-name="' + escapeHtml(p.name) + '" data-schema-id="productSchema"></div>' +
