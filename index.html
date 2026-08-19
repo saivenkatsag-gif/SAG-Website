@@ -1201,7 +1201,7 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       : 'background: linear-gradient(135deg, #f0f8ff, #e8f3ff);';
 
     var visualInner = imageUrl
-      ? '<img src="'+esc(imageUrl)+'" alt="'+esc(title)+'" width="800" height="450" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.style.display=\'none\'"/>'
+      ? '<img src="'+esc(imageUrl)+'" alt="'+esc(title)+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;" onerror="this.style.display=\'none\'"/>'
         + '<div class="visual-bg" style="font-size:8rem;position:absolute;">'+emoji+'</div>'
       : '<div class="visual-bg" style="font-size:8rem;">'+emoji+'</div>';
 
@@ -1364,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var spySections = document.querySelectorAll('section[id]');
   var navLinks = document.querySelectorAll('.nav-link[data-section]');
   var mainNavEl = document.getElementById('mainNav');
-  var navH = 0; // measured in rAF below, not synchronously here
+  var navH = mainNavEl.offsetHeight; // read once; only re-read on resize (not a scroll hot path)
   var currentSection = 'home';
   var spyObserver = null;
 
@@ -1385,15 +1385,8 @@ document.addEventListener('DOMContentLoaded', function() {
     spySections.forEach(function(sec) { spyObserver.observe(sec); });
   }
 
-  // Deferred to a rAF so the offsetHeight read lands after the browser's
-  // own layout pass instead of forcing one synchronously mid-script,
-  // right when DOMContentLoaded fires and other style/layout work
-  // (fonts, injected third-party markup, images) is often still pending.
   if ('IntersectionObserver' in window) {
-    requestAnimationFrame(function() {
-      navH = mainNavEl.offsetHeight;
-      setupScrollSpy();
-    });
+    setupScrollSpy();
   }
 
   var bgTicking = false;
@@ -1409,10 +1402,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', function() {
-    requestAnimationFrame(function() {
-      navH = mainNavEl.offsetHeight;
-      if ('IntersectionObserver' in window) setupScrollSpy();
-    });
+    navH = mainNavEl.offsetHeight;
+    if ('IntersectionObserver' in window) setupScrollSpy();
   }, { passive: true });
   requestAnimationFrame(updateNavBackground);
 
