@@ -190,6 +190,15 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   .pd-price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 22px; }
   .pd-price-new { font-family: 'Barlow Condensed', sans-serif; font-size: 2rem; font-weight: 800; color: var(--blue); }
   .pd-price-old { font-size: 1.1rem; color: var(--muted); text-decoration: line-through; }
+  .pd-qty-row { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+  .pd-qty-label { font-size: 0.88rem; font-weight: 700; color: var(--white); }
+  .pd-qty-stepper { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 40px; overflow: hidden; background: var(--card2); }
+  .pd-qty-btn { width: 38px; height: 38px; border: none; background: transparent; color: var(--white); font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; user-select: none; }
+  .pd-qty-btn:hover { background: rgba(133,201,255,0.12); }
+  .pd-qty-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .pd-qty-input { width: 46px; text-align: center; border: none; border-left: 1.5px solid var(--border); border-right: 1.5px solid var(--border); background: transparent; color: var(--white); font-size: 0.95rem; font-weight: 700; height: 38px; -moz-appearance: textfield; }
+  .pd-qty-input::-webkit-outer-spin-button, .pd-qty-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .pd-qty-total { font-size: 0.85rem; color: var(--muted); }
   .pd-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
   .pd-btn-primary {
     display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff;
@@ -364,15 +373,58 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
     });
   }
 
-  function waLinkFor(p) {
+  function waLinkFor(p, qty) {
+    qty = Math.max(1, parseInt(qty, 10) || 1);
     var wa = (p.wa_num || '919390238537').replace(/[^0-9]/g, '');
+    var total = Number(p.price) * qty;
     var msg = 'Hello SAG Drone Technologies! \uD83D\uDC4B\n\n' +
       "I'm interested in purchasing the following product:\n\n" +
       '\uD83D\uDED2 *Product:* ' + p.name + '\n' +
-      '\uD83D\uDCB0 *Price:* \u20b9' + Number(p.price).toLocaleString('en-IN') + '\n' +
+      '\uD83D\uDD22 *Quantity:* ' + qty + '\n' +
+      '\uD83D\uDCB0 *Price:* \u20b9' + Number(p.price).toLocaleString('en-IN') + ' each' + '\n' +
+      '\uD83E\uDDFE *Total:* \u20b9' + total.toLocaleString('en-IN') + '\n' +
       (p.image ? '\uD83D\uDDBC\uFE0F *Image:* ' + p.image + '\n' : '') +
       '\nPlease share more details and help me proceed with the purchase. Thank you!';
     return 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg);
+  }
+
+  var currentProduct = null;
+
+  function getQty() {
+    var input = document.getElementById('pdQtyInput');
+    var val = parseInt(input && input.value, 10);
+    if (!val || val < 1) val = 1;
+    return val;
+  }
+
+  function updateQtyUI() {
+    var input = document.getElementById('pdQtyInput');
+    var minusBtn = document.getElementById('pdQtyMinus');
+    var totalEl = document.getElementById('pdQtyTotal');
+    var waBtn = document.getElementById('pdWaBtn');
+    var qty = getQty();
+    if (input) input.value = qty;
+    if (minusBtn) minusBtn.disabled = qty <= 1;
+    if (currentProduct) {
+      if (totalEl) {
+        totalEl.textContent = qty > 1
+          ? ('Total: \u20b9' + (Number(currentProduct.price) * qty).toLocaleString('en-IN'))
+          : '';
+      }
+      if (waBtn) waBtn.setAttribute('href', waLinkFor(currentProduct, qty));
+    }
+  }
+
+  function changeQty(delta) {
+    var input = document.getElementById('pdQtyInput');
+    var qty = getQty() + delta;
+    if (qty < 1) qty = 1;
+    if (input) input.value = qty;
+    updateQtyUI();
+  }
+
+  function onQtyInput() {
+    updateQtyUI();
   }
 
   function renderNotFound() {
@@ -459,8 +511,17 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
             '<span class="pd-price-new">\u20b9' + Number(p.price).toLocaleString('en-IN') + '</span>' +
             (p.original_price ? '<span class="pd-price-old">\u20b9' + Number(p.original_price).toLocaleString('en-IN') + '</span>' : '') +
           '</div>' +
+          '<div class="pd-qty-row">' +
+            '<span class="pd-qty-label">Quantity</span>' +
+            '<div class="pd-qty-stepper">' +
+              '<button type="button" class="pd-qty-btn" id="pdQtyMinus" onclick="changeQty(-1)" aria-label="Decrease quantity">\u2212</button>' +
+              '<input type="number" class="pd-qty-input" id="pdQtyInput" value="1" min="1" step="1" inputmode="numeric" oninput="onQtyInput()"/>' +
+              '<button type="button" class="pd-qty-btn" id="pdQtyPlus" onclick="changeQty(1)" aria-label="Increase quantity">+</button>' +
+            '</div>' +
+            '<span class="pd-qty-total" id="pdQtyTotal"></span>' +
+          '</div>' +
           '<div class="pd-actions">' +
-            '<a class="pd-btn-primary" href="' + waLinkFor(p) + '" target="_blank">\uD83D\uDCAC Enquire on WhatsApp</a>' +
+            '<a class="pd-btn-primary" id="pdWaBtn" href="' + waLinkFor(p, 1) + '" target="_blank">\uD83D\uDCAC Enquire on WhatsApp</a>' +
             '<a class="pd-btn-secondary" href="products.html">&larr; Back to Products</a>' +
           '</div>' +
           '<div class="pd-note">Have questions about specs, availability or bulk pricing? Message us on WhatsApp +91 897777 1705 or +91 897777 6019. Our team will get back to you shortly.</div>' +
@@ -477,6 +538,8 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       '<div class="pd-related" id="pdRelated"></div>';
 
     document.getElementById('pdWrap').innerHTML = html;
+    currentProduct = p;
+    updateQtyUI();
     if (window.sagReviewsInit) window.sagReviewsInit();
     loadRelated(p);
   }
