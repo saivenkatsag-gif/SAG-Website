@@ -1364,7 +1364,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var spySections = document.querySelectorAll('section[id]');
   var navLinks = document.querySelectorAll('.nav-link[data-section]');
   var mainNavEl = document.getElementById('mainNav');
-  var navH = mainNavEl.offsetHeight; // read once; only re-read on resize (not a scroll hot path)
+  var navH = 0; // measured in rAF below, not synchronously here
   var currentSection = 'home';
   var spyObserver = null;
 
@@ -1385,8 +1385,15 @@ document.addEventListener('DOMContentLoaded', function() {
     spySections.forEach(function(sec) { spyObserver.observe(sec); });
   }
 
+  // Deferred to a rAF so the offsetHeight read lands after the browser's
+  // own layout pass instead of forcing one synchronously mid-script,
+  // right when DOMContentLoaded fires and other style/layout work
+  // (fonts, injected third-party markup, images) is often still pending.
   if ('IntersectionObserver' in window) {
-    setupScrollSpy();
+    requestAnimationFrame(function() {
+      navH = mainNavEl.offsetHeight;
+      setupScrollSpy();
+    });
   }
 
   var bgTicking = false;
@@ -1402,8 +1409,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', function() {
-    navH = mainNavEl.offsetHeight;
-    if ('IntersectionObserver' in window) setupScrollSpy();
+    requestAnimationFrame(function() {
+      navH = mainNavEl.offsetHeight;
+      if ('IntersectionObserver' in window) setupScrollSpy();
+    });
   }, { passive: true });
   requestAnimationFrame(updateNavBackground);
 
