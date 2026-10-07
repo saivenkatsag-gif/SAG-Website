@@ -1,0 +1,2941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SAG LeadFlow CRM v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#f0f2f8;--bg2:#ffffff;--bg3:#f7f8fc;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
+  --accent:#1d4ed8;--accent2:#2563eb;--accent-glow:rgba(29,78,216,0.09);
+  --green:#15803d;--green-bg:rgba(21,128,61,0.09);
+  --amber:#b45309;--amber-bg:rgba(180,83,9,0.09);
+  --red:#dc2626;--red-bg:rgba(220,38,38,0.09);
+  --purple:#7c3aed;--purple-bg:rgba(124,58,237,0.09);
+  --teal:#0e7490;--teal-bg:rgba(14,116,144,0.09);
+  --orange:#c2410c;--orange-bg:rgba(194,65,12,0.09);
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --radius:9px;--radius-lg:13px;--radius-xl:18px;
+  --shadow:0 2px 14px rgba(0,0,0,0.07);
+  --font:'Plus Jakarta Sans',sans-serif;--mono:'JetBrains Mono',monospace;
+  --gold:#d97706;--gold-bg:rgba(217,119,6,0.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+.app{display:flex;height:100vh}
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar{width:224px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-logo{padding:20px 18px 14px;border-bottom:1px solid var(--border)}
+.logo-mark{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),#3b82f6);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(37,99,235,0.3)}
+.logo-text{font-size:15px;font-weight:700;letter-spacing:-.4px}
+.logo-sub{font-size:9px;color:var(--text3);margin-top:2px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.2px}
+.nav{padding:10px 8px;flex:1;overflow-y:auto}
+.nav-section{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.4px;padding:10px 8px 5px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .13s;margin-bottom:1px;position:relative}
+.nav-item:hover{background:rgba(0,0,0,.03);color:var(--text)}
+.nav-item.active{background:var(--accent-glow);color:var(--accent2);font-weight:600}
+.nav-item.active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:2.5px;background:var(--accent);border-radius:2px}
+.nav-icon{width:15px;height:15px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:9px;min-width:17px;text-align:center}
+.sidebar-footer{padding:12px 14px;border-top:1px solid var(--border)}
+.user-card{display:flex;align-items:center;gap:9px;cursor:pointer;padding:7px;border-radius:var(--radius);transition:background .13s}
+.user-card:hover{background:rgba(0,0,0,.03)}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.user-info .user-name{font-size:12px;font-weight:600}
+.user-info .user-role{font-size:10px;color:var(--text3);margin-top:1px}
+/* ── MAIN ─────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 22px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.topbar-title{font-size:16px;font-weight:700;flex:1;letter-spacing:-.4px}
+.btn{padding:7px 14px;border-radius:8px;font-size:12px;font-family:var(--font);cursor:pointer;border:1px solid var(--border2);background:var(--bg2);color:var(--text);transition:all .13s;font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{background:var(--bg3)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:rgba(220,38,38,.2)}
+.btn-danger:hover{background:rgba(220,38,38,.16)}
+.btn-success{background:var(--green-bg);color:var(--green);border-color:rgba(22,163,74,.2)}
+.content{flex:1;overflow-y:auto;padding:22px}
+/* ── POINTS WIDGET ─────────────────────────── */
+.topbar-pts{display:flex;align-items:center;gap:6px;background:var(--gold-bg);border:1px solid rgba(217,119,6,.25);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--gold);cursor:pointer;transition:all .13s;position:relative}
+.topbar-pts:hover{background:rgba(217,119,6,.18);border-color:rgba(217,119,6,.4)}
+.topbar-pts svg{width:14px;height:14px}
+/* ── POINTS HISTORY POPUP ───────────────────── */
+.pts-popup{position:absolute;right:0;top:44px;width:320px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,.14);z-index:600;overflow:hidden;display:none}
+.pts-popup.open{display:block;animation:fadeIn .15s ease}
+.pts-popup-hdr{padding:13px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pts-popup-title{font-size:13px;font-weight:700}
+.pts-popup-total{font-size:13px;font-weight:800;color:var(--gold);font-family:var(--mono)}
+.pts-popup-body{max-height:320px;overflow-y:auto}
+.pts-popup-row{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px}
+.pts-popup-row:last-child{border-bottom:none}
+.pts-popup-delta{font-size:13px;font-weight:800;font-family:var(--mono);flex-shrink:0;width:42px;text-align:right}
+.pts-popup-empty{padding:28px;text-align:center;font-size:12px;color:var(--text3)}
+.topbar-reminders{position:relative;cursor:pointer}
+.reminder-bell{width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);background:var(--bg2);display:flex;align-items:center;justify-content:center;transition:all .13s;cursor:pointer}
+.reminder-bell:hover{background:var(--bg3);border-color:var(--accent)}
+.reminder-bell-badge{position:absolute;top:-2px;right:-2px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg2)}
+.reminder-dropdown{position:absolute;right:0;top:42px;width:300px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,.12);z-index:500;overflow:hidden;display:none}
+.reminder-dropdown.open{display:block;animation:fadeIn .15s ease}
+.rd-hdr{padding:12px 14px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.rd-item{padding:10px 14px;border-bottom:1px solid var(--border);font-size:12px;cursor:pointer;transition:background .12s}
+.rd-item:last-child{border-bottom:none}
+.rd-item:hover{background:var(--bg3)}
+.rd-item-title{font-weight:600;color:var(--text)}
+.rd-item-meta{font-size:10px;color:var(--text3);margin-top:2px}
+.rd-empty{padding:20px;text-align:center;font-size:12px;color:var(--text3)}
+/* ── STATS ─────────────────────────────────── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:20px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 18px;transition:border-color .2s,box-shadow .2s}
+.stat-card:hover{border-color:var(--border2);box-shadow:var(--shadow)}
+.stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;font-weight:600}
+.stat-value{font-size:26px;font-weight:700;margin-top:5px;letter-spacing:-1px}
+.stat-change{font-size:11px;color:var(--text3);margin-top:3px}
+/* ── PANELS ─────────────────────────────────── */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:13px;font-weight:700;letter-spacing:-.2px}
+.section-link{font-size:11px;color:var(--accent2);cursor:pointer;transition:opacity .13s}
+.section-link:hover{opacity:.75}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+/* ── TABLE ─────────────────────────────────── */
+.table-wrap{overflow-x:auto}
+.leads-table{width:100%;min-width:860px;border-collapse:collapse}
+.leads-table thead tr{background:var(--bg3);border-bottom:1px solid var(--border)}
+.leads-table th{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;padding:9px 13px;text-align:left;white-space:nowrap}
+.leads-table tbody tr{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.leads-table tbody tr:last-child{border-bottom:none}
+.leads-table tbody tr:hover{background:var(--accent-glow)}
+.leads-table td{padding:12px 13px;font-size:12.5px;vertical-align:middle}
+.lead-name{font-weight:600;color:var(--text)}
+.lead-sub{font-size:10.5px;color:var(--text3);margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap}
+.pill::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;opacity:.7}
+.pill-new{background:rgba(59,130,246,.11);color:#1d4ed8}
+.pill-contacted{background:var(--amber-bg);color:var(--amber)}
+.pill-qualified{background:var(--green-bg);color:var(--green)}
+.pill-proposal{background:var(--purple-bg);color:var(--purple)}
+.pill-won{background:rgba(21,128,61,.15);color:var(--green);border:1px solid rgba(21,128,61,.2)}
+.pill-lost{background:var(--red-bg);color:var(--red)}
+.source-badge{background:var(--bg3);color:var(--text2);font-size:10px;padding:2px 7px;border-radius:5px;border:1px solid var(--border)}
+.date-overdue{color:var(--red);font-weight:600}
+.date-today{color:var(--amber);font-weight:700}
+.date-soon{color:var(--amber)}
+.date-ok{color:var(--text2)}
+.date-none{color:var(--text3)}
+.row-actions{display:flex;gap:3px;opacity:0;transition:opacity .12s}
+.leads-table tbody tr:hover .row-actions{opacity:1}
+.act-btn{padding:4px 7px;border-radius:5px;font-size:10.5px;cursor:pointer;border:1px solid var(--border);background:var(--bg3);color:var(--text2);font-family:var(--font);transition:all .11s}
+.act-btn:hover{background:var(--accent-glow);color:var(--accent2);border-color:rgba(37,99,235,.25)}
+.act-btn.del:hover{background:var(--red-bg);color:var(--red);border-color:rgba(220,38,38,.2)}
+/* ── MODALS ─────────────────────────────────── */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;z-index:1000}
+.modal-backdrop.open{display:flex;animation:fadeIn .13s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius-xl);width:580px;max-width:96vw;max-height:90vh;overflow-y:auto;padding:26px;animation:slideUp .18s ease;box-shadow:0 12px 48px rgba(0,0,0,.16)}
+@keyframes slideUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-sm{width:420px}
+.modal-lg{width:700px}
+.modal-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.modal-title{font-size:17px;font-weight:700;letter-spacing:-.4px}
+.modal-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.modal-close{width:27px;height:27px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;color:var(--text2);font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .13s;flex-shrink:0}
+.modal-close:hover{border-color:var(--border2);color:var(--text)}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+.fl{font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.7px}
+.fl .req{color:var(--accent2);margin-left:2px}
+.fi{padding:8px 11px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;color:var(--text);font-size:13px;font-family:var(--font);outline:none;transition:border-color .13s;width:100%}
+.fi:focus{border-color:var(--accent);background:#eff6ff}
+.fi::placeholder{color:var(--text3)}
+select.fi{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 11px center;padding-right:28px}
+textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
+.fi-note{font-size:10px;color:var(--text3);margin-top:1px}
+.form-section{grid-column:1/-1}
+.form-section-title{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;padding:5px 0 9px;border-top:1px solid var(--border);margin-top:3px}
+/* ── DETAIL PANEL — fixed right drawer, always scrollable ── */
+.detail-panel{
+  position:fixed;top:0;right:0;bottom:0;
+  width:380px;max-width:96vw;
+  background:var(--bg2);
+  border-left:2px solid var(--border2);
+  box-shadow:-6px 0 32px rgba(0,0,0,.13);
+  display:flex;flex-direction:column;
+  z-index:600;
+  animation:slideInRight .22s cubic-bezier(.16,1,.3,1);
+}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.dp-overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:599;animation:fadeIn .2s ease}
+.dp-hdr{
+  padding:13px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  background:var(--bg2);
+  position:sticky;top:0;z-index:1;
+}
+.dp-body{
+  padding:16px 18px 40px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  flex:1;
+  min-height:0;
+}
+.dp-avatar-row{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.dp-avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700}
+.dp-name{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.dp-company{font-size:11px;color:var(--text3);margin-top:2px}
+.dp-section{margin-bottom:18px}
+.dp-section-title{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.9px;margin-bottom:9px}
+.dp-row{display:flex;justify-content:space-between;align-items:flex-start;font-size:11.5px;padding:5px 0;border-bottom:1px solid var(--border)}
+.dp-row:last-child{border-bottom:none}
+.dp-key{color:var(--text3)}
+.dp-val{font-weight:600;text-align:right;max-width:160px;word-break:break-word}
+/* Chat messages - immutable */
+.chat-area{background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border);max-height:220px;overflow-y:auto;padding:10px;margin-bottom:10px;display:flex;flex-direction:column;gap:6px}
+.chat-msg{padding:7px 10px;border-radius:8px;font-size:11.5px;line-height:1.5}
+.chat-msg.call{background:rgba(14,116,144,.08);border-left:2px solid var(--teal)}
+.chat-msg.chat{background:rgba(29,78,216,.07);border-left:2px solid var(--accent)}
+.chat-msg.reminder{background:var(--amber-bg);border-left:2px solid var(--amber)}
+.chat-msg-meta{font-size:9.5px;color:var(--text3);margin-top:3px;font-family:var(--mono)}
+.chat-msg-lock{font-size:9px;color:var(--text3);margin-top:3px;display:flex;align-items:center;gap:3px;opacity:.6}
+.chat-compose{display:flex;gap:6px;margin-top:6px}
+.chat-compose .fi{font-size:12px;padding:7px 10px}
+.chat-compose button{padding:7px 10px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;font-size:11px;cursor:pointer;font-family:var(--font);white-space:nowrap;transition:background .12s}
+.chat-compose button:hover{background:var(--accent2)}
+/* ── WhatsApp ─────────────────────────────────── */
+.btn-wa{background:#dcfce7;color:#15803d;border-color:rgba(21,128,61,.25);font-weight:600}
+.btn-wa:hover{background:#bbf7d0;border-color:rgba(21,128,61,.4)}
+.wa-templates{display:none;margin-top:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:8px;gap:6px;flex-direction:column}
+.wa-templates.open{display:flex}
+.wa-tpl-btn{padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);font-size:11.5px;font-family:var(--font);cursor:pointer;text-align:left;line-height:1.4;transition:all .12s}
+.wa-tpl-btn:hover{border-color:rgba(21,128,61,.4);background:#dcfce7;color:#15803d}
+.wa-tpl-label{font-size:9.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px;padding:0 2px}
+/* ── TIMELINE ────────────────────────────────── */
+.timeline-item{display:flex;gap:9px;margin-bottom:9px}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:3px}
+.tl-line{width:1px;background:var(--border);flex:1;margin:2px 2px 0}
+.tl-text{font-size:11px;color:var(--text2);flex:1}
+/* ── POINTS DASHBOARD WIDGET ─────────────────── */
+.pts-badge{display:inline-flex;align-items:center;gap:5px;background:var(--gold-bg);border:1px solid rgba(217,119,6,.25);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--gold)}
+.pts-log-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px}
+.pts-log-row:last-child{border-bottom:none}
+.pts-plus{color:var(--green);font-weight:700}
+.pts-minus{color:var(--red);font-weight:700}
+/* ── KANBAN ─────────────────────────────────── */
+.kanban{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px}
+.kanban-col{min-width:182px;flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;display:flex;flex-direction:column}
+.kanban-col-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.kanban-col-name{font-size:11px;font-weight:700;color:var(--text2)}
+.kanban-count{font-size:9.5px;font-weight:700;background:var(--bg3);color:var(--text3);padding:1px 6px;border-radius:9px;border:1px solid var(--border)}
+.kanban-cards{display:flex;flex-direction:column;gap:7px;flex:1}
+.kcard{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:11px;cursor:pointer;transition:all .13s}
+.kcard:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(37,99,235,.1)}
+.kcard-name{font-size:11.5px;font-weight:600;margin-bottom:3px}
+.kcard-product{font-size:10.5px;color:var(--text3);margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kcard-footer{display:flex;align-items:center;justify-content:space-between}
+.kcard-source{font-size:9.5px;color:var(--text3);background:var(--bg2);padding:1px 5px;border-radius:4px;border:1px solid var(--border)}
+/* ── NOTIF ──────────────────────────────────── */
+.notif-item{display:flex;align-items:flex-start;gap:13px;padding:14px 18px;border-bottom:1px solid var(--border);transition:background .12s}
+.notif-item:last-child{border-bottom:none}
+.notif-item:hover{background:var(--bg3)}
+.notif-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.notif-dot.overdue{background:var(--red);box-shadow:0 0 5px var(--red)}
+.notif-dot.today{background:var(--amber);box-shadow:0 0 5px var(--amber)}
+.notif-dot.soon{background:var(--accent)}
+.notif-body{flex:1}
+.notif-title{font-size:12.5px;font-weight:600}
+.notif-meta{font-size:10.5px;color:var(--text3);margin-top:2px}
+/* ── REPORTS ────────────────────────────────── */
+.reports-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.report-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px}
+.report-title{font-size:12.5px;font-weight:700;margin-bottom:12px}
+.chart-wrap{position:relative;height:200px}
+/* ── MISC ────────────────────────────────────── */
+.empty-state{text-align:center;padding:50px 20px}
+.empty-icon{font-size:36px;opacity:.18;margin-bottom:10px}
+.empty-text{font-size:13px;color:var(--text2)}
+.empty-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:2000;display:flex;flex-direction:column;gap:7px}
+.toast{background:#0f172a;border:1px solid #1e293b;border-radius:var(--radius);padding:11px 14px;font-size:12px;color:#f1f5f9;display:flex;align-items:flex-start;gap:9px;box-shadow:0 4px 20px rgba(0,0,0,.22);animation:toastIn .22s ease;min-width:240px;max-width:min(420px,calc(100vw - 44px));line-height:1.5}
+.toast span{word-break:break-word}
+.toast-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+@keyframes toastIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.info-banner{display:flex;align-items:flex-start;gap:9px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.14);border-radius:var(--radius);padding:11px 13px;margin-bottom:16px;font-size:12px;color:var(--text2);line-height:1.6}
+.info-banner svg{flex-shrink:0;margin-top:1px;color:var(--accent2)}
+.locked-notice{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text3);padding:14px;background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border)}
+.admin-badge{font-size:9px;background:rgba(29,78,216,.12);color:var(--accent2);padding:1px 6px;border-radius:8px;font-weight:700;border:1px solid rgba(29,78,216,.18)}
+.filters-bar{display:flex;align-items:center;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:180px;max-width:300px}
+.search-wrap svg{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--text3);pointer-events:none}
+.search-input{width:100%;padding:7px 11px 7px 30px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12.5px;font-family:var(--font);outline:none;transition:border-color .13s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text3)}
+.filter-chip{padding:5px 11px;border-radius:20px;font-size:11px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text2);transition:all .13s;font-family:var(--font);white-space:nowrap}
+.filter-chip:hover{border-color:var(--border2);color:var(--text)}
+.filter-chip.active{background:var(--accent-glow);color:var(--accent2);border-color:rgba(37,99,235,.3);font-weight:600}
+/* ── SETTINGS / BRANCHES ─────────────────────── */
+.settings-section{margin-bottom:24px}
+.settings-title{font-size:12.5px;font-weight:700;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid var(--border)}
+.branch-row{display:flex;gap:6px;align-items:center;margin-bottom:6px}
+.branch-row .fi{flex:1;margin:0}
+.branch-del{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--red);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .11s}
+.branch-del:hover{background:var(--red-bg);border-color:rgba(220,38,38,.25)}
+/* ── LOGIN ─────────────────────────────────── */
+#login-screen{position:fixed;inset:0;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#0f172a 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+#login-screen.hidden{display:none}
+.login-box{background:#fff;border-radius:var(--radius-xl);padding:36px;width:380px;max-width:95vw;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.login-logo .logo-icon{width:38px;height:38px;border-radius:11px}
+.login-title{font-size:22px;font-weight:700;letter-spacing:-.5px}
+.login-sub{font-size:12px;color:var(--text3);margin-top:3px}
+.login-step{display:none}
+.login-step.active{display:block}
+.login-label{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}
+.otp-row{display:flex;gap:8px;margin:14px 0}
+.otp-box{width:42px;height:48px;border:1.5px solid #e2e8f0;border-radius:10px;text-align:center;font-size:20px;font-weight:700;font-family:var(--mono);outline:none;background:#f8fafc;transition:border-color .13s;color:var(--text)}
+.otp-box:focus{border-color:var(--accent);background:#eff6ff}
+.otp-banner{display:none;background:#fffbeb;border:2px solid #f59e0b;border-radius:10px;padding:14px 16px;margin-bottom:14px;color:#78350f;text-align:center}
+.otp-banner.show{display:block}
+/* ── PERF CARD ────────────────────────────────── */
+.perf-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;margin-bottom:10px}
+.perf-points{font-size:28px;font-weight:700;color:var(--gold);font-family:var(--mono)}
+/* ── MOBILE ELEMENTS ─────────────────────────── */
+.mobile-nav{display:none}
+#mob-menu-btn{display:none}
+.mobile-sidebar-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.5);backdrop-filter:blur(2px)}
+.mobile-sidebar-overlay.open{display:block}
+.mobile-sidebar-panel{position:fixed;left:0;top:0;bottom:0;width:256px;background:var(--bg2);z-index:900;transform:translateX(-100%);transition:transform .25s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:4px 0 20px rgba(0,0,0,.14)}
+.mobile-sidebar-overlay.open .mobile-sidebar-panel{transform:translateX(0)}
+.mob-sidebar-hdr{padding:16px 15px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mob-sidebar-close{width:27px;height:27px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--text2)}
+.mob-sidebar-nav{padding:9px;flex:1;overflow-y:auto}
+.mob-sidebar-footer{padding:12px 14px;border-top:1px solid var(--border)}
+.mob-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:transparent;font-family:var(--font);font-size:9px;font-weight:600;color:var(--text3);transition:color .13s;padding:6px 3px;position:relative}
+.mob-nav-item.active{color:var(--accent2)}
+.mob-nav-item svg{width:19px;height:19px}
+.mob-nav-badge{position:absolute;top:4px;right:calc(50% - 18px);background:var(--red);color:#fff;font-size:8px;font-weight:700;min-width:13px;height:13px;border-radius:7px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+/* ── PRODUCT ROW ────────────────────────────── */
+.product-row{display:grid;grid-template-columns:1fr 90px 27px;gap:5px;align-items:center}
+.product-row .fi{margin:0}
+.product-row-remove{width:27px;height:27px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--red);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .11s;font-family:var(--font)}
+.product-row-remove:hover{background:var(--red-bg);border-color:rgba(220,38,38,.25)}
+.drop-zone{border:1.5px dashed var(--border2);border-radius:var(--radius-lg);padding:36px 20px;text-align:center;cursor:pointer;transition:all .18s}
+.drop-zone:hover,.drop-zone.drag-over{border-color:var(--accent);background:var(--accent-glow)}
+.csv-preview{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;font-family:var(--mono);font-size:10.5px;max-height:180px;overflow-y:auto}
+.csv-row{display:grid;grid-template-columns:repeat(5,1fr)}
+.csv-row>div{padding:5px 9px;border-bottom:1px solid var(--border);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.csv-row.head>div{background:var(--bg);color:var(--text3);font-weight:700;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px}
+.csv-row:last-child>div{border-bottom:none}
+/* ── RESPONSIVE ─────────────────────────────── */
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr)}.reports-grid{grid-template-columns:1fr}}
+@media(max-width:900px) and (min-width:769px){
+  .sidebar{width:56px}.sidebar-logo{padding:14px 0;display:flex;justify-content:center}
+  .logo-text,.logo-sub,.nav-section,.nav-item span,.nav-badge,.user-info{display:none}
+  .nav-item{justify-content:center;padding:9px}.nav-icon{width:18px;height:18px}
+  .sidebar-footer{padding:9px 0;display:flex;justify-content:center}.user-card{justify-content:center;padding:8px 0}
+}
+@media(max-width:768px){
+  html,body{overflow:hidden}
+  .app{flex-direction:column}.sidebar{display:none!important}
+  .mobile-nav{display:flex!important;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:500;height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);align-items:stretch}
+  #mob-menu-btn{display:flex!important}
+  .topbar{padding:9px 13px;gap:7px}.topbar-title{font-size:14px}
+  .main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+  .content{flex:1;overflow-y:auto;padding:11px;padding-bottom:calc(90px + env(safe-area-inset-bottom))}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+  .stat-card{padding:12px}.stat-value{font-size:20px}
+  .table-wrap{display:none}
+  #mob-lead-cards{display:block!important}
+  [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+  .filters-bar{gap:5px}.search-wrap{max-width:100%;min-width:0}
+  .detail-panel{width:100vw!important;border-left:none!important;border-top:1px solid var(--border)}
+  .dp-overlay{display:none}
+  .topbar-pts{font-size:10px;padding:4px 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349383/logo_ussruy.png" style="width:38px;height:38px;border-radius:11px;" alt="SAG LeadFlow Logo"/>
+      <div><div class="login-title">SAG LeadFlow</div><div class="login-sub">Sales CRM v2</div></div>
+    </div>
+    <div class="login-step active" id="login-step-email">
+      <div class="login-label">Work email</div>
+      <input class="fi" id="login-email" type="email" placeholder="you@company.com" style="margin-bottom:14px"/>
+      <button class="btn btn-primary" id="btn-send-otp" style="width:100%;justify-content:center">Send OTP →</button>
+    </div>
+    <div class="login-step" id="login-step-otp">
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Signing in as <strong id="login-email-display"></strong></div>
+      <div class="otp-banner" id="otp-banner">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;opacity:.7">📧 OTP Sent!</div>
+        <div id="otp-banner-text" style="font-size:13px;font-weight:500;letter-spacing:0;font-family:var(--font)">Check your email inbox for the 6-digit code.</div>
+        <div style="font-size:10px;margin-top:6px;opacity:.65">Valid for 10 minutes · Check spam if not received</div>
+      </div>
+      <div class="login-label">Enter 6-digit code</div>
+      <div class="otp-row">
+        <input class="otp-box" id="otp-0" maxlength="1" inputmode="numeric"/>
+        <input class="otp-box" id="otp-1" maxlength="1" inputmode="numeric"/>
+        <input class="otp-box" id="otp-2" maxlength="1" inputmode="numeric"/>
+        <input class="otp-box" id="otp-3" maxlength="1" inputmode="numeric"/>
+        <input class="otp-box" id="otp-4" maxlength="1" inputmode="numeric"/>
+        <input class="otp-box" id="otp-5" maxlength="1" inputmode="numeric"/>
+      </div>
+      <button class="btn btn-primary" id="btn-verify-otp" style="width:100%;justify-content:center;margin-bottom:10px">Verify & Sign In</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" id="btn-back-email" style="flex:1;justify-content:center">← Back</button>
+        <button class="btn btn-sm" id="btn-resend-otp" style="flex:1;justify-content:center">Resend OTP</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div class="app" id="app" style="display:none">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349383/logo_ussruy.png" style="width:32px;height:32px;border-radius:9px;" alt="SAG LeadFlow Logo"/>
+        <div><div class="logo-text">SAG LeadFlow</div><div class="logo-sub">Sales CRM</div></div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="nav-section">Main</div>
+      <div class="nav-item active" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg><span>Dashboard</span></div>
+      <div class="nav-item" data-view="leads"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg><span>All Leads</span></div>
+      <div class="nav-item" data-view="notifications"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg><span>Reminders</span><div class="nav-badge" id="notif-badge" style="display:none">0</div></div>
+      <div class="nav-section">Analytics</div>
+      <div class="nav-item" data-view="reports"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg><span>Reports</span></div>
+      <div class="nav-section">People</div>
+      <div class="nav-item" data-view="team"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="2.5"/><path d="M0 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 11.5a3 3 0 0 1 .5 1.5"/></svg><span>Team</span></div>
+      <div class="nav-section">Tools</div>
+      <div class="nav-item" data-view="import"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 5 4-5"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg><span>Import CSV</span></div>
+      <div class="nav-item" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg><span>Settings</span></div>
+    </div>
+    <div class="sidebar-footer">
+      <div style="padding:4px 6px 8px">
+        <button class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:6px" onclick="openAddLead()">
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 1v12M1 7h12"/></svg>Add Lead
+        </button>
+      </div>
+      <div class="user-card" onclick="signOut()" title="Sign out">
+        <div class="avatar" id="sidebar-avatar" style="width:30px;height:30px">--</div>
+        <div class="user-info"><div class="user-name" id="sidebar-name">—</div><div class="user-role" id="sidebar-role">—</div></div>
+        <svg style="margin-left:auto;opacity:.35;flex-shrink:0" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 8H2M6 4l-4 4 4 4"/><path d="M13 2v12"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <div class="topbar">
+      <button id="mob-menu-btn" style="display:none;width:32px;height:32px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;align-items:center;justify-content:center;flex-shrink:0" onclick="openMobileSidebar()">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+      </button>
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <!-- Reminder Bell -->
+      <div class="topbar-reminders" id="reminder-btn">
+        <div class="reminder-bell" onclick="toggleReminderDropdown()">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg>
+        </div>
+        <div class="reminder-bell-badge" id="reminder-badge" style="display:none">0</div>
+        <div class="reminder-dropdown" id="reminder-dropdown">
+          <div class="rd-hdr"><span>Reminders</span><button class="btn btn-sm" onclick="setView('notifications');toggleReminderDropdown()">View All</button></div>
+          <div id="reminder-list"></div>
+        </div>
+      </div>
+      <!-- Points Widget — click to open history popup -->
+      <div style="position:relative" id="pts-widget">
+        <div class="topbar-pts" id="topbar-pts" onclick="togglePtsPopup()">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><polygon points="8,2 10,6 14,6.5 11,9.5 11.8,14 8,12 4.2,14 5,9.5 2,6.5 6,6"/></svg>
+          <span id="topbar-pts-val">0 pts</span>
+        </div>
+        <div class="pts-popup" id="pts-popup">
+          <div class="pts-popup-hdr">
+            <span class="pts-popup-title">⭐ Points History</span>
+            <span class="pts-popup-total" id="pts-popup-total">0 pts</span>
+          </div>
+          <div class="pts-popup-body" id="pts-popup-body">
+            <div class="pts-popup-empty">No points activity yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-nav" id="mobile-nav" style="display:none">
+    <button class="mob-nav-item active" data-view="dashboard" onclick="setView('dashboard');updateMobileNav()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>Home</button>
+    <button class="mob-nav-item" data-view="leads" onclick="setView('leads');updateMobileNav()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg>Leads</button>
+    <button class="mob-nav-item" data-view="notifications" onclick="setView('notifications');updateMobileNav()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg>Alerts<div class="mob-nav-badge" id="mob-notif-badge" style="display:none">0</div></button>
+    <button class="mob-nav-item" data-view="reports" onclick="setView('reports');updateMobileNav()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg>Reports</button>
+    <button class="mob-nav-item" onclick="openMobileSidebar()"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4h12M2 8h12M2 12h12"/></svg>More</button>
+  </nav>
+
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <div class="mobile-sidebar-overlay" id="mobile-sidebar-overlay" onclick="closeMobileSidebar()">
+    <div class="mobile-sidebar-panel" onclick="event.stopPropagation()">
+      <div class="mob-sidebar-hdr">
+        <div class="logo-mark"><img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349383/logo_ussruy.png" style="width:28px;height:28px;border-radius:7px;" alt="SAG LeadFlow Logo"/><div class="logo-text" style="font-size:14px">SAG LeadFlow</div></div>
+        <button class="mob-sidebar-close" onclick="closeMobileSidebar()">✕</button>
+      </div>
+      <div class="mob-sidebar-nav">
+        <div class="nav-section">Main</div>
+        <div class="nav-item" onclick="setView('dashboard');closeMobileSidebar()" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg><span>Dashboard</span></div>
+        <div class="nav-item" onclick="setView('leads');closeMobileSidebar()" data-view="leads"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg><span>All Leads</span></div>
+        <div class="nav-item" onclick="setView('notifications');closeMobileSidebar()" data-view="notifications"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg><span>Reminders</span><div class="nav-badge" id="mob-side-notif-badge" style="display:none">0</div></div>
+        <div class="nav-section">Analytics</div>
+        <div class="nav-item" onclick="setView('reports');closeMobileSidebar()" data-view="reports"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg><span>Reports</span></div>
+        <div class="nav-section">People</div>
+        <div class="nav-item" onclick="setView('team');closeMobileSidebar()" data-view="team"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="2.5"/><path d="M0 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 11.5a3 3 0 0 1 .5 1.5"/></svg><span>Team</span></div>
+        <div class="nav-section">Tools</div>
+        <div class="nav-item" onclick="setView('import');closeMobileSidebar()" data-view="import"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 5 4-5"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg><span>Import CSV</span></div>
+        <div class="nav-item" onclick="setView('settings');closeMobileSidebar()" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg><span>Settings</span></div>
+      </div>
+      <div class="mob-sidebar-footer">
+        <div class="user-card" onclick="signOut()"><div class="avatar" id="mob-sidebar-avatar" style="width:30px;height:30px">--</div><div class="user-info"><div class="user-name" id="mob-sidebar-name">—</div><div class="user-role" id="mob-sidebar-role">—</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LEAD MODAL -->
+<div class="modal-backdrop" id="lead-modal" onclick="backdropClose(event,'lead-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="lead-modal-title">Add New Lead</div><div class="modal-sub">Fill in lead details below</div></div>
+      <button class="modal-close" onclick="closeModal('lead-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">Full Name <span class="req">*</span></label><input class="fi" id="f-name" placeholder="Ravi Kumar"/></div>
+      <div class="fg"><label class="fl">Phone <span class="req">*</span></label><input class="fi" id="f-phone" placeholder="+91 98765 43210"/></div>
+      <div class="fg"><label class="fl">Email <span style="color:var(--text3);font-size:9px">(Optional)</span></label><input class="fi" id="f-email" type="email" placeholder="ravi@company.com"/></div>
+      <div class="fg"><label class="fl">Category <span class="req">*</span></label>
+        <select class="fi" id="f-category">
+          <option value="">Select Category…</option>
+          <option value="Drones">Drones</option>
+          <option value="Spares">Spares</option>
+          <option value="RPTO">RPTO</option>
+          <option value="B2B">B2B</option>
+          <option value="Loans">Loans</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">State <span class="req">*</span></label>
+        <select class="fi" id="f-state">
+          <option value="">Select State…</option>
+          <option value="Andhra Pradesh">Andhra Pradesh</option>
+          <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+          <option value="Assam">Assam</option>
+          <option value="Bihar">Bihar</option>
+          <option value="Chhattisgarh">Chhattisgarh</option>
+          <option value="Goa">Goa</option>
+          <option value="Gujarat">Gujarat</option>
+          <option value="Haryana">Haryana</option>
+          <option value="Himachal Pradesh">Himachal Pradesh</option>
+          <option value="Jharkhand">Jharkhand</option>
+          <option value="Karnataka">Karnataka</option>
+          <option value="Kerala">Kerala</option>
+          <option value="Madhya Pradesh">Madhya Pradesh</option>
+          <option value="Maharashtra">Maharashtra</option>
+          <option value="Manipur">Manipur</option>
+          <option value="Meghalaya">Meghalaya</option>
+          <option value="Mizoram">Mizoram</option>
+          <option value="Nagaland">Nagaland</option>
+          <option value="Odisha">Odisha</option>
+          <option value="Punjab">Punjab</option>
+          <option value="Rajasthan">Rajasthan</option>
+          <option value="Sikkim">Sikkim</option>
+          <option value="Tamil Nadu">Tamil Nadu</option>
+          <option value="Telangana">Telangana</option>
+          <option value="Tripura">Tripura</option>
+          <option value="Uttar Pradesh">Uttar Pradesh</option>
+          <option value="Uttarakhand">Uttarakhand</option>
+          <option value="West Bengal">West Bengal</option>
+          <option value="Jammu &amp; Kashmir">Jammu &amp; Kashmir</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Language Preference <span class="req">*</span></label>
+        <select class="fi" id="f-language">
+          <option value="">Select Language…</option>
+          <option value="Telugu">Telugu</option>
+          <option value="English">English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Tamil">Tamil</option>
+          <option value="Kannada">Kannada</option>
+          <option value="Malayalam">Malayalam</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Pincode</label><input class="fi" id="f-pincode" placeholder="600001" maxlength="6"/></div>
+      <div class="fg full" style="grid-column:1/-1">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <label class="fl" style="margin:0">Products Interested In <span class="req">*</span></label>
+          <button type="button" onclick="addProductRow()" style="font-size:11px;padding:3px 10px;border-radius:6px;border:1px dashed var(--accent2);background:var(--accent-glow);color:var(--accent2);cursor:pointer;font-family:var(--font);font-weight:500">+ Add Product</button>
+        </div>
+        <div id="f-products-list"></div>
+      </div>
+      <div class="fg full"><label class="fl">Address</label><textarea class="fi" id="f-address" placeholder="Door No., Street, Area, City…" style="min-height:56px;resize:vertical"></textarea></div>
+      <div class="fg"><label class="fl">Branch <span class="req">*</span></label><select class="fi" id="f-branch"><option value="">Select Branch…</option></select></div>
+      <div class="fg"><label class="fl">Lead Source <span class="req">*</span></label>
+        <select class="fi" id="f-source">
+          <option value="Instagram">Instagram</option>
+          <option value="IndiaMART">IndiaMART</option>
+          <option value="Walk-in">Walk-in</option>
+          <option value="Website">Website</option>
+          <option value="Referral">Referral</option>
+          <option value="Event/Expo">Event/Expo</option>
+          <option value="Cold Call">Cold Call</option>
+          <option value="Email Campaign">Email Campaign</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Status <span class="req">*</span></label>
+        <select class="fi" id="f-status"><option>New</option><option>Contacted</option><option>Qualified</option><option>Proposal</option><option>Won</option><option>Lost</option></select>
+      </div>
+      <div class="fg"><label class="fl">Deal Value (₹)</label><input class="fi" id="f-value" type="number" placeholder="0" min="0"/></div>
+      <div class="fg"><label class="fl">Expected Close Date</label><input class="fi" id="f-buydate" type="date"/></div>
+      <div class="fg"><label class="fl">Assign To <span class="req">*</span></label><select class="fi" id="f-assignee"><option value="">Unassigned</option></select></div>
+      <div class="form-section"><div class="form-section-title">Notes</div></div>
+      <div class="fg full"><textarea class="fi" id="f-notes" placeholder="Important details, follow-up notes…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('lead-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLead()">Save Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- MEMBER MODAL (Super Admin only) -->
+<div class="modal-backdrop" id="member-modal" onclick="backdropClose(event,'member-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="member-modal-title">Add Employee</div><div class="modal-sub">Super Admin action — new members sign in via email OTP</div></div>
+      <button class="modal-close" onclick="closeModal('member-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">Full Name <span class="req">*</span></label><input class="fi" id="m-name" placeholder="Priya Sharma"/></div>
+      <div class="fg"><label class="fl">Email <span class="req">*</span></label><input class="fi" id="m-email" type="email" placeholder="priya@company.com"/></div>
+      <div class="fg"><label class="fl">Role</label><select class="fi" id="m-role"><option>Sales Rep</option><option>Team Lead</option><option>Manager</option></select></div>
+      <div class="fg"><label class="fl">Phone</label><input class="fi" id="m-phone" placeholder="+91 98765 43210"/></div>
+      <div class="fg"><label class="fl">Branch</label><select class="fi" id="m-branch"><option value="">Select Branch…</option></select></div>
+      <div class="fg"><label class="fl">Target (₹)</label><input class="fi" id="m-target" type="number" placeholder="1000000"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('member-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMember()">Save Employee</button>
+    </div>
+  </div>
+</div>
+
+<!-- REMINDER MODAL -->
+<div class="modal-backdrop" id="reminder-modal" onclick="backdropClose(event,'reminder-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Set Reminder</div><div class="modal-sub" id="reminder-modal-sub">For this lead</div></div>
+      <button class="modal-close" onclick="closeModal('reminder-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg full"><label class="fl">Reminder Note</label><input class="fi" id="rem-note" placeholder="Call back / Follow up…"/></div>
+      <div class="fg"><label class="fl">Date</label><input class="fi" id="rem-date" type="date"/></div>
+      <div class="fg"><label class="fl">Time</label><input class="fi" id="rem-time" type="time" value="10:00"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('reminder-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReminder()">Set Reminder</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="followup-done-modal" onclick="backdropClose(event,'followup-done-modal')">
+  <div class="modal modal-sm">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Mark Follow-up Done</div><div class="modal-sub" id="followup-done-modal-sub">For this lead</div></div>
+      <button class="modal-close" onclick="closeModal('followup-done-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg full"><label class="fl">What happened? (logged to lead chat)</label><textarea class="fi" id="fu-done-comment" rows="3" placeholder="e.g. Spoke to customer, they need 2 more days to decide…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('followup-done-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveFollowUpDone()">Mark Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT CONFIRM MODAL -->
+<div class="modal-backdrop" id="import-confirm-modal" onclick="backdropClose(event,'import-confirm-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Confirm Import</div><div class="modal-sub" id="import-confirm-sub">—</div></div>
+      <button class="modal-close" onclick="closeModal('import-confirm-modal')">✕</button>
+    </div>
+    <div id="import-confirm-body"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('import-confirm-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmImport()">Import Leads</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   SAG LEADFLOW CRM v2 — Full Enhanced Edition
+   Features: Role-based access, Points system, Branch management,
+             Reminders, Chat/Call log, Supabase persistence
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Config ─────────────────────────────────────────────── */
+const SB_URL = 'https://gwyariovhutenplndfne.supabase.co/rest/v1';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3eWFyaW92aHV0ZW5wbG5kZm5lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4Mzg5MzMsImV4cCI6MjA5MjQxNDkzM30.AoqqCGWqj3W_QJNPZB4i0v48KYMwTVzIAjdVddKPGGI';
+const SB_HDR = {'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=representation'};
+const sb = window.supabase.createClient('https://gwyariovhutenplndfne.supabase.co', SB_KEY);
+let _realtimeSubscribed=false;
+function subscribeRealtimeLeads(){
+  if(_realtimeSubscribed)return;
+  _realtimeSubscribed=true;
+  sb.channel('leads-realtime')
+    .on('postgres_changes', {event:'INSERT', schema:'public', table:'leads'}, payload=>{
+      const lead=dbToLead(payload.new);
+      if(!leads.find(l=>l.id===lead.id)){
+        leads.unshift(lead);
+        lsSaveLeads();
+        if(lead.source==='WhatsApp'){
+          toast('New lead from WhatsApp: '+lead.name,'#22c87a');
+        }
+        render();
+      }
+    })
+    .on('postgres_changes', {event:'UPDATE', schema:'public', table:'leads'}, payload=>{
+      const lead=dbToLead(payload.new);
+      const idx=leads.findIndex(l=>l.id===lead.id);
+      if(idx>=0){leads[idx]=lead; lsSaveLeads();
+        if(currentView==='leads'||currentView==='dashboard')render();
+      }
+    })
+    .subscribe();
+}
+
+/* ── All data stored exclusively in Supabase ─────────────── */
+/* No localStorage keys — all persistence goes through Supabase */
+
+const EMAILJS_SERVICE  = 'service_wzxfmeh';
+const EMAILJS_TEMPLATE = 'template_pbdck2y';
+const EMAILJS_PUBKEY   = '08Mw24QOT3yyBoG_V';
+
+const STATUSES = ['New','Contacted','Qualified','Proposal','Won','Lost'];
+const LEAD_SOURCES = ['Instagram','IndiaMART','Walk-in','Website','Referral','Event/Expo','Cold Call','Email Campaign','Others'];
+const COLORS = ['#2563eb','#f59e0b','#16a34a','#7c3aed','#dc2626','#0e7490','#c2410c','#db2777'];
+const BGCOLOR = ['rgba(37,99,235,.1)','rgba(245,158,11,.1)','rgba(22,163,74,.1)','rgba(124,58,237,.1)','rgba(220,38,38,.1)','rgba(14,116,144,.1)'];
+
+/* ── State ──────────────────────────────────────────────── */
+let leads=[], team=[], branches=[], reminders=[], pointsLog=[];
+let currentUser=null, editLeadId=null, editMemberId=null, reminderLeadId=null, followUpDoneLeadId=null;
+let currentView='dashboard', statusFilter='all', searchQ='', branchFilter='all', categoryFilter='all', stateFilter='all', languageFilter='all', memberFilter='all';
+const CATEGORIES=['Drones','Spares','RPTO','B2B','Loans'];
+const STATES=['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Jammu & Kashmir'];
+const LANGUAGES=['Telugu','English','Hindi','Tamil','Kannada','Malayalam'];
+let pendingImport=[], chartReg={};
+let teamTab='members';
+let _pendingOTPEmail='', _currentOTP='', _otpExpiry=0;
+
+/* ── Helpers ────────────────────────────────────────────── */
+function lsSaveTeam(){try{localStorage.setItem('lf_team',JSON.stringify(team));}catch(e){}}
+function lsLoadTeam(){try{const d=localStorage.getItem('lf_team');return d?JSON.parse(d):null;}catch(e){return null;}}
+function lsSaveLeads(){try{localStorage.setItem('lf_leads',JSON.stringify(leads));}catch(e){}}
+function lsLoadLeads(){try{const d=localStorage.getItem('lf_leads');return d?JSON.parse(d):null;}catch(e){return null;}}
+
+const $=id=>document.getElementById(id);
+const d0=(n=0)=>{const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]};
+const fmtDate=s=>s?new Date(s).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'—';
+const fmtDateTime=s=>{if(!s)return'—';const d=new Date(s);return d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})+', '+d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});};
+const numFmt=n=>Number(n).toLocaleString('en-IN');
+const initials=n=>(n||'?').split(' ').map(x=>x[0]).join('').toUpperCase().slice(0,2);
+const uid=()=>'id'+Date.now()+Math.random().toString(36).slice(2,7);
+const isAdmin=u=>u&&(u.isSuperAdmin||u.role==='Super Admin'||u.role==='Manager');
+const isSuperAdmin=u=>u&&(u.isSuperAdmin||u.role==='Manager');
+
+function memberColor(id){const i=team.findIndex(m=>m.id===id);return COLORS[i>=0?i%COLORS.length:7]}
+function memberBg(id){const i=team.findIndex(m=>m.id===id);return BGCOLOR[i>=0?i%BGCOLOR.length:0]}
+function memberName(id){const m=team.find(m=>m.id===id);return m?m.name:'Unassigned'}
+function daysTo(s){if(!s)return null;const t=new Date();t.setHours(0,0,0,0);const g=new Date(s);g.setHours(0,0,0,0);return Math.round((g-t)/86400000)}
+function dateClass(s){const d=daysTo(s);if(d===null)return'date-none';if(d<0)return'date-overdue';if(d===0)return'date-today';if(d<=3)return'date-soon';return'date-ok'}
+function dateLabel(s){const d=daysTo(s);if(d===null)return'—';if(d<0)return Math.abs(d)+'d overdue';if(d===0)return'TODAY ⚡';if(d===1)return'Tomorrow';return fmtDate(s)}
+function hotLeads(){return leads.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost'}).sort((a,b)=>daysTo(a.buyDate)-daysTo(b.buyDate))}
+
+/* Leads visible to current user: own leads for employees, all for admin */
+function visibleLeads(){
+  if(!currentUser)return[];
+  if(isAdmin(currentUser))return leads;
+  return leads.filter(l=>l.assignee===currentUser.id);
+}
+
+/* ── Points System ──────────────────────────────────────── */
+function calcPointsForBill(amount){
+  if(!amount||amount<=0)return 0;
+  const a=Number(amount);
+  if(a<=10000)return 1;
+  return Math.floor(a/10000);// every 10k = 1 point
+}
+
+function getUserPoints(userId){
+  return pointsLog
+    .filter(p=>p.userId===userId)
+    .reduce((s,p)=>s+p.delta,0);
+}
+
+async function addPointsEntry(userId,delta,reason,leadId=''){
+  const entry={id:uid(),userId,delta,reason,leadId,ts:new Date().toISOString()};
+  pointsLog.push(entry);
+  try{localStorage.setItem('lf_points_log',JSON.stringify(pointsLog));}catch(e){}
+  sbFetch('/points_log',{method:'POST',body:JSON.stringify({id:entry.id,user_id:userId,delta,reason,lead_id:leadId||null,ts:entry.ts}),headers:{...SB_HDR,'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+  return entry;
+}
+
+async function savePointsLog(){
+  /* Points log is append-only — just upsert all entries to Supabase */
+  /* Called after each addPointsEntry; individual entry already pushed */
+}
+async function loadPointsLog(){
+  try{
+    const rows=await sbFetch('/points_log?order=ts.asc&limit=2000');
+    pointsLog=rows.map(r=>({id:r.id,userId:r.user_id,delta:r.delta,reason:r.reason,leadId:r.lead_id||'',ts:r.ts}));
+    return;
+  }catch(e){console.warn('points_log Supabase unavailable, using localStorage');}
+  try{const saved=localStorage.getItem('lf_points_log');pointsLog=saved?JSON.parse(saved):[];}catch(e){pointsLog=[];}
+}
+
+/* ── Reminders ──────────────────────────────────────────── */
+async function saveReminder_sb(r){
+  return sbFetch('/reminders',{
+    method:'POST',
+    body:JSON.stringify({id:r.id,user_id:r.userId,lead_id:r.leadId||null,note:r.note,datetime:r.datetime,done:r.done,penalty_applied:r.penaltyApplied||false,created_at:r.createdAt}),
+    headers:{...SB_HDR,'Prefer':'resolution=merge-duplicates'}
+  }).catch(e=>console.warn('reminder save failed:',e.message));
+}
+async function updateReminder_sb(r){
+  return sbFetch('/reminders?id=eq.'+r.id,{
+    method:'PATCH',
+    body:JSON.stringify({done:r.done,penalty_applied:r.penaltyApplied||false})
+  }).catch(e=>console.warn('reminder update failed:',e.message));
+}
+async function loadRemindersFromSupabase(){
+  try{
+    const rows=await sbFetch('/reminders?order=datetime.asc');
+    reminders=rows.map(r=>({id:r.id,userId:r.user_id,leadId:r.lead_id||'',note:r.note,datetime:r.datetime,done:r.done,penaltyApplied:r.penalty_applied||false,createdAt:r.created_at}));
+  }catch(e){console.warn('Could not load reminders:',e.message);reminders=[];}
+}
+
+function myReminders(){
+  if(!currentUser)return[];
+  const now=Date.now();
+  return reminders
+    .filter(r=>r.userId===currentUser.id && !r.done)
+    .filter(r=>new Date(r.datetime).getTime()>=now-86400000*1)// within past 24h or future
+    .sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+}
+
+function openReminderModal(leadId){
+  reminderLeadId=leadId;
+  const lead=leads.find(l=>l.id===leadId);
+  $('reminder-modal-sub').textContent=lead?'For: '+lead.name:'Set reminder';
+  $('rem-note').value='';
+  $('rem-date').value=d0(1);
+  $('rem-time').value='10:00';
+  openModal('reminder-modal');
+}
+
+async function saveReminder(){
+  const note=$('rem-note').value.trim();
+  const date=$('rem-date').value;
+  const time=$('rem-time').value||'10:00';
+  if(!date){toast('Please select a date','#f59e0b');return;}
+  const r={
+    id:uid(),
+    userId:currentUser.id,
+    leadId:reminderLeadId||'',
+    note:note||'Follow up',
+    datetime:date+'T'+time+':00',
+    done:false,
+    penaltyApplied:false,
+    createdAt:new Date().toISOString()
+  };
+  reminders.push(r);
+  await saveReminder_sb(r);
+  closeModal('reminder-modal');
+  updateReminderBadge();
+  updateReminderDropdown();
+  toast('Reminder set for '+fmtDate(date),'#22c87a');
+}
+
+function dismissReminder(id){
+  const r=reminders.find(x=>x.id===id);
+  if(r){r.done=true;updateReminder_sb(r);}
+  updateReminderBadge();
+  updateReminderDropdown();
+  render();
+}
+
+/* ── Follow-up Alert → Mark Done (with comment logged to lead chat) ── */
+function openFollowUpDoneModal(leadId){
+  followUpDoneLeadId=leadId;
+  const lead=leads.find(l=>l.id===leadId);
+  $('followup-done-modal-sub').textContent=lead?'For: '+lead.name:'For this lead';
+  $('fu-done-comment').value='';
+  openModal('followup-done-modal');
+}
+
+function saveFollowUpDone(){
+  const lead=leads.find(l=>l.id===followUpDoneLeadId);
+  if(!lead){closeModal('followup-done-modal');return;}
+  const comment=$('fu-done-comment').value.trim();
+  if(!comment){toast('Please add a quick note about this follow-up','#f59e0b');return;}
+  /* Mark this follow-up cycle as resolved for the lead's current buy date.
+     If the buy date is later changed (new follow-up scheduled), the alert
+     will naturally reappear since it's tied to the date that was resolved. */
+  lead.followUpDoneFor=lead.buyDate;
+  if(!lead.timeline)lead.timeline=[];
+  lead.timeline.push('Follow-up completed — '+comment);
+  addChatMessage(lead.id,'reminder','✅ Follow-up marked done: '+comment);
+  closeModal('followup-done-modal');
+  toast('Follow-up marked done ✓','#22c87a');
+}
+
+/* Check if any reminder was missed (not attended) → -1 point */
+function checkMissedReminders(){
+  if(!currentUser)return;
+  const now=Date.now();
+  reminders.forEach(r=>{
+    if(r.userId===currentUser.id && !r.done && !r.penaltyApplied){
+      const dt=new Date(r.datetime).getTime();
+      // If reminder time passed by >30min and not attended
+      if(now-dt > 30*60*1000){
+        r.penaltyApplied=true;
+        addPointsEntry(currentUser.id,-1,'Missed reminder: '+r.note,r.leadId);
+        toast('⚠️ -1 point: missed reminder "'+r.note+'"','#dc2626');
+        r.done=true;
+        updateReminder_sb(r);
+      }
+    }
+  });
+}
+
+function updateReminderBadge(){
+  const my=myReminders();
+  const overdue=my.filter(r=>new Date(r.datetime)<new Date()).length;
+  const total=my.length;
+  const badge=$('reminder-badge');
+  if(badge){badge.textContent=total;badge.style.display=total?'flex':'none';}
+}
+
+function toggleReminderDropdown(){
+  const dd=$('reminder-dropdown');
+  if(dd)dd.classList.toggle('open');
+  updateReminderDropdown();
+}
+
+function updateReminderDropdown(){
+  const list=$('reminder-list');
+  if(!list)return;
+  const my=myReminders();
+  if(!my.length){list.innerHTML='<div class="rd-empty">No upcoming reminders</div>';return;}
+  list.innerHTML=my.slice(0,6).map(r=>{
+    const lead=leads.find(l=>l.id===r.leadId);
+    const dt=new Date(r.datetime);
+    const overdue=dt<new Date();
+    return`<div class="rd-item" style="${overdue?'border-left:2px solid var(--red)':''}">
+      <div class="rd-item-title" style="color:${overdue?'var(--red)':'var(--text)'}">${r.note}</div>
+      <div class="rd-item-meta">${lead?lead.name+' · ':''}<span style="font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</span></div>
+      <button class="btn btn-sm" style="margin-top:5px;font-size:10px" onclick="dismissReminder('${r.id}');event.stopPropagation()">Mark Done</button>
+    </div>`;
+  }).join('');
+}
+
+/* ── Call / Chat Log (immutable) ────────────────────────── */
+function addChatMessage(leadId, type, content){
+  const lead=leads.find(l=>l.id===leadId);
+  if(!lead)return;
+  const msg={
+    id:uid(),
+    type,
+    content,
+    author:currentUser?currentUser.name:'Unknown',
+    ts:new Date().toISOString(),
+    immutable:true
+  };
+  if(!lead.chatLog)lead.chatLog=[];
+  lead.chatLog.push(msg);
+  /* Save to localStorage immediately so it survives refresh */
+  lsSaveLeads();
+  /* Then sync to Supabase in background */
+  sbFetch('/leads?id=eq.'+lead.id,{method:'PATCH',body:JSON.stringify(leadToDb(lead))}).catch(()=>{});
+  render();
+}
+
+function logCallActivity(leadId, durationMin=0){
+  const now=new Date();
+  const content=`Call logged — ${now.toLocaleDateString('en-IN')} at ${now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}${durationMin?', duration: ~'+durationMin+' min':''}`;
+  addChatMessage(leadId,'call',content);
+}
+
+/* ── Supabase ────────────────────────────────────────────── */
+async function sbFetch(path,opts={}){
+  const res=await fetch(SB_URL+path,{...opts,headers:{...SB_HDR,...(opts.headers||{})}});
+  if(!res.ok){const t=await res.text();console.error('Supabase:',t);throw new Error(t);}
+  const txt=await res.text();
+  return txt?JSON.parse(txt):[];
+}
+
+
+
+/* Row mappers — app (camelCase) ↔ Supabase (snake_case) */
+function dbToLead(r){
+  return{
+    id:r.id,name:r.name||'',email:r.email||'',phone:r.phone||'',
+    address:r.address||'',pincode:r.pincode||'',
+    source:r.source||'Others',status:r.status||'New',
+    product:r.product||'',products:r.products||[],branch:r.branch||'',
+    category:r.category||'',state:r.state||'',language:r.language||'',
+    buyDate:r.buy_date||'',assignee:r.assignee||'',
+    value:r.value||0,notes:r.notes||'',
+    timeline:r.timeline||[],
+    chatLog:r.chat_log||[],
+    followUpDoneFor:r.follow_up_done_for||'',
+    createdAt:r.created_at||new Date().toISOString()
+  };
+}
+function leadToDb(l){
+  return{
+    id:l.id,name:l.name,email:l.email||null,phone:l.phone||null,
+    address:l.address||null,pincode:l.pincode||null,
+    source:l.source||'Others',status:l.status||'New',
+    product:l.product||null,products:l.products||[],branch:l.branch||null,
+    category:l.category||null,state:l.state||null,language:l.language||null,
+    buy_date:l.buyDate||null,assignee:l.assignee||null,
+    value:Number(l.value)||0,notes:l.notes||null,
+    timeline:l.timeline||[],
+    chat_log:l.chatLog||[],
+    follow_up_done_for:l.followUpDoneFor||null,
+    created_at:l.createdAt||new Date().toISOString()
+  };
+}
+function dbToMember(r){
+  return{
+    id:r.id,name:r.name||'',email:r.email||'',phone:r.phone||'',
+    role:r.role||'Sales Rep',branch:r.branch||'',target:r.target||0,
+    isSuperAdmin:r.is_super_admin||r.role==='Super Admin'||false
+  };
+}
+function memberToDb(m){
+  return{
+    id:m.id,name:m.name,email:m.email||null,phone:m.phone||null,
+    role:m.role||'Sales Rep',branch:m.branch||null,
+    target:Number(m.target)||0,
+    is_super_admin:!!(m.isSuperAdmin)
+  };
+}
+
+async function dbLoadAll(){
+  showAppLoading(true);
+
+  /* ── STEP 1: Load branches from Supabase ONLY (no localStorage) ── */
+  showSBStatus('connecting');
+  try{
+    const [tRows,lRows,branchLoaded]=await Promise.race([
+      Promise.all([
+        sbFetch('/team_members?order=created_at.asc'),
+        sbFetch('/leads?order=created_at.desc'),
+        loadBranchesFromSupabase()
+      ]),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),10000))
+    ]);
+
+    /* Team */
+    if(tRows&&tRows.length) team=tRows.map(dbToMember);
+    else team=SEED_TEAM.map(m=>({...m}));
+
+    /* Leads */
+    if(lRows&&lRows.length) leads=lRows.map(dbToLead);
+    else leads=SEED_LEADS.map(l=>({...l}));
+
+    /* Branches — if none in Supabase, seed defaults and save up */
+    if(!branchLoaded||!branches.length){
+      branches=['Mumbai','Delhi','Chennai','Bengaluru','Hyderabad','Kolkata','Ahmedabad','Pune'];
+      saveBranches().catch(()=>{});// fire-and-forget seed
+    }
+
+    /* Cache team/leads locally for offline reference only */
+    lsSaveTeam();lsSaveLeads();
+    showSBStatus('connected');
+    rebuildBranchDropdowns();
+  }catch(e){
+    showSBStatus('error',e.message);
+    console.warn('Supabase load failed — using cached data:',e.message);
+    /* Fallback for team/leads only — branches stay empty if Supabase is down */
+    const lsTeam=lsLoadTeam();const lsLeads=lsLoadLeads();
+    if(lsTeam&&lsTeam.length)team=lsTeam; else team=SEED_TEAM.map(m=>({...m}));
+    if(lsLeads&&lsLeads.length)leads=lsLeads; else leads=SEED_LEADS.map(l=>({...l}));
+    if(!branches.length)branches=['Mumbai','Delhi','Chennai','Bengaluru','Hyderabad','Kolkata','Ahmedabad','Pune'];
+  }
+
+  showAppLoading(false);
+}
+
+let _sbStatusTimer=null;
+function showSBStatus(state, msg=''){
+  let bar=document.getElementById('sb-status-bar');
+  if(!bar){
+    bar=document.createElement('div');
+    bar.id='sb-status-bar';
+    bar.style.cssText='position:fixed;bottom:70px;left:50%;transform:translateX(-50%);z-index:3000;font-size:11px;font-family:var(--mono);padding:6px 14px;border-radius:20px;display:flex;align-items:center;gap:7px;box-shadow:0 2px 12px rgba(0,0,0,.15);transition:all .3s;white-space:nowrap';
+    document.body.appendChild(bar);
+  }
+  clearTimeout(_sbStatusTimer);
+  if(state==='connecting'){
+    bar.style.background='#1e293b';bar.style.color='#94a3b8';bar.style.display='flex';
+    bar.innerHTML='<div style="width:7px;height:7px;border-radius:50%;background:#94a3b8;animation:pulse 1s infinite"></div>Connecting to Supabase…';
+    document.head.insertAdjacentHTML('beforeend','<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}</style>');
+  } else if(state==='connected'){
+    bar.style.background='#14532d';bar.style.color='#86efac';bar.style.display='flex';
+    bar.innerHTML='<div style="width:7px;height:7px;border-radius:50%;background:#22c55e"></div>Supabase connected ✓';
+    _sbStatusTimer=setTimeout(()=>{bar.style.display='none';},3500);
+  } else if(state==='error'){
+    bar.style.background='#7f1d1d';bar.style.color='#fca5a5';bar.style.display='flex';
+    bar.innerHTML='<div style="width:7px;height:7px;border-radius:50%;background:#ef4444"></div>Supabase offline — using local storage';
+    _sbStatusTimer=setTimeout(()=>{bar.style.display='none';},6000);
+  }
+}
+
+/* Background Supabase sync — pushes localStorage data to Supabase
+   and pulls any newer records from Supabase (merge by id).
+   If Supabase fails, everything still works from localStorage.        */
+async function sbSyncInBackground(){
+  try{
+    const [tRows, lRows] = await Promise.all([
+      sbFetch('/team_members?order=created_at.asc').catch(()=>null),
+      sbFetch('/leads?order=created_at.desc').catch(()=>null)
+    ]);
+
+    let changed = false;
+
+    /* Merge team */
+    if(tRows && tRows.length){
+      const sbTeam = tRows.map(dbToMember);
+      sbTeam.forEach(sm=>{
+        if(!team.find(m=>m.id===sm.id)){ team.push(sm); changed=true; }
+      });
+      if(changed){ lsSaveTeam(); render(); }
+    }
+    if(tRows !== null){
+      for(const m of team){
+        sbFetch('/team_members?id=eq.'+m.id,{method:'PATCH',body:JSON.stringify(memberToDb(m))}).catch(()=>
+          sbFetch('/team_members',{method:'POST',body:JSON.stringify(memberToDb(m)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{})
+        );
+      }
+    }
+
+    /* Merge leads */
+    if(lRows && lRows.length){
+      const sbLeads = lRows.map(dbToLead);
+      let leadsChanged = false;
+      sbLeads.forEach(sl=>{
+        if(!leads.find(l=>l.id===sl.id)){ leads.unshift(sl); leadsChanged=true; }
+      });
+      if(leadsChanged){ lsSaveLeads(); render(); }
+    }
+    if(lRows !== null){
+      for(const l of leads){
+        sbFetch('/leads?id=eq.'+l.id,{method:'PATCH',body:JSON.stringify(leadToDb(l))}).catch(()=>
+          sbFetch('/leads',{method:'POST',body:JSON.stringify(leadToDb(l)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{})
+        );
+      }
+    }
+
+    /* Branches are Supabase-only — no local push needed */
+    const gotSbBranches = await loadBranchesFromSupabase();
+    if(gotSbBranches){ rebuildBranchDropdowns(); }
+
+  }catch(e){
+    console.warn('Supabase background sync failed (data safe in localStorage):', e.message);
+  }
+}
+
+/* ── Branches persistence: dedicated `branches` Supabase table ── */
+/*   Schema:
+       create table branches (
+         id   serial primary key,
+         name text not null unique
+       );
+       alter table branches disable row level security;
+*/
+
+async function saveBranches(){
+  /* Full replace strategy: delete all rows then re-insert current list.
+     This keeps the table perfectly in sync with the in-memory array.    */
+  try{
+    await sbFetch('/branches',{method:'DELETE',headers:{...SB_HDR,'Accept':'*/*'}});
+  }catch(e){/* Table may be empty — that's fine, continue */}
+  if(!branches.length)return;
+  const rows=branches.map(name=>({name}));
+  await sbFetch('/branches',{
+    method:'POST',
+    body:JSON.stringify(rows),
+    headers:{...SB_HDR,'Prefer':'resolution=ignore-duplicates'}
+  });
+}
+
+async function loadBranchesFromSupabase(){
+  try{
+    const rows=await sbFetch('/branches?order=id.asc');
+    if(rows&&rows.length){
+      branches=rows.map(r=>r.name);
+      return true;
+    }
+  }catch(e){console.warn('Could not load branches from Supabase:',e.message);}
+  return false;
+}
+
+async function dbSeedTeam(){
+  team=SEED_TEAM.map(m=>({...m}));
+  lsSaveTeam();
+  sbFetch('/team_members',{method:'POST',body:JSON.stringify(SEED_TEAM.map(memberToDb)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+}
+async function dbSeedLeads(){
+  leads=SEED_LEADS.map(l=>({...l}));
+  lsSaveLeads();
+  sbFetch('/leads',{method:'POST',body:JSON.stringify(SEED_LEADS.map(leadToDb)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+}
+
+/* ── Lead CRUD: localStorage first, Supabase in background ── */
+async function dbUpsertLead(l){
+  /* 1. Update in-memory array */
+  const idx=leads.findIndex(x=>x.id===l.id);
+  if(idx>=0) leads[idx]=l; else leads.unshift(l);
+  /* 2. Persist to localStorage immediately */
+  lsSaveLeads();
+  /* 3. Try Supabase in background */
+  sbFetch('/leads?id=eq.'+l.id,{method:'PATCH',body:JSON.stringify(leadToDb(l))}).catch(()=>
+    sbFetch('/leads',{method:'POST',body:JSON.stringify(leadToDb(l)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{})
+  );
+}
+async function dbInsertLead(l){
+  /* 1. Add to in-memory array */
+  if(!leads.find(x=>x.id===l.id)) leads.unshift(l);
+  /* 2. Persist to localStorage immediately */
+  lsSaveLeads();
+  /* 3. Try Supabase in background */
+  sbFetch('/leads',{method:'POST',body:JSON.stringify(leadToDb(l)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+}
+async function dbDeleteLead(id){
+  /* 1. Remove from in-memory array */
+  leads=leads.filter(l=>l.id!==id);
+  /* 2. Persist to localStorage immediately */
+  lsSaveLeads();
+  /* 3. Try Supabase in background */
+  sbFetch('/leads?id=eq.'+id,{method:'DELETE'}).catch(()=>{});
+}
+
+/* ── Member CRUD: localStorage first, Supabase in background ── */
+async function dbUpsertMember(m){
+  const idx=team.findIndex(x=>x.id===m.id);
+  if(idx>=0) team[idx]=m; else team.push(m);
+  lsSaveTeam();
+  sbFetch('/team_members?id=eq.'+m.id,{method:'PATCH',body:JSON.stringify(memberToDb(m))}).catch(()=>
+    sbFetch('/team_members',{method:'POST',body:JSON.stringify(memberToDb(m)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{})
+  );
+}
+async function dbInsertMember(m){
+  if(!team.find(x=>x.id===m.id)) team.push(m);
+  lsSaveTeam();
+  sbFetch('/team_members',{method:'POST',body:JSON.stringify(memberToDb(m)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+}
+async function dbDeleteMember(id){
+  team=team.filter(m=>m.id!==id);
+  lsSaveTeam();
+  sbFetch('/team_members?id=eq.'+id,{method:'DELETE'}).catch(()=>{});
+}
+
+/* ── Seed data ───────────────────────────────────────────── */
+const SEED_TEAM=[
+  {id:'u0',name:'Sai Venkat (Super Admin)',email:'saivenkat.sag@gmail.com',role:'Super Admin',phone:'',branch:'Hyderabad',target:0,isSuperAdmin:true},
+  {id:'u1',name:'Priya Sharma',email:'priya@company.com',role:'Team Lead',phone:'+91 98001 11111',branch:'Mumbai',target:2000000},
+  {id:'u2',name:'Ravi Kumar',email:'ravi@company.com',role:'Sales Rep',phone:'+91 98002 22222',branch:'Delhi',target:1200000},
+  {id:'u3',name:'Anita Singh',email:'anita@company.com',role:'Sales Rep',phone:'+91 98003 33333',branch:'Chennai',target:1000000},
+  {id:'u4',name:'Suresh Menon',email:'suresh@company.com',role:'Manager',phone:'+91 98004 44444',branch:'Bengaluru',target:5000000},
+];
+const SEED_LEADS=[
+  {id:'l1',name:'Arjun Reddy',email:'arjun@techsol.in',phone:'+91 98765 43210',address:'Plot 12, Jubilee Hills',pincode:'500033',source:'IndiaMART',status:'Qualified',product:'Enterprise CRM Suite',branch:'Hyderabad',buyDate:d0(3),assignee:'u1',value:250000,notes:'Demo scheduled.',timeline:['Lead added','Called – interested','Demo scheduled'],chatLog:[],createdAt:new Date(Date.now()-864e5*10).toISOString()},
+  {id:'l2',name:'Meena Sundar',email:'meena@globalfin.com',phone:'+91 87654 32109',address:'Anna Salai',pincode:'600002',source:'Cold Call',status:'Contacted',product:'Finance Analytics',branch:'Chennai',buyDate:d0(1),assignee:'u2',value:80000,notes:'Decision pending.',timeline:['Lead added','Initial call'],chatLog:[],createdAt:new Date(Date.now()-864e5*5).toISOString()},
+  {id:'l3',name:'Suresh Patel',email:'suresh@buildcorp.in',phone:'+91 76543 21098',address:'Linking Road',pincode:'400050',source:'Referral',status:'New',product:'Project Management Tool',branch:'Mumbai',buyDate:d0(7),assignee:'u3',value:45000,notes:'Referred by Ramesh.',timeline:['Lead added'],chatLog:[],createdAt:new Date(Date.now()-864e5*2).toISOString()},
+  {id:'l4',name:'Vikram Nair',email:'vikram@logistech.in',phone:'+91 54321 09876',address:'MG Road',pincode:'560001',source:'Event/Expo',status:'Won',product:'Logistics Software',branch:'Bengaluru',buyDate:d0(-2),assignee:'u2',value:350000,notes:'Deal closed!',timeline:['Lead added','Qualified','Won – Deal Closed!'],chatLog:[],createdAt:new Date(Date.now()-864e5*15).toISOString()},
+];
+
+/* ── Auth ────────────────────────────────────────────────── */
+async function sendOTP(){
+  const email=($('login-email').value||'').trim().toLowerCase();
+  if(!email){toast('Please enter your email','#f59e0b');return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){toast('Please enter a valid email address','#f59e0b');return;}
+  const btn=$('btn-send-otp');btn.textContent='Sending…';btn.disabled=true;
+
+  /* Ensure EmailJS is available before making any network calls */
+  if(typeof emailjs==='undefined'){
+    btn.textContent='Send OTP →';btn.disabled=false;
+    toast('Email service not loaded. Please refresh the page and try again.','#dc2626');return;
+  }
+  try{emailjs.init(EMAILJS_PUBKEY);}catch(e){}
+
+  /* Always verify against Supabase — no localStorage lookup */
+  let member=null;
+  try{
+    const rows=await Promise.race([
+      sbFetch('/team_members?email=eq.'+encodeURIComponent(email)+'&limit=1'),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+    ]);
+    if(rows&&rows.length)member=dbToMember(rows[0]);
+  }catch(e){
+    btn.textContent='Send OTP →';btn.disabled=false;
+    toast('Could not reach server. Check your internet connection and try again.','#dc2626');
+    console.error('Supabase lookup failed:',e);return;
+  }
+
+  if(!member){
+    btn.textContent='Send OTP →';btn.disabled=false;
+    toast('Email not registered. Ask your Super Admin to add you first.','#dc2626');return;
+  }
+
+  const otp=String(Math.floor(100000+Math.random()*900000));
+  _pendingOTPEmail=email;_currentOTP=otp;_otpExpiry=Date.now()+600000;// 10 min
+
+  /* Send OTP via EmailJS ONLY — never reveal on screen */
+  try{
+    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      to_email:    email,
+      email:       email,
+      user_email:  email,
+      user_name:   member.name,
+      name:        member.name,
+      otp_code:    otp,
+      otp:         otp,
+      passcode:    otp,
+      message:     'Your SAG LeadFlow CRM sign-in code is: '+otp,
+      company_name:'SAG LeadFlow CRM',
+      valid_time:  '10 minutes',
+      expiry_time: new Date(Date.now()+600000).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})
+    });
+  }catch(e){
+    _pendingOTPEmail='';_currentOTP='';
+    btn.textContent='Send OTP →';btn.disabled=false;
+    toast('Failed to send OTP email. Check EmailJS settings.','#dc2626');
+    console.error('EmailJS error:',e);return;
+  }
+
+  $('login-email-display').textContent=email;
+  [0,1,2,3,4,5].forEach(i=>{$('otp-'+i).value='';});
+  $('otp-banner').classList.add('show');
+  $('login-step-email').classList.remove('active');
+  $('login-step-otp').classList.add('active');
+  setTimeout(()=>$('otp-0').focus(),80);
+  btn.textContent='Send OTP →';btn.disabled=false;
+  toast('✉️ OTP sent to '+email+' — check your inbox','#22c87a');
+}
+
+async function verifyOTP(){
+  const entered=[0,1,2,3,4,5].map(i=>$('otp-'+i).value).join('');
+  if(entered.length<6){toast('Enter all 6 digits','#f59e0b');return;}
+  if(Date.now()>_otpExpiry){toast('OTP expired. Request a new one.','#dc2626');backToEmail();return;}
+  if(entered!==_currentOTP){toast('Incorrect OTP.','#dc2626');return;}
+
+  /* Fetch the verified member fresh from Supabase */
+  let member=null;
+  try{
+    const rows=await Promise.race([
+      sbFetch('/team_members?email=eq.'+encodeURIComponent(_pendingOTPEmail)+'&limit=1'),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+    ]);
+    if(rows&&rows.length)member=dbToMember(rows[0]);
+  }catch(e){toast('Could not verify with server. Try again.','#dc2626');return;}
+
+  if(!member){toast('Account not found. Contact Super Admin.','#dc2626');return;}
+
+  currentUser=member;
+  /* Also update local team array so the UI has the member */
+  const idx=team.findIndex(m=>m.id===member.id);
+  if(idx>=0)team[idx]=member; else team.push(member);
+  try{localStorage.setItem('lf_current_user',member.id);}catch(e){}
+  _pendingOTPEmail='';_currentOTP='';
+  $('login-screen').classList.add('hidden');
+  $('app').style.display='flex';
+  updateSidebarUser();render();checkMissedReminders();
+  subscribeRealtimeLeads();
+  setInterval(checkMissedReminders,5*60*1000);
+  initMobileLayout();
+  toast('Welcome, '+member.name+'! 👋','#22c87a');
+}
+
+function backToEmail(){
+  $('login-step-otp').classList.remove('active');
+  $('login-step-email').classList.add('active');
+  $('otp-banner').classList.remove('show');
+}
+
+function signOut(){
+  currentUser=null;
+  try{localStorage.removeItem('lf_current_user');}catch(e){}
+  $('app').style.display='none';
+  $('login-step-otp').classList.remove('active');
+  $('login-step-email').classList.add('active');
+  $('login-email').value='';
+  $('otp-banner').classList.remove('show');
+  $('login-screen').classList.remove('hidden');
+  toast('Signed out','#2563eb');
+}
+
+function wireLoginEvents(){
+  const btnSend=$('btn-send-otp');
+  const btnVerify=$('btn-verify-otp');
+  if(!btnSend||!btnVerify)return;
+  btnSend.addEventListener('click',sendOTP);
+  btnVerify.addEventListener('click',verifyOTP);
+  $('btn-back-email').addEventListener('click',backToEmail);
+  $('btn-resend-otp').addEventListener('click',sendOTP);
+  $('login-email').addEventListener('keydown',e=>{if(e.key==='Enter')sendOTP();});
+  [0,1,2,3,4,5].forEach(i=>{
+    const el=$('otp-'+i);
+    el.addEventListener('input',()=>{
+      el.value=el.value.replace(/\D/g,'');
+      if(el.value&&i<5)$('otp-'+(i+1)).focus();
+      if(i===5&&el.value)verifyOTP();
+    });
+    el.addEventListener('keydown',e=>{
+      if(e.key==='Backspace'&&!el.value&&i>0)$('otp-'+(i-1)).focus();
+      if(e.key==='Enter')verifyOTP();
+    });
+  });
+}
+
+/* ── Nav / Render ────────────────────────────────────────── */
+function setView(v){
+  currentView=v;
+  document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
+  const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Reminders & Alerts',reports:'Reports & Analytics',team:'Team',import:'Import CSV',settings:'Settings'};
+  $('page-title').textContent=titles[v]||v;
+  Object.values(chartReg).forEach(c=>{try{c.destroy();}catch(e){}});chartReg={};
+  render();
+}
+
+function render(){
+  const c=$('content');
+  if(currentView==='dashboard')c.innerHTML=renderDash();
+  else if(currentView==='leads')c.innerHTML=renderLeads();
+  else if(currentView==='notifications')c.innerHTML=renderNotifs();
+  else if(currentView==='reports'){c.innerHTML=renderReports();setTimeout(initCharts,60);}
+  else if(currentView==='team')c.innerHTML=renderTeam();
+  else if(currentView==='import')c.innerHTML=renderImport();
+  else if(currentView==='settings')c.innerHTML=renderSettings();
+  updateBadge();
+  updateMobileNav();
+  updateReminderBadge();
+  updateTopbarPoints();
+}
+
+function updateBadge(){
+  const vl=visibleLeads();
+  const c=vl.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost'}).length;
+  [$('notif-badge'),$('mob-notif-badge'),$('mob-side-notif-badge')].forEach(b=>{if(b){b.textContent=c;b.style.display=c?'flex':'none';}});
+}
+
+function updateTopbarPoints(){
+  if(!currentUser)return;
+  const pts=getUserPoints(currentUser.id);
+  const el=$('topbar-pts-val');
+  if(el)el.textContent=pts+' pts';
+}
+
+function togglePtsPopup(){
+  const popup=$('pts-popup');
+  if(!popup)return;
+  const isOpen=popup.classList.contains('open');
+  /* Close reminder dropdown if open */
+  $('reminder-dropdown')?.classList.remove('open');
+  if(isOpen){popup.classList.remove('open');return;}
+  renderPtsPopup();
+  popup.classList.add('open');
+}
+
+function renderPtsPopup(){
+  if(!currentUser)return;
+  const myLog=[...pointsLog]
+    .filter(p=>p.userId===currentUser.id)
+    .reverse()
+    .slice(0,50);
+  const total=getUserPoints(currentUser.id);
+  const totalEl=$('pts-popup-total');
+  if(totalEl)totalEl.textContent=total+' pts';
+  const body=$('pts-popup-body');
+  if(!body)return;
+  if(!myLog.length){
+    body.innerHTML='<div class="pts-popup-empty">No points activity yet</div>';
+    return;
+  }
+  body.innerHTML=myLog.map(p=>{
+    const dt=new Date(p.ts);
+    const plus=p.delta>=0;
+    return`<div class="pts-popup-row">
+      <div class="pts-popup-delta" style="color:${plus?'var(--green)':'var(--red)'}">${plus?'+':''}${p.delta}</div>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:500;color:var(--text)">${p.reason}</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})} · ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <div style="width:6px;height:6px;border-radius:50%;background:${plus?'var(--green)':'var(--red)'};flex-shrink:0;margin-top:4px;opacity:.7"></div>
+    </div>`;
+  }).join('');
+}
+
+function updateSidebarUser(){
+  if(!currentUser)return;
+  const av=$('sidebar-avatar');
+  if(av){av.textContent=initials(currentUser.name);av.style.background=memberBg(currentUser.id);av.style.color=memberColor(currentUser.id);av.style.width='30px';av.style.height='30px';}
+  const sn=$('sidebar-name');if(sn)sn.textContent=currentUser.name;
+  const sr=$('sidebar-role');if(sr)sr.textContent=currentUser.role;
+  const mav=$('mob-sidebar-avatar');if(mav){mav.textContent=initials(currentUser.name);mav.style.background=memberBg(currentUser.id);mav.style.color=memberColor(currentUser.id);mav.style.width='30px';mav.style.height='30px';}
+  const msn=$('mob-sidebar-name');if(msn)msn.textContent=currentUser.name;
+  const msr=$('mob-sidebar-role');if(msr)msr.textContent=currentUser.role;
+  rebuildBranchDropdowns();
+  rebuildAssigneeDropdown();
+  updateReminderDropdown();
+}
+
+function rebuildAssigneeDropdown(){
+  const sel=$('f-assignee');if(!sel)return;
+  const cur=sel.value;
+  if(isAdmin(currentUser)){
+    sel.innerHTML='<option value="">Unassigned</option>'+team.filter(m=>!m.isSuperAdmin).map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  } else {
+    sel.innerHTML=`<option value="${currentUser.id}">${currentUser.name} (You)</option>`;
+  }
+  sel.value=cur||(currentUser?currentUser.id:'');
+}
+
+function rebuildBranchDropdowns(){
+  const opts=['<option value="">Select Branch…</option>',...branches.map(b=>`<option value="${b}">${b}</option>`)].join('');
+  [$('f-branch'),$('m-branch')].forEach(el=>{if(el)el.innerHTML=opts;});
+}
+
+/* ── DASHBOARD ───────────────────────────────────────────── */
+function renderDash(){
+  const vl=visibleLeads();
+  const total=vl.length;
+  const won=vl.filter(l=>l.status==='Won').length;
+  const hot=vl.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost'}).length;
+  const val=vl.filter(l=>l.status!=='Lost').reduce((s,l)=>s+(Number(l.value)||0),0);
+  const pts=getUserPoints(currentUser.id);
+  const myRems=myReminders();
+
+  const pipelineBar=STATUSES.map((s,i)=>{
+    const cnt=vl.filter(l=>l.status===s).length;
+    const p=total>0?Math.round(cnt/total*100):0;
+    return`<div style="flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 13px">
+      <div style="font-size:9.5px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px">${s}</div>
+      <div style="font-size:20px;font-weight:700;margin-top:3px">${cnt}</div>
+      <div style="height:3px;background:var(--bg3);border-radius:2px;margin-top:7px"><div style="height:100%;background:${COLORS[i]};border-radius:2px;width:${p}%"></div></div>
+    </div>`;
+  }).join('');
+
+  const hotLeadsList=vl.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost';}).slice(0,5);
+  const recentLeads=vl.slice(0,5);
+
+  const remSection=myRems.length?myRems.slice(0,4).map(r=>{
+    const lead=leads.find(l=>l.id===r.leadId);
+    const dt=new Date(r.datetime);
+    const overdue=dt<new Date();
+    return`<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
+      <div style="width:7px;height:7px;border-radius:50%;background:${overdue?'var(--red)':'var(--amber)'};flex-shrink:0;margin-top:4px;box-shadow:0 0 5px ${overdue?'var(--red)':'var(--amber)'}"></div>
+      <div style="flex:1">
+        <div style="font-size:12.5px;font-weight:600;color:${overdue?'var(--red)':'var(--text)'}">${r.note}</div>
+        <div style="font-size:10.5px;color:var(--text3);margin-top:2px">${lead?lead.name+' · ':''}<span style="font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</span></div>
+      </div>
+      <button class="act-btn" onclick="dismissReminder('${r.id}')">Done</button>
+    </div>`;
+  }).join(''):`<div class="empty-state" style="padding:24px"><div class="empty-text">No upcoming reminders</div></div>`;
+
+  return`
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-label">My Leads</div><div class="stat-value" style="color:var(--accent2)">${total}</div><div class="stat-change">Assigned to you</div></div>
+  <div class="stat-card"><div class="stat-label">Deals Won</div><div class="stat-value" style="color:var(--green)">${won}</div><div class="stat-change">${total>0?Math.round(won/total*100):0}% win rate</div></div>
+  <div class="stat-card"><div class="stat-label">Hot Follow-ups</div><div class="stat-value" style="color:var(--amber)">${hot}</div><div class="stat-change">Due in ≤3 days</div></div>
+  <div class="stat-card" style="background:var(--gold-bg);border-color:rgba(217,119,6,.25);cursor:pointer" onclick="togglePtsPopup()" title="View points history"><div class="stat-label" style="color:var(--gold)">My Points</div><div class="stat-value" style="color:var(--gold);font-family:var(--mono)">${pts}</div><div class="stat-change" style="color:var(--gold)">Tap to view history ↗</div></div>
+</div>
+
+<div style="margin-bottom:14px">
+  <div class="section-hdr"><div class="section-title">Pipeline Overview</div></div>
+  <div style="display:flex;gap:9px;flex-wrap:wrap">${pipelineBar}</div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+  <div>
+    <div class="section-hdr"><div class="section-title">Recent Leads</div><div class="section-link" onclick="setView('leads')">View all →</div></div>
+    <div class="panel">${recentLeads.length?recentLeads.map(l=>`
+      <div style="display:grid;grid-template-columns:2fr 1fr 1fr;border-bottom:1px solid var(--border);padding:10px 14px;align-items:center;cursor:pointer;transition:background .12s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openDetail('${l.id}')">
+        <div><div class="lead-name">${l.name}</div><div class="lead-sub">${l.branch||'—'} · ${l.source}</div></div>
+        <span class="pill pill-${l.status.toLowerCase()}">${l.status}</span>
+        <div class="${dateClass(l.buyDate)}" style="font-size:11px">${dateLabel(l.buyDate)}</div>
+      </div>`).join(''):'<div class="empty-state" style="padding:30px"><div class="empty-text">No leads yet</div></div>'}</div>
+  </div>
+  <div>
+    <div class="section-hdr"><div class="section-title">Upcoming Reminders</div><div class="section-link" onclick="setView('notifications')">View all →</div></div>
+    <div class="panel">${remSection}</div>
+  </div>
+</div>
+`;
+}
+
+/* ── LEADS LIST ──────────────────────────────────────────── */
+function handleLeadSearchInput(el){
+  searchQ=el.value;
+  const pos=el.selectionStart;
+  render();
+  const ne=$('lead-search-input');
+  if(ne){ne.focus();ne.setSelectionRange(pos,pos);}
+}
+
+function renderLeads(){
+  let vl=visibleLeads();
+  if(searchQ)vl=vl.filter(l=>l.name.toLowerCase().includes(searchQ)||l.phone.includes(searchQ)||(l.email||'').toLowerCase().includes(searchQ)||(l.product||'').toLowerCase().includes(searchQ)||(l.branch||'').toLowerCase().includes(searchQ));
+  if(statusFilter!=='all')vl=vl.filter(l=>l.status===statusFilter);
+  if(branchFilter!=='all')vl=vl.filter(l=>l.branch===branchFilter);
+  if(categoryFilter!=='all')vl=vl.filter(l=>l.category===categoryFilter);
+  if(stateFilter!=='all')vl=vl.filter(l=>l.state===stateFilter);
+  if(languageFilter!=='all')vl=vl.filter(l=>l.language===languageFilter);
+  if(memberFilter!=='all')vl=vl.filter(l=>l.assignee===memberFilter);
+
+
+  const rows=vl.map(l=>`
+    <tr onclick="openDetail('${l.id}')">
+      <td><div class="lead-name">${l.name}</div><div class="lead-sub">${l.phone}</div></td>
+      <td><span class="pill pill-${l.status.toLowerCase()}">${l.status}</span></td>
+      <td>${l.product||'—'}</td>
+      <td><span class="source-badge">${l.source}</span></td>
+      <td>${l.branch||'—'}</td>
+      <td>${memberName(l.assignee)}</td>
+      <td><div class="${dateClass(l.buyDate)}" style="font-size:11.5px">${dateLabel(l.buyDate)}</div></td>
+      <td style="font-family:var(--mono);font-size:11.5px">${l.value?'₹'+numFmt(l.value):'—'}</td>
+      <td style="font-size:11px;color:var(--text3);white-space:nowrap">${fmtDateTime(l.createdAt)}</td>
+      <td>
+        <div class="row-actions">
+          <button class="act-btn" onclick="event.stopPropagation();openEditLead('${l.id}')">Edit</button>
+          <button class="act-btn" onclick="event.stopPropagation();openReminderModal('${l.id}')">⏰</button>
+          ${isAdmin(currentUser)?`<button class="act-btn del" onclick="event.stopPropagation();deleteLead('${l.id}')">Del</button>`:''}
+        </div>
+      </td>
+    </tr>`).join('');
+
+  return`
+<div class="filters-bar">
+  <div class="search-wrap" style="flex:2;max-width:none"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg><input class="search-input" id="lead-search-input" placeholder="Search leads…" value="${searchQ}" oninput="handleLeadSearchInput(this)"/></div>
+  <span style="font-size:11px;color:var(--text3);font-weight:600">Status:</span>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="statusFilter=this.value;render()">
+    <option value="all" ${statusFilter==='all'?'selected':''}>All Statuses</option>
+    ${STATUSES.map(s=>`<option value="${s}" ${statusFilter===s?'selected':''}>${s}</option>`).join('')}
+  </select>
+</div>
+<div class="filters-bar" style="margin-bottom:14px">
+  <span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">Branch:</span>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="branchFilter=this.value;render()">
+    <option value="all" ${branchFilter==='all'?'selected':''}>All Branches</option>
+    ${branches.map(b=>`<option value="${b}" ${branchFilter===b?'selected':''}>${b}</option>`).join('')}
+  </select></span>
+  <span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">Category:</span>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="categoryFilter=this.value;render()">
+    <option value="all" ${categoryFilter==='all'?'selected':''}>All Categories</option>
+    ${CATEGORIES.map(c=>`<option value="${c}" ${categoryFilter===c?'selected':''}>${c}</option>`).join('')}
+  </select></span>
+  <span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">State:</span>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="stateFilter=this.value;render()">
+    <option value="all" ${stateFilter==='all'?'selected':''}>All States</option>
+    ${STATES.map(s=>`<option value="${s}" ${stateFilter===s?'selected':''}>${s}</option>`).join('')}
+  </select></span>
+  <span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">Language:</span>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="languageFilter=this.value;render()">
+    <option value="all" ${languageFilter==='all'?'selected':''}>All Languages</option>
+    ${LANGUAGES.map(l=>`<option value="${l}" ${languageFilter===l?'selected':''}>${l}</option>`).join('')}
+  </select></span>
+  ${isAdmin(currentUser)?`<span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">Team Member:</span>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="memberFilter=this.value;render()">
+    <option value="all" ${memberFilter==='all'?'selected':''}>All Team Members</option>
+    ${team.map(m=>`<option value="${m.id}" ${memberFilter===m.id?'selected':''}>${m.name}</option>`).join('')}
+  </select></span>`:''}
+</div>
+<div class="section-hdr">
+  <div class="section-title">${vl.length} lead${vl.length!==1?'s':''}</div>
+  <button class="btn btn-sm btn-primary" onclick="openAddLead()">+ Add Lead</button>
+</div>
+<div class="panel table-wrap">
+  <table class="leads-table">
+    <thead><tr><th>Name</th><th>Status</th><th>Product</th><th>Source</th><th>Branch</th><th>Team Member</th><th>Close Date</th><th>Value</th><th>Added</th><th></th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--text3)">🚀 Start building your pipeline</br> Add your first lead to begin tracking opportunities.</td></tr>'}</tbody>
+  </table>
+</div>
+${renderMobileLeadCards(vl)}
+`;
+}
+
+function renderMobileLeadCards(vl){
+  if(!vl.length)return`<div class="empty-state" style="display:none" id="mob-lead-cards"><div class="empty-text">No leads</div></div>`;
+  return`<div id="mob-lead-cards" style="display:none">${vl.map(l=>`
+    <div onclick="openDetail('${l.id}')" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px 15px;margin-bottom:7px;cursor:pointer">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">
+        <div><div class="lead-name" style="font-size:13.5px">${l.name}</div><div class="lead-sub">${l.phone}${l.branch?' · '+l.branch:''}</div></div>
+        <span class="pill pill-${l.status.toLowerCase()}">${l.status}</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span class="source-badge">${l.source}</span>
+        <span style="font-size:11px;color:var(--text3)">${l.product||'—'}</span>
+        <div class="${dateClass(l.buyDate)}" style="font-size:11px;font-weight:600">${dateLabel(l.buyDate)}</div>
+        <div style="display:flex;gap:3px" onclick="event.stopPropagation()">
+          <button class="act-btn" style="opacity:1" onclick="openEditLead('${l.id}')">Edit</button>
+          <button class="act-btn" style="opacity:1" onclick="openReminderModal('${l.id}')">⏰</button>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:7px">${memberName(l.assignee)} · Added ${fmtDateTime(l.createdAt)}</div>
+    </div>`).join('')}</div>`;
+}
+
+/* ── DETAIL PANEL ────────────────────────────────────────── */
+function closeDetailPanel(){
+  const dp=document.getElementById('detail-panel');
+  const ov=document.getElementById('dp-overlay');
+  if(dp)dp.remove();
+  if(ov)ov.remove();
+  document.body.style.overflow='';
+}
+
+function openDetail(id){
+  const l=leads.find(x=>x.id===id);
+  if(!l)return;
+  if(!isAdmin(currentUser)&&l.assignee!==currentUser.id){toast('Access denied','#dc2626');return;}
+
+  /* Remove any existing panel */
+  closeDetailPanel();
+
+  /* Backdrop overlay */
+  const ov=document.createElement('div');
+  ov.id='dp-overlay';
+  ov.className='dp-overlay';
+  ov.addEventListener('click',closeDetailPanel);
+  document.body.appendChild(ov);
+
+  /* Drawer panel */
+  const dp=document.createElement('div');
+  dp.id='detail-panel';
+  dp.className='detail-panel';
+  dp.innerHTML=buildDetailHTML(l);
+  document.body.appendChild(dp);
+}
+
+function buildDetailHTML(l){
+  const chatHTML=(l.chatLog||[]).map(m=>{
+    const dt=new Date(m.ts);
+    return`<div class="chat-msg ${m.type}">
+      <div>${m.content}</div>
+      <div class="chat-msg-meta">${m.author} · ${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div>
+      <div class="chat-msg-lock"><svg width="8" height="8" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Immutable record</div>
+    </div>`;
+  }).join('');
+
+  const tl=(l.timeline||[]).map((t,i,arr)=>`
+    <div class="timeline-item">
+      <div class="tl-dot-wrap"><div class="tl-dot"></div>${i<arr.length-1?'<div class="tl-line"></div>':''}</div>
+      <div class="tl-text">${t}</div>
+    </div>`).join('');
+
+  return`
+<div class="dp-hdr">
+  <div style="font-size:12.5px;font-weight:700">Lead Details</div>
+  <div style="display:flex;gap:5px">
+    <button class="act-btn" onclick="openEditLead('${l.id}')">Edit</button>
+    <button class="act-btn" onclick="openReminderModal('${l.id}')">⏰</button>
+    <button class="act-btn" onclick="closeDetailPanel()">✕</button>
+  </div>
+</div>
+<div class="dp-body">
+  <div class="dp-avatar-row">
+    <div class="dp-avatar" style="background:rgba(37,99,235,.12);color:var(--accent2)">${initials(l.name)}</div>
+    <div><div class="dp-name">${l.name}</div><div class="dp-company">${l.source} · ${l.branch||'—'}</div></div>
+  </div>
+  <div class="dp-section">
+    <div class="dp-section-title">Contact</div>
+    <div class="dp-row">
+      <span class="dp-key">Phone</span>
+      <span class="dp-val">
+        ${l.phone
+          ? `<a href="tel:${l.phone}" onclick="autoLogCall('${l.id}')"
+               style="color:var(--accent2);text-decoration:none;display:inline-flex;align-items:center;gap:5px;font-weight:600">
+               <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2.5 1.5c-.5 0-1 .5-1 1s.5 3 4 5.5S11.5 11.5 12 11.5s1-.5 1-1l.5-2.5L11 6.5l-1.5 2S8 8 7 7S5.5 5 5.5 5l2-1.5L6 1.5H2.5z"/></svg>
+               ${l.phone}
+             </a>`
+          : '—'}
+      </span>
+    </div>
+    <div class="dp-row"><span class="dp-key">Email</span><span class="dp-val">${l.email?`<a href="mailto:${l.email}" style="color:var(--accent2);text-decoration:none">${l.email}</a>`:'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Address</span><span class="dp-val">${l.address||'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Pincode</span><span class="dp-val">${l.pincode||'—'}</span></div>
+  </div>
+  <div class="dp-section">
+    <div class="dp-section-title">Lead Info</div>
+    <div class="dp-row"><span class="dp-key">Product</span><span class="dp-val">${l.product||'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Branch</span><span class="dp-val">${l.branch||'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Status</span><span class="dp-val"><span class="pill pill-${(l.status||'new').toLowerCase()}">${l.status}</span></span></div>
+    <div class="dp-row"><span class="dp-key">Close Date</span><span class="dp-val ${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</span></div>
+    <div class="dp-row"><span class="dp-key">Value</span><span class="dp-val" style="font-family:var(--mono)">${l.value?'₹'+numFmt(l.value):'—'}</span></div>
+    <div class="dp-row"><span class="dp-key">Assignee</span><span class="dp-val">${memberName(l.assignee)}</span></div>
+    <div class="dp-row"><span class="dp-key">Added On</span><span class="dp-val" style="font-family:var(--mono);font-size:11.5px">${fmtDateTime(l.createdAt)}</span></div>
+  </div>
+
+  <div class="dp-section">
+    <div class="dp-section-title" style="display:flex;justify-content:space-between;align-items:center">
+      <span>Communication Log</span>
+      <span style="font-size:9px;background:var(--green-bg);color:var(--green);padding:2px 7px;border-radius:8px;border:1px solid rgba(22,163,74,.2)">Immutable</span>
+    </div>
+    <div class="chat-area">${chatHTML||'<div style="text-align:center;color:var(--text3);font-size:11px;padding:8px">No communications yet</div>'}</div>
+
+    <div style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+      <a href="tel:${l.phone||''}" onclick="autoLogCall('${l.id}')"
+         class="btn btn-sm" style="text-decoration:none;color:inherit"
+         ${!l.phone?'style="pointer-events:none;opacity:.4"':''}>
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 1.5c-.5 0-1 .5-1 1s.5 3 4 5.5S11.5 11.5 12 11.5s1-.5 1-1l.5-2.5L11 6.5l-1.5 2S8 8 7 7S5.5 5 5.5 5l2-1.5L6 1.5H2.5z"/></svg>Call Now
+      </a>
+      <button class="btn btn-sm btn-success" onclick="logChatFrom('${l.id}')">💬 Log Chat</button>
+      ${l.phone
+        ? `<a href="https://wa.me/${waNum(l.phone)}" target="_blank" rel="noopener"
+              class="btn btn-sm btn-wa" title="Open WhatsApp chat">
+             <svg width="13" height="13" viewBox="0 0 32 32" fill="currentColor"><path d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.5 2.1 7.9L.4 31.6l8-2c2.3 1.3 4.9 2 7.6 2 8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.5c-2.5 0-4.9-.7-7-1.9l-.5-.3-5.1 1.3 1.4-4.9-.3-.5C3.2 20.9 2.7 18.5 2.7 16 2.7 8.7 8.7 2.7 16 2.7S29.3 8.7 29.3 16 23.3 28.9 16 28.9zm8.4-10.4c-.5-.2-2.7-1.3-3.1-1.4-.4-.2-.7-.2-1 .2-.3.5-1.1 1.4-1.4 1.7-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.4-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-.9l.7-.8c.2-.3.3-.5.4-.8.1-.3 0-.6-.1-.8-.2-.2-1-2.5-1.4-3.4-.4-.9-.7-.7-1-.7h-.8c-.3 0-.7.1-1.1.5-.4.4-1.4 1.4-1.4 3.4s1.4 3.9 1.6 4.2c.2.3 2.8 4.3 6.8 6 1 .4 1.7.6 2.3.8.9.3 1.8.3 2.5.2.8-.1 2.4-.9 2.7-1.9.3-.9.3-1.7.2-1.9-.1-.2-.4-.3-.9-.5z"/></svg>
+             WhatsApp
+           </a>
+          <button class="btn btn-sm btn-wa" style="border-left:none;border-radius:0 7px 7px 0;margin-left:-7px;padding:5px 8px" onclick="toggleWaTemplates('${l.id}')" title="Send a template">▾</button>`
+        : `<button class="btn btn-sm btn-wa" style="opacity:.4;pointer-events:none">
+             <svg width="13" height="13" viewBox="0 0 32 32" fill="currentColor"><path d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.5 2.1 7.9L.4 31.6l8-2c2.3 1.3 4.9 2 7.6 2 8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.5c-2.5 0-4.9-.7-7-1.9l-.5-.3-5.1 1.3 1.4-4.9-.3-.5C3.2 20.9 2.7 18.5 2.7 16 2.7 8.7 8.7 2.7 16 2.7S29.3 8.7 29.3 16 23.3 28.9 16 28.9zm8.4-10.4c-.5-.2-2.7-1.3-3.1-1.4-.4-.2-.7-.2-1 .2-.3.5-1.1 1.4-1.4 1.7-.3.3-.5.3-1 .1-.5-.2-2-.7-3.8-2.4-1.4-1.2-2.3-2.8-2.6-3.2-.3-.5 0-.7.2-.9l.7-.8c.2-.3.3-.5.4-.8.1-.3 0-.6-.1-.8-.2-.2-1-2.5-1.4-3.4-.4-.9-.7-.7-1-.7h-.8c-.3 0-.7.1-1.1.5-.4.4-1.4 1.4-1.4 3.4s1.4 3.9 1.6 4.2c.2.3 2.8 4.3 6.8 6 1 .4 1.7.6 2.3.8.9.3 1.8.3 2.5.2.8-.1 2.4-.9 2.7-1.9.3-.9.3-1.7.2-1.9-.1-.2-.4-.3-.9-.5z"/></svg>
+             WhatsApp
+           </button>`
+      }
+    </div>
+    <div class="wa-templates" id="wa-tpl-${l.id}">
+      <div class="wa-tpl-label">Send Template</div>
+      <button class="wa-tpl-btn" onclick="sendWaTemplate('${l.id}','new_lead')">
+        <div style="font-weight:600;margin-bottom:2px">🙏 New Lead</div>
+        <div style="color:var(--text3);font-size:10.5px">Thank you for contacting SAG. We will reach out to you shortly.</div>
+      </button>
+      <button class="wa-tpl-btn" onclick="sendWaTemplate('${l.id}','reminder')">
+        <div style="font-weight:600;margin-bottom:2px">📅 Demo Reminder</div>
+        <div style="color:var(--text3);font-size:10.5px">Your demo is scheduled for tomorrow. Please be available.</div>
+      </button>
+      <button class="wa-tpl-btn" onclick="sendWaTemplate('${l.id}','quotation')">
+        <div style="font-weight:600;margin-bottom:2px">📄 Quotation</div>
+        <div style="color:var(--text3);font-size:10.5px">Please find the attached quotation for your reference.</div>
+      </button>
+    </div>
+
+    <div class="chat-compose" id="chat-compose-${l.id}" style="display:none">
+      <input class="fi" id="chat-input-${l.id}" placeholder="Type message to log…" style="flex:1"/>
+      <button onclick="sendChatMsg('${l.id}')">Send</button>
+    </div>
+  </div>
+
+  ${(l.timeline||[]).length?`<div class="dp-section">
+    <div class="dp-section-title">Timeline</div>
+    ${tl}
+  </div>`:''}
+
+  ${l.notes?`<div class="dp-section">
+    <div class="dp-section-title">Notes</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.6;background:var(--bg3);padding:10px;border-radius:8px;border:1px solid var(--border)">${l.notes}</div>
+  </div>`:''}
+</div>`;
+}
+
+/* ── Auto Call Logger ────────────────────────────────────────
+   State machine (3 phases):
+
+   IDLE  →  WAITING_FOR_HIDE  →  HIDDEN (call active)  →  RETURNED
+
+   Phase 1 — WAITING_FOR_HIDE:
+     Tel link is tapped. We wait for the page to actually go hidden
+     (dialler/phone app takes over screen). We do NOT start the
+     timer here — the dial animation can take 1–3 s.
+
+   Phase 2 — HIDDEN:
+     Page visibility becomes "hidden". THIS is when we start the
+     call timer — it's the most accurate proxy for call start.
+
+   Phase 3 — RETURNED:
+     Page becomes visible again. Timer stops. We guard against
+     the dual-fire race (visibilitychange + pageshow) with a
+     single `_callHandled` flag so the log is written exactly once.
+   ────────────────────────────────────────────────────────── */
+let _callLeadId   = null;   // which lead is being called
+let _callHideTs   = null;   // when page went hidden (call start)
+let _callState    = 'idle'; // 'idle' | 'waiting' | 'hidden'
+let _callHandled  = false;  // prevents double-fire
+
+function autoLogCall(leadId){
+  /* Cancel any previous unfinished call session */
+  _resetCallState();
+
+  _callLeadId  = leadId;
+  _callState   = 'waiting';
+  _callHandled = false;
+
+  document.addEventListener('visibilitychange', _onVisibilityChange);
+  window.addEventListener('pageshow',           _onPageShow);
+
+  /* Safety fallback: if the page never hides within 10 s
+     (e.g. desktop browser, dialler declined), abort cleanly */
+  window._callSafetyTimer = setTimeout(()=>{
+    if(_callState==='waiting') _resetCallState();
+  }, 10000);
+}
+
+function _onVisibilityChange(){
+  if(_callState==='waiting' && document.visibilityState==='hidden'){
+    /* Page just went hidden — call has started, begin timer */
+    _callHideTs = Date.now();
+    _callState  = 'hidden';
+    clearTimeout(window._callSafetyTimer);
+  } else if(_callState==='hidden' && document.visibilityState==='visible'){
+    /* Page is back — user returned from call */
+    _finaliseCallLog();
+  }
+}
+
+function _onPageShow(){
+  /* iOS Safari fires pageshow instead of visibilitychange on return.
+     Only act when we're in the hidden phase and haven't logged yet. */
+  if(_callState==='hidden'){
+    _finaliseCallLog();
+  }
+}
+
+function _finaliseCallLog(){
+  if(_callHandled) return;   // guard against double-fire
+  _callHandled = true;
+
+  const leadId  = _callLeadId;
+  const hideTs  = _callHideTs;
+  _resetCallState();
+
+  if(!leadId || !hideTs) return;
+
+  const elapsed = Math.round((Date.now() - hideTs) / 1000); // seconds
+
+  /* Ignore if returned in under 4 s — probably dismissed the dialler */
+  if(elapsed < 4) {
+    toast('Call cancelled — nothing logged','#94a3b8');
+    return;
+  }
+
+  /* Build human-readable duration */
+  let durationLabel;
+  if     (elapsed < 60)   durationLabel = `${elapsed}s`;
+  else if(elapsed < 3600) durationLabel = `${Math.floor(elapsed/60)}m ${elapsed%60}s`;
+  else                    durationLabel = `${Math.floor(elapsed/3600)}h ${Math.floor((elapsed%3600)/60)}m`;
+
+  const callTime = new Date(hideTs); // use call-START time, not return time
+  const content  = `📞 Call — ${callTime.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} `
+                 + `at ${callTime.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}, `
+                 + `duration: ${durationLabel}`;
+
+  addChatMessage(leadId,'call',content);
+
+  /* Refresh the open detail panel */
+  if(document.getElementById('detail-panel')) openDetail(leadId);
+  toast('📞 Call logged — '+durationLabel,'#0e7490');
+}
+
+function _resetCallState(){
+  document.removeEventListener('visibilitychange', _onVisibilityChange);
+  window.removeEventListener('pageshow',           _onPageShow);
+  clearTimeout(window._callSafetyTimer);
+  _callLeadId  = null;
+  _callHideTs  = null;
+  _callState   = 'idle';
+  _callHandled = false;
+}
+
+/* ── WhatsApp helpers ────────────────────────────────────── */
+function waNum(phone){
+  /* Strip everything except digits; prepend 91 if no country code */
+  const digits=(phone||'').replace(/\D/g,'');
+  if(digits.startsWith('91')&&digits.length>=12)return digits;
+  return '91'+digits;
+}
+
+function toggleWaTemplates(leadId){
+  const tpl=document.getElementById('wa-tpl-'+leadId);
+  if(tpl)tpl.classList.toggle('open');
+}
+
+const WA_TEMPLATES={
+  new_lead:'Thank you for contacting SAG Drone Technologies! 🙏\n\nWe have received your enquiry and our team will get in touch with you shortly.\n\nFor urgent queries, feel free to reply here.',
+  reminder:'Hi! 👋 This is a reminder that your demo with SAG Drone Technologies is scheduled for *tomorrow*.\n\nPlease keep some time free. Looking forward to speaking with you!',
+  quotation:'Hi! Please find the quotation attached for your reference. 📄\n\nKindly review and let us know if you have any questions. We are happy to customise as per your needs.\n\n— SAG Drone Technologies'
+};
+
+function sendWaTemplate(leadId,tplKey){
+  const lead=leads.find(l=>l.id===leadId);
+  if(!lead||!lead.phone)return;
+  const msg=WA_TEMPLATES[tplKey]||'';
+  const url='https://wa.me/'+waNum(lead.phone)+'?text='+encodeURIComponent(msg);
+  window.open(url,'_blank','noopener');
+  /* Log it in the communication log */
+  const labels={new_lead:'New Lead template',reminder:'Demo Reminder template',quotation:'Quotation template'};
+  addChatMessage(leadId,'chat','📲 WhatsApp sent: '+labels[tplKey]);
+  /* Close templates panel */
+  const tpl=document.getElementById('wa-tpl-'+leadId);
+  if(tpl)tpl.classList.remove('open');
+  /* Refresh detail panel */
+  setTimeout(()=>openDetail(leadId),300);
+}
+
+function logChatFrom(leadId){
+  const cc=$('chat-compose-'+leadId);
+  if(cc)cc.style.display=cc.style.display==='none'?'flex':'none';
+}
+
+function sendChatMsg(leadId){
+  const inp=$('chat-input-'+leadId);
+  const msg=(inp?inp.value:'').trim();
+  if(!msg){toast('Enter a message','#f59e0b');return;}
+  addChatMessage(leadId,'chat',msg);
+  openDetail(leadId);
+}
+
+/* ── Auto Lead Creation from WhatsApp ──────────────────────
+   Call createLeadFromWhatsApp(phone, message, name) whenever an
+   inbound WhatsApp message arrives (e.g. from a webhook bridge).
+   Creates a new lead automatically: Source = WhatsApp, Status = New.
+   If a lead with this phone already exists, it just logs the
+   message into that lead's chat instead of duplicating. ───────── */
+function createLeadFromWhatsApp(phone, message, name){
+  phone=(phone||'').trim();
+  message=(message||'').trim();
+  if(!phone)return null;
+
+  const existing=leads.find(l=>l.phone&&l.phone.replace(/\D/g,'')===phone.replace(/\D/g,''));
+  if(existing){
+    addChatMessage(existing.id,'in',message||'New WhatsApp message');
+    toast('New WhatsApp message from '+existing.name,'#2563eb');
+    return existing;
+  }
+
+  const lead={
+    id:uid(),
+    name:name||('WhatsApp Lead '+phone.slice(-4)),
+    email:'',
+    phone,
+    address:'',
+    pincode:'',
+    product:'',products:[],
+    branch:branches[0]||'',
+    category:'',
+    state:'',
+    language:'',
+    source:'WhatsApp',
+    status:'New',
+    buyDate:'',
+    assignee:currentUser?currentUser.id:'',
+    value:0,
+    notes:message||'',
+    timeline:['Lead added — Auto-created from WhatsApp'],
+    chatLog:[],
+    createdAt:new Date().toISOString()
+  };
+
+  if(message)lead.chatLog.push({type:'in',content:message,ts:new Date().toISOString()});
+
+  dbInsertLead(lead);
+  toast('New lead from WhatsApp: '+lead.name,'#22c87a');
+  render();
+  return lead;
+}
+
+/* Demo/testing entry point — simulates an incoming WhatsApp message.
+   Wire a real WhatsApp Business API / Twilio webhook to POST to your
+   backend, which then calls createLeadFromWhatsApp() with the
+   sender's phone, message text, and (optionally) profile name. */
+function simulateWhatsAppLead(){
+  const phone='+91 9'+Math.floor(100000000+Math.random()*899999999);
+  createLeadFromWhatsApp(phone,'Hi, need drone details','New WhatsApp Contact');
+}
+
+/* ── LEADS CRUD ──────────────────────────────────────────── */
+function openAddLead(){
+  editLeadId=null;
+  $('lead-modal-title').textContent='Add New Lead';
+  ['f-name','f-phone','f-email','f-address','f-pincode','f-notes'].forEach(id=>{const el=$(id);if(el)el.value='';});
+  setProductRows([]);
+  $('f-category').value='';
+  $('f-state').value='';
+  $('f-language').value='';
+  $('f-source').value='Instagram';
+  $('f-status').value='New';
+  $('f-value').value='';
+  $('f-buydate').value='';
+  rebuildBranchDropdowns();
+  rebuildAssigneeDropdown();
+  $('f-branch').value='';
+  openModal('lead-modal');
+}
+
+function openEditLead(id){
+  const l=leads.find(x=>x.id===id);
+  if(!l)return;
+  if(!isAdmin(currentUser)&&l.assignee!==currentUser.id){toast('You can only edit your own leads','#dc2626');return;}
+  editLeadId=id;
+  $('lead-modal-title').textContent='Edit Lead';
+  $('f-name').value=l.name||'';
+  $('f-phone').value=l.phone||'';
+  $('f-email').value=l.email||'';
+  $('f-address').value=l.address||'';
+  $('f-pincode').value=l.pincode||'';
+  setProductRows(typeof l.products==='string'?stringToProducts(l.products):Array.isArray(l.products)&&l.products.length?l.products:stringToProducts(l.product||''));
+  $('f-notes').value=l.notes||'';
+  $('f-value').value=l.value||'';
+  $('f-buydate').value=l.buyDate||'';
+  $('f-status').value=l.status||'New';
+  rebuildBranchDropdowns();
+  rebuildAssigneeDropdown();
+  setTimeout(()=>{$('f-branch').value=l.branch||'';$('f-source').value=l.source||'Others';$('f-assignee').value=l.assignee||'';$('f-category').value=l.category||'';$('f-state').value=l.state||'';$('f-language').value=l.language||'';},50);
+  openModal('lead-modal');
+}
+
+/* ── Multi-product helpers ───────────────────────────────── */
+function addProductRow(name='', qty=1){
+  const list=document.getElementById('f-products-list');
+  if(!list)return;
+  const row=document.createElement('div');
+  row.className='product-row';
+  row.style.cssText='display:grid;grid-template-columns:1fr 80px 28px;gap:6px;align-items:center;margin-bottom:6px';
+  row.innerHTML=`
+    <input class="fi" style="margin:0" placeholder="e.g. AG-365 Drone, RPTO Training…" value="${name.replace(/"/g,'&quot;')}" />
+    <input class="fi" style="margin:0" type="number" min="1" placeholder="Qty" value="${qty}" />
+    <button type="button" onclick="this.closest('.product-row').remove();if(!document.getElementById('f-products-list').children.length)addProductRow();" style="width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--bg3);color:var(--red);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>`;
+  list.appendChild(row);
+}
+
+function getProductRows(){
+  const list=document.getElementById('f-products-list');
+  if(!list)return[];
+  return Array.from(list.querySelectorAll('.product-row')).map(row=>{
+    const inputs=row.querySelectorAll('input');
+    return{name:(inputs[0]?.value||'').trim(),qty:Number(inputs[1]?.value)||1};
+  }).filter(p=>p.name);
+}
+
+function setProductRows(products){
+  const list=document.getElementById('f-products-list');
+  if(!list)return;
+  list.innerHTML='';
+  if(!products||!products.length){addProductRow();return;}
+  products.forEach(p=>addProductRow(p.name||p,p.qty||1));
+}
+
+function productsToString(products){
+  if(!products||!products.length)return'';
+  return products.map(p=>p.qty>1?p.name+' (x'+p.qty+')':p.name).join(', ');
+}
+
+function stringToProducts(str){
+  if(!str)return[{name:'',qty:1}];
+  // Parse "AG-365 Drone (x3), Battery Pack" format
+  return str.split(',').map(s=>{
+    s=s.trim();
+    const m=s.match(/^(.*?)\s*\((x|×)(\d+)\)$/i);
+    if(m)return{name:m[1].trim(),qty:Number(m[3])};
+    return{name:s,qty:1};
+  }).filter(p=>p.name);
+}
+
+
+async function saveLead(){
+  const name=$('f-name').value.trim();
+  const phone=$('f-phone').value.trim();
+  if(!name||!phone){toast('Name and phone are required','#f59e0b');return;}
+  const branch=$('f-branch').value;
+  if(!branch){toast('Please select a branch','#f59e0b');return;}
+  const productRows=getProductRows();
+  if(!productRows.length){toast('Please add at least one product','#f59e0b');return;}
+  const product=productsToString(productRows);
+  const state=$('f-state').value;
+  if(!state){toast('Please select a state','#f59e0b');return;}
+  const language=$('f-language').value;
+  if(!language){toast('Please select a language preference','#f59e0b');return;}
+  const status=$('f-status').value;
+  if(!status){toast('Please select a status','#f59e0b');return;}
+  const assignee=$('f-assignee').value;
+  if(!assignee){toast('Please assign this lead to a team member','#f59e0b');return;}
+
+  const newStatus=status;
+  const newValue=Number($('f-value').value)||0;
+
+  if(editLeadId){
+    const l=leads.find(x=>x.id===editLeadId);
+    if(!l)return;
+    const prevStatus=l.status;
+    const prevAssignee=l.assignee;
+    Object.assign(l,{
+      name,phone,email:$('f-email').value.trim(),
+      address:$('f-address').value.trim(),pincode:$('f-pincode').value.trim(),
+      product,products:productRows,branch,source:$('f-source').value,
+      category:$('f-category').value,state:$('f-state').value,language:$('f-language').value,
+      status:newStatus,value:newValue,
+      buyDate:$('f-buydate').value,notes:$('f-notes').value.trim(),
+      assignee:$('f-assignee').value
+    });
+    if(prevStatus!==newStatus) l.timeline.push('Status → '+newStatus);
+    /* Save localStorage first, then Supabase in background */
+    lsSaveLeads();
+    sbFetch('/leads?id=eq.'+l.id,{method:'PATCH',body:JSON.stringify(leadToDb(l))}).catch(e=>{
+      console.error('Cloud save failed for lead',l.id,e.message);
+      toast('⚠️ Cloud sync failed: '+sbErrorMessage(e),'#dc2626',7000);
+    });
+    /* Award points if just Won */
+    if(prevStatus!=='Won'&&newStatus==='Won'&&newValue>0){
+      const pts=calcPointsForBill(newValue);
+      addPointsEntry(l.assignee||currentUser.id,pts,'Deal Won: '+l.name+' ₹'+numFmt(newValue),l.id);
+      toast('🏆 +'+pts+' point'+(pts>1?'s':'')+' awarded for closing ₹'+numFmt(newValue),'#d97706');
+    }
+    toast('Lead updated ✓','#22c87a');
+  } else {
+    const l={
+      id:uid(),name,phone,email:$('f-email').value.trim(),
+      address:$('f-address').value.trim(),pincode:$('f-pincode').value.trim(),
+      product,products:productRows,branch,source:$('f-source').value,
+      category:$('f-category').value,state:$('f-state').value,language:$('f-language').value,
+      status:newStatus,value:newValue,
+      buyDate:$('f-buydate').value,notes:$('f-notes').value.trim(),
+      assignee:$('f-assignee').value||currentUser.id,
+      timeline:['Lead added by '+currentUser.name],
+      chatLog:[],
+      createdAt:new Date().toISOString()
+    };
+    leads.unshift(l);
+    /* Save localStorage first, then Supabase in background */
+    lsSaveLeads();
+    sbFetch('/leads',{method:'POST',body:JSON.stringify(leadToDb(l)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(e=>{
+      console.error('Cloud save failed for new lead',l.id,e.message);
+      toast('⚠️ Cloud sync failed: '+sbErrorMessage(e),'#dc2626',7000);
+    });
+    if(newStatus==='Won'&&newValue>0){
+      const pts=calcPointsForBill(newValue);
+      addPointsEntry(l.assignee,pts,'Deal Won: '+l.name+' ₹'+numFmt(newValue),l.id);
+    }
+    toast('Lead saved ✓','#22c87a');
+  }
+  closeModal('lead-modal');
+  render();
+}
+
+async function deleteLead(id){
+  if(!isAdmin(currentUser)){toast('Only admins can delete leads','#dc2626');return;}
+  if(!confirm('Delete this lead?'))return;
+  leads=leads.filter(l=>l.id!==id);
+  lsSaveLeads();
+  sbFetch('/leads?id=eq.'+id,{method:'DELETE'}).catch(()=>{});
+  const dp=document.getElementById('detail-panel');
+  if(dp)dp.remove();
+  toast('Lead deleted','#dc2626');
+  render();
+}
+
+async function deleteMember(id){
+  if(!isSuperAdmin(currentUser)){toast('Only Super Admin can remove employees','#dc2626');return;}
+  if(team.length<=1){toast('Cannot remove the only team member','#f59e0b');return;}
+  if(!confirm('Remove this employee?'))return;
+  team=team.filter(m=>m.id!==id);
+  lsSaveTeam();
+  sbFetch('/team_members?id=eq.'+id,{method:'DELETE'}).catch(()=>{});
+  toast('Employee removed','#dc2626');
+  render();
+}
+
+/* ── TEAM MEMBERS (Super Admin only) ─────────────────────── */
+function renderTeam(){
+  const amAdmin=isAdmin(currentUser);
+  const tabs=['members','performance','points'];
+  const tabLabels={members:'Members',performance:'Performance',points:'Points Leaderboard'};
+  if(amAdmin){tabs.push('activity');}
+
+  const membersHTML=`
+<div class="section-hdr" style="margin-bottom:14px">
+  ${amAdmin?`<button class="btn btn-primary btn-sm" onclick="openAddMember()">+ Add Employee</button>`:'<span style="font-size:12px;color:var(--text3)">Employees can only be added by Super Admin</span>'}
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+${team.filter(m=>!m.isSuperAdmin||amAdmin).map((m,i)=>{
+    const ml=leads.filter(l=>l.assignee===m.id);
+    const mw=ml.filter(l=>l.status==='Won').length;
+    const mv=ml.filter(l=>l.status!=='Lost').reduce((s,l)=>s+(Number(l.value)||0),0);
+    const pts=getUserPoints(m.id);
+    const isMe=currentUser&&currentUser.id===m.id;
+    return`<div class="panel" style="padding:16px;${isMe?'border-color:rgba(37,99,235,.35)':''}">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="avatar" style="width:40px;height:40px;font-size:13px;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:700">${m.name}${isMe?' <span style="font-size:9px;background:var(--accent-glow);color:var(--accent2);padding:1px 5px;border-radius:7px">You</span>':''}${m.isSuperAdmin?' <span class="admin-badge">Super Admin</span>':''}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:1px">${m.role}${m.branch?' · '+m.branch:''}</div>
+        </div>
+        ${amAdmin&&!m.isSuperAdmin?`<div style="display:flex;gap:4px"><button class="act-btn" onclick="openEditMember('${m.id}')">Edit</button><button class="act-btn del" onclick="deleteMember('${m.id}')">Del</button></div>`:''}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px">
+        <div style="background:var(--bg3);border-radius:7px;padding:8px;text-align:center"><div style="font-size:17px;font-weight:700;color:var(--accent2)">${ml.length}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Leads</div></div>
+        <div style="background:var(--green-bg);border-radius:7px;padding:8px;text-align:center"><div style="font-size:17px;font-weight:700;color:var(--green)">${mw}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Won</div></div>
+        <div style="background:var(--gold-bg);border-radius:7px;padding:8px;text-align:center"><div style="font-size:17px;font-weight:700;color:var(--gold);font-family:var(--mono)">${pts}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Points</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--text3)">Pipeline: <strong style="color:var(--text);font-family:var(--mono)">₹${numFmt(mv)}</strong></div>
+    </div>`;
+  }).join('')}
+</div>`;
+
+  const perfHTML=`
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">
+${team.filter(m=>!m.isSuperAdmin).map((m,i)=>{
+    const ml=leads.filter(l=>l.assignee===m.id);
+    const mw=ml.filter(l=>l.status==='Won').length;
+    const mlost=ml.filter(l=>l.status==='Lost').length;
+    const mv=ml.filter(l=>l.status==='Won').reduce((s,l)=>s+(Number(l.value)||0),0);
+    const wr=ml.length?Math.round(mw/ml.length*100):0;
+    const pts=getUserPoints(m.id);
+    const pct=m.target>0?Math.min(Math.round(mv/m.target*100),100):0;
+    return`<div class="panel" style="padding:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <div class="avatar" style="width:36px;height:36px;font-size:12px;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div>
+        <div><div style="font-weight:700;font-size:13.5px">${m.name}</div><div style="font-size:11px;color:var(--text3)">${m.role}</div></div>
+        <div class="pts-badge" style="margin-left:auto">⭐ ${pts} pts</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;text-align:center">
+        <div style="background:var(--bg3);border-radius:6px;padding:7px"><div style="font-size:16px;font-weight:700;color:var(--accent2)">${ml.length}</div><div style="font-size:9px;color:var(--text3)">Total</div></div>
+        <div style="background:var(--green-bg);border-radius:6px;padding:7px"><div style="font-size:16px;font-weight:700;color:var(--green)">${mw}</div><div style="font-size:9px;color:var(--text3)">Won</div></div>
+        <div style="background:var(--red-bg);border-radius:6px;padding:7px"><div style="font-size:16px;font-weight:700;color:var(--red)">${mlost}</div><div style="font-size:9px;color:var(--text3)">Lost</div></div>
+        <div style="background:var(--bg3);border-radius:6px;padding:7px"><div style="font-size:16px;font-weight:700;color:var(--teal)">${wr}%</div><div style="font-size:9px;color:var(--text3)">Win</div></div>
+      </div>
+      ${m.target?`<div><div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text3);margin-bottom:4px"><span>Target Progress</span><span style="font-weight:700;color:var(--text)">${pct}%</span></div><div style="height:5px;background:var(--border);border-radius:3px"><div style="height:100%;background:${pct>=100?'var(--green)':COLORS[i%COLORS.length]};border-radius:3px;width:${pct}%;transition:width .4s"></div></div><div style="font-size:9.5px;color:var(--text3);margin-top:2px">₹${numFmt(mv)} of ₹${numFmt(m.target)}</div></div>`:''}
+    </div>`;
+  }).join('')}
+</div>`;
+
+  // Points leaderboard & log (admin sees all, employee sees own)
+  const leaderList=team.filter(m=>!m.isSuperAdmin).map(m=>({m,pts:getUserPoints(m.id)})).sort((a,b)=>b.pts-a.pts);
+  const ptsHTML=`
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+  <div>
+    <div class="section-title" style="margin-bottom:12px">Leaderboard</div>
+    <div class="panel">
+      ${leaderList.map((item,i)=>{
+        const m=item.m;const pts=item.pts;
+        const isMe=currentUser&&currentUser.id===m.id;
+        return`<div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border);${isMe?'background:var(--accent-glow)':''}">
+          <div style="width:22px;height:22px;border-radius:50%;background:${i===0?'var(--gold-bg)':i===1?'rgba(148,163,184,.1)':'rgba(180,120,80,.1)'};color:${i===0?'var(--gold)':i===1?'#94a3b8':'#b47850'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">${i+1}</div>
+          <div class="avatar" style="width:28px;height:28px;font-size:10px;background:${memberBg(m.id)};color:${memberColor(m.id)}">${initials(m.name)}</div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">${m.name}${isMe?' (You)':''}</div><div style="font-size:10.5px;color:var(--text3)">${m.role}</div></div>
+          <div class="pts-badge" style="font-size:13px">⭐ ${pts}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+  <div>
+    <div class="section-title" style="margin-bottom:12px">${amAdmin?'All Points Activity':'My Points Log'}</div>
+    <div class="panel" style="max-height:400px;overflow-y:auto">
+      ${(amAdmin?pointsLog:[...pointsLog].filter(p=>p.userId===currentUser.id)).slice().reverse().slice(0,30).map(p=>{
+        const m=team.find(x=>x.id===p.userId);
+        const lead=leads.find(l=>l.id===p.leadId);
+        const dt=new Date(p.ts);
+        return`<div class="pts-log-row">
+          <div style="flex:1">
+            ${amAdmin?`<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px">${m?m.name:'Unknown'}</div>`:''}
+            <div style="font-size:12px;color:var(--text)">${p.reason}</div>
+            <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
+          </div>
+          <div class="${p.delta>=0?'pts-plus':'pts-minus'}" style="font-size:14px;font-family:var(--mono)">${p.delta>=0?'+':''}${p.delta}</div>
+        </div>`;
+      }).join('')||'<div class="rd-empty">No points activity yet</div>'}
+    </div>
+  </div>
+</div>`;
+
+  const activityHTML=amAdmin?`
+<div class="panel" style="max-height:500px;overflow-y:auto">
+  ${leads.slice(0,50).flatMap(l=>(l.chatLog||[]).map(m=>({...m,leadName:l.name}))).sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,40).map(m=>{
+    const dt=new Date(m.ts);
+    return`<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)">
+      <div style="width:7px;height:7px;border-radius:50%;background:${m.type==='call'?'var(--teal)':m.type==='chat'?'var(--accent2)':'var(--amber)'};flex-shrink:0;margin-top:4px"></div>
+      <div style="flex:1">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2px">
+          <span style="font-size:11px;font-weight:600;background:var(--bg3);padding:1px 7px;border-radius:9px;text-transform:capitalize">${m.type}</span>
+          <span style="font-size:11.5px;font-weight:500">${m.author}</span>
+          <span style="font-size:11px;color:var(--text3)">on ${m.leadName}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text2)">${m.content}</div>
+      </div>
+      <div style="font-size:10.5px;color:var(--text3);white-space:nowrap;font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div>
+    </div>`;
+  }).join('')||'<div class="rd-empty">No communication logged yet</div>'}
+</div>`:`<div class="locked-notice"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Activity log is visible to Admins only.</div>`;
+
+  const tabContent={members:membersHTML,performance:perfHTML,points:ptsHTML,activity:activityHTML};
+  return`
+<div style="display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--border)">
+  ${tabs.map(t=>`<button onclick="teamTab='${t}';render()" style="padding:8px 14px;border:none;background:transparent;cursor:pointer;font-size:12.5px;font-family:var(--font);font-weight:600;color:${teamTab===t?'var(--accent2)':'var(--text3)'};border-bottom:2px solid ${teamTab===t?'var(--accent2)':'transparent'};margin-bottom:-1px;transition:all .13s">${tabLabels[t]}</button>`).join('')}
+</div>
+${tabContent[teamTab]||membersHTML}`;
+}
+
+/* ── MEMBER CRUD ─────────────────────────────────────────── */
+function openAddMember(){
+  if(!isSuperAdmin(currentUser)){toast('Only Super Admin can add employees','#dc2626');return;}
+  editMemberId=null;
+  $('member-modal-title').textContent='Add Employee';
+  ['m-name','m-email','m-phone','m-target'].forEach(id=>{const el=$(id);if(el)el.value='';});
+  $('m-role').value='Sales Rep';
+  rebuildBranchDropdowns();
+  openModal('member-modal');
+}
+
+function openEditMember(id){
+  if(!isSuperAdmin(currentUser)){toast('Only Super Admin can edit employees','#dc2626');return;}
+  const m=team.find(x=>x.id===id);if(!m)return;
+  editMemberId=id;
+  $('member-modal-title').textContent='Edit Employee';
+  $('m-name').value=m.name||'';
+  $('m-email').value=m.email||'';
+  $('m-phone').value=m.phone||'';
+  $('m-role').value=m.role||'Sales Rep';
+  $('m-target').value=m.target||'';
+  rebuildBranchDropdowns();
+  setTimeout(()=>{$('m-branch').value=m.branch||'';},50);
+  openModal('member-modal');
+}
+
+async function saveMember(){
+  if(!isSuperAdmin(currentUser)){toast('Only Super Admin can manage employees','#dc2626');return;}
+  const name=$('m-name').value.trim();
+  const email=$('m-email').value.trim().toLowerCase();
+  if(!name||!email){toast('Name and email are required','#f59e0b');return;}
+  if(team.find(m=>m.email===email&&m.id!==editMemberId)){toast('Email already in use','#dc2626');return;}
+  if(editMemberId){
+    const m=team.find(x=>x.id===editMemberId);if(!m)return;
+    Object.assign(m,{name,email,phone:$('m-phone').value.trim(),role:$('m-role').value,branch:$('m-branch').value,target:Number($('m-target').value)||0});
+    lsSaveTeam();
+    sbFetch('/team_members?id=eq.'+m.id,{method:'PATCH',body:JSON.stringify(memberToDb(m))}).catch(()=>{});
+    toast('Employee updated ✓','#22c87a');
+  } else {
+    const m={id:uid(),name,email,phone:$('m-phone').value.trim(),role:$('m-role').value,branch:$('m-branch').value,target:Number($('m-target').value)||0,isSuperAdmin:false};
+    team.push(m);
+    lsSaveTeam();
+    sbFetch('/team_members',{method:'POST',body:JSON.stringify(memberToDb(m)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+    toast('Employee added ✓ — they can now log in with their email','#22c87a');
+  }
+  closeModal('member-modal');render();updateSidebarUser();
+}
+
+/* deleteMember defined above */
+
+/* ── NOTIFICATIONS ───────────────────────────────────────── */
+function renderNotifs(){
+  const vl=visibleLeads();
+  const hot=vl.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost'&&l.followUpDoneFor!==l.buyDate;}).sort((a,b)=>daysTo(a.buyDate)-daysTo(b.buyDate));
+  const my=reminders.filter(r=>r.userId===currentUser.id).sort((a,b)=>new Date(a.datetime)-new Date(b.datetime));
+
+  const followUps=hot.map(l=>{
+    const d=daysTo(l.buyDate);
+    const cls=d<0?'overdue':d===0?'today':'soon';
+    return`<div class="notif-item" onclick="openDetail('${l.id}')">
+      <div class="notif-dot ${cls}"></div>
+      <div class="notif-body">
+        <div class="notif-title">${l.name}</div>
+        <div class="notif-meta">${l.product||'—'} · ${l.branch||'—'} · ${memberName(l.assignee)}</div>
+      </div>
+      <div class="${dateClass(l.buyDate)}" style="font-size:11.5px;font-weight:600;white-space:nowrap;margin-right:6px">${dateLabel(l.buyDate)}</div>
+      <button class="act-btn" onclick="openFollowUpDoneModal('${l.id}');event.stopPropagation()">Mark Done</button>
+    </div>`;
+  }).join('');
+
+  const remItems=my.map(r=>{
+    const dt=new Date(r.datetime);
+    const overdue=dt<new Date()&&!r.done;
+    const lead=leads.find(l=>l.id===r.leadId);
+    return`<div class="notif-item" style="${r.done?'opacity:.5':''}">
+      <div class="notif-dot ${overdue?'overdue':r.done?'':daysTo(r.datetime)===0?'today':'soon'}"></div>
+      <div class="notif-body">
+        <div class="notif-title">${r.note}${r.done?' <span style="font-size:9.5px;background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:8px">Done</span>':''}</div>
+        <div class="notif-meta">${lead?lead.name+' · ':''}<span style="font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</span>${overdue?' · <span style="color:var(--red);font-weight:600">OVERDUE</span>':''}</div>
+      </div>
+      ${!r.done?`<button class="act-btn" onclick="dismissReminder('${r.id}')">Done</button>`:''}
+    </div>`;
+  }).join('');
+
+  return`
+<div style="margin-bottom:22px">
+  <div class="section-hdr"><div class="section-title">Follow-up Alerts (${hot.length})</div></div>
+  <div class="panel">${followUps||'<div class="empty-state" style="padding:30px"><div class="empty-icon">✅</div><div class="empty-text">No urgent follow-ups!</div></div>'}</div>
+</div>
+<div>
+  <div class="section-hdr">
+    <div class="section-title">My Reminders (${my.length})</div>
+    <button class="btn btn-primary btn-sm" onclick="openReminderModal('')">+ Set Reminder</button>
+  </div>
+  <div class="panel">${remItems||'<div class="empty-state" style="padding:30px"><div class="empty-icon">🔔</div><div class="empty-text">No reminders set</div></div>'}</div>
+</div>`;
+}
+
+/* ── REPORTS ─────────────────────────────────────────────── */
+function renderReports(){
+  const vl=visibleLeads();
+  return`
+<div class="reports-grid">
+  <div class="report-card"><div class="report-title">Leads by Status</div><div class="chart-wrap"><canvas id="ch-status"></canvas></div></div>
+  <div class="report-card"><div class="report-title">Leads by Source</div><div class="chart-wrap"><canvas id="ch-source"></canvas></div></div>
+  <div class="report-card"><div class="report-title">Leads by Branch</div><div class="chart-wrap"><canvas id="ch-branch"></canvas></div></div>
+  ${isAdmin(currentUser)?`<div class="report-card"><div class="report-title">Team Performance (Points)</div><div class="chart-wrap"><canvas id="ch-pts"></canvas></div></div>`:''}
+</div>`;
+}
+
+function initCharts(){
+  const vl=visibleLeads();
+  function mkDoughnut(id,labels,data,colors){
+    const c=$(id);if(!c)return;
+    if(chartReg[id])chartReg[id].destroy();
+    chartReg[id]=new Chart(c,{type:'doughnut',data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},padding:10}}}}});
+  }
+  function mkBar(id,labels,data,color){
+    const c=$(id);if(!c)return;
+    if(chartReg[id])chartReg[id].destroy();
+    chartReg[id]=new Chart(c,{type:'bar',data:{labels,datasets:[{data,backgroundColor:color||'rgba(37,99,235,.7)',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,.05)'},ticks:{font:{size:11}}},x:{grid:{display:false},ticks:{font:{size:11}}}}}});
+  }
+
+  const statusCounts=STATUSES.map(s=>vl.filter(l=>l.status===s).length);
+  mkDoughnut('ch-status',STATUSES,statusCounts,COLORS);
+
+  const srcMap={};vl.forEach(l=>{srcMap[l.source]=(srcMap[l.source]||0)+1;});
+  const srcLabels=Object.keys(srcMap),srcData=Object.values(srcMap);
+  mkDoughnut('ch-source',srcLabels,srcData,COLORS.slice(0,srcLabels.length));
+
+  const brMap={};vl.forEach(l=>{if(l.branch){brMap[l.branch]=(brMap[l.branch]||0)+1;}});
+  mkBar('ch-branch',Object.keys(brMap),Object.values(brMap),'rgba(14,116,144,.7)');
+
+  if(isAdmin(currentUser)){
+    const employees=team.filter(m=>!m.isSuperAdmin);
+    const ptsData=employees.map(m=>getUserPoints(m.id));
+    mkBar('ch-pts',employees.map(m=>m.name.split(' ')[0]),ptsData,'rgba(217,119,6,.75)');
+  }
+}
+
+/* ── SETTINGS (Super Admin) ──────────────────────────────── */
+function renderSettings(){
+  if(!isAdmin(currentUser))return`<div class="locked-notice" style="max-width:400px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Settings are accessible to Admins only.</div>`;
+
+  const branchRows=branches.map((b,i)=>`
+    <div class="branch-row">
+      <input class="fi" value="${b}" oninput="branches[${i}]=this.value;saveBranches();rebuildBranchDropdowns()"/>
+      <button class="branch-del" onclick="deleteBranch(${i})" title="Remove branch">✕</button>
+    </div>`).join('');
+
+  return`
+<div style="max-width:680px">
+  <div class="settings-section">
+    <div class="settings-title">Branch Locations</div>
+    <div class="info-banner"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 5v4M8 11v1"/></svg>Add or remove branches. Changes reflect immediately in the Add Lead form's branch dropdown.</div>
+    <div id="branch-list">${branchRows}</div>
+    <button class="btn btn-primary btn-sm" style="margin-top:10px" onclick="addBranch()">+ Add Branch</button>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">Supabase Connection</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <div id="sb-conn-status" style="display:flex;align-items:center;gap:7px;font-size:12px;font-family:var(--mono);background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:5px 12px">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--text3)"></div>Not tested
+      </div>
+      <button class="btn btn-sm" onclick="testSupabaseConnection()">Test Connection</button>
+    </div>
+    <div style="font-size:11.5px;color:var(--text2);margin-bottom:8px">
+      <strong>Project:</strong> <span style="font-family:var(--mono)">gwyariovhutenplndfne.supabase.co</span>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">Supabase Table Setup (one-time)</div>
+    <div class="info-banner" style="background:rgba(124,58,237,.06);border-color:rgba(124,58,237,.2);flex-direction:column;align-items:flex-start;gap:6px">
+      <div style="font-size:11.5px;font-weight:700;color:var(--purple)">Run this SQL once in your Supabase SQL Editor:</div>
+      <code style="display:block;background:#1e293b;color:#e2e8f0;padding:10px 12px;border-radius:7px;font-size:10.5px;font-family:var(--mono);width:100%;line-height:1.8;white-space:pre-wrap">-- Add missing columns to leads table
+alter table leads add column if not exists address text;
+alter table leads add column if not exists pincode text;
+alter table leads add column if not exists branch text;
+alter table leads add column if not exists chat_log jsonb default '[]';
+alter table leads add column if not exists follow_up_done_for text;
+alter table leads add column if not exists category text;
+alter table leads add column if not exists state text;
+alter table leads add column if not exists language text;
+alter table leads add column if not exists products jsonb default '[]';
+
+-- Add missing column to team_members
+alter table team_members add column if not exists branch text;
+alter table team_members add column if not exists is_super_admin boolean default false;
+
+-- ✅ NEW: Dedicated branches table (replaces app_settings)
+create table if not exists branches (
+  id   serial primary key,
+  name text not null unique
+);
+
+-- Disable RLS so the app can read/write freely
+alter table leads disable row level security;
+alter table team_members disable row level security;
+alter table branches disable row level security;</code>
+      <button class="btn btn-sm" style="margin-top:4px" onclick="copySetupSQL()">📋 Copy SQL</button>
+    </div>
+  </div>
+    <div class="panel" style="padding:16px">
+      <div style="font-size:12.5px;color:var(--text2);line-height:2">
+        <div><strong>₹1 – ₹10,000</strong> → 1 point</div>
+        <div><strong>₹10,001 – ₹20,000</strong> → 2 points</div>
+        <div><strong>₹20,001 – ₹30,000</strong> → 3 points (and so on…)</div>
+        <div style="margin-top:8px;color:var(--red)"><strong>Missed reminder / unanswered callback</strong> → −1 point</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-section">
+    <div class="settings-title">Data Management</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="btn btn-sm" onclick="exportCSV()">Export Leads CSV</button>
+      <button class="btn btn-sm" onclick="exportTeamCSV()">Export Team CSV</button>
+    </div>
+    <div class="info-banner" style="background:rgba(21,128,61,.06);border-color:rgba(21,128,61,.2)">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M5 8l2 2 4-4"/></svg>
+      <div>Data is saved to your browser's localStorage <strong>immediately</strong> on every change — data is never lost on refresh. Supabase sync runs in the background as a backup.</div>
+    </div>
+    <div style="margin-top:10px">
+      <button class="btn btn-sm btn-danger" onclick="if(confirm('Clear ALL leads from this browser? This cannot be undone.')){leads=[];lsSaveLeads();render();toast('All leads cleared','#dc2626');}">Clear All Leads (Local)</button>
+    </div>
+  </div>
+</div>`;
+}
+
+async function addBranch(){
+  const name=prompt('New branch name:');
+  if(!name||!name.trim())return;
+  const trimmed=name.trim();
+  if(branches.includes(trimmed)){toast('Branch already exists','#f59e0b');return;}
+  branches.push(trimmed);
+  rebuildBranchDropdowns();render();
+  try{
+    await sbFetch('/branches',{
+      method:'POST',
+      body:JSON.stringify({name:trimmed}),
+      headers:{...SB_HDR,'Prefer':'resolution=ignore-duplicates'}
+    });
+    toast('Branch added: '+trimmed,'#22c87a');
+  }catch(e){
+    branches.pop();// rollback
+    rebuildBranchDropdowns();render();
+    toast('Failed to save branch — check Supabase connection','#dc2626');
+  }
+}
+
+async function deleteBranch(i){
+  if(!confirm('Remove branch "'+branches[i]+'"?'))return;
+  const removed=branches.splice(i,1)[0];
+  rebuildBranchDropdowns();render();
+  try{
+    await sbFetch('/branches?name=eq.'+encodeURIComponent(removed),{
+      method:'DELETE',
+      headers:{...SB_HDR,'Accept':'*/*'}
+    });
+    toast('Branch removed','#dc2626');
+  }catch(e){
+    branches.splice(i,0,removed);// rollback
+    rebuildBranchDropdowns();render();
+    toast('Failed to remove branch — check Supabase connection','#dc2626');
+  }
+}
+
+/* ── IMPORT ─────────────────────────────────────────────── */
+function renderImport(){
+  return`<div style="max-width:600px">
+<div class="info-banner"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="7"/><path d="M8 5v4M8 11v1"/></svg>Upload a CSV file. Required columns: <code>name</code>, <code>phone</code>. Optional: email, address, pincode, product, branch, source, status, value, notes.</div>
+<div class="drop-zone" id="drop-zone" onclick="$('csv-input').click()" ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="handleDrop(event)">
+  <svg style="margin:0 auto 10px;display:block;opacity:.35" width="36" height="36" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6v20M10 16l10 12 10-12"/><rect x="4" y="30" width="32" height="6" rx="3"/></svg>
+  <div style="font-size:13.5px;font-weight:600">Click to upload or drag & drop your CSV</div>
+  <div style="font-size:11px;color:var(--text3);margin-top:4px">Supports .csv files up to 1,000 rows</div>
+</div>
+<input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleFileSelect(event)"/>
+<div class="section-hdr" style="margin-top:20px;margin-bottom:10px">
+  <div class="section-title">Column Reference</div>
+  <button class="btn btn-sm" onclick="downloadSampleCSV()">Download Sample</button>
+</div>
+<div class="csv-preview"><div class="csv-row head"><div>name</div><div>phone</div><div>product</div><div>branch</div><div>source</div></div><div class="csv-row"><div>Ravi Kumar</div><div>+91 9876543210</div><div>CRM Suite</div><div>Mumbai</div><div>IndiaMART</div></div></div>
+</div>`;
+}
+
+function handleDrop(e){e.preventDefault();$('drop-zone').classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f&&f.name.endsWith('.csv'))processCSV(f);else toast('Please upload a .csv file','#f59e0b');}
+function handleFileSelect(e){const f=e.target.files[0];if(f)processCSV(f);}
+
+function processCSV(file){
+  const r=new FileReader();
+  r.onload=e=>{
+    const rows=e.target.result.trim().split('\n').map(row=>row.split(',').map(c=>c.trim().replace(/^"|"$/g,'')));
+    if(rows.length<2){toast('CSV must have header + data rows','#f59e0b');return;}
+    const hdr=rows[0].map(h=>h.toLowerCase().replace(/[\s_\-]/g,''));
+    const gi=k=>{const aliases={name:['name','fullname'],phone:['phone','mobile','phonenumber'],email:['email'],address:['address'],pincode:['pincode','zip'],product:['product','productinterested','productofinterest'],branch:['branch'],source:['source','leadsource'],status:['status'],value:['value','amount','dealvalue'],notes:['notes','note']};const list=aliases[k]||[k];return hdr.findIndex(h=>list.includes(h));};
+    const parsed=rows.slice(1).filter(r=>r.length>1&&r.some(c=>c.trim())).map(r=>({id:uid(),name:r[gi('name')]||'Unknown',phone:r[gi('phone')]||'',email:r[gi('email')]||'',address:r[gi('address')]||'',pincode:r[gi('pincode')]||'',product:r[gi('product')]||'',branch:r[gi('branch')]||branches[0]||'',source:r[gi('source')]||'Others',status:r[gi('status')]||'New',value:Number(r[gi('value')])||0,notes:r[gi('notes')]||'',assignee:currentUser.id,timeline:['Imported from CSV'],chatLog:[],createdAt:new Date().toISOString()}));
+    if(!parsed.length){toast('No valid rows found','#f59e0b');return;}
+    pendingImport=parsed;
+    $('import-confirm-sub').textContent=parsed.length+' lead'+(parsed.length!==1?'s':'')+' ready to import';
+    $('import-confirm-body').innerHTML=`<div class="csv-preview"><div class="csv-row head"><div>Name</div><div>Phone</div><div>Product</div><div>Branch</div><div>Status</div></div>${parsed.slice(0,8).map(r=>`<div class="csv-row"><div>${r.name}</div><div>${r.phone||'—'}</div><div>${r.product||'—'}</div><div>${r.branch||'—'}</div><div>${r.status}</div></div>`).join('')}${parsed.length>8?`<div style="padding:7px 10px;font-size:10.5px;color:var(--text3)">… and ${parsed.length-8} more</div>`:''}</div>`;
+    openModal('import-confirm-modal');
+  };r.readAsText(file);
+}
+
+async function confirmImport(){
+  const toInsert=pendingImport;const c=toInsert.length;pendingImport=[];
+  /* Add to in-memory and localStorage immediately */
+  leads=[...toInsert,...leads];
+  lsSaveLeads();
+  closeModal('import-confirm-modal');
+  toast(c+' leads imported ✓','#22c87a');
+  setView('leads');
+  /* Try Supabase in background */
+  sbFetch('/leads',{method:'POST',body:JSON.stringify(toInsert.map(leadToDb)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
+}
+
+function downloadSampleCSV(){const csv=`name,phone,email,address,pincode,product,branch,source,status,value,notes\nRavi Kumar,+91 9876543210,ravi@co.in,MG Road Bengaluru,560001,CRM Suite,Bengaluru,IndiaMART,New,150000,\nPriya Iyer,+91 9876543211,priya@co.in,Anna Salai Chennai,600002,Analytics Pro,Chennai,Website,Contacted,80000,Needs demo\n`;const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='leadflow_sample.csv';a.click();toast('Sample CSV downloaded','#22c87a');}
+
+async function testSupabaseConnection(){
+  const el=document.getElementById('sb-conn-status');
+  if(el){el.innerHTML='<div style="width:7px;height:7px;border-radius:50%;background:#94a3b8;animation:pulse 1s infinite"></div>Testing…';}
+  try{
+    await Promise.race([
+      sbFetch('/team_members?limit=1'),
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error('Timeout — check network/Supabase')),8000))
+    ]);
+    if(el){el.innerHTML='<div style="width:7px;height:7px;border-radius:50%;background:#22c55e"></div><span style="color:#15803d;font-weight:700">Connected ✓</span>';}
+    toast('✅ Supabase connected!','#15803d');
+  }catch(e){
+    if(el){el.innerHTML='<div style="width:7px;height:7px;border-radius:50%;background:#ef4444"></div><span style="color:#dc2626">'+e.message+'</span>';}
+    toast('❌ Supabase: '+e.message,'#dc2626');
+  }
+}
+
+function copySetupSQL(){
+  const sql=`-- Add missing columns to leads table
+alter table leads add column if not exists address text;
+alter table leads add column if not exists pincode text;
+alter table leads add column if not exists branch text;
+alter table leads add column if not exists chat_log jsonb default '[]';
+alter table leads add column if not exists follow_up_done_for text;
+alter table leads add column if not exists category text;
+alter table leads add column if not exists state text;
+alter table leads add column if not exists language text;
+alter table leads add column if not exists products jsonb default '[]';
+
+-- Add missing columns to team_members table
+alter table team_members add column if not exists branch text;
+alter table team_members add column if not exists is_super_admin boolean default false;
+
+-- NEW: Dedicated branches table (Supabase only, no localStorage)
+create table if not exists branches (
+  id   serial primary key,
+  name text not null unique
+);
+
+-- Disable RLS for all app tables
+alter table leads disable row level security;
+alter table team_members disable row level security;
+alter table branches disable row level security;`;
+  navigator.clipboard.writeText(sql)
+    .then(()=>toast('SQL copied to clipboard ✓','#15803d'))
+    .catch(()=>toast('Copy failed — please select and copy manually','#f59e0b'));
+}
+
+function exportCSV(){const hdr=['Name','Phone','Email','Address','Pincode','Product','Branch','Source','Status','Assignee','Value','Notes'];const rows=leads.map(l=>[l.name,l.phone,l.email,l.address,l.pincode,l.product,l.branch,l.source,l.status,memberName(l.assignee),l.value,l.notes].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='leads_'+new Date().toISOString().split('T')[0]+'.csv';a.click();toast('Leads exported','#22c87a');}
+
+function exportTeamCSV(){const hdr=['Name','Email','Phone','Role','Branch','Target'];const rows=team.map(m=>[m.name,m.email,m.phone,m.role,m.branch,m.target].map(v=>`"${(v||'').toString()}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='team_export.csv';a.click();toast('Team data exported','#22c87a');}
+
+/* ── Loading ─────────────────────────────────────────────── */
+function showAppLoading(on){
+  let el=document.getElementById('app-loading');
+  if(on){if(!el){el=document.createElement('div');el.id='app-loading';el.style.cssText='position:fixed;inset:0;background:var(--bg);z-index:9998;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px';el.innerHTML='<div style="width:32px;height:32px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite"></div><div style="font-size:12px;color:var(--text3)">Connecting to database…</div>';document.body.appendChild(el);}}
+  else{if(el)el.remove();}
+}
+
+/* ── Modal helpers ───────────────────────────────────────── */
+function openModal(id){$(id).classList.add('open');}
+function closeModal(id){$(id).classList.remove('open');}
+function backdropClose(e,id){if(e.target.id===id)closeModal(id);}
+
+/* ── Toast ───────────────────────────────────────────────── */
+function toast(msg,color='#2563eb',duration=2800){
+  const el=document.createElement('div');el.className='toast';
+  el.innerHTML=`<div class="toast-dot" style="background:${color}"></div><span>${msg}</span>`;
+  $('toast-wrap').appendChild(el);
+  setTimeout(()=>{el.style.opacity='0';el.style.transform='translateY(8px)';el.style.transition='all .2s';setTimeout(()=>el.remove(),200);},duration);
+}
+
+/* Extract a readable message out of a Supabase/PostgREST error.
+   The raw error text is usually JSON like:
+   {"code":"42703","message":"column \"category\" of relation \"leads\" does not exist", ...} */
+function sbErrorMessage(e){
+  const raw=(e&&e.message)||String(e);
+  try{
+    const j=JSON.parse(raw);
+    return j.message||j.hint||j.details||raw;
+  }catch(_){return raw;}
+}
+
+/* ── Mobile helpers ──────────────────────────────────────── */
+function isMobile(){return window.innerWidth<=768;}
+function initMobileLayout(){
+  const mob=isMobile();
+  const mn=$('mobile-nav');const mb=$('mob-menu-btn');
+  if(mn)mn.style.display=mob?'flex':'none';
+  if(mb)mb.style.display=mob?'flex':'none';
+}
+function openMobileSidebar(){const ov=$('mobile-sidebar-overlay');if(ov){ov.classList.add('open');document.body.style.overflow='hidden';}}
+function closeMobileSidebar(){const ov=$('mobile-sidebar-overlay');if(ov){ov.classList.remove('open');document.body.style.overflow='';}}
+function updateMobileNav(){
+  document.querySelectorAll('.mob-nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===currentView));
+  document.querySelectorAll('.mobile-sidebar-panel .nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===currentView));
+}
+window.addEventListener('resize',()=>{initMobileLayout();if(currentView==='leads')render();});
+
+/* ── Close dropdown on outside click ───────────────────── */
+document.addEventListener('click',e=>{
+  const dd=$('reminder-dropdown');const btn=$('reminder-btn');
+  if(dd&&btn&&!btn.contains(e.target))dd.classList.remove('open');
+  const pp=$('pts-popup');const pw=$('pts-widget');
+  if(pp&&pw&&!pw.contains(e.target))pp.classList.remove('open');
+});
+
+
+
+
+/* ── Back button handler — WebView / mobile / desktop ────── */
+(function(){
+  function pushBack(){
+    history.pushState({app:true},document.title,'');
+  }
+  pushBack();
+
+  function handleBack(){
+    /* Priority 1: mobile sidebar */
+    const ov=document.getElementById('mobile-sidebar-overlay');
+    if(ov&&ov.classList.contains('open')){if(typeof closeMobileSidebar==='function')closeMobileSidebar();pushBack();return true;}
+
+    /* Priority 2: open modal */
+    const modals=['lead-modal','member-modal','reminder-modal','followup-done-modal','import-confirm-modal'];
+    const openMod=modals.find(id=>{const el=document.getElementById(id);return el&&el.classList.contains('open');});
+    if(openMod){closeModal(openMod);pushBack();return true;}
+
+    /* Priority 3: detail panel */
+    const dp=document.getElementById('detail-panel');
+    if(dp&&dp.classList.contains('open')){closeDetailPanel();pushBack();return true;}
+
+    /* Priority 4: dropdowns */
+    const pp=document.getElementById('pts-popup');
+    const dd=document.getElementById('reminder-dropdown');
+    if(pp&&pp.classList.contains('open')){pp.classList.remove('open');pushBack();return true;}
+    if(dd&&dd.classList.contains('open')){dd.classList.remove('open');pushBack();return true;}
+
+    /* Priority 5: OTP step → email step */
+    const otpStep=document.getElementById('login-step-otp');
+    if(otpStep&&otpStep.classList.contains('active')){if(typeof backToEmail==='function')backToEmail();pushBack();return true;}
+
+    /* Priority 6: sub-view → dashboard */
+    if(typeof currentView!=='undefined'&&currentView!=='dashboard'){setView('dashboard');pushBack();return true;}
+
+    /* Nothing to close — stay in app */
+    pushBack();
+    return false;
+  }
+
+  /* Browser back button (desktop + mobile browsers) */
+  window.addEventListener('popstate',function(){handleBack();});
+
+  /* WebIntoApp / AppMaker style bridge */
+  window.onBackPressed=function(){return handleBack();};
+
+  /* Alternative name some wrappers use */
+  window.handleBackButton=window.onBackPressed;
+
+  /* GoNative bridge */
+  window.gonative_back_pressed=window.onBackPressed;
+
+  /* Cordova / Capacitor style */
+  document.addEventListener('backbutton',function(e){e.preventDefault();handleBack();},false);
+})();
+
+/* ── Boot ────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof emailjs!=='undefined')emailjs.init(EMAILJS_PUBKEY);
+  const style=document.createElement('style');
+  style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(style);
+  document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.addEventListener('click',()=>setView(el.dataset.view)));
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){['lead-modal','member-modal','reminder-modal','followup-done-modal','import-confirm-modal'].forEach(closeModal);closeDetailPanel();$('reminder-dropdown')?.classList.remove('open');}
+    if(e.key==='n'&&(e.ctrlKey||e.metaKey)){e.preventDefault();openAddLead();}
+  });
+  loadPointsLog();
+  loadRemindersFromSupabase();
+  wireLoginEvents();
+  initMobileLayout();
+  dbLoadAll().then(async ()=>{
+    const cu=localStorage.getItem('lf_current_user');
+    if(cu){
+      /* Verify the stored session against Supabase — not just the local team array */
+      try{
+        const rows=await Promise.race([
+          sbFetch('/team_members?id=eq.'+encodeURIComponent(cu)+'&limit=1'),
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),6000))
+        ]);
+        if(rows&&rows.length){
+          const member=dbToMember(rows[0]);
+          /* Update local team cache */
+          const idx=team.findIndex(m=>m.id===member.id);
+          if(idx>=0)team[idx]=member; else team.push(member);
+          currentUser=member;
+          $('login-screen').classList.add('hidden');
+          $('app').style.display='flex';
+          updateSidebarUser();render();
+          checkMissedReminders();
+          subscribeRealtimeLeads();
+          setInterval(checkMissedReminders,5*60*1000);
+          initMobileLayout();
+          return;
+        }
+      }catch(e){
+        /* Supabase unreachable — fall back to login screen */
+        console.warn('Session check failed:',e.message);
+      }
+      /* Session invalid or Supabase down — require re-login */
+      try{localStorage.removeItem('lf_current_user');}catch(e){}
+    }
+    $('login-screen').classList.remove('hidden');
+    $('app').style.display='none';
+  });
+});
+</script>
+</body>
+</html>
