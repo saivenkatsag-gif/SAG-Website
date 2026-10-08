@@ -747,6 +747,7 @@ select.form-control option{background:var(--card2);}
             <option value="all">All Tags</option>
             <option value="new">New</option>
             <option value="offer">Offer</option>
+            <option value="trending">🔥 Trending</option>
           </select>
         </div>
         <span id="productCountLabel" style="font-size:0.82rem;color:var(--muted);"></span>
@@ -849,6 +850,13 @@ CREATE POLICY "Auth write" ON drone_applications FOR ALL USING (true);
 
 -- Enable realtime
 ALTER PUBLICATION supabase_realtime ADD TABLE drone_applications;</pre>
+
+        <div class="settings-divider"></div>
+        <h4 style="margin-bottom:10px;font-size:1rem;">🔥 Top Trending Products — Setup SQL</h4>
+        <p class="settings-desc" style="margin-bottom:12px;">Run this once in the Supabase SQL Editor to enable the <strong>Top Trending</strong> section on the product page. Then tick 🔥 Trending (and set a position) on any product in the Products manager.</p>
+        <pre style="background:var(--dark2);border:1px solid var(--border-solid);border-radius:10px;padding:16px;font-size:0.78rem;color:var(--blue);overflow-x:auto;line-height:1.6;">ALTER TABLE products ADD COLUMN IF NOT EXISTS is_trending BOOLEAN DEFAULT false;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS trending_order INTEGER DEFAULT 0;
+NOTIFY pgrst, 'reload schema';</pre>
 
         <div class="settings-divider"></div>
         <h4 style="margin-bottom:10px;font-size:1rem;">🏷️ Categories Table Setup SQL</h4>
@@ -1140,7 +1148,16 @@ ALTER PUBLICATION supabase_realtime ADD TABLE full_drones;</pre>
             <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;">
               <input type="checkbox" id="pIsOffer" style="accent-color:var(--blue);width:15px;height:15px;"/> Offer
             </label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;cursor:pointer;">
+              <input type="checkbox" id="pIsTrending" style="accent-color:var(--blue);width:15px;height:15px;"/> 🔥 Trending
+            </label>
           </div>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label>Trending Position <span style="font-weight:400;text-transform:none;color:var(--muted);font-size:0.7rem;">(1 = shown first in "Top Trending" on the product page; only used if 🔥 Trending is ticked)</span></label>
+          <input class="form-control" id="pTrendingOrder" type="number" min="1" step="1" placeholder="e.g. 1" style="max-width:160px;"/>
         </div>
       </div>
       <div class="form-row single">
@@ -2396,6 +2413,8 @@ async function syncProductsFromSupabase() {
           image: r.image || '',
           isNew: !!r.is_new,
           isOffer: !!r.is_offer,
+          isTrending: !!r.is_trending,
+          trendingOrder: Number(r.trending_order) || 0,
           status: r.status || 'instock',
           waNum: r.wa_num || '919390238537',
           description: r.description || '',
@@ -2427,15 +2446,45 @@ async function pushProductToSupabase(p, isUpdate) {
     wa_num: p.waNum || '919390238537',
     description: p.description || '',
     package_includes: Array.isArray(p.packageIncludes) ? p.packageIncludes.join('\n') : (p.packageIncludes || ''),
+    is_trending: !!p.isTrending,
+    trending_order: p.isTrending ? (Number(p.trendingOrder) || 999) : 0,
     updated_at: new Date().toISOString()
   };
+  async function send(r) {
+    if (isUpdate) return supabaseFetch('products?id=eq.' + p.id, 'PATCH', r);
+    return supabaseFetch('products', 'POST', r);
+  }
   try {
-    if (isUpdate) {
-      await supabaseFetch('products?id=eq.' + p.id, 'PATCH', row);
+    await send(row);
+  } catch(e) {
+    // Trending columns not added to Supabase yet? Save the product without them
+    // so nothing else breaks, and tell the admin what to run.
+    if (/is_trending|trending_order/.test(e.message)) {
+      delete row.is_trending; delete row.trending_order;
+      try { await send(row); } catch(e2) { console.warn('Product push failed:', e2.message); return; }
+      showToast('error', '⚠️ Saved, but trending was NOT stored — run the Trending SQL in Settings first.');
     } else {
-      await supabaseFetch('products', 'POST', row);
+      console.warn('Product push failed:', e.message);
     }
-  } catch(e) { console.warn('Product push failed:', e.message); }
+  }
+}
+
+// Quick ⭐ toggle from the product card
+async function toggleProductTrending(id) {
+  var p = products.find(function(x){return x.id===id;});
+  if (!p) return;
+  p.isTrending = !p.isTrending;
+  if (p.isTrending && !p.trendingOrder) {
+    var max = 0;
+    products.forEach(function(x){ if (x.isTrending && x.id !== p.id && x.trendingOrder > max) max = x.trendingOrder; });
+    p.trendingOrder = max + 1;
+  }
+  showLoading(true);
+  await pushProductToSupabase(p, true);
+  saveLocalProducts();
+  renderProductsGrid();
+  showLoading(false);
+  showToast('success', p.isTrending ? '🔥 Added to Top Trending (position ' + p.trendingOrder + ')' : 'Removed from Top Trending');
 }
 
 async function deleteProductFromSupabase(id) {
@@ -2453,9 +2502,12 @@ function renderProductsGrid() {
   var tagFilter = document.getElementById('productFilterTag') ? document.getElementById('productFilterTag').value : 'all';
   var filtered = products.filter(function(p) {
     var matchSearch = !search || p.name.toLowerCase().indexOf(search) !== -1;
-    var matchTag = tagFilter === 'all' || (tagFilter === 'new' && p.isNew) || (tagFilter === 'offer' && p.isOffer);
+    var matchTag = tagFilter === 'all' || (tagFilter === 'new' && p.isNew) || (tagFilter === 'offer' && p.isOffer) || (tagFilter === 'trending' && p.isTrending);
     return matchSearch && matchTag;
   });
+  if (tagFilter === 'trending') {
+    filtered.sort(function(a, b){ return (a.trendingOrder || 999) - (b.trendingOrder || 999); });
+  }
   if (document.getElementById('productCountLabel')) {
     document.getElementById('productCountLabel').textContent = filtered.length + ' of ' + products.length + ' products';
   }
@@ -2463,6 +2515,7 @@ function renderProductsGrid() {
     var tags = [];
     if (p.isNew) tags.push('<span style="background:rgba(133,201,255,0.15);border:1px solid #1a6fb5;color:#1a6fb5;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">NEW</span>');
     if (p.isOffer) tags.push('<span style="background:var(--amber-glow);border:1px solid var(--amber);color:var(--amber);border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">OFFER</span>');
+    if (p.isTrending) tags.push('<span style="background:rgba(255,120,40,0.15);border:1px solid #e8590c;color:#e8590c;border-radius:20px;padding:2px 9px;font-size:0.68rem;font-weight:700;">🔥 TRENDING #'+(p.trendingOrder||'–')+'</span>');
     var inStock = p.status !== 'outofstock';
     return '<div class="app-card">'
       + '<div class="app-card-visual" style="background:var(--dark2);">'
@@ -2478,6 +2531,7 @@ function renderProductsGrid() {
       + '</div>'
       + '<div class="app-card-actions">'
       + '<button class="btn btn-blue btn-sm" onclick="openEditProductModal('+p.id+')">✏️ Edit</button>'
+      + '<button class="btn btn-amber btn-sm" onclick="toggleProductTrending('+p.id+')" title="Show or hide in Top Trending on the product page">'+(p.isTrending?'🔥 Untrend':'🔥 Trend')+'</button>'
       + '<button class="btn btn-red btn-sm" onclick="openProductConfirmDelete('+p.id+')">🗑️ Delete</button>'
       + '</div>'
       + '</div></div>';
@@ -2509,6 +2563,8 @@ function openAddProductModal() {
   document.getElementById('pUrlPreviewWrap').style.display = 'none';
   document.getElementById('pIsNew').checked = false;
   document.getElementById('pIsOffer').checked = false;
+  document.getElementById('pIsTrending').checked = false;
+  document.getElementById('pTrendingOrder').value = '';
   document.getElementById('pStatus').value = 'instock';
   document.getElementById('pWaNum').value = '919390238537';
   document.getElementById('pCategory').value = '';
@@ -2533,6 +2589,8 @@ function openEditProductModal(id) {
   document.getElementById('pImageUrl').value = p.image || '';
   document.getElementById('pIsNew').checked = !!p.isNew;
   document.getElementById('pIsOffer').checked = !!p.isOffer;
+  document.getElementById('pIsTrending').checked = !!p.isTrending;
+  document.getElementById('pTrendingOrder').value = p.trendingOrder || '';
   document.getElementById('pStatus').value = p.status || 'instock';
   document.getElementById('pWaNum').value = p.waNum || '919390238537';
   document.getElementById('pDescription').value = p.description || '';
@@ -2577,6 +2635,8 @@ async function saveProduct() {
     image: document.getElementById('pImageUrl').value.trim(),
     isNew: document.getElementById('pIsNew').checked,
     isOffer: document.getElementById('pIsOffer').checked,
+    isTrending: document.getElementById('pIsTrending').checked,
+    trendingOrder: parseInt(document.getElementById('pTrendingOrder').value, 10) || 0,
     status: document.getElementById('pStatus').value,
     waNum: document.getElementById('pWaNum').value.trim() || '919390238537',
     description: document.getElementById('pDescription').value.trim(),
