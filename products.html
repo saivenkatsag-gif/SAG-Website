@@ -780,6 +780,16 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   .filter-bar{display:none;}
   .product-card.hidden{display:none;}
 
+  /* ── TOP TRENDING (admin-managed) ── */
+  .trending-section{margin-bottom:34px;padding-bottom:28px;border-bottom:1px solid var(--border);}
+  .trending-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+  .trending-head h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:1.6rem;color:var(--white);margin:0;}
+  .trending-head h2 span{color:var(--blue);}
+  .trending-head p{font-size:0.84rem;color:var(--muted);margin:0;}
+  .product-badge.trending-badge{background:#e8590c;color:#fff;}
+  @media (max-width:600px){.trending-head h2{font-size:1.3rem;}}
+  :root[data-theme="light"] .trending-head h2, body.light .trending-head h2{color:#0d1b2a;}
+
   /* ── HIDDEN CARDS (filter) ── */
   .product-card.hidden { display: none; }
 
@@ -3366,6 +3376,14 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
   </aside>
   <!-- PRODUCTS MAIN -->
   <div class="shop-main">
+    <!-- TOP TRENDING (managed from admin panel) -->
+    <section class="trending-section" id="trendingSection" hidden>
+      <div class="trending-head">
+        <h2>🔥 Top <span>Trending</span> Products</h2>
+        <p>What our customers are buying right now</p>
+      </div>
+      <div class="products-grid" id="trendingGrid"></div>
+    </section>
     <div class="products-toolbar">
       <div class="products-count" id="productsCount">Loading...</div>
     </div>
@@ -3833,7 +3851,74 @@ src="https://www.facebook.com/tr?id=1597811208730856&ev=PageView&noscript=1"
       countEl.innerHTML = 'Showing <strong>' + filtered.length + '</strong> of ' + allProducts.length + ' products';
     }
     renderProductCards(filtered);
+    renderTrending(!q && activeCat === 'all' && activeTag === 'all' && activeStatus === 'all');
     updateFilterBtnIndicator();
+  }
+
+  /* == Top Trending: products flagged 🔥 in the admin panel, in the order set there == */
+  var TRENDING_MAX = 6;
+  function renderTrending(show) {
+    var sec = document.getElementById('trendingSection');
+    var grid = document.getElementById('trendingGrid');
+    if (!sec || !grid) return;
+    var list = allProducts.filter(function(p) { return p.is_trending; })
+      .sort(function(a, b) { return (Number(a.trending_order) || 999) - (Number(b.trending_order) || 999); })
+      .slice(0, TRENDING_MAX);
+    // Only shown on the unfiltered view so search/filter results stay clean.
+    if (!show || !list.length) { sec.hidden = true; return; }
+    grid.innerHTML = '';
+    list.forEach(function(p, i) {
+      var inStock = p.status !== 'outofstock';
+      var wa = (p.wa_num || '919390238537').replace(/[^0-9]/g, '');
+      var msg = 'Hello SAG Drone Technologies!\n\nI am interested in: ' + p.name + '\nPrice: Rs.' + Number(p.price).toLocaleString('en-IN') + '\n\nPlease share more details. Thank you!';
+      var card = document.createElement('div');
+      card.className = 'product-card';
+      card.onclick = function() { window.location.href = 'product?id=' + p.id; };
+
+      var badge = document.createElement('span');
+      badge.className = 'product-badge trending-badge';
+      badge.textContent = '🔥 #' + (i + 1);
+      card.appendChild(badge);
+
+      var imgWrap = document.createElement('div');
+      imgWrap.className = 'product-img';
+      if (p.image) {
+        var img = document.createElement('img');
+        img.src = cldOpt(p.image, 400); img.alt = p.name; img.loading = 'lazy';
+        imgWrap.appendChild(img);
+      }
+      card.appendChild(imgWrap);
+
+      var info = document.createElement('div');
+      info.className = 'product-info';
+      var st = document.createElement('div');
+      st.className = 'product-status';
+      if (!inStock) st.style.color = '#e05050';
+      st.textContent = inStock ? 'In Stock' : 'Out of Stock';
+      var nm = document.createElement('div');
+      nm.className = 'product-name'; nm.textContent = p.name;
+      var pr = document.createElement('div');
+      pr.className = 'product-price';
+      var pn = document.createElement('span');
+      pn.className = 'price-new'; pn.textContent = '₹' + Number(p.price).toLocaleString('en-IN');
+      pr.appendChild(pn);
+      if (p.original_price) {
+        var po = document.createElement('span');
+        po.className = 'price-old'; po.textContent = '₹' + Number(p.original_price).toLocaleString('en-IN');
+        pr.appendChild(po);
+      }
+      info.appendChild(st); info.appendChild(nm); info.appendChild(pr);
+      card.appendChild(info);
+
+      var btn = document.createElement('a');
+      btn.className = 'buy-btn';
+      btn.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent(msg);
+      btn.target = '_blank'; btn.textContent = 'Enquire Now';
+      btn.onclick = function(e) { e.stopPropagation(); };
+      card.appendChild(btn);
+      grid.appendChild(card);
+    });
+    sec.hidden = false;
   }
 
   function renderProductCards(prods) {
