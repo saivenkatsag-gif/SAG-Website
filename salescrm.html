@@ -769,6 +769,22 @@ const initials=n=>(n||'?').split(' ').map(x=>x[0]).join('').toUpperCase().slice(
 const uid=()=>'id'+Date.now()+Math.random().toString(36).slice(2,7);
 const isAdmin=u=>u&&(u.isSuperAdmin||u.role==='Super Admin'||u.role==='Manager');
 const isSuperAdmin=u=>u&&(u.isSuperAdmin||u.role==='Manager');
+const isTeamLead=u=>u&&u.role==='Team Lead'&&!isAdmin(u);
+const canTrackTeam=u=>isAdmin(u)||isTeamLead(u);
+/* Members a user can see: admins → everyone; Team Lead → self + Sales Reps in the same branch; others → self */
+function scopeMembers(includeSuperAdmin=false){
+  if(!currentUser)return[];
+  if(isAdmin(currentUser))return includeSuperAdmin?team:team.filter(m=>!m.isSuperAdmin);
+  if(isTeamLead(currentUser)){
+    return team.filter(m=>m.id===currentUser.id||(currentUser.branch&&m.branch===currentUser.branch&&m.role==='Sales Rep'&&!m.isSuperAdmin));
+  }
+  return team.filter(m=>m.id===currentUser.id);
+}
+function canAccessLead(l){
+  if(!currentUser||!l)return false;
+  if(isAdmin(currentUser))return true;
+  return scopeMembers().some(m=>m.id===l.assignee);
+}
 
 function memberColor(id){const i=team.findIndex(m=>m.id===id);return COLORS[i>=0?i%COLORS.length:7]}
 function memberBg(id){const i=team.findIndex(m=>m.id===id);return BGCOLOR[i>=0?i%BGCOLOR.length:0]}
@@ -782,7 +798,8 @@ function hotLeads(){return leads.filter(l=>{const d=daysTo(l.buyDate);return d!=
 function visibleLeads(){
   if(!currentUser)return[];
   if(isAdmin(currentUser))return leads;
-  return leads.filter(l=>l.assignee===currentUser.id);
+  const ids=new Set(scopeMembers().map(m=>m.id));
+  return leads.filter(l=>ids.has(l.assignee));
 }
 
 /* ── Points System ──────────────────────────────────────── */
@@ -1430,6 +1447,7 @@ function wireLoginEvents(){
 
 /* ── Nav / Render ────────────────────────────────────────── */
 function setView(v){
+  if(v==='settings'&&!isAdmin(currentUser)){toast('Settings are accessible to Admins only','#dc2626');v='dashboard';}
   currentView=v;
   document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
   const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Reminders & Alerts',reports:'Reports & Analytics',team:'Team',import:'Import CSV',settings:'Settings'};
@@ -1518,6 +1536,7 @@ function updateSidebarUser(){
   rebuildBranchDropdowns();
   rebuildAssigneeDropdown();
   updateReminderDropdown();
+  document.querySelectorAll('.nav-item[data-view="settings"]').forEach(el=>{el.style.display=isAdmin(currentUser)?'':'none';});
 }
 
 function rebuildAssigneeDropdown(){
@@ -1525,6 +1544,8 @@ function rebuildAssigneeDropdown(){
   const cur=sel.value;
   if(isAdmin(currentUser)){
     sel.innerHTML='<option value="">Unassigned</option>'+team.filter(m=>!m.isSuperAdmin).map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  } else if(isTeamLead(currentUser)){
+    sel.innerHTML=scopeMembers().map(m=>`<option value="${m.id}">${m.name}${m.id===currentUser.id?' (You)':''}</option>`).join('');
   } else {
     sel.innerHTML=`<option value="${currentUser.id}">${currentUser.name} (You)</option>`;
   }
@@ -1575,7 +1596,7 @@ function renderDash(){
 
   return`
 <div class="stats-grid">
-  <div class="stat-card"><div class="stat-label">My Leads</div><div class="stat-value" style="color:var(--accent2)">${total}</div><div class="stat-change">Assigned to you</div></div>
+  <div class="stat-card"><div class="stat-label">${isTeamLead(currentUser)?'Team Leads':'My Leads'}</div><div class="stat-value" style="color:var(--accent2)">${total}</div><div class="stat-change">${isTeamLead(currentUser)?'You + your teammates':'Assigned to you'}</div></div>
   <div class="stat-card"><div class="stat-label">Deals Won</div><div class="stat-value" style="color:var(--green)">${won}</div><div class="stat-change">${total>0?Math.round(won/total*100):0}% win rate</div></div>
   <div class="stat-card"><div class="stat-label">Hot Follow-ups</div><div class="stat-value" style="color:var(--amber)">${hot}</div><div class="stat-change">Due in ≤3 days</div></div>
   <div class="stat-card" style="background:var(--gold-bg);border-color:rgba(217,119,6,.25);cursor:pointer" onclick="togglePtsPopup()" title="View points history"><div class="stat-label" style="color:var(--gold)">My Points</div><div class="stat-value" style="color:var(--gold);font-family:var(--mono)">${pts}</div><div class="stat-change" style="color:var(--gold)">Tap to view history ↗</div></div>
@@ -1674,10 +1695,10 @@ function renderLeads(){
     <option value="all" ${languageFilter==='all'?'selected':''}>All Languages</option>
     ${LANGUAGES.map(l=>`<option value="${l}" ${languageFilter===l?'selected':''}>${l}</option>`).join('')}
   </select></span>
-  ${isAdmin(currentUser)?`<span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">Team Member:</span>
+  ${canTrackTeam(currentUser)?`<span style="display:flex;align-items:center;gap:7px;white-space:nowrap"><span style="font-size:11px;color:var(--text3);font-weight:600">Team Member:</span>
   <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="memberFilter=this.value;render()">
     <option value="all" ${memberFilter==='all'?'selected':''}>All Team Members</option>
-    ${team.map(m=>`<option value="${m.id}" ${memberFilter===m.id?'selected':''}>${m.name}</option>`).join('')}
+    ${scopeMembers(true).map(m=>`<option value="${m.id}" ${memberFilter===m.id?'selected':''}>${m.name}</option>`).join('')}
   </select></span>`:''}
 </div>
 <div class="section-hdr">
@@ -1727,7 +1748,7 @@ function closeDetailPanel(){
 function openDetail(id){
   const l=leads.find(x=>x.id===id);
   if(!l)return;
-  if(!isAdmin(currentUser)&&l.assignee!==currentUser.id){toast('Access denied','#dc2626');return;}
+  if(!canAccessLead(l)){toast('Access denied','#dc2626');return;}
 
   /* Remove any existing panel */
   closeDetailPanel();
@@ -2103,7 +2124,7 @@ function openAddLead(){
 function openEditLead(id){
   const l=leads.find(x=>x.id===id);
   if(!l)return;
-  if(!isAdmin(currentUser)&&l.assignee!==currentUser.id){toast('You can only edit your own leads','#dc2626');return;}
+  if(!canAccessLead(l)){toast('You can only edit your own or your team\'s leads','#dc2626');return;}
   editLeadId=id;
   $('lead-modal-title').textContent='Edit Lead';
   $('f-name').value=l.name||'';
@@ -2275,16 +2296,20 @@ async function deleteMember(id){
 /* ── TEAM MEMBERS (Super Admin only) ─────────────────────── */
 function renderTeam(){
   const amAdmin=isAdmin(currentUser);
+  const amTrack=canTrackTeam(currentUser);
+  const scope=scopeMembers(true);
+  const scopeEmp=scopeMembers(false);
+  const scopeIds=new Set(scope.map(m=>m.id));
   const tabs=['members','performance','points'];
   const tabLabels={members:'Members',performance:'Performance',points:'Points Leaderboard'};
-  if(amAdmin){tabs.push('activity');}
+  if(amTrack){tabs.push('activity');}
 
   const membersHTML=`
 <div class="section-hdr" style="margin-bottom:14px">
-  ${amAdmin?`<button class="btn btn-primary btn-sm" onclick="openAddMember()">+ Add Employee</button>`:'<span style="font-size:12px;color:var(--text3)">Employees can only be added by Super Admin</span>'}
+  ${amAdmin?`<button class="btn btn-primary btn-sm" onclick="openAddMember()">+ Add Employee</button>`:'<span style="font-size:12px;color:var(--text3)">'+(amTrack?'Showing you and your teammates':'Employees can only be added by Super Admin')+'</span>'}
 </div>
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
-${team.filter(m=>!m.isSuperAdmin||amAdmin).map((m,i)=>{
+${scope.map((m,i)=>{
     const ml=leads.filter(l=>l.assignee===m.id);
     const mw=ml.filter(l=>l.status==='Won').length;
     const mv=ml.filter(l=>l.status!=='Lost').reduce((s,l)=>s+(Number(l.value)||0),0);
@@ -2311,7 +2336,7 @@ ${team.filter(m=>!m.isSuperAdmin||amAdmin).map((m,i)=>{
 
   const perfHTML=`
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px">
-${team.filter(m=>!m.isSuperAdmin).map((m,i)=>{
+${scopeEmp.map((m,i)=>{
     const ml=leads.filter(l=>l.assignee===m.id);
     const mw=ml.filter(l=>l.status==='Won').length;
     const mlost=ml.filter(l=>l.status==='Lost').length;
@@ -2337,7 +2362,7 @@ ${team.filter(m=>!m.isSuperAdmin).map((m,i)=>{
 </div>`;
 
   // Points leaderboard & log (admin sees all, employee sees own)
-  const leaderList=team.filter(m=>!m.isSuperAdmin).map(m=>({m,pts:getUserPoints(m.id)})).sort((a,b)=>b.pts-a.pts);
+  const leaderList=scopeEmp.map(m=>({m,pts:getUserPoints(m.id)})).sort((a,b)=>b.pts-a.pts);
   const ptsHTML=`
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
   <div>
@@ -2356,15 +2381,15 @@ ${team.filter(m=>!m.isSuperAdmin).map((m,i)=>{
     </div>
   </div>
   <div>
-    <div class="section-title" style="margin-bottom:12px">${amAdmin?'All Points Activity':'My Points Log'}</div>
+    <div class="section-title" style="margin-bottom:12px">${amAdmin?'All Points Activity':amTrack?'Team Points Activity':'My Points Log'}</div>
     <div class="panel" style="max-height:400px;overflow-y:auto">
-      ${(amAdmin?pointsLog:[...pointsLog].filter(p=>p.userId===currentUser.id)).slice().reverse().slice(0,30).map(p=>{
+      ${(amAdmin?pointsLog:[...pointsLog].filter(p=>amTrack?scopeIds.has(p.userId):p.userId===currentUser.id)).slice().reverse().slice(0,30).map(p=>{
         const m=team.find(x=>x.id===p.userId);
         const lead=leads.find(l=>l.id===p.leadId);
         const dt=new Date(p.ts);
         return`<div class="pts-log-row">
           <div style="flex:1">
-            ${amAdmin?`<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px">${m?m.name:'Unknown'}</div>`:''}
+            ${amTrack?`<div style="font-size:11px;font-weight:600;color:var(--text2);margin-bottom:2px">${m?m.name:'Unknown'}</div>`:''}
             <div style="font-size:12px;color:var(--text)">${p.reason}</div>
             <div style="font-size:10px;color:var(--text3);margin-top:2px;font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</div>
           </div>
@@ -2375,9 +2400,9 @@ ${team.filter(m=>!m.isSuperAdmin).map((m,i)=>{
   </div>
 </div>`;
 
-  const activityHTML=amAdmin?`
+  const activityHTML=amTrack?`
 <div class="panel" style="max-height:500px;overflow-y:auto">
-  ${leads.slice(0,50).flatMap(l=>(l.chatLog||[]).map(m=>({...m,leadName:l.name}))).sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,40).map(m=>{
+  ${leads.filter(l=>amAdmin||scopeIds.has(l.assignee)).slice(0,50).flatMap(l=>(l.chatLog||[]).map(m=>({...m,leadName:l.name}))).sort((a,b)=>new Date(b.ts)-new Date(a.ts)).slice(0,40).map(m=>{
     const dt=new Date(m.ts);
     return`<div style="display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)">
       <div style="width:7px;height:7px;border-radius:50%;background:${m.type==='call'?'var(--teal)':m.type==='chat'?'var(--accent2)':'var(--amber)'};flex-shrink:0;margin-top:4px"></div>
@@ -2392,7 +2417,7 @@ ${team.filter(m=>!m.isSuperAdmin).map((m,i)=>{
       <div style="font-size:10.5px;color:var(--text3);white-space:nowrap;font-family:var(--mono)">${dt.toLocaleDateString('en-IN',{day:'numeric',month:'short'})} ${dt.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div>
     </div>`;
   }).join('')||'<div class="rd-empty">No communication logged yet</div>'}
-</div>`:`<div class="locked-notice"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Activity log is visible to Admins only.</div>`;
+</div>`:`<div class="locked-notice"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="10" height="7" rx="1.5"/><path d="M5 7V5a3 3 0 0 1 6 0v2"/></svg>Activity log is visible to Admins and Team Leads only.</div>`;
 
   const tabContent={members:membersHTML,performance:perfHTML,points:ptsHTML,activity:activityHTML};
   return`
@@ -2508,7 +2533,7 @@ function renderReports(){
   <div class="report-card"><div class="report-title">Leads by Status</div><div class="chart-wrap"><canvas id="ch-status"></canvas></div></div>
   <div class="report-card"><div class="report-title">Leads by Source</div><div class="chart-wrap"><canvas id="ch-source"></canvas></div></div>
   <div class="report-card"><div class="report-title">Leads by Branch</div><div class="chart-wrap"><canvas id="ch-branch"></canvas></div></div>
-  ${isAdmin(currentUser)?`<div class="report-card"><div class="report-title">Team Performance (Points)</div><div class="chart-wrap"><canvas id="ch-pts"></canvas></div></div>`:''}
+  ${canTrackTeam(currentUser)?`<div class="report-card"><div class="report-title">Team Performance (Points)</div><div class="chart-wrap"><canvas id="ch-pts"></canvas></div></div>`:''}
 </div>`;
 }
 
@@ -2535,8 +2560,8 @@ function initCharts(){
   const brMap={};vl.forEach(l=>{if(l.branch){brMap[l.branch]=(brMap[l.branch]||0)+1;}});
   mkBar('ch-branch',Object.keys(brMap),Object.values(brMap),'rgba(14,116,144,.7)');
 
-  if(isAdmin(currentUser)){
-    const employees=team.filter(m=>!m.isSuperAdmin);
+  if(canTrackTeam(currentUser)){
+    const employees=scopeMembers(false);
     const ptsData=employees.map(m=>getUserPoints(m.id));
     mkBar('ch-pts',employees.map(m=>m.name.split(' ')[0]),ptsData,'rgba(217,119,6,.75)');
   }
