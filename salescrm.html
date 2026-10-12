@@ -423,6 +423,7 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
       <div class="nav-section">People</div>
       <div class="nav-item" data-view="team"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="2.5"/><path d="M0 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 11.5a3 3 0 0 1 .5 1.5"/></svg><span>Team</span></div>
       <div class="nav-section">Tools</div>
+      <div class="nav-item" data-view="dronesales" style="display:none"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="3" cy="3" r="1.8"/><circle cx="13" cy="3" r="1.8"/><circle cx="3" cy="13" r="1.8"/><circle cx="13" cy="13" r="1.8"/><path d="M4.3 4.3L6.5 6.5M11.7 4.3L9.5 6.5M4.3 11.7L6.5 9.5M11.7 11.7L9.5 9.5"/><rect x="6.2" y="6.2" width="3.6" height="3.6" rx="1"/></svg><span>Drone Sales</span></div>
       <div class="nav-item" data-view="import"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 5 4-5"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg><span>Import CSV</span></div>
       <div class="nav-item" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg><span>Settings</span></div>
     </div>
@@ -504,6 +505,7 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
         <div class="nav-section">People</div>
         <div class="nav-item" onclick="setView('team');closeMobileSidebar()" data-view="team"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="5" cy="5" r="2.5"/><path d="M0 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 11.5a3 3 0 0 1 .5 1.5"/></svg><span>Team</span></div>
         <div class="nav-section">Tools</div>
+        <div class="nav-item" onclick="setView('dronesales');closeMobileSidebar()" data-view="dronesales" style="display:none"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="3" cy="3" r="1.8"/><circle cx="13" cy="3" r="1.8"/><circle cx="3" cy="13" r="1.8"/><circle cx="13" cy="13" r="1.8"/><path d="M4.3 4.3L6.5 6.5M11.7 4.3L9.5 6.5M4.3 11.7L6.5 9.5M11.7 11.7L9.5 9.5"/><rect x="6.2" y="6.2" width="3.6" height="3.6" rx="1"/></svg><span>Drone Sales</span></div>
         <div class="nav-item" onclick="setView('import');closeMobileSidebar()" data-view="import"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1v9M4 6l4 5 4-5"/><rect x="1" y="12" width="14" height="3" rx="1"/></svg><span>Import CSV</span></div>
         <div class="nav-item" onclick="setView('settings');closeMobileSidebar()" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="2"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41"/></svg><span>Settings</span></div>
       </div>
@@ -687,6 +689,45 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
     <div class="modal-footer">
       <button class="btn" onclick="closeModal('import-confirm-modal')">Cancel</button>
       <button class="btn btn-primary" onclick="confirmImport()">Import Leads</button>
+    </div>
+  </div>
+</div>
+
+<!-- DRONE IMPORT MODAL -->
+<div class="modal-backdrop" id="drone-import-modal" onclick="backdropClose(event,'drone-import-modal')">
+  <div class="modal modal-lg">
+    <div class="modal-hdr">
+      <div><div class="modal-title">Confirm Drone Sales Import</div><div class="modal-sub" id="drone-import-sub">—</div></div>
+      <button class="modal-close" onclick="closeModal('drone-import-modal')">✕</button>
+    </div>
+    <div id="drone-import-body"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('drone-import-modal')">Cancel</button>
+      <button class="btn btn-primary" id="drone-import-btn" onclick="confirmDroneImport()">Import Records</button>
+    </div>
+  </div>
+</div>
+
+<!-- DRONE SALE MODAL (Super Admin only) -->
+<div class="modal-backdrop" id="drone-modal" onclick="backdropClose(event,'drone-modal')">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div><div class="modal-title" id="drone-modal-title">Add Drone Sale</div><div class="modal-sub">Super Admin only — record UIN and ownership transfer details</div></div>
+      <button class="modal-close" onclick="closeModal('drone-modal')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="fg"><label class="fl">UIN Number <span class="req">*</span></label><input class="fi" id="d-uin" placeholder="e.g. UA-XXXXXXXX" style="text-transform:uppercase"/></div>
+      <div class="fg"><label class="fl">Customer Name <span class="req">*</span></label><input class="fi" id="d-customer" placeholder="Customer / company name"/></div>
+      <div class="fg"><label class="fl">Branch Name <span class="req">*</span></label><select class="fi" id="d-branch"><option value="">Select Branch…</option></select></div>
+      <div class="fg"><label class="fl">Owner eGCA ID</label><input class="fi" id="d-egca" placeholder="Owner's eGCA ID"/></div>
+      <div class="fg full"><label class="fl">Transfer Status <span class="req">*</span></label>
+        <select class="fi" id="d-status"><option value="Not Transferred">Not Transferred</option><option value="Transferred">Transferred</option></select>
+      </div>
+      <div class="fg full"><label class="fl">Notes</label><textarea class="fi" id="d-notes" placeholder="Model, serial number, transfer remarks…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('drone-modal')">Cancel</button>
+      <button class="btn btn-primary" id="drone-save-btn" onclick="saveDroneSale()">Save</button>
     </div>
   </div>
 </div>
@@ -1398,7 +1439,7 @@ async function verifyOTP(){
   $('login-screen').classList.add('hidden');
   $('app').style.display='flex';
   updateSidebarUser();render();checkMissedReminders();
-  subscribeRealtimeLeads();
+  subscribeRealtimeLeads();loadDroneSales();
   setInterval(checkMissedReminders,5*60*1000);
   initMobileLayout();
   toast('Welcome, '+member.name+'! 👋','#22c87a');
@@ -1447,10 +1488,11 @@ function wireLoginEvents(){
 
 /* ── Nav / Render ────────────────────────────────────────── */
 function setView(v){
+  if(v==='dronesales'&&!isSuperAdmin(currentUser)){toast('Drone Sales is accessible to Super Admin only','#dc2626');v='dashboard';}
   if(v==='settings'&&!isAdmin(currentUser)){toast('Settings are accessible to Admins only','#dc2626');v='dashboard';}
   currentView=v;
   document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
-  const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Reminders & Alerts',reports:'Reports & Analytics',team:'Team',import:'Import CSV',settings:'Settings'};
+  const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Reminders & Alerts',reports:'Reports & Analytics',team:'Team',import:'Import CSV',dronesales:'Drone Sales',settings:'Settings'};
   $('page-title').textContent=titles[v]||v;
   Object.values(chartReg).forEach(c=>{try{c.destroy();}catch(e){}});chartReg={};
   render();
@@ -1464,6 +1506,7 @@ function render(){
   else if(currentView==='reports'){c.innerHTML=renderReports();setTimeout(initCharts,60);}
   else if(currentView==='team')c.innerHTML=renderTeam();
   else if(currentView==='import')c.innerHTML=renderImport();
+  else if(currentView==='dronesales')c.innerHTML=renderDroneSales();
   else if(currentView==='settings')c.innerHTML=renderSettings();
   updateBadge();
   updateMobileNav();
@@ -1537,6 +1580,7 @@ function updateSidebarUser(){
   rebuildAssigneeDropdown();
   updateReminderDropdown();
   document.querySelectorAll('.nav-item[data-view="settings"]').forEach(el=>{el.style.display=isAdmin(currentUser)?'':'none';});
+  document.querySelectorAll('.nav-item[data-view="dronesales"]').forEach(el=>{el.style.display=isSuperAdmin(currentUser)?'':'none';});
 }
 
 function rebuildAssigneeDropdown(){
@@ -2477,6 +2521,241 @@ async function saveMember(){
 
 /* deleteMember defined above */
 
+/* ── DRONE SALES (Super Admin only) ─────────────────────── */
+let droneSales=[], droneEditId=null, droneSearch='', droneStatusFilter='all', droneBranchFilter='all';
+function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function dbToDrone(r){return{id:r.id,uin:r.uin||'',customer:r.customer_name||'',branch:r.branch||'',egca:r.owner_egca_id||'',status:r.transfer_status||'Not Transferred',notes:r.notes||'',createdBy:r.created_by||'',createdAt:r.created_at||new Date().toISOString()};}
+function droneToDb(d){return{id:d.id,uin:d.uin,customer_name:d.customer,branch:d.branch||null,owner_egca_id:d.egca||null,transfer_status:d.status,notes:d.notes||null,created_by:d.createdBy||null,created_at:d.createdAt};}
+function lsSaveDrones(){try{localStorage.setItem('lf_drone_sales',JSON.stringify(droneSales));}catch(e){}}
+async function loadDroneSales(){
+  if(!isSuperAdmin(currentUser))return;
+  try{
+    const rows=await sbFetch('/drone_sales?order=created_at.desc');
+    droneSales=rows.map(dbToDrone);
+    lsSaveDrones();
+  }catch(e){
+    try{const d=localStorage.getItem('lf_drone_sales');droneSales=d?JSON.parse(d):[];}catch(_){droneSales=[];}
+    toast('Drone Sales table not reachable — run the SQL in Settings → Supabase Table Setup','#f59e0b',6000);
+  }
+  if(currentView==='dronesales')render();
+}
+function renderDroneSales(){
+  if(!isSuperAdmin(currentUser))return`<div class="locked-notice" style="max-width:400px">Drone Sales is accessible to Super Admin only.</div>`;
+  const q=droneSearch.trim().toLowerCase();
+  let list=droneSales.filter(d=>(droneStatusFilter==='all'||d.status===droneStatusFilter)&&(droneBranchFilter==='all'||d.branch===droneBranchFilter)&&(!q||[d.uin,d.customer,d.egca,d.branch,d.notes].some(v=>(v||'').toLowerCase().includes(q))));
+  const total=droneSales.length,tr=droneSales.filter(d=>d.status==='Transferred').length,nt=total-tr;
+  const allBranches=[...new Set([...branches,...droneSales.map(d=>d.branch).filter(Boolean)])];
+  const rows=list.map(d=>`
+    <tr style="cursor:default">
+      <td style="font-family:var(--mono);font-weight:600">${esc(d.uin)}</td>
+      <td><div class="lead-name">${esc(d.customer)}</div></td>
+      <td>${esc(d.branch)||'—'}</td>
+      <td style="font-family:var(--mono);font-size:12px">${esc(d.egca)||'—'}</td>
+      <td>
+        <select class="fi" style="width:auto;padding:4px 26px 4px 9px;font-size:11.5px;font-weight:600;${d.status==='Transferred'?'color:var(--green);background-color:var(--green-bg)':'color:var(--amber);background-color:var(--amber-bg)'}" onchange="setDroneStatus('${d.id}',this.value)">
+          <option value="Not Transferred" ${d.status!=='Transferred'?'selected':''}>Not Transferred</option>
+          <option value="Transferred" ${d.status==='Transferred'?'selected':''}>Transferred</option>
+        </select>
+      </td>
+      <td style="max-width:240px;font-size:12px;color:var(--text2);white-space:pre-wrap;word-break:break-word">${esc(d.notes)||'—'}</td>
+      <td style="font-size:11px;color:var(--text3);white-space:nowrap">${fmtDateTime(d.createdAt)}</td>
+      <td><div style="display:flex;gap:4px"><button class="act-btn" onclick="openDroneModal('${d.id}')">Edit</button><button class="act-btn del" onclick="deleteDroneSale('${d.id}')">Del</button></div></td>
+    </tr>`).join('');
+  return`
+<div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="stat-card"><div class="stat-label">Drones Sold</div><div class="stat-value" style="color:var(--accent2)">${total}</div><div class="stat-change">Total records</div></div>
+  <div class="stat-card"><div class="stat-label">Transferred</div><div class="stat-value" style="color:var(--green)">${tr}</div><div class="stat-change">Ownership transferred</div></div>
+  <div class="stat-card"><div class="stat-label">Not Transferred</div><div class="stat-value" style="color:var(--amber)">${nt}</div><div class="stat-change">Pending transfer</div></div>
+</div>
+<div class="filters-bar">
+  <div class="search-wrap" style="flex:2;max-width:none"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="5"/><path d="M11 11l3 3"/></svg><input class="search-input" id="drone-search-input" placeholder="Search UIN, customer, eGCA ID…" value="${esc(droneSearch)}" oninput="handleDroneSearch(this)"/></div>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="droneStatusFilter=this.value;render()">
+    <option value="all" ${droneStatusFilter==='all'?'selected':''}>All Transfer Status</option>
+    <option value="Transferred" ${droneStatusFilter==='Transferred'?'selected':''}>Transferred</option>
+    <option value="Not Transferred" ${droneStatusFilter==='Not Transferred'?'selected':''}>Not Transferred</option>
+  </select>
+  <select class="fi" style="width:auto;padding:6px 28px 6px 10px;font-size:12px" onchange="droneBranchFilter=this.value;render()">
+    <option value="all" ${droneBranchFilter==='all'?'selected':''}>All Branches</option>
+    ${allBranches.map(b=>`<option value="${esc(b)}" ${droneBranchFilter===b?'selected':''}>${esc(b)}</option>`).join('')}
+  </select>
+</div>
+<div class="section-hdr">
+  <div class="section-title">${list.length} record${list.length!==1?'s':''}</div>
+  <div style="display:flex;gap:6px"><button class="btn btn-sm" onclick="downloadDroneSampleCSV()">Sample CSV</button><button class="btn btn-sm" onclick="$('drone-csv-input').click()">Import CSV</button><button class="btn btn-sm" onclick="exportDroneCSV()">Export CSV</button><button class="btn btn-sm btn-primary" onclick="openDroneModal()">+ Add Drone Sale</button></div>
+</div>
+<input type="file" id="drone-csv-input" accept=".csv" style="display:none" onchange="handleDroneFile(event)"/>
+<div class="panel" style="overflow-x:auto">
+  <table class="leads-table" style="min-width:980px">
+    <thead><tr><th>UIN Number</th><th>Customer</th><th>Branch</th><th>Owner eGCA ID</th><th>Transfer Status</th><th>Notes</th><th>Added</th><th></th></tr></thead>
+    <tbody>${rows||'<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--text3)">🚁 No drone sales recorded yet<br>Click “Add Drone Sale” to add the first one.</td></tr>'}</tbody>
+  </table>
+</div>`;
+}
+function handleDroneSearch(el){
+  droneSearch=el.value;const pos=el.selectionStart;render();
+  const ne=$('drone-search-input');if(ne){ne.focus();ne.setSelectionRange(pos,pos);}
+}
+function openDroneModal(id){
+  if(!isSuperAdmin(currentUser)){toast('Super Admin only','#dc2626');return;}
+  droneEditId=id||null;
+  const d=id?droneSales.find(x=>x.id===id):null;
+  $('drone-modal-title').textContent=d?'Edit Drone Sale':'Add Drone Sale';
+  const bl=[...branches];if(d&&d.branch&&!bl.includes(d.branch))bl.push(d.branch);
+  $('d-branch').innerHTML='<option value="">Select Branch…</option>'+bl.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
+  $('d-uin').value=d?d.uin:'';
+  $('d-customer').value=d?d.customer:'';
+  $('d-branch').value=d?d.branch:'';
+  $('d-egca').value=d?d.egca:'';
+  $('d-status').value=d?d.status:'Not Transferred';
+  $('d-notes').value=d?d.notes:'';
+  openModal('drone-modal');
+}
+async function saveDroneSale(){
+  if(!isSuperAdmin(currentUser)){toast('Super Admin only','#dc2626');return;}
+  const uin=$('d-uin').value.trim().toUpperCase();
+  const customer=$('d-customer').value.trim();
+  const branch=$('d-branch').value;
+  if(!uin){toast('UIN number is required','#f59e0b');return;}
+  if(!customer){toast('Customer name is required','#f59e0b');return;}
+  if(!branch){toast('Please select a branch','#f59e0b');return;}
+  if(droneSales.some(x=>x.uin===uin&&x.id!==droneEditId)){toast('This UIN is already recorded','#dc2626');return;}
+  let d;
+  const vals={uin,customer,branch,egca:$('d-egca').value.trim(),status:$('d-status').value,notes:$('d-notes').value.trim()};
+  if(droneEditId){d=droneSales.find(x=>x.id===droneEditId);if(!d)return;Object.assign(d,vals);}
+  else{d={id:uid(),...vals,createdBy:currentUser.name,createdAt:new Date().toISOString()};droneSales.unshift(d);}
+  lsSaveDrones();
+  const btn=$('drone-save-btn');btn.disabled=true;
+  try{
+    await sbFetch('/drone_sales',{method:'POST',body:JSON.stringify(droneToDb(d)),headers:{'Prefer':'resolution=merge-duplicates'}});
+    toast('Drone sale saved ✓','#22c87a');
+  }catch(e){
+    toast('⚠️ Saved locally, cloud sync failed: '+sbErrorMessage(e),'#dc2626',7000);
+  }
+  btn.disabled=false;
+  closeModal('drone-modal');render();
+}
+async function setDroneStatus(id,val){
+  const d=droneSales.find(x=>x.id===id);if(!d||!isSuperAdmin(currentUser))return;
+  const prev=d.status;d.status=val;lsSaveDrones();render();
+  try{
+    await sbFetch('/drone_sales?id=eq.'+encodeURIComponent(id),{method:'PATCH',body:JSON.stringify({transfer_status:val})});
+    toast('Marked '+val+' ✓','#22c87a');
+  }catch(e){
+    d.status=prev;lsSaveDrones();render();
+    toast('Could not update status: '+sbErrorMessage(e),'#dc2626',6000);
+  }
+}
+async function deleteDroneSale(id){
+  if(!isSuperAdmin(currentUser)){toast('Super Admin only','#dc2626');return;}
+  const d=droneSales.find(x=>x.id===id);if(!d)return;
+  if(!confirm('Delete drone sale '+d.uin+'?'))return;
+  try{
+    await sbFetch('/drone_sales?id=eq.'+encodeURIComponent(id),{method:'DELETE'});
+  }catch(e){toast('Delete failed: '+sbErrorMessage(e),'#dc2626',6000);return;}
+  droneSales=droneSales.filter(x=>x.id!==id);lsSaveDrones();
+  toast('Drone sale deleted','#dc2626');render();
+}
+function exportDroneCSV(){
+  const hdr=['UIN Number','Customer Name','Branch','Owner eGCA ID','Transfer Status','Notes','Added'];
+  const rows=droneSales.map(d=>[d.uin,d.customer,d.branch,d.egca,d.status,d.notes,d.createdAt].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`).join(','));
+  const csv=[hdr.join(','),...rows].join('\n');
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='drone_sales_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
+  toast('Drone sales exported','#22c87a');
+}
+
+/* ── Drone Sales CSV import ──────────────────────────────── */
+let pendingDroneImport=[];
+function parseCSVText(text){
+  text=text.replace(/^﻿/,'');
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i];
+    if(q){
+      if(c==='"'){if(text[i+1]==='"'){cur+='"';i++;}else q=false;}
+      else cur+=c;
+    }else if(c==='"')q=true;
+    else if(c===','){row.push(cur);cur='';}
+    else if(c==='\n'||c==='\r'){
+      if(c==='\r'&&text[i+1]==='\n')i++;
+      row.push(cur);cur='';
+      if(row.some(x=>x.trim()))rows.push(row);
+      row=[];
+    }else cur+=c;
+  }
+  row.push(cur);if(row.some(x=>x.trim()))rows.push(row);
+  return rows.map(r=>r.map(x=>x.trim()));
+}
+function normDroneStatus(v){
+  const t=(v||'').toLowerCase().replace(/[\s_\-]/g,'');
+  if(!t)return'Not Transferred';
+  if(t.includes('not')||t==='no'||t==='false'||t==='pending'||t==='0')return'Not Transferred';
+  if(t.includes('transfer')||t==='yes'||t==='true'||t==='done'||t==='1')return'Transferred';
+  return'Not Transferred';
+}
+function handleDroneFile(e){
+  const f=e.target.files[0];e.target.value='';
+  if(!f)return;
+  if(!isSuperAdmin(currentUser)){toast('Super Admin only','#dc2626');return;}
+  if(!/\.csv$/i.test(f.name)){toast('Please upload a .csv file','#f59e0b');return;}
+  const r=new FileReader();
+  r.onload=ev=>processDroneCSV(ev.target.result);
+  r.readAsText(f);
+}
+function processDroneCSV(text){
+  const rows=parseCSVText(text);
+  if(rows.length<2){toast('CSV must have a header row and data rows','#f59e0b');return;}
+  const hdr=rows[0].map(h=>h.toLowerCase().replace(/[^a-z0-9]/g,''));
+  const aliases={
+    uin:['uin','uinnumber','uinno'],
+    customer:['customer','customername','name','ownername'],
+    branch:['branch','branchname'],
+    egca:['egca','egcaid','owneregcaid','ownerdgcaid','dgcaid','ownerid'],
+    status:['status','transferstatus','transferred'],
+    notes:['notes','note','remarks']
+  };
+  const gi=k=>hdr.findIndex(h=>aliases[k].includes(h));
+  const idx={};Object.keys(aliases).forEach(k=>idx[k]=gi(k));
+  if(idx.uin<0||idx.customer<0){toast('CSV needs at least "UIN Number" and "Customer Name" columns','#dc2626',5000);return;}
+  const get=(r,k)=>idx[k]>=0?(r[idx[k]]||'').trim():'';
+  const seen=new Set(droneSales.map(d=>d.uin));
+  const valid=[];let dup=0,missing=0;
+  rows.slice(1).forEach(r=>{
+    const uin=get(r,'uin').toUpperCase(),customer=get(r,'customer');
+    if(!uin||!customer){missing++;return;}
+    if(seen.has(uin)){dup++;return;}
+    seen.add(uin);
+    valid.push({id:uid(),uin,customer,branch:get(r,'branch'),egca:get(r,'egca'),status:normDroneStatus(get(r,'status')),notes:get(r,'notes'),createdBy:currentUser.name,createdAt:new Date().toISOString()});
+  });
+  if(!valid.length){toast('No new valid rows found ('+dup+' duplicate, '+missing+' missing UIN/customer)','#f59e0b',5000);return;}
+  pendingDroneImport=valid;
+  $('drone-import-sub').textContent=valid.length+' record'+(valid.length!==1?'s':'')+' ready to import'+(dup||missing?' · skipped '+dup+' duplicate UIN'+(dup!==1?'s':'')+', '+missing+' incomplete row'+(missing!==1?'s':''):'');
+  const cell='padding:6px 9px;border-bottom:1px solid var(--border);overflow:hidden;white-space:nowrap;text-overflow:ellipsis';
+  $('drone-import-body').innerHTML=`<div class="csv-preview" style="max-height:260px"><div class="csv-row head" style="grid-template-columns:1.3fr 1.5fr 1fr 1.2fr 1.1fr"><div>UIN</div><div>Customer</div><div>Branch</div><div>eGCA ID</div><div>Status</div></div>${valid.slice(0,10).map(d=>`<div class="csv-row" style="grid-template-columns:1.3fr 1.5fr 1fr 1.2fr 1.1fr"><div>${esc(d.uin)}</div><div>${esc(d.customer)}</div><div>${esc(d.branch)||'—'}</div><div>${esc(d.egca)||'—'}</div><div>${esc(d.status)}</div></div>`).join('')}${valid.length>10?`<div style="padding:7px 10px;font-size:10.5px;color:var(--text3)">… and ${valid.length-10} more</div>`:''}</div>`;
+  openModal('drone-import-modal');
+}
+async function confirmDroneImport(){
+  if(!isSuperAdmin(currentUser)){toast('Super Admin only','#dc2626');return;}
+  const items=pendingDroneImport;if(!items.length)return;
+  pendingDroneImport=[];
+  const btn=$('drone-import-btn');btn.disabled=true;
+  droneSales=[...items,...droneSales];lsSaveDrones();
+  let failed=false;
+  for(let i=0;i<items.length;i+=100){
+    try{
+      await sbFetch('/drone_sales',{method:'POST',body:JSON.stringify(items.slice(i,i+100).map(droneToDb)),headers:{'Prefer':'resolution=merge-duplicates'}});
+    }catch(e){failed=true;toast('⚠️ Imported locally, cloud sync failed: '+sbErrorMessage(e),'#dc2626',7000);break;}
+  }
+  btn.disabled=false;
+  closeModal('drone-import-modal');
+  if(!failed)toast(items.length+' drone sale'+(items.length!==1?'s':'')+' imported ✓','#22c87a');
+  render();
+}
+function downloadDroneSampleCSV(){
+  const csv='UIN Number,Customer Name,Branch Name,Owner eGCA ID,Transfer Status,Notes\nUA-0000001,Ravi Kumar,Hyderabad,EG123456,Transferred,AG-365 drone\nUA-0000002,Anita Singh,Chennai,,Not Transferred,"Pending docs, follow up"\n';
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='drone_sales_sample.csv';a.click();
+  toast('Sample CSV downloaded','#22c87a');
+}
+
 /* ── NOTIFICATIONS ───────────────────────────────────────── */
 function renderNotifs(){
   const vl=visibleLeads();
@@ -2627,7 +2906,21 @@ create table if not exists branches (
 -- Disable RLS so the app can read/write freely
 alter table leads disable row level security;
 alter table team_members disable row level security;
-alter table branches disable row level security;</code>
+alter table branches disable row level security;
+
+-- Drone Sales (Super Admin section)
+create table if not exists drone_sales (
+  id              text primary key,
+  uin             text not null,
+  customer_name   text not null,
+  branch          text,
+  owner_egca_id   text,
+  transfer_status text default 'Not Transferred',
+  notes           text,
+  created_by      text,
+  created_at      timestamptz default now()
+);
+alter table drone_sales disable row level security;</code>
       <button class="btn btn-sm" style="margin-top:4px" onclick="copySetupSQL()">📋 Copy SQL</button>
     </div>
   </div>
@@ -2788,7 +3081,21 @@ create table if not exists branches (
 -- Disable RLS for all app tables
 alter table leads disable row level security;
 alter table team_members disable row level security;
-alter table branches disable row level security;`;
+alter table branches disable row level security;
+
+-- Drone Sales (Super Admin section)
+create table if not exists drone_sales (
+  id              text primary key,
+  uin             text not null,
+  customer_name   text not null,
+  branch          text,
+  owner_egca_id   text,
+  transfer_status text default 'Not Transferred',
+  notes           text,
+  created_by      text,
+  created_at      timestamptz default now()
+);
+alter table drone_sales disable row level security;`;
   navigator.clipboard.writeText(sql)
     .then(()=>toast('SQL copied to clipboard ✓','#15803d'))
     .catch(()=>toast('Copy failed — please select and copy manually','#f59e0b'));
@@ -2869,7 +3176,7 @@ document.addEventListener('click',e=>{
     if(ov&&ov.classList.contains('open')){if(typeof closeMobileSidebar==='function')closeMobileSidebar();pushBack();return true;}
 
     /* Priority 2: open modal */
-    const modals=['lead-modal','member-modal','reminder-modal','followup-done-modal','import-confirm-modal'];
+    const modals=['lead-modal','member-modal','reminder-modal','followup-done-modal','import-confirm-modal','drone-modal','drone-import-modal'];
     const openMod=modals.find(id=>{const el=document.getElementById(id);return el&&el.classList.contains('open');});
     if(openMod){closeModal(openMod);pushBack();return true;}
 
@@ -2919,7 +3226,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.head.appendChild(style);
   document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.addEventListener('click',()=>setView(el.dataset.view)));
   document.addEventListener('keydown',e=>{
-    if(e.key==='Escape'){['lead-modal','member-modal','reminder-modal','followup-done-modal','import-confirm-modal'].forEach(closeModal);closeDetailPanel();$('reminder-dropdown')?.classList.remove('open');}
+    if(e.key==='Escape'){['lead-modal','member-modal','reminder-modal','followup-done-modal','import-confirm-modal','drone-modal','drone-import-modal'].forEach(closeModal);closeDetailPanel();$('reminder-dropdown')?.classList.remove('open');}
     if(e.key==='n'&&(e.ctrlKey||e.metaKey)){e.preventDefault();openAddLead();}
   });
   loadPointsLog();
@@ -2945,7 +3252,7 @@ document.addEventListener('DOMContentLoaded',function(){
           $('app').style.display='flex';
           updateSidebarUser();render();
           checkMissedReminders();
-          subscribeRealtimeLeads();
+          subscribeRealtimeLeads();loadDroneSales();
           setInterval(checkMissedReminders,5*60*1000);
           initMobileLayout();
           return;
