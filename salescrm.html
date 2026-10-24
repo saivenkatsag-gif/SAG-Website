@@ -8,6 +8,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
   --bg:#f0f2f8;--bg2:#ffffff;--bg3:#f7f8fc;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.13);
@@ -419,6 +420,12 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
       <div class="nav-item active" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg><span>Dashboard</span></div>
       <div class="nav-item" data-view="leads"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.76 2.24-5 5-5s5 2.24 5 5"/><circle cx="12" cy="5" r="2"/><path d="M14.5 12c0-1.66-1.12-3-2.5-3"/></svg><span>All Leads</span></div>
       <div class="nav-item" data-view="notifications"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1.5a5 5 0 0 0-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 0 0-5-5z"/><path d="M6.5 13a1.5 1.5 0 0 0 3 0"/></svg><span>Reminders</span><div class="nav-badge" id="notif-badge" style="display:none">0</div></div>
+      <div class="nav-section">Sales &amp; Operations</div>
+      <div class="nav-item" data-view="products"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 1l6 3v8l-6 3-6-3V4z"/><path d="M2 4l6 3 6-3M8 7v8"/></svg><span>Products &amp; Services</span></div>
+      <div class="nav-item" data-view="quotes"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="1" width="10" height="14" rx="1.5"/><path d="M6 5h4M6 8h4M6 11h2"/></svg><span>Quotations &amp; Orders</span></div>
+      <div class="nav-item" data-view="invoices"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 7h14M4 10h3"/></svg><span>Invoices &amp; Payments</span></div>
+      <div class="nav-item" data-view="expenses" id="nav-expenses" style="display:none"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="3" width="14" height="10" rx="1.5"/><circle cx="8" cy="8" r="2"/><path d="M3.5 6v4M12.5 6v4"/></svg><span>Expenses</span></div>
+      <div class="nav-item" data-view="service"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10.5 2a3.5 3.5 0 0 0-3 5L2 12.5 3.5 14 9 8.5a3.5 3.5 0 0 0 5-3l-2 2-2-.5-.5-2z"/></svg><span>Support &amp; Service</span></div>
       <div class="nav-section">Analytics</div>
       <div class="nav-item" data-view="reports"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12l4-5 3 3 5-7"/><rect x="1" y="1" width="14" height="14" rx="2"/></svg><span>Reports</span></div>
       <div class="nav-section">People</div>
@@ -632,7 +639,7 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
     <div class="form-grid">
       <div class="fg"><label class="fl">Full Name <span class="req">*</span></label><input class="fi" id="m-name" placeholder="Priya Sharma"/></div>
       <div class="fg"><label class="fl">Email <span class="req">*</span></label><input class="fi" id="m-email" type="email" placeholder="priya@company.com"/></div>
-      <div class="fg"><label class="fl">Role</label><select class="fi" id="m-role"><option>Sales Rep</option><option>Team Lead</option><option>Manager</option></select></div>
+      <div class="fg full"><label class="fl">Roles <span class="req">*</span> <span style="text-transform:none;font-weight:500;color:var(--text3)">(select one or more)</span></label><div id="m-roles" style="display:flex;flex-wrap:wrap;gap:8px 18px;padding:6px 2px"><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" class="m-role-cb" value="Sales Rep"/>Sales Rep</label><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" class="m-role-cb" value="Team Lead"/>Team Lead</label><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" class="m-role-cb" value="Manager"/>Manager</label><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" class="m-role-cb" value="Finance Officer"/>Finance Officer</label><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" class="m-role-cb" value="Accounts Team"/>Accounts Team</label><label style="display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer"><input type="checkbox" class="m-role-cb" value="Service Technician"/>Service Technician</label></div><div class="fi-note">Manager = full admin access. A person gets the combined access of every role ticked.</div></div>
       <div class="fg"><label class="fl">Phone</label><input class="fi" id="m-phone" placeholder="+91 98765 43210"/></div>
       <div class="fg"><label class="fl">Branch</label><select class="fi" id="m-branch"><option value="">Select Branch…</option></select></div>
       <div class="fg"><label class="fl">Target (₹)</label><input class="fi" id="m-target" type="number" placeholder="1000000"/></div>
@@ -1104,14 +1111,14 @@ function leadToDb(l){
 function dbToMember(r){
   return{
     id:r.id,name:r.name||'',email:r.email||'',phone:r.phone||'',
-    role:r.role||'Sales Rep',branch:r.branch||'',target:r.target||0,
-    isSuperAdmin:r.is_super_admin||r.role==='Super Admin'||false
+    roles:parseRoles(r.role),role:primaryRole(parseRoles(r.role)),branch:r.branch||'',target:r.target||0,
+    isSuperAdmin:r.is_super_admin||parseRoles(r.role).includes('Super Admin')||false
   };
 }
 function memberToDb(m){
   return{
     id:m.id,name:m.name,email:m.email||null,phone:m.phone||null,
-    role:m.role||'Sales Rep',branch:m.branch||null,
+    role:(m.roles&&m.roles.length?m.roles:[m.role||'Sales Rep']).join(', '),branch:m.branch||null,
     target:Number(m.target)||0,
     is_super_admin:!!(m.isSuperAdmin)
   };
@@ -1497,11 +1504,12 @@ function wireLoginEvents(){
 
 /* ── Nav / Render ────────────────────────────────────────── */
 function setView(v){
+  if(v==='expenses'&&!SO.canExp()){toast('Expenses are accessible to the Finance team only','#dc2626');v='dashboard';}
   if(v==='dronesales'&&!isSuperAdmin(currentUser)){toast('Drone Sales is accessible to Super Admin only','#dc2626');v='dashboard';}
   if(v==='settings'&&!isAdmin(currentUser)){toast('Settings are accessible to Admins only','#dc2626');v='dashboard';}
   currentView=v;
   document.querySelectorAll('.nav-item[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===v));
-  const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Reminders & Alerts',reports:'Reports & Analytics',team:'Team',import:'Import CSV',dronesales:'Drone Sales',settings:'Settings'};
+  const titles={dashboard:'Dashboard',leads:'All Leads',notifications:'Reminders & Alerts',reports:'Reports & Analytics',team:'Team',import:'Import CSV',dronesales:'Drone Sales',settings:'Settings',products:'Products & Services',quotes:'Quotations & Orders',invoices:'Invoices & Payments',service:'Support & Service',expenses:'Expenses'};
   $('page-title').textContent=titles[v]||v;
   Object.values(chartReg).forEach(c=>{try{c.destroy();}catch(e){}});chartReg={};
   render();
@@ -1517,6 +1525,8 @@ function render(){
   else if(currentView==='import')c.innerHTML=renderImport();
   else if(currentView==='dronesales')c.innerHTML=renderDroneSales();
   else if(currentView==='settings')c.innerHTML=renderSettings();
+  else if(currentView==='expenses'){c.innerHTML=SO.rExp();if(!SO.expLoaded&&!SO.expLoading&&SO.canExp())SO.loadExp();}
+  else if(SO.views.includes(currentView)){c.innerHTML=SO.render();if(!SO.loaded&&!SO.loading)SO.load();}
   updateBadge();
   updateMobileNav();
   updateReminderBadge();
@@ -1581,14 +1591,15 @@ function updateSidebarUser(){
   const av=$('sidebar-avatar');
   if(av){av.textContent=initials(currentUser.name);av.style.background=memberBg(currentUser.id);av.style.color=memberColor(currentUser.id);av.style.width='30px';av.style.height='30px';}
   const sn=$('sidebar-name');if(sn)sn.textContent=currentUser.name;
-  const sr=$('sidebar-role');if(sr)sr.textContent=currentUser.role;
+  const sr=$('sidebar-role');if(sr)sr.textContent=roleLbl(currentUser);
   const mav=$('mob-sidebar-avatar');if(mav){mav.textContent=initials(currentUser.name);mav.style.background=memberBg(currentUser.id);mav.style.color=memberColor(currentUser.id);mav.style.width='30px';mav.style.height='30px';}
   const msn=$('mob-sidebar-name');if(msn)msn.textContent=currentUser.name;
-  const msr=$('mob-sidebar-role');if(msr)msr.textContent=currentUser.role;
+  const msr=$('mob-sidebar-role');if(msr)msr.textContent=roleLbl(currentUser);
   rebuildBranchDropdowns();
   rebuildAssigneeDropdown();
   updateReminderDropdown();
   document.querySelectorAll('.nav-item[data-view="settings"]').forEach(el=>{el.style.display=isAdmin(currentUser)?'':'none';});
+  document.querySelectorAll('.nav-item[data-view="expenses"]').forEach(el=>{el.style.display=SO.canExp()?'':'none';});
   document.querySelectorAll('.nav-item[data-view="dronesales"]').forEach(el=>{el.style.display=isSuperAdmin(currentUser)?'':'none';});
 }
 
@@ -2380,7 +2391,7 @@ ${scope.map((m,i)=>{
         <div class="avatar" style="width:40px;height:40px;font-size:13px;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div>
         <div style="flex:1">
           <div style="font-size:14px;font-weight:700">${m.name}${isMe?' <span style="font-size:9px;background:var(--accent-glow);color:var(--accent2);padding:1px 5px;border-radius:7px">You</span>':''}${m.isSuperAdmin?' <span class="admin-badge">Super Admin</span>':''}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:1px">${m.role}${m.branch?' · '+m.branch:''}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:1px">${roleLbl(m)}${m.branch?' · '+m.branch:''}</div>
         </div>
         ${amAdmin&&!m.isSuperAdmin?`<div style="display:flex;gap:4px"><button class="act-btn" onclick="openEditMember('${m.id}')">Edit</button><button class="act-btn del" onclick="deleteMember('${m.id}')">Del</button></div>`:''}
       </div>
@@ -2407,7 +2418,7 @@ ${scopeEmp.map((m,i)=>{
     return`<div class="panel" style="padding:16px">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
         <div class="avatar" style="width:36px;height:36px;font-size:12px;background:${BGCOLOR[i%BGCOLOR.length]};color:${COLORS[i%COLORS.length]}">${initials(m.name)}</div>
-        <div><div style="font-weight:700;font-size:13.5px">${m.name}</div><div style="font-size:11px;color:var(--text3)">${m.role}</div></div>
+        <div><div style="font-weight:700;font-size:13.5px">${m.name}</div><div style="font-size:11px;color:var(--text3)">${roleLbl(m)}</div></div>
         <div class="pts-badge" style="margin-left:auto">⭐ ${pts} pts</div>
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;text-align:center">
@@ -2434,7 +2445,7 @@ ${scopeEmp.map((m,i)=>{
         return`<div style="display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--border);${isMe?'background:var(--accent-glow)':''}">
           <div style="width:22px;height:22px;border-radius:50%;background:${i===0?'var(--gold-bg)':i===1?'rgba(148,163,184,.1)':'rgba(180,120,80,.1)'};color:${i===0?'var(--gold)':i===1?'#94a3b8':'#b47850'};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700">${i+1}</div>
           <div class="avatar" style="width:28px;height:28px;font-size:10px;background:${memberBg(m.id)};color:${memberColor(m.id)}">${initials(m.name)}</div>
-          <div style="flex:1"><div style="font-size:13px;font-weight:600">${m.name}${isMe?' (You)':''}</div><div style="font-size:10.5px;color:var(--text3)">${m.role}</div></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:600">${m.name}${isMe?' (You)':''}</div><div style="font-size:10.5px;color:var(--text3)">${roleLbl(m)}</div></div>
           <div class="pts-badge" style="font-size:13px">⭐ ${pts}</div>
         </div>`;
       }).join('')}
@@ -2493,7 +2504,7 @@ function openAddMember(){
   editMemberId=null;
   $('member-modal-title').textContent='Add Employee';
   ['m-name','m-email','m-phone','m-target'].forEach(id=>{const el=$(id);if(el)el.value='';});
-  $('m-role').value='Sales Rep';
+  setRoleChecks(['Sales Rep']);
   rebuildBranchDropdowns();
   openModal('member-modal');
 }
@@ -2506,7 +2517,7 @@ function openEditMember(id){
   $('m-name').value=m.name||'';
   $('m-email').value=m.email||'';
   $('m-phone').value=m.phone||'';
-  $('m-role').value=m.role||'Sales Rep';
+  setRoleChecks(roleList(m));
   $('m-target').value=m.target||'';
   rebuildBranchDropdowns();
   setTimeout(()=>{$('m-branch').value=m.branch||'';},50);
@@ -2519,14 +2530,18 @@ async function saveMember(){
   const email=$('m-email').value.trim().toLowerCase();
   if(!name||!email){toast('Name and email are required','#f59e0b');return;}
   if(team.find(m=>m.email===email&&m.id!==editMemberId)){toast('Email already in use','#dc2626');return;}
+  const roles=getRoleChecks();
+  if(!roles.length){toast('Select at least one role','#f59e0b');return;}
+  if(editMemberId&&editMemberId===currentUser.id&&!currentUser.isSuperAdmin&&!roles.includes('Manager')){toast('You cannot remove your own Manager role','#dc2626');return;}
   if(editMemberId){
     const m=team.find(x=>x.id===editMemberId);if(!m)return;
-    Object.assign(m,{name,email,phone:$('m-phone').value.trim(),role:$('m-role').value,branch:$('m-branch').value,target:Number($('m-target').value)||0});
+    Object.assign(m,{name,email,phone:$('m-phone').value.trim(),roles,role:primaryRole(roles),branch:$('m-branch').value,target:Number($('m-target').value)||0});
+    if(m.id===currentUser.id)Object.assign(currentUser,{roles:m.roles,role:m.role});
     lsSaveTeam();
     sbFetch('/team_members?id=eq.'+m.id,{method:'PATCH',body:JSON.stringify(memberToDb(m))}).catch(()=>{});
     toast('Employee updated ✓','#22c87a');
   } else {
-    const m={id:uid(),name,email,phone:$('m-phone').value.trim(),role:$('m-role').value,branch:$('m-branch').value,target:Number($('m-target').value)||0,isSuperAdmin:false};
+    const m={id:uid(),name,email,phone:$('m-phone').value.trim(),roles,role:primaryRole(roles),branch:$('m-branch').value,target:Number($('m-target').value)||0,isSuperAdmin:false};
     team.push(m);
     lsSaveTeam();
     sbFetch('/team_members',{method:'POST',body:JSON.stringify(memberToDb(m)),headers:{'Prefer':'resolution=ignore-duplicates'}}).catch(()=>{});
@@ -3163,7 +3178,7 @@ alter table drone_sales disable row level security;`;
 
 function exportCSV(){const hdr=['Name','Phone','Email','Address','Pincode','Product','Branch','Source','Status','Assignee','Value','Notes'];const rows=leads.map(l=>[l.name,l.phone,l.email,l.address,l.pincode,l.product,l.branch,l.source,l.status,memberName(l.assignee),l.value,l.notes].map(v=>`"${(v||'').toString().replace(/"/g,'""')}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='leads_'+new Date().toISOString().split('T')[0]+'.csv';a.click();toast('Leads exported','#22c87a');}
 
-function exportTeamCSV(){const hdr=['Name','Email','Phone','Role','Branch','Target'];const rows=team.map(m=>[m.name,m.email,m.phone,m.role,m.branch,m.target].map(v=>`"${(v||'').toString()}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='team_export.csv';a.click();toast('Team data exported','#22c87a');}
+function exportTeamCSV(){const hdr=['Name','Email','Phone','Role','Branch','Target'];const rows=team.map(m=>[m.name,m.email,m.phone,roleLbl(m),m.branch,m.target].map(v=>`"${(v||'').toString()}"`));const csv=[hdr.join(','),...rows.map(r=>r.join(','))].join('\n');const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='team_export.csv';a.click();toast('Team data exported','#22c87a');}
 
 /* ── Loading ─────────────────────────────────────────────── */
 function showAppLoading(on){
@@ -3328,6 +3343,296 @@ document.addEventListener('DOMContentLoaded',function(){
     $('app').style.display='none';
   });
 });
+
+/* ═══ SALES & OPERATIONS (Products, Quotes/Orders, Invoices/Payments, Service) ═══
+   NOTE: role checks below are UI-level. Real enforcement needs Supabase Auth + RLS. */
+const SO={views:['products','quotes','invoices','service'],loaded:false,loading:false,err:'',lines:[],
+  products:[],cats:[],quotes:[],orders:[],invoices:[],bal:{},tickets:[],payments:[],tab:'quotes',q:'',edit:null};
+const E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const inr=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const CO='Samtulana Antarjala Gathaka Pvt Ltd';
+SO.can=a=>{if(isAdmin(currentUser))return true;const r=roleList(currentUser).join(' ').toLowerCase();
+  if(a==='sales')return /sales|lead/.test(r);if(a==='acct')return /account/.test(r);
+  if(a==='service')return /technician|service|sales|lead/.test(r);return false;};
+SO.fail=e=>{let m=e.message||String(e);try{m=JSON.parse(m).message||m}catch(x){}toast(m.slice(0,200),'#dc2626',5000);};
+SO.leadOk=id=>{const s=new Set(visibleLeads().map(l=>l.id));return isAdmin(currentUser)||s.has(id);};
+SO.load=async()=>{SO.loading=true;SO.err='';
+  const g=p=>sbFetch(p);
+  try{[SO.products,SO.cats,SO.quotes,SO.orders,SO.invoices,SO.tickets,SO.payments]=await Promise.all([
+    g('/products?order=name&limit=1000'),g('/product_categories?order=name'),g('/quotations?order=created_at.desc&limit=500'),
+    g('/sales_orders?order=created_at.desc&limit=500'),g('/invoices?order=created_at.desc&limit=500'),
+    g('/service_tickets?order=created_at.desc&limit=500'),g('/payments?order=created_at.desc&limit=1000')]);
+    const b=await g('/invoice_balances?limit=1000');SO.bal={};b.forEach(x=>SO.bal[x.invoice_id]=x);
+    SO.loaded=true;}
+  catch(e){SO.err='Tables not found or unreachable. Run 001_sales_ops.sql in Supabase first. ('+(e.message||'').slice(0,120)+')';}
+  SO.loading=false;render();};
+SO.pill=s=>{const m={Draft:'#64748b',Sent:'#2563eb',Accepted:'#15803d',Rejected:'#dc2626',Expired:'#b45309',Converted:'#7c3aed',Confirmed:'#2563eb',Processing:'#b45309',Dispatched:'#0e7490',Delivered:'#15803d',Cancelled:'#dc2626',Issued:'#2563eb','Partially Paid':'#b45309',Paid:'#15803d',Overdue:'#dc2626',Open:'#2563eb',Assigned:'#7c3aed','In Progress':'#b45309','Waiting for Parts':'#c2410c','Waiting for Customer':'#c2410c',Resolved:'#15803d',Closed:'#64748b',Low:'#64748b',Medium:'#2563eb',High:'#c2410c',Critical:'#dc2626'};
+  const c=m[s]||'#64748b';return `<span class="pill" style="background:${c}18;color:${c}">${E(s)}</span>`;};
+SO.stats=a=>`<div class="stats-grid">${a.map(x=>`<div class="stat-card"><div class="stat-label">${x[0]}</div><div class="stat-value" style="font-size:22px">${x[1]}</div></div>`).join('')}</div>`;
+SO.head=(t,btn)=>`<div style="display:flex;gap:10px;align-items:center;margin-bottom:14px"><div style="font-size:11px;color:var(--text3)">Sales &amp; Operations › ${t}</div><div style="flex:1"></div><input class="fi" style="width:220px" placeholder="Search…" value="${E(SO.q)}" oninput="SO.q=this.value;SO.redraw()">${btn||''}</div>`;
+SO.redraw=()=>{const p=$('content').querySelector('input:focus');const pos=p?p.selectionStart:0;$('content').innerHTML=SO.render();const i=$('content').querySelector('input.fi');if(p&&i){i.focus();i.setSelectionRange(pos,pos);}};
+SO.match=o=>!SO.q.trim()||JSON.stringify(Object.values(o)).toLowerCase().includes(SO.q.trim().toLowerCase());
+SO.render=()=>{if(SO.err)return `<div class="stat-card" style="color:var(--red)">${E(SO.err)}</div>`;
+  if(!SO.loaded)return '<div class="empty-state"><div class="empty-text">Loading…</div></div>';
+  return {products:SO.rProducts,quotes:SO.rQuotes,invoices:SO.rInvoices,service:SO.rService}[currentView]();};
+SO.tbl=(h,rows,empty)=>rows.length?`<div class="table-wrap"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr>${h.map(x=>`<th style="text-align:left;padding:8px 10px;font-size:10px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)">${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td style="padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:middle">${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`:`<div class="empty-state"><div class="empty-text">${empty}</div></div>`;
+SO.btn=(l,f,p)=>`<button class="btn btn-sm ${p?'btn-primary':''}" onclick="${f}">${l}</button> `;
+SO.modal=(title,body,save,label)=>{let m=$('so-modal');if(!m){m=document.createElement('div');m.id='so-modal';m.className='modal-backdrop';document.body.appendChild(m);}
+  SO.onSave=save;m.innerHTML=`<div class="modal modal-lg"><div class="modal-hdr"><div class="modal-title">${title}</div><button class="modal-close" onclick="closeModal('so-modal')">✕</button></div>${body}<div class="modal-footer"><button class="btn" onclick="closeModal('so-modal')">Close</button>${save?`<button class="btn btn-primary" onclick="SO.onSave()">${label||'Save'}</button>`:''}</div></div>`;openModal('so-modal');};
+SO.v=id=>($(id)||{}).value;
+SO.fg=(l,id,v='',t='text',x='')=>`<div class="fg"><label class="fl">${l}</label><input class="fi" id="${id}" type="${t}" value="${E(v)}" ${x}></div>`;
+SO.sel=(l,id,opts,v='')=>`<div class="fg"><label class="fl">${l}</label><select class="fi" id="${id}">${opts.map(o=>{const [a,b]=Array.isArray(o)?o:[o,o];return `<option value="${E(a)}" ${a==v?'selected':''}>${E(b)}</option>`}).join('')}</select></div>`;
+SO.grid='style="display:grid;grid-template-columns:1fr 1fr;gap:12px"';
+
+/* ── 1. PRODUCTS ── */
+SO.rProducts=()=>{const P=SO.products,low=P.filter(p=>!p.is_service&&p.active&&+p.stock_qty<=+p.min_stock);
+  const cn=id=>(SO.cats.find(c=>c.id===id)||{}).name||'—';const adm=isAdmin(currentUser);
+  const rows=P.filter(SO.match).map(p=>[`<b>${E(p.name)}</b><div style="font-size:10px;color:var(--text3)">${E(p.sku)} · ${E(p.product_code)}</div>`,cn(p.category_id),inr(p.selling_price),p.tax_rate+'%',
+    p.is_service?'<span style="color:var(--text3)">Service</span>':`<span style="color:${+p.stock_qty<=+p.min_stock?'var(--red)':'inherit'};font-weight:600">${p.stock_qty} ${E(p.unit)}</span>${+p.stock_qty<=+p.min_stock?' ⚠ low':''}`,
+    p.active?SO.pill('Issued').replace('Issued','Active'):SO.pill('Closed').replace('Closed','Inactive'),
+    adm?SO.btn('Edit',`SO.pForm('${p.id}')`)+(p.is_service?'':SO.btn('Stock',`SO.stock('${p.id}')`))+SO.btn(p.active?'Deactivate':'Activate',`SO.pToggle('${p.id}')`):'']);
+  return SO.head('Products &amp; Services',adm?SO.btn('⬆ Import Excel/CSV','SO.impForm()')+SO.btn('Sample file','SO.tpl()')+SO.btn('+ Add Product','SO.pForm()',1):'')+SO.stats([['Active products',P.filter(p=>p.active).length],['Low stock',low.length],['Services',P.filter(p=>p.is_service).length],['Stock value (cost)',inr(P.reduce((s,p)=>s+(p.is_service?0:p.stock_qty*p.cost_price),0))]])+SO.tbl(['Product','Category','Price','GST','Stock','Status',''],rows,'No products yet');};
+SO.pForm=id=>{const p=SO.products.find(x=>x.id===id)||{tax_rate:18,unit:'Nos',active:true,stock_qty:0,min_stock:0,cost_price:0,selling_price:0};
+  SO.modal(id?'Edit Product':'Add Product',`<div ${SO.grid}>${SO.fg('SKU *','p-sku',p.sku)}${SO.fg('Name *','p-name',p.name)}${SO.sel('Category','p-cat',SO.cats.map(c=>[c.id,c.name]),p.category_id)}${SO.fg('Unit','p-unit',p.unit)}${SO.fg('Cost price','p-cost',p.cost_price,'number')}${SO.fg('Selling price *','p-price',p.selling_price,'number')}${SO.fg('GST %','p-tax',p.tax_rate,'number')}${SO.fg('HSN/SAC','p-hsn',p.hsn_sac)}${id?'':SO.fg('Opening stock','p-stock',0,'number')}${SO.fg('Min stock','p-min',p.min_stock,'number')}${SO.fg('Image URL','p-img',p.image_url)}${SO.sel('Type','p-svc',[['false','Physical product'],['true','Service (no stock)']],String(!!p.is_service))}${SO.sel('Serial tracking','p-ser',[['false','No'],['true','Yes']],String(!!p.track_serial))}</div><div class="fg" style="margin-top:12px"><label class="fl">Description / specs</label><textarea class="fi" id="p-desc" rows="3">${E(p.description)}</textarea></div>`,async()=>{
+    const sku=SO.v('p-sku').trim(),name=SO.v('p-name').trim(),price=+SO.v('p-price');if(!sku||!name||!(price>=0))return toast('SKU, name and price are required','#dc2626');
+    if(SO.products.some(x=>x.id!==id&&x.sku.toLowerCase()===sku.toLowerCase()))return toast('Duplicate SKU','#dc2626');
+    const b={sku,name,category_id:SO.v('p-cat')||null,unit:SO.v('p-unit')||'Nos',cost_price:+SO.v('p-cost')||0,selling_price:price,tax_rate:+SO.v('p-tax')||0,hsn_sac:SO.v('p-hsn')||null,min_stock:+SO.v('p-min')||0,image_url:SO.v('p-img')||null,is_service:SO.v('p-svc')==='true',track_serial:SO.v('p-ser')==='true',description:SO.v('p-desc')||null,updated_at:new Date().toISOString()};
+    try{if(id)await sbFetch('/products?id=eq.'+id,{method:'PATCH',body:JSON.stringify(b)});else{const r=await sbFetch('/products',{method:'POST',body:JSON.stringify(b)});const q=+SO.v('p-stock')||0;if(q>0&&!b.is_service)await sbFetch('/inventory_movements',{method:'POST',body:JSON.stringify({product_id:r[0].id,movement_type:'purchase',qty:q,note:'Opening stock',created_by:currentUser.id})});}
+      closeModal('so-modal');toast('Product saved','#16a34a');SO.load();}catch(e){SO.fail(e);}});};
+SO.pToggle=async id=>{const p=SO.products.find(x=>x.id===id);if(!confirm((p.active?'Deactivate ':'Activate ')+p.name+'?'))return;try{await sbFetch('/products?id=eq.'+id,{method:'PATCH',body:JSON.stringify({active:!p.active})});SO.load();}catch(e){SO.fail(e);}};
+SO.stock=id=>{const p=SO.products.find(x=>x.id===id);SO.modal('Stock movement — '+E(p.name),`<div ${SO.grid}>${SO.sel('Type','m-type',[['purchase','Purchase (+)'],['return_in','Customer return (+)'],['return_out','Return to supplier (−)'],['adjustment','Adjustment (+/−)']])}${SO.fg('Quantity (adjustment may be negative)','m-qty','','number')}</div>${SO.fg('Note','m-note')}<div class="fi-note">Current stock: ${p.stock_qty} ${E(p.unit)}. Negative stock is rejected.</div>`,async()=>{
+    const t=SO.v('m-type');let q=+SO.v('m-qty');if(!q)return toast('Enter quantity','#dc2626');if(t!=='adjustment')q=t==='return_out'?-Math.abs(q):Math.abs(q);
+    try{await sbFetch('/inventory_movements',{method:'POST',body:JSON.stringify({product_id:id,movement_type:t,qty:q,note:SO.v('m-note')||null,created_by:currentUser.id})});closeModal('so-modal');SO.load();}catch(e){SO.fail(e);}});};
+
+/* ── 2. QUOTATIONS & ORDERS ── */
+SO.calc=(rows,del)=>{let sub=0,tx=0,tax=0;const r=rows.map(x=>{const g=x.qty*x.unit_price,t=+(g*(1-x.discount_pct/100)).toFixed(2),a=+(t*x.tax_rate/100).toFixed(2);sub+=g;tx+=t;tax+=a;return{...x,line_taxable:t,line_tax:a,line_total:+(t+a).toFixed(2)};});
+  return{rows:r,subtotal:+sub.toFixed(2),discount_total:+(sub-tx).toFixed(2),taxable_total:+tx.toFixed(2),tax_total:+tax.toFixed(2),grand_total:+(tx+tax+(+del||0)).toFixed(2)};};
+SO.rQuotes=()=>{const Q=SO.quotes.filter(q=>SO.leadOk(q.lead_id)),O=SO.orders.filter(o=>SO.leadOk(o.lead_id)),can=SO.can('sales');
+  const acc=Q.filter(q=>['Accepted','Converted'].includes(q.status)).length,dec=Q.filter(q=>['Accepted','Converted','Rejected','Expired'].includes(q.status)).length;
+  const live=O.filter(o=>o.status!=='Cancelled');
+  const qr=Q.filter(SO.match).map(q=>[`<b>${E(q.quote_no)}</b>${q.revision?' <span style="font-size:10px">rev '+q.revision+'</span>':''}`,E(q.customer_name),inr(q.grand_total),fmtDate(q.valid_until),SO.pill(q.status),
+    (can?SO.btn('View/Print',`SO.printQ('${q.id}')`)+(q.status==='Draft'?SO.btn('Mark Sent',`SO.qSet('${q.id}','Sent')`):'')+(['Sent','Draft'].includes(q.status)?SO.btn('Accept',`SO.qSet('${q.id}','Accepted')`)+SO.btn('Reject',`SO.qSet('${q.id}','Rejected')`):'')+(q.status==='Accepted'?SO.btn('→ Order',`SO.convert('${q.id}')`,1):'')+SO.btn('Revise',`SO.qForm(null,'${q.id}')`):SO.btn('View/Print',`SO.printQ('${q.id}')`))+(SO.canDel('q')?SO.btn('Delete',`SO.delQ('${q.id}')`):'')]);
+  const NEXT={Confirmed:'Processing',Processing:'Dispatched',Dispatched:'Delivered'};
+  const or=O.filter(SO.match).map(o=>[`<b>${E(o.order_no)}</b>`,E(o.customer_name),inr(o.grand_total),SO.pill(o.status),
+    (can?(NEXT[o.status]?SO.btn('→ '+NEXT[o.status],`SO.oSet('${o.id}','${NEXT[o.status]}')`):'')+(['Confirmed','Processing'].includes(o.status)?SO.btn('Cancel',`SO.oSet('${o.id}','Cancelled')`):'')+(o.status!=='Cancelled'&&(SO.can('acct')||SO.can('sales'))&&!SO.invoices.some(i=>i.order_id===o.id&&i.status!=='Cancelled')?SO.btn('Create Invoice',`SO.mkInv('${o.id}')`,1):'')+SO.btn('Details',`SO.oForm('${o.id}')`):'')+(SO.canDel('q')?SO.btn('Delete',`SO.delO('${o.id}')`):'')]);
+  return SO.head('Quotations &amp; Orders',can?SO.btn('+ New Quotation','SO.qForm()',1):'')+SO.stats([['Quotations',Q.length],['Acceptance rate',dec?Math.round(acc/dec*100)+'%':'—'],['Confirmed orders',live.length],['Order value',inr(live.reduce((s,o)=>s+ +o.grand_total,0))]])+
+  `<div style="font-weight:700;margin:6px 0">Quotations</div>`+SO.tbl(['No.','Customer','Total','Valid until','Status',''],qr,'No quotations')+`<div style="font-weight:700;margin:18px 0 6px">Sales Orders</div>`+SO.tbl(['Order','Customer','Total','Status',''],or,'No orders');};
+SO.qForm=(leadId,reviseId)=>{let q=null;if(reviseId){q=SO.quotes.find(x=>x.id===reviseId);leadId=q.lead_id;}
+  SO.pend={reviseId,items:null};SO.lines=[];
+  const go=async()=>{if(reviseId){const it=await sbFetch('/quotation_items?quotation_id=eq.'+reviseId+'&order=line_no');SO.lines=it.map(x=>({product_id:x.product_id,description:x.description,hsn_sac:x.hsn_sac,unit:x.unit,qty:+x.qty,unit_price:+x.unit_price,discount_pct:+x.discount_pct,tax_rate:+x.tax_rate}));}else SO.lines=[{qty:1,unit_price:0,discount_pct:0,tax_rate:18,description:''}];
+    const vl=visibleLeads();
+    SO.modal(reviseId?'Revise Quotation':'New Quotation',`<div ${SO.grid}>${SO.sel('Lead / customer *','q-lead',vl.map(l=>[l.id,l.name+(l.phone?' · '+l.phone:'')]),leadId)}${SO.fg('Valid until','q-valid',(q&&q.valid_until)||d0(15),'date')}${SO.fg('Payment terms','q-pay',(q&&q.payment_terms)||'50% advance, balance before dispatch')}${SO.fg('Delivery terms','q-del',(q&&q.delivery_terms)||'Ex-works')}${SO.fg('Delivery charge','q-dc',(q&&q.delivery_charge)||0,'number','oninput="SO.drawLines()"')}${SO.fg('Notes','q-notes',q&&q.notes)}</div><div id="q-lines" style="margin-top:14px"></div><div class="fg" style="margin-top:10px"><label class="fl">Terms &amp; conditions</label><textarea class="fi" id="q-terms" rows="2">${E((q&&q.terms)||'Prices valid until the date above. Warranty as per manufacturer terms.')}</textarea></div>`,SO.saveQ,'Save quotation');SO.drawLines();};
+  go().catch(SO.fail);};
+SO.drawLines=()=>{const el=$('q-lines');if(!el)return;const c=SO.calc(SO.lines,SO.v('q-dc'));
+  el.innerHTML=`<table style="width:100%;font-size:12px"><tr style="font-size:10px;color:var(--text3)"><td>Item</td><td>Description</td><td>Qty</td><td>Price</td><td>Disc%</td><td>GST%</td><td>Total</td><td></td></tr>${SO.lines.map((x,i)=>`<tr><td><select class="fi" onchange="SO.pick(${i},this.value)"><option value="">Custom</option>${SO.products.filter(p=>p.active).map(p=>`<option value="${p.id}" ${p.id===x.product_id?'selected':''}>${E(p.name)}</option>`).join('')}</select></td><td><input class="fi" value="${E(x.description)}" oninput="SO.lines[${i}].description=this.value"></td><td><input class="fi" style="width:60px" type="number" value="${x.qty}" oninput="SO.set(${i},'qty',this.value)"></td><td><input class="fi" style="width:90px" type="number" value="${x.unit_price}" oninput="SO.set(${i},'unit_price',this.value)"></td><td><input class="fi" style="width:55px" type="number" value="${x.discount_pct}" oninput="SO.set(${i},'discount_pct',this.value)"></td><td><input class="fi" style="width:55px" type="number" value="${x.tax_rate}" oninput="SO.set(${i},'tax_rate',this.value)"></td><td>${inr(c.rows[i].line_total)}</td><td><button class="btn btn-sm" onclick="SO.lines.splice(${i},1);SO.drawLines()">✕</button></td></tr>`).join('')}</table><button class="btn btn-sm" onclick="SO.lines.push({qty:1,unit_price:0,discount_pct:0,tax_rate:18,description:''});SO.drawLines()">+ Line</button><div id="q-tot" style="text-align:right;margin-top:8px;font-size:12px">${SO.totHtml(c)}</div>`;};
+SO.totHtml=c=>`Subtotal ${inr(c.subtotal)} · Discount ${inr(c.discount_total)} · Taxable ${inr(c.taxable_total)} · Tax ${inr(c.tax_total)} · <b>Grand total ${inr(c.grand_total)}</b>`;
+SO.set=(i,k,v)=>{SO.lines[i][k]=+v||0;const c=SO.calc(SO.lines,SO.v('q-dc'));$('q-tot').innerHTML=SO.totHtml(c);};
+SO.pick=(i,pid)=>{const p=SO.products.find(x=>x.id===pid);if(p)Object.assign(SO.lines[i],{product_id:p.id,description:p.name,unit_price:+p.selling_price,tax_rate:+p.tax_rate,hsn_sac:p.hsn_sac,unit:p.unit});else SO.lines[i].product_id=null;SO.drawLines();};
+SO.saveQ=async()=>{const l=leads.find(x=>x.id===SO.v('q-lead'));if(!l)return toast('Pick a lead','#dc2626');
+  if(!SO.lines.length||SO.lines.some(x=>!x.description||!(x.qty>0)||x.unit_price<0))return toast('Each line needs a description, qty > 0 and a price','#dc2626');
+  const c=SO.calc(SO.lines,SO.v('q-dc'));const old=SO.pend.reviseId?SO.quotes.find(x=>x.id===SO.pend.reviseId):null;
+  const h={lead_id:l.id,customer_name:l.name,customer_phone:l.phone||null,customer_email:l.email||null,billing_address:l.address||null,customer_state:l.state||null,valid_until:SO.v('q-valid')||null,payment_terms:SO.v('q-pay'),delivery_terms:SO.v('q-del'),notes:SO.v('q-notes'),terms:SO.v('q-terms'),delivery_charge:+SO.v('q-dc')||0,subtotal:c.subtotal,discount_total:c.discount_total,taxable_total:c.taxable_total,tax_total:c.tax_total,grand_total:c.grand_total,branch:l.branch||null,salesperson_id:l.assignee||null,created_by:currentUser.id,revision_of:old?(old.revision_of||old.id):null,revision:old?old.revision+1:0};
+  try{const r=await sbFetch('/quotations',{method:'POST',body:JSON.stringify(h)});await sbFetch('/quotation_items',{method:'POST',body:JSON.stringify(c.rows.map((x,i)=>({quotation_id:r[0].id,line_no:i+1,product_id:x.product_id||null,description:x.description,hsn_sac:x.hsn_sac||null,unit:x.unit||null,qty:x.qty,unit_price:x.unit_price,discount_pct:x.discount_pct,tax_rate:x.tax_rate,line_taxable:x.line_taxable,line_tax:x.line_tax,line_total:x.line_total})))});
+    closeModal('so-modal');toast('Quotation '+r[0].quote_no+' saved','#16a34a');SO.load();}catch(e){SO.fail(e);}};
+SO.qSet=async(id,s)=>{try{await sbFetch('/quotations?id=eq.'+id,{method:'PATCH',body:JSON.stringify({status:s,updated_at:new Date().toISOString()})});SO.load();}catch(e){SO.fail(e);}};
+SO.convert=async id=>{if(!confirm('Convert this quotation to a sales order?'))return;try{const{data,error}=await sb.rpc('convert_quotation_to_order',{p_quote:id,p_user:currentUser.id});if(error)throw error;toast('Order created','#16a34a');SO.load();}catch(e){SO.fail(e);}};
+SO.oSet=async(id,s)=>{const o=SO.orders.find(x=>x.id===id);if(s==='Cancelled'&&!confirm('Cancel order '+o.order_no+'?'))return;
+  try{if(s==='Dispatched'){const it=await sbFetch('/order_items?order_id=eq.'+id);for(const x of it){const p=SO.products.find(p=>p.id===x.product_id);if(p&&!p.is_service)await sbFetch('/inventory_movements',{method:'POST',body:JSON.stringify({product_id:p.id,movement_type:'sale',qty:-x.qty,ref_type:'order',ref_id:id,created_by:currentUser.id})});}}
+    await sbFetch('/sales_orders?id=eq.'+id,{method:'PATCH',body:JSON.stringify({status:s,updated_at:new Date().toISOString()})});SO.load();}catch(e){SO.fail(e);}};
+SO.oForm=id=>{const o=SO.orders.find(x=>x.id===id);SO.modal('Order '+E(o.order_no),`<div ${SO.grid}>${SO.fg('Delivery address','o-addr',o.delivery_address)}${SO.fg('Expected delivery','o-exp',o.expected_delivery,'date')}${SO.fg('Tracking details','o-trk',o.tracking_no)}${SO.fg('Remarks','o-rem',o.remarks)}</div><div class="fi-note">Linked quotation and lead are preserved by ID.</div>`,async()=>{try{await sbFetch('/sales_orders?id=eq.'+id,{method:'PATCH',body:JSON.stringify({delivery_address:SO.v('o-addr'),expected_delivery:SO.v('o-exp')||null,tracking_no:SO.v('o-trk'),remarks:SO.v('o-rem'),updated_at:new Date().toISOString()})});closeModal('so-modal');SO.load();}catch(e){SO.fail(e);}});};
+SO.printDoc=(title,no,h,items,extra)=>{const w=window.open('','_blank');if(!w)return toast('Allow pop-ups to print','#dc2626');
+  w.document.write(`<html><head><title>${E(no)}</title><style>body{font-family:Arial;padding:28px;font-size:12px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px;text-align:left}th{background:#f1f5f9}.r{text-align:right}</style></head><body><div style="display:flex;justify-content:space-between"><div><img src="https://res.cloudinary.com/drfl8crbx/image/upload/v1778349383/logo_ussruy.png" width="44"><h2>${CO}</h2></div><div class="r"><h2>${title}</h2><b>${E(no)}</b><br>${fmtDate(h.invoice_date||h.created_at)}</div></div><p><b>Bill to:</b> ${E(h.customer_name)}<br>${E(h.billing_address||'')} ${E(h.customer_state||'')} ${h.customer_gstin?'<br>GSTIN: '+E(h.customer_gstin):''}</p><table><tr><th>#</th><th>Description</th><th>HSN/SAC</th><th>Qty</th><th>Rate</th><th>Disc%</th><th>GST%</th><th class="r">Amount</th></tr>${items.map((x,i)=>`<tr><td>${i+1}</td><td>${E(x.description)}</td><td>${E(x.hsn_sac||'')}</td><td>${x.qty}</td><td>${inr(x.unit_price)}</td><td>${x.discount_pct}</td><td>${x.tax_rate}</td><td class="r">${inr(x.line_total)}</td></tr>`).join('')}</table><p class="r">Subtotal ${inr(h.subtotal)}<br>Discount ${inr(h.discount_total)}<br>Taxable ${inr(h.taxable_total)}<br>${h.supply_type==='inter'?'IGST '+inr(h.igst):h.supply_type?'CGST '+inr(h.cgst)+' · SGST '+inr(h.sgst):'Tax '+inr(h.tax_total)}<br>Delivery ${inr(h.delivery_charge)}<br><b style="font-size:15px">Grand total ${inr(h.grand_total)}</b></p>${extra||''}<script>setTimeout(()=>print(),400)<\/script></body></html>`);w.document.close();};
+/* ── Quotation print layout (SAG quotation format: header box, bill/ship, items grid, GST summary, words, bank/terms/signatory) ── */
+SO.QCO={name:'SAMTULANA ANTHARJALA GATHAKA PVT LTD',addr:'2-2-152/2A/1, pangidi road, Nidadavole, West Godavari, Andhra Pradesh, 534301',gstin:'37ABPCS5581F1ZS',mobile:'8977771705',pan:'ABPCS5581F',email:'sagtechinfo@gmail.com',state:'Andhra Pradesh',city:'Nidadavole',logo:'https://res.cloudinary.com/drfl8crbx/image/upload/v1778349383/logo_ussruy.png',bank:{name:'SAMTULANA ANTARJALA GATHAKA',ifsc:'ICIC0007566',acc:'756605000933',bank:'ICICI Bank, NIDADAVOLE'},sign:''};
+SO.n=v=>{v=+v||0;const w=Math.abs(v-Math.round(v))<0.005;return v.toLocaleString('en-IN',{minimumFractionDigits:w?0:2,maximumFractionDigits:w?0:2});};
+SO.words=v=>{const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  const two=n=>n<20?a[n]:b[Math.floor(n/10)]+(n%10?' '+a[n%10]:''),three=n=>(n>=100?a[Math.floor(n/100)]+' Hundred'+(n%100?' ':''):'')+(n%100?two(n%100):'');
+  let r=Math.floor(+v||0),p=Math.round(((+v||0)-r)*100);if(p===100){r++;p=0;}if(!r&&!p)return 'Zero Rupees';
+  let s=[],c=Math.floor(r/1e7),l=Math.floor(r%1e7/1e5),t=Math.floor(r%1e5/1e3),h=r%1e3;
+  if(c)s.push(three(c)+' Crore');if(l)s.push(two(l)+' Lakh');if(t)s.push(two(t)+' Thousand');if(h)s.push(three(h));
+  return (s.join(' ')||'Zero')+' Rupees'+(p?' and '+two(p)+' Paise':'');};
+SO.printQ=async id=>{const q=SO.quotes.find(x=>x.id===id);
+  try{const it=await sbFetch('/quotation_items?quotation_id=eq.'+id+'&order=line_no');
+    const w=window.open('','_blank');if(!w)return toast('Allow pop-ups to print','#dc2626');
+    const C=SO.QCO,n=SO.n,dt=s=>s?new Date(s).toLocaleDateString('en-GB'):'—';
+    const st=(q.customer_state||'').trim(),inter=!!st&&!/andhra|^a\.?p\.?$/i.test(st);
+    const totQty=it.reduce((s,x)=>s+(+x.qty||0),0),totTax=it.reduce((s,x)=>s+(+x.line_tax||0),0),dc=+q.delivery_charge||0;
+    const rows=it.map((x,i)=>`<tr class="it"><td class="c">${i+1}</td><td>${E(x.description)}</td><td class="c">${E(x.hsn_sac||'')}</td><td class="c">${+x.qty} ${E(x.unit||'')}</td><td class="c">${n(x.unit_price)}${+x.discount_pct?`<div class="sm">(-${+x.discount_pct}% disc.)</div>`:''}</td><td class="c">${n(x.line_tax)}<div class="sm">(${+x.tax_rate}%)</div></td><td class="c">${n(x.line_total)}</td></tr>`).join('')
+      +(dc?`<tr class="it"><td class="c">${it.length+1}</td><td>Delivery charges</td><td></td><td></td><td></td><td></td><td class="c">${n(dc)}</td></tr>`:'');
+    const g={};it.forEach(x=>{const k=(x.hsn_sac||'—')+'|'+(+x.tax_rate);const o=g[k]=g[k]||{h:x.hsn_sac||'—',r:+x.tax_rate,t:0,x:0};o.t+=+x.line_taxable||0;o.x+=+x.line_tax||0;});
+    const gl=Object.values(g);
+    const sumRows=gl.map(o=>{const half=+(o.x/2).toFixed(2),oth=+(o.x-half).toFixed(2);
+      return `<tr><td class="c">${E(o.h)}</td><td class="r">${n(o.t)}</td>`+(inter?`<td class="c">${o.r}%</td><td class="r">${n(o.x)}</td>`:`<td class="c">${o.r/2}%</td><td class="r">${n(half)}</td><td class="c">${o.r/2}%</td><td class="r">${n(oth)}</td>`)+`<td class="r">₹ ${n(o.x)}</td></tr>`;}).join('');
+    const sumHead=`<tr><th rowspan="2">HSN/SAC</th><th rowspan="2">Taxable Value</th>`+(inter?`<th colspan="2">IGST</th>`:`<th colspan="2">CGST</th><th colspan="2">SGST</th>`)+`<th rowspan="2">Total Tax Amount</th></tr><tr>`+(inter?`<th>Rate</th><th>Amount</th>`:`<th>Rate</th><th>Amount</th><th>Rate</th><th>Amount</th>`)+`</tr>`;
+    const terms=['Goods once sold will not be taken back or exchanged',...String(q.terms||'').split('\n').map(s=>s.trim()).filter(Boolean),...(q.payment_terms?['Payment terms: '+q.payment_terms]:[]),...(q.delivery_terms?['Delivery terms: '+q.delivery_terms]:[]),...(q.notes?['Note: '+q.notes]:[]),'All disputes are subject to '+C.city+' jurisdiction only'];
+    const css=`*{box-sizing:border-box}@page{size:A4;margin:8mm}html,body{margin:0;padding:0}body{font-family:Roboto,Arial,Helvetica,sans-serif;font-size:11px;color:#111;line-height:1.35;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ttl{font-size:13px;margin:0 0 6px 2px}.box{border:1px solid #222}.hd{display:flex;border-bottom:1px solid #222}.hd .l{flex:0 0 52.7%;display:flex;gap:16px;padding:12px 10px;border-right:1px solid #222}.hd .l img{width:92px;height:auto;align-self:center;object-fit:contain}
+.co{font-size:16px;font-weight:700;color:#5551c0;line-height:1.25;margin-bottom:3px}.gs{display:flex;gap:26px}.hd .r{flex:1;min-width:0;display:flex;justify-content:space-around;align-items:center;text-align:center;padding:8px}.hd .r b{display:block;margin-bottom:6px;font-size:12px}
+.bs{display:flex;border-bottom:1px solid #222}.bs>div{flex:1;padding:8px 8px 10px}.bs>div:first-child{flex:0 0 52.7%}.bs>div:first-child{border-right:1px solid #222}.bs .h{font-weight:700;margin-bottom:6px}.bs .nm{font-weight:700;font-size:12px;margin-bottom:3px}.bs .ad{padding-left:0}
+table{width:100%;border-collapse:collapse}.items{height:112mm;border-bottom:0}.items th{background:#dddcf3;border:1px solid #222;padding:7px 6px;font-weight:500;font-size:11.5px}
+.items td{padding:6px 8px;vertical-align:top;border-left:1px solid #222;border-right:1px solid #222}.items td:first-child{border-left:0}.items td:last-child{border-right:0}.items tr.fill td{height:100%;padding:0}
+.items tr.tot td{background:#dddcf3;border:1px solid #222;border-left:0;border-right:0;font-weight:700;padding:7px 8px;vertical-align:middle}.items tr.tot td:not(:first-child){border-left:1px solid #222}
+.c{text-align:center}.r{text-align:right}.sm{font-size:9.5px;color:#777}
+.gst{margin-top:8px}.gst th{background:#fff;border:1px solid #222;padding:4px 6px;font-weight:500}.gst td{border:1px solid #222;padding:3px 8px}
+.wd{margin-top:8px;padding:6px 8px;font-size:12px}.wd b{font-size:12px}.wd div{margin-top:3px;font-size:11px}
+.bt{display:flex;border-top:0;margin-top:0}.bt>div{padding:6px 8px;font-size:10.5px}.bk{flex:1.05;border-right:1px solid #222}.tc{flex:1.15;border-right:1px solid #222}.sg{flex:1.1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;text-align:center;min-height:30mm}
+.bk h4,.tc h4{margin:0 0 3px;font-size:12px;font-weight:500}.bk table td{padding:2px 0;vertical-align:top;border:0}.bk td:first-child{width:30%}.tc ol{margin:0;padding-left:16px}.sg img{max-width:90px;max-height:60px;margin-bottom:4px}
+.top,.gst,.wd,.bt{page-break-inside:avoid}`;
+    const html=`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${E(q.quote_no)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"><style>${css}</style></head><body>
+<div class="ttl">QUOTATION</div>
+<div class="box top"><div class="hd"><div class="l"><img src="${C.logo}" alt="SAG"><div><div class="co">${C.name}</div><div>${C.addr}</div><div class="gs"><div><b>GSTIN:</b><br>${C.gstin}</div><div><b>Mobile:</b><br>${C.mobile}</div></div><div><b>PAN Number:</b> ${C.pan}</div><div><b>Email:</b> ${C.email}</div></div></div>
+<div class="r"><div><b>Quotation No.</b>${E(q.quote_no)}${q.revision?' <span class="sm">rev '+q.revision+'</span>':''}</div><div><b>Quotation Date</b>${dt(q.created_at)}</div><div><b>Expiry Date</b>${dt(q.valid_until)}</div></div></div>
+<div class="bs"><div><div class="h">BILL TO</div><div class="nm">${E(String(q.customer_name||'').toUpperCase())}</div><div class="ad">Address: ${E(q.billing_address||'—')}${st&&!(q.billing_address||'').toLowerCase().includes(st.toLowerCase())?', '+E(st):''}</div><div>Place of Supply: ${E(st||C.state)}</div><div>${q.customer_phone?'Mobile: '+E(q.customer_phone):''}${q.customer_pan?' &nbsp; PAN Number: '+E(q.customer_pan):''}${q.customer_gstin?'<br>GSTIN: '+E(q.customer_gstin):''}</div></div>
+<div><div class="h">SHIP TO</div><div class="nm">${E(String(q.customer_name||'').toUpperCase())}</div><div class="ad">Address: ${E(q.shipping_address||q.billing_address||'—')}${!q.shipping_address&&st&&!(q.billing_address||'').toLowerCase().includes(st.toLowerCase())?', '+E(st):''}</div></div></div>
+<table class="items"><thead><tr><th style="width:7%">S.NO.</th><th>ITEMS</th><th style="width:11%">HSN</th><th style="width:8%">QTY.</th><th style="width:12%">RATE</th><th style="width:12%">TAX</th><th style="width:13%">AMOUNT</th></tr></thead><tbody>${rows}<tr class="fill"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="tot"><td></td><td class="r">TOTAL</td><td></td><td class="c">${n(totQty)}</td><td></td><td class="c">₹ ${n(totTax)}</td><td class="c">₹ ${n(q.grand_total)}</td></tr></tbody></table></div>
+<table class="gst">${sumHead}${sumRows}</table>
+<div class="box wd"><b>Total Amount (in words)</b><div>${SO.words(q.grand_total)}</div></div>
+<div class="box bt"><div class="bk"><h4>Bank Details</h4><table><tr><td>Name:</td><td>${C.bank.name}</td></tr><tr><td>IFSC Code:</td><td>${C.bank.ifsc}</td></tr><tr><td>Account No:</td><td>${C.bank.acc}</td></tr><tr><td>Bank:</td><td>${C.bank.bank}</td></tr></table></div>
+<div class="tc"><h4>Terms and Conditions</h4><ol>${terms.map(t=>'<li>'+E(t)+'</li>').join('')}</ol></div>
+<div class="sg">${C.sign?'<img src="'+C.sign+'" alt="">':''}<div>Authorised Signatory For<br>${C.name}</div></div></div>
+<script>window.addEventListener('load',function(){(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){setTimeout(function(){print()},300)})})<\/script></body></html>`;
+    w.document.write(html);w.document.close();
+  }catch(e){SO.fail(e);}};
+
+/* ── 3. INVOICES & PAYMENTS ── */
+SO.invStatus=i=>{const b=SO.bal[i.id];return b&&+b.overdue_amount>0?'Overdue':i.status;};
+SO.rInvoices=()=>{const I=SO.invoices.filter(i=>SO.leadOk(i.lead_id)),live=I.filter(i=>!['Draft','Cancelled'].includes(i.status)),B=i=>SO.bal[i.id]||{total_paid:0,outstanding:i.grand_total,overdue_amount:0},acct=SO.can('acct');
+  const rows=I.filter(SO.match).map(i=>[`<b>${E(i.invoice_no)}</b>`,E(i.customer_name),fmtDate(i.invoice_date),fmtDate(i.due_date),inr(i.grand_total),inr(B(i).total_paid),`<b>${inr(B(i).outstanding)}</b>`,SO.pill(SO.invStatus(i)),
+    SO.btn('Print',`SO.printI('${i.id}')`)+(SO.canPay()&&!['Cancelled','Paid'].includes(i.status)?SO.btn('+ Payment',`SO.payForm('${i.id}')`,1):'')+SO.btn('History',`SO.payForm('${i.id}')`)+(SO.canPay()&&i.status==='Draft'?SO.btn('Issue',`SO.issue('${i.id}')`,1):'')+(acct&&!['Draft','Cancelled'].includes(i.status)&&+B(i).total_paid===0?SO.btn('Cancel',`SO.cancelI('${i.id}')`):'')+(SO.canDel('i')?SO.btn('Delete',`SO.delI('${i.id}')`):'')]);
+  return SO.head('Invoices &amp; Payments','')+SO.stats([['Invoiced revenue',inr(live.reduce((s,i)=>s+ +i.grand_total,0))],['Collected',inr(live.reduce((s,i)=>s+ +B(i).total_paid,0))],['Outstanding',inr(live.reduce((s,i)=>s+ +B(i).outstanding,0))],['Overdue',inr(live.reduce((s,i)=>s+ +B(i).overdue_amount,0))]])+SO.tbl(['Invoice','Customer','Date','Due','Total','Paid','Balance','Status',''],rows,'No invoices — create one from a confirmed order');};
+SO.mkInv=async id=>{try{const{error}=await sb.rpc('create_invoice_from_order',{p_order:id,p_user:currentUser.id,p_due_days:15});if(error)throw error;toast('Draft invoice created — review and Issue it','#16a34a');await SO.load();setView('invoices');}catch(e){SO.fail(e);}};
+SO.issue=async id=>{if(!confirm('Issue this invoice? It cannot be edited afterwards.'))return;try{const{error}=await sb.rpc('issue_invoice',{p_invoice:id,p_user:currentUser.id});if(error)throw error;SO.load();}catch(e){SO.fail(e);}};
+SO.cancelI=async id=>{const r=prompt('Reason for cancelling this invoice?');if(!r)return;try{await sbFetch('/invoices?id=eq.'+id,{method:'PATCH',body:JSON.stringify({status:'Cancelled',cancel_reason:r})});SO.load();}catch(e){SO.fail(e);}};
+SO.payForm=id=>{const i=SO.invoices.find(x=>x.id===id),b=SO.bal[id]||{outstanding:i.grand_total,total_paid:0},ps=SO.payments.filter(p=>p.invoice_id===id),can=SO.canPay()&&!['Cancelled','Paid'].includes(i.status);
+  SO.modal('Payments — '+E(i.invoice_no),`<div style="font-size:12px;margin-bottom:10px">Total ${inr(i.grand_total)} · Paid ${inr(b.total_paid)} · <b>Outstanding ${inr(b.outstanding)}</b></div>${SO.tbl(['Receipt','Date','Method','Ref','Type','Amount',''],ps.map(p=>[E(p.receipt_no),fmtDate(p.paid_on),E(p.method),E(p.reference||''),E(p.kind),inr(p.amount),SO.canDel('p')?SO.btn('Delete',"SO.delP('"+p.id+"')"):'']),'No payments yet')}${can?`<div ${SO.grid} style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">${SO.fg('Amount','pay-amt',b.outstanding,'number')}${SO.sel('Method','pay-m',['Bank transfer','UPI','Card','Cheque','Cash','Other'])}${SO.fg('Transaction ref','pay-ref')}${SO.fg('Date','pay-date',d0(0),'date')}</div>${SO.fg('Note','pay-note')}`:''}`,can?async()=>{try{const{error}=await sb.rpc('record_payment',{p_invoice:id,p_amount:+SO.v('pay-amt'),p_method:SO.v('pay-m'),p_ref:SO.v('pay-ref')||null,p_paid_on:SO.v('pay-date'),p_note:SO.v('pay-note')||null,p_user:currentUser.id});if(error)throw error;closeModal('so-modal');toast('Payment recorded','#16a34a');SO.load();}catch(e){SO.fail(e);}}:null,'Record payment');};
+SO.printI=async id=>{const i=SO.invoices.find(x=>x.id===id);try{const it=await sbFetch('/invoice_items?invoice_id=eq.'+id+'&order=line_no'),b=SO.bal[id]||{total_paid:0,outstanding:i.grand_total};SO.printDoc(i.status==='Draft'?'DRAFT INVOICE':'TAX INVOICE',i.invoice_no,i,it,`<p><b>Due:</b> ${fmtDate(i.due_date)} · <b>Place of supply:</b> ${E(i.place_of_supply||'')}<br><b>Paid:</b> ${inr(b.total_paid)} · <b>Balance due:</b> ${inr(b.outstanding)}</p>`);}catch(e){SO.fail(e);}};
+
+/* ── 4. SUPPORT & SERVICE ── */
+SO.ST=['Open','Assigned','In Progress','Waiting for Parts','Waiting for Customer','Resolved','Closed'];
+SO.rService=()=>{const T=SO.tickets.filter(t=>SO.leadOk(t.lead_id)&&(isAdmin(currentUser)||!/technician/i.test(roleList(currentUser).join(' '))||t.technician_id===currentUser.id)),open=T.filter(t=>!['Resolved','Closed'].includes(t.status)),od=open.filter(t=>t.target_date&&daysTo(t.target_date)<0);
+  const done=T.filter(t=>t.resolved_at),avg=done.length?(done.reduce((s,t)=>s+(new Date(t.resolved_at)-new Date(t.created_at)),0)/done.length/86400000).toFixed(1)+' days':'—';
+  const rows=T.filter(SO.match).map(t=>[`<b>${E(t.ticket_no)}</b>`,E(t.customer_name)+`<div style="font-size:10px;color:var(--text3)">${E(t.drone_model||'')} ${E(t.serial_no||'')}</div>`,E(t.category||''),SO.pill(t.priority),`<select class="fi" onchange="SO.tSet('${t.id}',this.value)" ${SO.can('service')?'':'disabled'}>${SO.ST.map(s=>`<option ${s===t.status?'selected':''}>${s}</option>`).join('')}</select>`,E(memberName(t.technician_id)),`<span class="${t.target_date&&!['Resolved','Closed'].includes(t.status)?dateClass(t.target_date):''}">${fmtDate(t.target_date)}</span>`,t.is_paid_service?'Paid':'Free'+(t.service_number?' #'+t.service_number:''),SO.btn('Update',`SO.tForm('${t.id}')`)]);
+  return SO.head('Support &amp; Service',SO.can('service')?SO.btn('+ New Ticket','SO.tForm()',1):'')+SO.stats([['Open tickets',open.length],['Overdue',od.length],['Critical open',open.filter(t=>t.priority==='Critical').length],['Avg resolution',avg]])+SO.tbl(['Ticket','Customer / drone','Issue','Priority','Status','Technician','Target','Service',''],rows,'No service tickets');};
+SO.tForm=id=>{const t=SO.tickets.find(x=>x.id===id)||{priority:'Medium'},vl=visibleLeads();
+  SO.modal(id?'Update '+E(t.ticket_no):'New Service Ticket',`<div ${SO.grid}>${id?`<div class="fg"><label class="fl">Customer</label><div>${E(t.customer_name)}</div></div>`:SO.sel('Lead / customer *','t-lead',vl.map(l=>[l.id,l.name+(l.phone?' · '+l.phone:'')]))}${SO.fg('Drone model','t-model',t.drone_model)}${SO.fg('Serial no.','t-serial',t.serial_no)}${SO.fg('Purchase date','t-pd',t.purchase_date,'date')}${SO.fg('Warranty end','t-we',t.warranty_end,'date')}${SO.fg('Category','t-cat',t.category)}${SO.sel('Priority','t-pri',['Low','Medium','High','Critical'],t.priority)}${SO.sel('Technician','t-tech',[['','Unassigned'],...team.filter(m=>!m.isSuperAdmin).map(m=>[m.id,m.name])],t.technician_id||'')}${SO.fg('Target resolution','t-tgt',t.target_date||d0(3),'date')}${SO.fg('Next maintenance','t-nm',t.next_maintenance_on,'date')}${SO.fg('Labour charge','t-lab',t.labour_charge||0,'number')}${SO.fg('Parts charge','t-par',t.parts_charge||0,'number')}</div><div class="fg" style="margin-top:10px"><label class="fl">Complaint</label><textarea class="fi" id="t-desc" rows="2">${E(t.description)}</textarea></div>${id?`<div class="fg" style="margin-top:10px"><label class="fl">Diagnosis</label><textarea class="fi" id="t-diag" rows="2">${E(t.diagnosis)}</textarea></div><div class="fg" style="margin-top:10px"><label class="fl">Work performed / parts replaced</label><textarea class="fi" id="t-work" rows="2">${E(t.work_done)}</textarea></div><div class="fg" style="margin-top:10px"><label class="fl">Internal notes</label><textarea class="fi" id="t-int" rows="2">${E(t.internal_notes)}</textarea></div>`:''}`,async()=>{
+    const desc=SO.v('t-desc').trim();if(!desc)return toast('Complaint is required','#dc2626');
+    const b={drone_model:SO.v('t-model')||null,serial_no:SO.v('t-serial')||null,purchase_date:SO.v('t-pd')||null,warranty_end:SO.v('t-we')||null,category:SO.v('t-cat')||null,priority:SO.v('t-pri'),technician_id:SO.v('t-tech')||null,target_date:SO.v('t-tgt')||null,next_maintenance_on:SO.v('t-nm')||null,labour_charge:+SO.v('t-lab')||0,parts_charge:+SO.v('t-par')||0,description:desc,updated_at:new Date().toISOString()};
+    try{if(id){Object.assign(b,{diagnosis:SO.v('t-diag')||null,work_done:SO.v('t-work')||null,internal_notes:SO.v('t-int')||null});if(b.technician_id&&t.status==='Open')b.status='Assigned';await sbFetch('/service_tickets?id=eq.'+id,{method:'PATCH',body:JSON.stringify(b)});}
+      else{const l=leads.find(x=>x.id===SO.v('t-lead'));const prior=b.serial_no?SO.tickets.filter(x=>x.serial_no===b.serial_no&&!x.is_paid_service).length:0;const inW=b.warranty_end&&daysTo(b.warranty_end)>=0;
+        Object.assign(b,{lead_id:l.id,customer_name:l.name,customer_phone:l.phone||null,branch:l.branch||null,status:b.technician_id?'Assigned':'Open',is_paid_service:!(inW&&prior<3),service_number:inW&&prior<3?prior+1:null,created_by:currentUser.id});
+        const r=await sbFetch('/service_tickets',{method:'POST',body:JSON.stringify(b)});await sbFetch('/service_logs',{method:'POST',body:JSON.stringify({ticket_id:r[0].id,to_status:b.status,note:'Ticket created',actor_id:currentUser.id})});}
+      closeModal('so-modal');toast('Ticket saved','#16a34a');SO.load();}catch(e){SO.fail(e);}});};
+SO.tSet=async(id,s)=>{const t=SO.tickets.find(x=>x.id===id);let reason=null;if(t.status==='Closed'){reason=prompt('Reason for reopening this ticket?');if(!reason){return SO.load();}}
+  const b={status:s,updated_at:new Date().toISOString()};if(s==='Resolved')b.resolved_at=new Date().toISOString();if(s==='Closed')b.closed_at=new Date().toISOString();
+  try{await sbFetch('/service_tickets?id=eq.'+id,{method:'PATCH',body:JSON.stringify(b)});await sbFetch('/service_logs',{method:'POST',body:JSON.stringify({ticket_id:id,from_status:t.status,to_status:s,reason,actor_id:currentUser.id})});SO.load();}catch(e){SO.fail(e);}};
+
+
+/* ── Permissions: payments + deletes ── */
+SO.canPay=()=>isAdmin(currentUser)||SO.can('acct')||SO.can('sales');
+SO.canDel=k=>isAdmin(currentUser)||(k==='q'&&SO.can('sales'))||((k==='i'||k==='p')&&SO.can('acct'));
+SO.rpc=async(fn,args,msg)=>{try{const{error}=await sb.rpc(fn,args);if(error)throw error;toast(msg,'#16a34a');SO.load();}catch(e){SO.fail(e);}};
+SO.delQ=id=>{const q=SO.quotes.find(x=>x.id===id);if(confirm('Delete quotation '+q.quote_no+' permanently?\nThis cannot be undone (a copy is kept in the audit log).'))SO.rpc('delete_quotation',{p_quote:id,p_user:currentUser.id},'Quotation deleted');};
+SO.delI=id=>{const i=SO.invoices.find(x=>x.id===id),n=SO.payments.filter(p=>p.invoice_id===id).length;if(confirm('Delete invoice '+i.invoice_no+'?'+(n?'\n\nIts '+n+' recorded payment(s) will also be deleted.':'')+'\nThe order becomes invoiceable again. A copy is kept in the audit log.'))SO.rpc('delete_invoice',{p_invoice:id,p_user:currentUser.id},'Invoice deleted');};
+SO.delP=id=>{const p=SO.payments.find(x=>x.id===id);if(confirm('Delete payment '+p.receipt_no+' ('+inr(p.amount)+')?\nThe invoice balance and status will be recalculated.')){closeModal('so-modal');SO.rpc('delete_payment',{p_payment:id,p_user:currentUser.id},'Payment deleted');}};
+
+/* ── Product import (CSV / Excel) ── */
+SO.COLS=['sku','name','category','type','unit','cost_price','selling_price','gst_rate','hsn_sac','opening_stock','min_stock','serial_tracking','description','image_url'];
+SO.tpl=()=>{const rows=[SO.COLS,['DRN-AG-10L','Agri Spray Drone 10L','Agriculture Drones','Product','Nos',250000,320000,5,'88023000',2,1,'Yes','10L payload agriculture drone',''],['BAT-14S-22K','14S 22000mAh Battery','Batteries and Chargers','Product','Nos',38000,46000,18,'85076000',10,3,'Yes','Smart battery',''],['SVC-SPRAY-ACRE','Drone Spraying (per acre)','Drone Spraying Services','Service','Acre',0,400,18,'998719','','','No','Spraying service','']];
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='products_import_sample.csv';a.click();};
+SO.impForm=()=>{SO.imp=[];SO.modal('Import Products',`<input type="file" id="imp-f" accept=".csv,.xlsx,.xls" class="fi" onchange="SO.impRead(this)"><div style="margin:10px 0">${SO.sel('If the SKU already exists','imp-mode',[['skip','Skip it'],['update','Update the existing product']])}</div><div id="imp-prev" class="fi-note">Choose a .csv, .xlsx or .xls file.</div><div class="fi-note" style="margin-top:8px">Columns: ${SO.COLS.join(', ')}. Required: sku, name, selling_price. <a href="#" onclick="SO.tpl();return false">Download sample CSV</a></div>`,SO.impGo,'Import');};
+SO.num=v=>{const n=parseFloat(String(v).replace(/[₹,\s]/g,''));return isNaN(n)?null:n;};
+SO.impRead=inp=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{try{
+  if(!window.XLSX)throw new Error('Excel reader failed to load — check your internet connection');
+  const wb=XLSX.read(e.target.result,{type:'array'}),raw=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:'',raw:false});
+  const al={price:'selling_price',mrp:'selling_price',gst:'gst_rate',tax_rate:'gst_rate',tax:'gst_rate',stock:'opening_stock',qty:'opening_stock',product_name:'name',item:'name',hsn:'hsn_sac',sac:'hsn_sac',serial:'serial_tracking',min_stock_level:'min_stock'};
+  const seen=new Set(),errs=[];SO.imp=[];
+  raw.forEach((o,ix)=>{const x={};Object.keys(o).forEach(k=>{let n=k.trim().toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');x[al[n]||n]=o[k];});
+    const sku=String(x.sku||'').trim(),name=String(x.name||'').trim(),price=SO.num(x.selling_price),ln=ix+2;
+    if(!sku&&!name&&price===null)return;
+    if(!sku||!name||price===null||price<0)return errs.push('Row '+ln+': sku, name and a valid selling_price are required');
+    if(seen.has(sku.toLowerCase()))return errs.push('Row '+ln+': duplicate SKU '+sku+' in file');seen.add(sku.toLowerCase());
+    const svc=/serv/i.test(x.type||'');SO.imp.push({sku,name,category:String(x.category||'').trim(),is_service:svc,unit:String(x.unit||'Nos').trim()||'Nos',cost_price:SO.num(x.cost_price)||0,selling_price:price,tax_rate:SO.num(x.gst_rate)??18,hsn_sac:String(x.hsn_sac||'').trim()||null,opening_stock:svc?0:(SO.num(x.opening_stock)||0),min_stock:svc?0:(SO.num(x.min_stock)||0),track_serial:/^(y|yes|true|1)$/i.test(String(x.serial_tracking||'').trim()),description:String(x.description||'')||null,image_url:String(x.image_url||'').trim()||null});});
+  $('imp-prev').innerHTML=`<b>${SO.imp.length}</b> valid row(s), <b style="color:${errs.length?'var(--red)':'inherit'}">${errs.length}</b> skipped.${errs.slice(0,6).map(m=>'<div style="color:var(--red)">'+E(m)+'</div>').join('')}${errs.length>6?'<div>…and '+(errs.length-6)+' more</div>':''}`;}catch(x){SO.imp=[];$('imp-prev').innerHTML='<span style="color:var(--red)">'+E(x.message)+'</span>';}};r.readAsArrayBuffer(f);};
+SO.impGo=async()=>{if(!SO.imp.length)return toast('No valid rows to import','#dc2626');const upd=SO.v('imp-mode')==='update';
+  try{const cm={};SO.cats.forEach(c=>cm[c.name.toLowerCase()]=c.id);
+    const nc=[...new Set(SO.imp.map(r=>r.category).filter(c=>c&&!cm[c.toLowerCase()]))];
+    if(nc.length){const made=await sbFetch('/product_categories',{method:'POST',body:JSON.stringify(nc.map(n=>({name:n,kind:SO.imp.find(r=>r.category===n).is_service?'service':'product'})))});made.forEach(c=>cm[c.name.toLowerCase()]=c.id);}
+    const ex={};SO.products.forEach(p=>ex[p.sku.toLowerCase()]=p);let added=0,updated=0,skipped=0;const fresh=[],stockRows=[];
+    for(const r of SO.imp){const row={sku:r.sku,name:r.name,category_id:r.category?cm[r.category.toLowerCase()]:null,unit:r.unit,cost_price:r.cost_price,selling_price:r.selling_price,tax_rate:r.tax_rate,hsn_sac:r.hsn_sac,min_stock:r.min_stock,track_serial:r.track_serial,is_service:r.is_service,description:r.description,image_url:r.image_url},e=ex[r.sku.toLowerCase()];
+      if(e){if(upd){await sbFetch('/products?id=eq.'+e.id,{method:'PATCH',body:JSON.stringify({...row,updated_at:new Date().toISOString()})});updated++;}else skipped++;}else fresh.push({row,qty:r.opening_stock});}
+    for(let i=0;i<fresh.length;i+=100){const part=fresh.slice(i,i+100),res=await sbFetch('/products',{method:'POST',body:JSON.stringify(part.map(x=>x.row))});added+=res.length;
+      res.forEach(p=>{const q=part.find(x=>x.row.sku.toLowerCase()===p.sku.toLowerCase()).qty;if(q>0&&!p.is_service)stockRows.push({product_id:p.id,movement_type:'purchase',qty:q,note:'Opening stock (import)',created_by:currentUser.id});});}
+    if(stockRows.length)await sbFetch('/inventory_movements',{method:'POST',body:JSON.stringify(stockRows)});
+    closeModal('so-modal');toast(`Imported: ${added} added, ${updated} updated, ${skipped} skipped`,'#16a34a',5000);SO.load();}
+  catch(e){SO.fail(e);SO.load();}};
+
+SO.delO=id=>{const o=SO.orders.find(x=>x.id===id);if(SO.invoices.some(i=>i.order_id===id))return toast('Delete this order\'s invoices first','#dc2626');if(confirm('Delete order '+o.order_no+'?\nDispatched stock is returned and the quotation can be converted again.'))SO.rpc('delete_order',{p_order:id,p_user:currentUser.id},'Order deleted');};
+
+/* ═══ EXPENSES (Finance Officer) — UI-level role check; see note on permissions ═══ */
+SO.EXPCATS=['Travel & Fuel','Office Supplies','Salaries & Wages','Rent & Utilities','Marketing & Ads','Drone Spares & Repairs','Courier & Logistics','Food & Refreshments','Professional Fees','Taxes & Fees','Miscellaneous'];
+SO.canExp=()=>isAdmin(currentUser)||/finance|account/i.test(roleList(currentUser).join(' '));
+SO.exp=[];SO.expLoaded=false;SO.expLoading=false;SO.expErr='';SO.eq='';
+SO.eF={from:d0(0).slice(0,8)+'01',to:d0(0),cat:''};
+SO.loadExp=async()=>{SO.expLoading=true;SO.expErr='';
+  try{SO.exp=await sbFetch(`/expenses?expense_date=gte.${SO.eF.from}&expense_date=lte.${SO.eF.to}&order=expense_date.desc,created_at.desc&limit=2000`);SO.expLoaded=true;}
+  catch(e){SO.expErr='Expenses table not found or unreachable. Run 004_expenses.sql in Supabase. ('+(e.message||'').slice(0,100)+')';}
+  try{SO.dep=await sbFetch(`/expense_deposits?deposit_date=gte.${SO.eF.from}&deposit_date=lte.${SO.eF.to}&order=deposit_date.desc,created_at.desc&limit=2000`);
+    const b=(await sbFetch('/expense_fund_balance'))[0];SO.fund={d:+b.total_deposits,e:+b.total_expenses};SO.depErr=false;}
+  catch(e){SO.depErr=true;SO.dep=[];SO.fund={d:0,e:0};}
+  SO.expLoading=false;if(currentView==='expenses')render();};
+SO.dep=[];SO.fund={d:0,e:0};SO.depErr=false;
+SO.expRows=()=>{const q=SO.eq.trim().toLowerCase();return SO.exp.filter(x=>(!SO.eF.cat||x.category===SO.eF.cat)&&(!q||JSON.stringify(Object.values(x)).toLowerCase().includes(q)));};
+SO.rExp=()=>{if(!SO.canExp())return '<div class="stat-card">Expenses are available to the Finance team and admins only.</div>';
+  if(SO.expErr)return `<div class="stat-card" style="color:var(--red)">${E(SO.expErr)}</div>`;
+  if(!SO.expLoaded)return '<div class="empty-state"><div class="empty-text">Loading…</div></div>';
+  const R=SO.expRows(),tot=R.reduce((s,x)=>s+ +x.amount,0),by={};R.forEach(x=>by[x.category]=(by[x.category]||0)+ +x.amount);
+  const top=Object.entries(by).sort((a,b)=>b[1]-a[1])[0],today=R.filter(x=>x.expense_date===d0(0)).reduce((s,x)=>s+ +x.amount,0);
+  const rows=R.map(x=>[`<b>${E(x.expense_no)}</b>`,fmtDate(x.expense_date),E(x.category),`${E(x.purpose)}${x.notes?`<div style="font-size:10px;color:var(--text3)">${E(x.notes)}</div>`:''}`,E(x.paid_to||'—'),`${E(x.payment_method)}${x.reference?`<div style="font-size:10px;color:var(--text3)">${E(x.reference)}</div>`:''}`,`<b>${inr(x.amount)}</b>`,E(memberName(x.created_by)),(x.receipt_url?`<a href="${E(x.receipt_url)}" target="_blank" rel="noopener" class="btn btn-sm">Bill</a> `:'')+SO.btn('Edit',`SO.xForm('${x.id}')`)+SO.btn('Delete',`SO.xDel('${x.id}')`)]);
+  return `<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px"><div style="font-size:11px;color:var(--text3)">Sales &amp; Operations › Expenses</div><div style="flex:1"></div>
+  <input class="fi" style="width:150px" type="date" value="${SO.eF.from}" onchange="SO.eF.from=this.value;SO.loadExp()"><input class="fi" style="width:150px" type="date" value="${SO.eF.to}" onchange="SO.eF.to=this.value;SO.loadExp()">
+  <select class="fi" style="width:170px" onchange="SO.eF.cat=this.value;render()"><option value="">All categories</option>${SO.EXPCATS.map(c=>`<option ${c===SO.eF.cat?'selected':''}>${c}</option>`).join('')}</select>
+  <input class="fi" id="exp-q" style="width:180px" placeholder="Search…" value="${E(SO.eq)}" oninput="SO.eq=this.value;SO.xRedraw()">${SO.btn('⬇ Export CSV','SO.xCsv()')}${SO.btn('+ Add Expense','SO.xForm()',1)}</div>`+
+  (SO.depErr?'<div class="stat-card" style="color:var(--red);margin-bottom:12px">Deposit tracking unavailable — run 005_expense_deposits.sql in Supabase.</div>':'')+
+  SO.stats([['Total deposited',inr(SO.fund.d)],['Total spent',inr(SO.fund.e)],['Remaining balance','<span style="color:'+(SO.fund.d-SO.fund.e<0?'var(--red)':'var(--green)')+'">'+inr(SO.fund.d-SO.fund.e)+'</span>'],['Spent (selected dates)',inr(tot)]])+
+  SO.stats([['Entries',R.length],['Top category',top?E(top[0])+' · '+inr(top[1]):'—'],["Today's expenses",inr(today)],['Deposits (selected dates)',inr(SO.dep.reduce((a,x)=>a+ +x.amount,0))]])+
+  '<div style="font-weight:700;margin:6px 0">Expenses</div>'+SO.tbl(['No.','Date','Category','Purpose','Paid to','Method','Amount','Added by',''],rows,'No expenses in this date range')+
+  '<div style="display:flex;align-items:center;margin:20px 0 6px"><div style="font-weight:700;flex:1">Deposits (funds added)</div>'+SO.btn('+ Add Deposit','SO.dForm()',1)+'</div>'+
+  SO.tbl(['No.','Date','Source','Method','Reference','Amount','Added by',''],SO.dep.map(x=>[`<b>${E(x.deposit_no)}</b>`,fmtDate(x.deposit_date),`${E(x.source||'—')}${x.notes?`<div style="font-size:10px;color:var(--text3)">${E(x.notes)}</div>`:''}`,E(x.method),E(x.reference||'—'),`<b style="color:var(--green)">+ ${inr(x.amount)}</b>`,E(memberName(x.created_by)),SO.btn('Edit',`SO.dForm('${x.id}')`)+SO.btn('Delete',`SO.dDel('${x.id}')`)]),'No deposits in this date range');};
+SO.xRedraw=()=>{const el=$('exp-q'),p=el?el.selectionStart:0;$('content').innerHTML=SO.rExp();const n=$('exp-q');if(n){n.focus();n.setSelectionRange(p,p);}};
+SO.xForm=id=>{const x=SO.exp.find(e=>e.id===id)||{expense_date:d0(0),payment_method:'Cash',branch:(currentUser&&currentUser.branch)||'',category:SO.EXPCATS[0]};
+  SO.modal(id?'Edit Expense '+E(x.expense_no):'Add Expense',`<div ${SO.grid}>${SO.fg('Date *','x-date',x.expense_date,'date')}${SO.fg('Amount (₹) *','x-amt',x.amount||'','number','min="0" step="0.01"')}${SO.sel('Category *','x-cat',SO.EXPCATS,x.category)}${SO.fg('Paid to (vendor / person)','x-to',x.paid_to)}${SO.sel('Payment method','x-m',['Cash','UPI','Bank transfer','Card','Cheque','Other'],x.payment_method)}${SO.fg('Transaction / bill ref','x-ref',x.reference)}${SO.sel('Branch',"x-br",[['','All / none'],...branches.map(b=>[b,b])],x.branch||'')}${SO.fg('Bill / receipt link','x-bill',x.receipt_url,'url','placeholder="https://…"')}</div><div class="fg" style="margin-top:12px"><label class="fl">Purpose *</label><input class="fi" id="x-pur" value="${E(x.purpose)}" placeholder="e.g. Fuel for field visit to Guntur"></div><div class="fg" style="margin-top:12px"><label class="fl">Notes</label><textarea class="fi" id="x-notes" rows="2">${E(x.notes)}</textarea></div>`,async()=>{
+    const amt=+SO.v('x-amt'),pur=SO.v('x-pur').trim(),dt=SO.v('x-date');
+    if(!dt||!(amt>0)||!pur)return toast('Date, amount (> 0) and purpose are required','#dc2626');
+    if(dt>d0(0)&&!confirm('This expense is dated in the future. Save anyway?'))return;
+    {const left=SO.fund.d-SO.fund.e+(id?+x.amount:0)-amt;if(!SO.depErr&&left<0&&!confirm('This expense is more than the remaining deposit balance (short by '+inr(-left)+'). Save anyway?'))return;}
+    const b={expense_date:dt,amount:amt,category:SO.v('x-cat'),purpose:pur,paid_to:SO.v('x-to')||null,payment_method:SO.v('x-m'),reference:SO.v('x-ref')||null,branch:SO.v('x-br')||null,receipt_url:SO.v('x-bill')||null,notes:SO.v('x-notes')||null,updated_by:currentUser.id,updated_at:new Date().toISOString()};
+    try{if(id)await sbFetch('/expenses?id=eq.'+id,{method:'PATCH',body:JSON.stringify(b)});else await sbFetch('/expenses',{method:'POST',body:JSON.stringify({...b,created_by:currentUser.id})});
+      closeModal('so-modal');toast('Expense saved','#16a34a');if(dt<SO.eF.from)SO.eF.from=dt;if(dt>SO.eF.to)SO.eF.to=dt;SO.loadExp();}catch(e){SO.fail(e);}});};
+SO.xDel=async id=>{const x=SO.exp.find(e=>e.id===id);if(!confirm('Delete expense '+x.expense_no+' ('+inr(x.amount)+')?\nA copy is kept in the audit log.'))return;
+  try{await sbFetch('/expenses?id=eq.'+id,{method:'PATCH',body:JSON.stringify({updated_by:currentUser.id})});await sbFetch('/expenses?id=eq.'+id,{method:'DELETE'});toast('Expense deleted','#16a34a');SO.loadExp();}catch(e){SO.fail(e);}};
+SO.xCsv=()=>{const R=SO.expRows();if(!R.length)return toast('Nothing to export','#dc2626');const h=['No','Date','Category','Purpose','Paid to','Method','Reference','Branch','Amount','Added by','Notes'];
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv=[h,...R.map(x=>[x.expense_no,x.expense_date,x.category,x.purpose,x.paid_to,x.payment_method,x.reference,x.branch,x.amount,memberName(x.created_by),x.notes])].map(r=>r.map(q).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='expenses_'+SO.eF.from+'_to_'+SO.eF.to+'.csv';a.click();};
+
+
+/* ── Multi-role support: roles stored comma-separated in team_members.role ── */
+const ROLE_PRIORITY=['Super Admin','Manager','Team Lead','Sales Rep'];
+function parseRoles(v){const a=String(v||'').split(',').map(x=>x.trim()).filter(Boolean);return a.length?[...new Set(a)]:['Sales Rep'];}
+function primaryRole(a){return ROLE_PRIORITY.find(r=>a.includes(r))||a[0]||'Sales Rep';}
+function roleList(u){return u?(u.roles&&u.roles.length?u.roles:parseRoles(u.role)):[];}
+function roleLbl(u){return roleList(u).join(', ')||'—';}
+function setRoleChecks(a){document.querySelectorAll('.m-role-cb').forEach(c=>c.checked=a.includes(c.value));}
+function getRoleChecks(){return [...document.querySelectorAll('.m-role-cb')].filter(c=>c.checked).map(c=>c.value);}
+
+SO.dForm=id=>{const x=SO.dep.find(e=>e.id===id)||{deposit_date:d0(0),method:'Bank transfer'};
+  SO.modal(id?'Edit Deposit '+E(x.deposit_no):'Add Deposit',`<div ${SO.grid}>${SO.fg('Date *','d-date',x.deposit_date,'date')}${SO.fg('Amount (₹) *','d-amt',x.amount||'','number','min="0" step="0.01"')}${SO.fg('Source (received from)','d-src',x.source)}${SO.sel('Method','d-m',['Bank transfer','Cash','UPI','Cheque','Other'],x.method)}${SO.fg('Reference','d-ref',x.reference)}</div><div class="fg" style="margin-top:12px"><label class="fl">Notes</label><textarea class="fi" id="d-notes" rows="2">${E(x.notes)}</textarea></div><div class="fi-note">Remaining balance now: ${inr(SO.fund.d-SO.fund.e)}</div>`,async()=>{
+    const amt=+SO.v('d-amt'),dt=SO.v('d-date');if(!dt||!(amt>0))return toast('Date and an amount above 0 are required','#dc2626');
+    const b={deposit_date:dt,amount:amt,source:SO.v('d-src')||null,method:SO.v('d-m'),reference:SO.v('d-ref')||null,notes:SO.v('d-notes')||null,updated_by:currentUser.id,updated_at:new Date().toISOString()};
+    try{if(id)await sbFetch('/expense_deposits?id=eq.'+id,{method:'PATCH',body:JSON.stringify(b)});else await sbFetch('/expense_deposits',{method:'POST',body:JSON.stringify({...b,created_by:currentUser.id})});
+      closeModal('so-modal');toast('Deposit saved','#16a34a');if(dt<SO.eF.from)SO.eF.from=dt;if(dt>SO.eF.to)SO.eF.to=dt;SO.loadExp();}catch(e){SO.fail(e);}});};
+SO.dDel=async id=>{const x=SO.dep.find(e=>e.id===id);if(!confirm('Delete deposit '+x.deposit_no+' ('+inr(x.amount)+')?\nThe remaining balance will drop by this amount. A copy is kept in the audit log.'))return;
+  try{await sbFetch('/expense_deposits?id=eq.'+id,{method:'PATCH',body:JSON.stringify({updated_by:currentUser.id})});await sbFetch('/expense_deposits?id=eq.'+id,{method:'DELETE'});toast('Deposit deleted','#16a34a');SO.loadExp();}catch(e){SO.fail(e);}};
 </script>
 </body>
 </html>
