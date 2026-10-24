@@ -839,6 +839,9 @@ function memberName(id){const m=team.find(m=>m.id===id);return m?m.name:'Unassig
 function daysTo(s){if(!s)return null;const t=new Date();t.setHours(0,0,0,0);const g=new Date(s);g.setHours(0,0,0,0);return Math.round((g-t)/86400000)}
 function dateClass(s){const d=daysTo(s);if(d===null)return'date-none';if(d<0)return'date-overdue';if(d===0)return'date-today';if(d<=3)return'date-soon';return'date-ok'}
 function dateLabel(s){const d=daysTo(s);if(d===null)return'—';if(d<0)return Math.abs(d)+'d overdue';if(d===0)return'TODAY ⚡';if(d===1)return'Tomorrow';return fmtDate(s)}
+function isClosedLead(l){return l&&(l.status==='Won'||l.status==='Lost');}
+function leadDateClass(l){return isClosedLead(l)?'date-ok':dateClass(l.buyDate);}
+function leadDateLabel(l){return isClosedLead(l)?(l.buyDate?'Closed '+fmtDate(l.buyDate):'Closed'):dateLabel(l.buyDate);}
 function hotLeads(){return leads.filter(l=>{const d=daysTo(l.buyDate);return d!==null&&d<=3&&l.status!=='Won'&&l.status!=='Lost'}).sort((a,b)=>daysTo(a.buyDate)-daysTo(b.buyDate))}
 
 /* Leads visible to current user: own leads for employees, all for admin */
@@ -1664,7 +1667,7 @@ function renderDash(){
       <div style="display:grid;grid-template-columns:2fr 1fr 1fr;border-bottom:1px solid var(--border);padding:10px 14px;align-items:center;cursor:pointer;transition:background .12s" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background=''" onclick="openDetail('${l.id}')">
         <div><div class="lead-name">${l.name}</div><div class="lead-sub">${l.branch||'—'} · ${l.source}</div></div>
         <span class="pill pill-${l.status.toLowerCase()}">${l.status}</span>
-        <div class="${dateClass(l.buyDate)}" style="font-size:11px">${dateLabel(l.buyDate)}</div>
+        <div class="${leadDateClass(l)}" style="font-size:11px">${leadDateLabel(l)}</div>
       </div>`).join(''):'<div class="empty-state" style="padding:30px"><div class="empty-text">No leads yet</div></div>'}</div>
   </div>
   <div>
@@ -1703,7 +1706,7 @@ function renderLeads(){
       <td><span class="source-badge">${l.source}</span></td>
       <td>${l.branch||'—'}</td>
       <td>${memberName(l.assignee)}</td>
-      <td><div class="${dateClass(l.buyDate)}" style="font-size:11.5px">${dateLabel(l.buyDate)}</div></td>
+      <td><div class="${leadDateClass(l)}" style="font-size:11.5px">${leadDateLabel(l)}</div></td>
       <td style="font-family:var(--mono);font-size:11.5px">${l.value?'₹'+numFmt(l.value):'—'}</td>
       <td style="font-size:11px;color:var(--text3);white-space:nowrap">${fmtDateTime(l.createdAt)}</td>
       <td>
@@ -1776,7 +1779,7 @@ function renderMobileLeadCards(vl){
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
         <span class="source-badge">${l.source}</span>
         <span style="font-size:11px;color:var(--text3)">${l.product||'—'}</span>
-        <div class="${dateClass(l.buyDate)}" style="font-size:11px;font-weight:600">${dateLabel(l.buyDate)}</div>
+        <div class="${leadDateClass(l)}" style="font-size:11px;font-weight:600">${leadDateLabel(l)}</div>
         <div style="display:flex;gap:3px" onclick="event.stopPropagation()">
           <button class="act-btn" style="opacity:1" onclick="openEditLead('${l.id}')">Edit</button>
           <button class="act-btn" style="opacity:1" onclick="openReminderModal('${l.id}')">⏰</button>
@@ -1871,7 +1874,7 @@ function buildDetailHTML(l){
     <div class="dp-row"><span class="dp-key">Product</span><span class="dp-val">${l.product||'—'}</span></div>
     <div class="dp-row"><span class="dp-key">Branch</span><span class="dp-val">${l.branch||'—'}</span></div>
     <div class="dp-row"><span class="dp-key">Status</span><span class="dp-val"><span class="pill pill-${(l.status||'new').toLowerCase()}">${l.status}</span></span></div>
-    <div class="dp-row"><span class="dp-key">Close Date</span><span class="dp-val ${dateClass(l.buyDate)}">${dateLabel(l.buyDate)}</span></div>
+    <div class="dp-row"><span class="dp-key">Close Date</span><span class="dp-val ${leadDateClass(l)}">${leadDateLabel(l)}</span></div>
     <div class="dp-row"><span class="dp-key">Value</span><span class="dp-val" style="font-family:var(--mono)">${l.value?'₹'+numFmt(l.value):'—'}</span></div>
     <div class="dp-row"><span class="dp-key">Assignee</span><span class="dp-val">${memberName(l.assignee)}</span></div>
     <div class="dp-row"><span class="dp-key">Added On</span><span class="dp-val" style="font-family:var(--mono);font-size:11.5px">${fmtDateTime(l.createdAt)}</span></div>
@@ -2799,7 +2802,7 @@ function renderNotifs(){
         <div class="notif-title">${l.name}</div>
         <div class="notif-meta">${l.product||'—'} · ${l.branch||'—'} · ${memberName(l.assignee)}</div>
       </div>
-      <div class="${dateClass(l.buyDate)}" style="font-size:11.5px;font-weight:600;white-space:nowrap;margin-right:6px">${dateLabel(l.buyDate)}</div>
+      <div class="${leadDateClass(l)}" style="font-size:11.5px;font-weight:600;white-space:nowrap;margin-right:6px">${leadDateLabel(l)}</div>
       <button class="act-btn" onclick="openFollowUpDoneModal('${l.id}');event.stopPropagation()">Mark Done</button>
     </div>`;
   }).join('');
@@ -2958,6 +2961,7 @@ alter table drone_sales add column if not exists sale_price numeric default 0;
 alter table drone_sales add column if not exists free_items text;
 alter table drone_sales add column if not exists in_warranty boolean default false;
 alter table drone_sales add column if not exists warranty_until date;
+notify pgrst, 'reload schema';
 alter table drone_sales disable row level security;</code>
       <button class="btn btn-sm" style="margin-top:4px" onclick="copySetupSQL()">📋 Copy SQL</button>
     </div>
@@ -3143,6 +3147,7 @@ alter table drone_sales add column if not exists sale_price numeric default 0;
 alter table drone_sales add column if not exists free_items text;
 alter table drone_sales add column if not exists in_warranty boolean default false;
 alter table drone_sales add column if not exists warranty_until date;
+notify pgrst, 'reload schema';
 alter table drone_sales disable row level security;`;
   navigator.clipboard.writeText(sql)
     .then(()=>toast('SQL copied to clipboard ✓','#15803d'))
