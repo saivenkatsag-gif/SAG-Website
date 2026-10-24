@@ -708,10 +708,10 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
           <option value="Yes">Yes — Type Certified</option>
           <option value="No">No — Not Type Certified</option>
         </select>
-        <div class="fi-note" id="d-cert-note">Choose first. Type certified drones need a UIN Number and Owner eGCA ID.</div>
+        <div class="fi-note" id="d-cert-note">Choose first. Type certified drones need a UIN Number.</div>
       </div>
       <div class="fg"><label class="fl">UIN Number <span class="req" id="d-uin-req">*</span></label><input class="fi" id="d-uin" placeholder="e.g. UA-XXXXXXXX" style="text-transform:uppercase"/></div>
-      <div class="fg"><label class="fl">Owner eGCA ID <span class="req" id="d-egca-req">*</span></label><input class="fi" id="d-egca" placeholder="Owner's eGCA ID"/></div>
+      <div class="fg"><label class="fl">Owner eGCA ID</label><input class="fi" id="d-egca" placeholder="Owner's eGCA ID"/></div>
       <div class="form-section"><div class="form-section-title">Customer &amp; Drone</div></div>
       <div class="fg"><label class="fl">Customer Name <span class="req">*</span></label><input class="fi" id="d-customer" placeholder="Customer / company name"/></div>
       <div class="fg"><label class="fl">Branch Name <span class="req">*</span></label><select class="fi" id="d-branch"><option value="">Select Branch…</option></select></div>
@@ -2601,12 +2601,11 @@ function onDroneCertChange(){
   const v=$('d-cert').value;
   const cert=v==='Yes';
   $('d-uin-req').style.display=cert?'':'none';
-  $('d-egca-req').style.display=cert?'':'none';
   $('d-uin').placeholder=cert?'e.g. UA-XXXXXXXX':'Optional';
-  $('d-egca').placeholder=cert?"Owner's eGCA ID":'Optional';
+  $('d-egca').placeholder='Optional';
   $('d-status-wrap').style.display=(v==='No')?'none':'';
   const note=$('d-cert-note');
-  if(note)note.textContent=cert?'UIN Number and Owner eGCA ID are mandatory for type certified drones.':(v==='No'?'UIN Number and Owner eGCA ID are optional for drones that are not type certified.':'Choose first. Type certified drones need a UIN Number and Owner eGCA ID.');
+  if(note)note.textContent=cert?'UIN Number is mandatory for type certified drones. Owner eGCA ID is optional.':(v==='No'?'UIN Number and Owner eGCA ID are optional for drones that are not type certified.':'Choose first. Type certified drones need a UIN Number.');
 }
 function onDroneWarrantyChange(){
   $('d-wuntil-wrap').style.display=$('d-warranty').value==='Yes'?'':'none';
@@ -2733,7 +2732,6 @@ async function saveDroneSale(){
   const price=Number($('d-price').value);
   const inWarranty=$('d-warranty').value==='Yes';
   if(typeCert&&!uin){toast('UIN number is required for type certified drones','#f59e0b');return;}
-  if(typeCert&&!egca){toast('Owner eGCA ID is required for type certified drones','#f59e0b');return;}
   if(!customer){toast('Customer name is required','#f59e0b');return;}
   if(!branch){toast('Please select a branch','#f59e0b');return;}
   if(!model){toast('Drone model is required','#f59e0b');return;}
