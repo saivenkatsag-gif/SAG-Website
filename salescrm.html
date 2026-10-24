@@ -1689,7 +1689,14 @@ function handleLeadSearchInput(el){
 
 function renderLeads(){
   let vl=visibleLeads();
-  if(searchQ)vl=vl.filter(l=>l.name.toLowerCase().includes(searchQ)||l.phone.includes(searchQ)||(l.email||'').toLowerCase().includes(searchQ)||(l.product||'').toLowerCase().includes(searchQ)||(l.branch||'').toLowerCase().includes(searchQ));
+  if(searchQ.trim()){
+    const q=searchQ.trim().toLowerCase();
+    const qd=q.replace(/\D/g,'');
+    vl=vl.filter(l=>{
+      const txt=[l.name,l.phone,l.email,l.product,l.branch,l.source,l.category,l.state,l.language,l.pincode,memberName(l.assignee)].map(v=>String(v||'').toLowerCase());
+      return txt.some(t=>t.includes(q))||(qd.length>=3&&String(l.phone||'').replace(/\D/g,'').includes(qd));
+    });
+  }
   if(statusFilter!=='all')vl=vl.filter(l=>l.status===statusFilter);
   if(branchFilter!=='all')vl=vl.filter(l=>l.branch===branchFilter);
   if(categoryFilter!=='all')vl=vl.filter(l=>l.category===categoryFilter);
