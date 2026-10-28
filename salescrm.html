@@ -733,6 +733,13 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.5}
       <div class="form-section"><div class="form-section-title">Sale Details</div></div>
       <div class="fg"><label class="fl">Purchase Date <span class="req">*</span></label><input class="fi" id="d-purchase" type="date"/></div>
       <div class="fg"><label class="fl">Sale Price (₹) <span class="req">*</span></label><input class="fi" id="d-price" type="number" min="0" placeholder="0"/></div>
+      <div class="form-section"><div class="form-section-title">Item Details</div></div>
+      <div class="fg full">
+        <div style="display:grid;grid-template-columns:1fr 90px 32px;gap:8px;font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;padding:0 2px 4px"><span>Item Name</span><span>Quantity</span><span></span></div>
+        <div id="d-items-list" style="display:flex;flex-direction:column;gap:6px"></div>
+        <button type="button" class="btn btn-sm" style="margin-top:8px" onclick="addDroneItemRow()">+ Add Item</button>
+        <div class="fi-note">Add each item supplied with this sale (e.g. Battery – 2, Charger – 1). Leave empty if none.</div>
+      </div>
       <div class="fg full"><label class="fl">Free Items Included</label><textarea class="fi" id="d-free" placeholder="e.g. 2 extra batteries, charger, carry case, propellers (one item per line or comma separated)" style="min-height:60px"></textarea></div>
       <div class="form-section"><div class="form-section-title">Warranty &amp; Transfer</div></div>
       <div class="fg"><label class="fl">In Warranty? <span class="req">*</span></label>
@@ -2586,6 +2593,7 @@ const DRONE_COLS=[
   {k:'purchase',label:'Purchase Date',cell:d=>`<span style="white-space:nowrap">${d.purchaseDate?fmtDate(d.purchaseDate):'—'}</span>`},
   {k:'price',label:'Sale Price',cell:d=>`<span style="font-family:var(--mono);font-size:12px;white-space:nowrap">${d.price?'₹'+numFmt(d.price):'—'}</span>`},
   {k:'warranty',label:'Warranty',cell:d=>droneWarrantyBadge(d)},
+  {k:'items',label:'Items',cell:d=>droneItemsCell(d)},
   {k:'free',label:'Free Items',cell:d=>`<div style="max-width:200px;font-size:12px;color:var(--text2);white-space:pre-wrap;word-break:break-word">${esc(d.freeItems)||'—'}</div>`},
   {k:'egca',label:'Owner eGCA ID',cell:d=>`<span style="font-family:var(--mono);font-size:12px">${esc(d.egca)||'—'}</span>`},
   {k:'transfer',label:'Transfer Status',cell:d=>d.typeCert?`<select class="fi" style="width:auto;padding:4px 26px 4px 9px;font-size:11.5px;font-weight:600;${d.status==='Transferred'?'color:var(--green);background-color:var(--green-bg)':'color:var(--amber);background-color:var(--amber-bg)'}" onchange="setDroneStatus('${d.id}',this.value)"><option value="Not Transferred" ${d.status!=='Transferred'?'selected':''}>Not Transferred</option><option value="Transferred" ${d.status==='Transferred'?'selected':''}>Transferred</option></select>`:'<span style="font-size:11.5px;color:var(--text3)">N/A</span>'},
@@ -2605,6 +2613,30 @@ function toggleDroneColsMenu(e){e.stopPropagation();const m=$('drone-cols-menu')
 function clearDroneFilters(){droneSearch='';droneStatusFilter=droneBranchFilter=droneCertFilter=droneWarrantyFilter=droneModelFilter='all';droneFromDate=droneToDate='';render();}
 document.addEventListener('click',e=>{const m=document.getElementById('drone-cols-menu');if(m&&!m.contains(e.target))m.classList.remove('open');});
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function normDroneItems(v){
+  if(typeof v==='string'){try{v=JSON.parse(v);}catch(e){v=[];}}
+  if(!Array.isArray(v))return[];
+  return v.map(i=>({name:String((i&&i.name)||'').trim(),qty:Math.max(0,Number(i&&i.qty)||0)})).filter(i=>i.name);
+}
+function droneItemsCell(d){
+  const it=normDroneItems(d.items);
+  if(!it.length)return'<span style="color:var(--text3)">—</span>';
+  return`<div style="max-width:220px;font-size:12px;color:var(--text2)">${it.map(i=>`<div style="display:flex;justify-content:space-between;gap:10px"><span style="word-break:break-word">${esc(i.name)}</span><b style="font-family:var(--mono)">× ${i.qty}</b></div>`).join('')}</div>`;
+}
+function addDroneItemRow(name,qty){
+  const box=$('d-items-list');if(!box)return;
+  const r=document.createElement('div');
+  r.className='d-item-row';r.style.cssText='display:grid;grid-template-columns:1fr 90px 32px;gap:8px;align-items:center';
+  r.innerHTML=`<input class="fi d-item-name" placeholder="Item name" value="${esc(name||'')}"/><input class="fi d-item-qty" type="number" min="1" step="1" placeholder="Qty" value="${qty||1}"/><button type="button" class="act-btn del" title="Remove item" style="height:32px" onclick="this.parentNode.remove()">✕</button>`;
+  box.appendChild(r);
+  if(name===undefined){const n=r.querySelector('.d-item-name');if(n)n.focus();}
+}
+function readDroneItems(){
+  return[...document.querySelectorAll('#d-items-list .d-item-row')].map(r=>({
+    name:r.querySelector('.d-item-name').value.trim(),
+    qty:Number(r.querySelector('.d-item-qty').value)
+  }));
+}
 function dbToDrone(r){
   const uin=r.uin||'';
   return{id:r.id,
@@ -2612,14 +2644,14 @@ function dbToDrone(r){
     uin,customer:r.customer_name||'',branch:r.branch||'',egca:r.owner_egca_id||'',
     model:r.drone_model||'',serial:r.serial_number||'',
     purchaseDate:r.purchase_date||'',price:Number(r.sale_price)||0,
-    freeItems:r.free_items||'',
+    freeItems:r.free_items||'',items:normDroneItems(r.items),
     inWarranty:(r.in_warranty==null?false:!!r.in_warranty),warrantyUntil:r.warranty_until||'',
     status:r.transfer_status||'Not Transferred',notes:r.notes||'',createdBy:r.created_by||'',createdAt:r.created_at||new Date().toISOString()};
 }
 function droneToDb(d){
   return{id:d.id,type_certified:!!d.typeCert,uin:d.uin||null,customer_name:d.customer,branch:d.branch||null,owner_egca_id:d.egca||null,
     drone_model:d.model||null,serial_number:d.serial||null,purchase_date:d.purchaseDate||null,sale_price:Number(d.price)||0,
-    free_items:d.freeItems||null,in_warranty:!!d.inWarranty,warranty_until:d.warrantyUntil||null,
+    free_items:d.freeItems||null,items:normDroneItems(d.items),in_warranty:!!d.inWarranty,warranty_until:d.warrantyUntil||null,
     transfer_status:d.status,notes:d.notes||null,created_by:d.createdBy||null,created_at:d.createdAt};
 }
 function lsSaveDrones(){try{localStorage.setItem('lf_drone_sales',JSON.stringify(droneSales));}catch(e){}}
@@ -2666,7 +2698,7 @@ function renderDroneSales(){
     &&(droneWarrantyFilter==='all'||warrantyState(d)===droneWarrantyFilter)
     &&(droneModelFilter==='all'||d.model===droneModelFilter)
     &&(!droneFromDate||(d.purchaseDate&&d.purchaseDate>=droneFromDate))&&(!droneToDate||(d.purchaseDate&&d.purchaseDate<=droneToDate))
-    &&(!q||[d.uin,d.customer,d.egca,d.branch,d.notes,d.model,d.serial,d.freeItems].some(v=>(v||'').toLowerCase().includes(q))));
+    &&(!q||[d.uin,d.customer,d.egca,d.branch,d.notes,d.model,d.serial,d.freeItems,normDroneItems(d.items).map(i=>i.name).join(' ')].some(v=>(v||'').toLowerCase().includes(q))));
   const allModels=[...new Set(droneSales.map(d=>d.model).filter(Boolean))].sort();
   const cols=DRONE_COLS.filter(c=>droneVisibleCols.includes(c.k));
   const filtersActive=droneSearch||droneStatusFilter!=='all'||droneBranchFilter!=='all'||droneCertFilter!=='all'||droneWarrantyFilter!=='all'||droneModelFilter!=='all'||droneFromDate||droneToDate;
@@ -2758,6 +2790,8 @@ function openDroneModal(id){
   $('d-purchase').value=d?d.purchaseDate:d0(0);
   $('d-price').value=d&&d.price?d.price:'';
   $('d-free').value=d?d.freeItems:'';
+  $('d-items-list').innerHTML='';
+  if(d)normDroneItems(d.items).forEach(i=>addDroneItemRow(i.name,i.qty));
   $('d-warranty').value=d?(d.inWarranty?'Yes':'No'):'Yes';
   $('d-wuntil').value=d?d.warrantyUntil:'';
   $('d-status').value=d&&d.status==='Transferred'?'Transferred':'Not Transferred';
@@ -2784,10 +2818,15 @@ async function saveDroneSale(){
   if(!model){toast('Drone model is required','#f59e0b');return;}
   if(!purchaseDate){toast('Purchase date is required','#f59e0b');return;}
   if($('d-price').value===''||isNaN(price)||price<0){toast('Please enter a valid sale price','#f59e0b');return;}
+  const rawItems=readDroneItems();
+  for(const i of rawItems){
+    if(!i.name){toast('Enter an item name or remove the empty item row','#f59e0b');return;}
+    if(!Number.isFinite(i.qty)||i.qty<1||!Number.isInteger(i.qty)){toast('Quantity for "'+i.name+'" must be a whole number of 1 or more','#f59e0b');return;}
+  }
   if(uin&&droneSales.some(x=>x.uin===uin&&x.id!==droneEditId)){toast('This UIN is already recorded','#dc2626');return;}
   let d;
   const vals={typeCert,uin,customer,branch,egca,model,serial:$('d-serial').value.trim(),purchaseDate,price,
-    freeItems:$('d-free').value.trim(),inWarranty,warrantyUntil:inWarranty?$('d-wuntil').value:'',
+    freeItems:$('d-free').value.trim(),items:rawItems,inWarranty,warrantyUntil:inWarranty?$('d-wuntil').value:'',
     status:typeCert?$('d-status').value:'Not Applicable',notes:$('d-notes').value.trim()};
   if(droneEditId){d=droneSales.find(x=>x.id===droneEditId);if(!d)return;Object.assign(d,vals);}
   else{d={id:uid(),...vals,createdBy:currentUser.name,createdAt:new Date().toISOString()};droneSales.unshift(d);}
@@ -2824,8 +2863,8 @@ async function deleteDroneSale(id){
   toast('Drone sale deleted','#dc2626');render();
 }
 function exportDroneCSV(){
-  const hdr=['Type Certified','UIN Number','Customer Name','Branch','Drone Model','Serial Number','Purchase Date','Sale Price','Free Items','In Warranty','Warranty Valid Till','Owner eGCA ID','Transfer Status','Notes','Added'];
-  const rows=droneSales.map(d=>[d.typeCert?'Yes':'No',d.uin,d.customer,d.branch,d.model,d.serial,d.purchaseDate,d.price,d.freeItems,d.inWarranty?'Yes':'No',d.warrantyUntil,d.egca,d.status,d.notes,d.createdAt].map(v=>`"${(v==null?'':v).toString().replace(/"/g,'""')}"`).join(','));
+  const hdr=['Type Certified','UIN Number','Customer Name','Branch','Drone Model','Serial Number','Purchase Date','Sale Price','Items (Name x Qty)','Free Items','In Warranty','Warranty Valid Till','Owner eGCA ID','Transfer Status','Notes','Added'];
+  const rows=droneSales.map(d=>[d.typeCert?'Yes':'No',d.uin,d.customer,d.branch,d.model,d.serial,d.purchaseDate,d.price,normDroneItems(d.items).map(i=>i.name+' x '+i.qty).join('; '),d.freeItems,d.inWarranty?'Yes':'No',d.warrantyUntil,d.egca,d.status,d.notes,d.createdAt].map(v=>`"${(v==null?'':v).toString().replace(/"/g,'""')}"`).join(','));
   const csv=[hdr.join(','),...rows].join('\n');
   const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='drone_sales_'+new Date().toISOString().split('T')[0]+'.csv';a.click();
   toast('Drone sales exported','#22c87a');
@@ -4966,6 +5005,7 @@ alter table drone_sales add column if not exists serial_number text;
 alter table drone_sales add column if not exists purchase_date date;
 alter table drone_sales add column if not exists sale_price numeric default 0;
 alter table drone_sales add column if not exists free_items text;
+alter table drone_sales add column if not exists items jsonb default '[]'::jsonb;
 alter table drone_sales add column if not exists in_warranty boolean default false;
 alter table drone_sales add column if not exists warranty_until date;
 notify pgrst, 'reload schema';
@@ -5152,6 +5192,7 @@ alter table drone_sales add column if not exists serial_number text;
 alter table drone_sales add column if not exists purchase_date date;
 alter table drone_sales add column if not exists sale_price numeric default 0;
 alter table drone_sales add column if not exists free_items text;
+alter table drone_sales add column if not exists items jsonb default '[]'::jsonb;
 alter table drone_sales add column if not exists in_warranty boolean default false;
 alter table drone_sales add column if not exists warranty_until date;
 notify pgrst, 'reload schema';
